@@ -1,0 +1,42 @@
+{
+  "run_timestamp": "20260304_214721",
+  "sprint": "1_exit_management",
+  "window_start": "2026-01-01",
+  "window_end": "2026-03-04",
+  "initial_capital": 10000.0,
+  "final_equity": 11260.32,
+  "net_pnl_usd": 1260.32,
+  "net_pnl_pct": 12.6032,
+  "daily_return_pct": 0.2033,
+  "n_days": 62,
+  "n_candles": 368,
+  "n_trades": 41,
+  "n_wins": 13,
+  "n_losses": 28,
+  "win_rate_pct": 31.71,
+  "avg_winner_usd": 435.64,
+  "avg_loser_usd": 157.25,
+  "rr_ratio": 2.77,
+  "profit_factor": 1.286,
+  "max_drawdown_pct": 14.23,
+  "sharpe_ratio": 2.348,
+  "exit_distribution": {
+    "SL": 21,
+    "TP": 10,
+    "TRAIL_SL": 9,
+    "TIME_EXIT": 1
+  },
+  "n_time_exits": 1,
+  "n_trail_sl": 9,
+  "n_tp": 10,
+  "n_sl": 30,
+  "avg_trail_count": 0.659,
+  "avg_holding_duration": 6.6,
+  "tp_extension_dist": {
+    "2.0": 41
+  },
+  "n_skipped": 96,
+  "n_errors": 0,
+  "dod_all_must_pass": false,
+  "elapsed_seconds": 234.4
+}

@@ -1,0 +1,41 @@
+{
+  "model": "GOLDEN_v4.4",
+  "window_start": "2026-01-01",
+  "window_end": "2026-03-04",
+  "initial_capital": 10000.0,
+  "final_equity": 13004.06,
+  "net_pnl_usd": 3004.06,
+  "net_pnl_pct": 30.0406,
+  "daily_return_pct": 0.4845,
+  "n_days": 62,
+  "n_trades": 129,
+  "n_wins": 74,
+  "n_losses": 55,
+  "win_rate_pct": 57.36,
+  "avg_winner_usd": 186.67,
+  "avg_loser_usd": 196.54,
+  "rr_ratio": 0.95,
+  "profit_factor": 1.278,
+  "max_drawdown_pct": 20.75,
+  "sharpe_ratio": 2.299,
+  "avg_hold_candles": 2.73,
+  "exit_distribution": {
+    "SL": 49,
+    "TRAIL_TP": 46,
+    "TP": 25,
+    "TIME_EXIT": 9
+  },
+  "regime_summary": {
+    "bear": {
+      "trades": 74,
+      "win_rate": 56.8,
+      "total_pnl": 2850.86
+    },
+    "bull": {
+      "trades": 55,
+      "win_rate": 58.2,
+      "total_pnl": 153.2
+    }
+  },
+  "vol_regime_summary": {}
+}

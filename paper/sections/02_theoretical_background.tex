@@ -1,0 +1,36 @@
+\section{Landasan Ekonofisika: Bayesian Changepoint Detection}
+\label{sec:theory}
+
+Ekonofisika memandang pasar finansial bukan sebagai sistem acak murni, melainkan sebagai sistem kompleks non-ekuilibrium yang mengalami transisi fase. Arsitektur BTC-QUANT mengadopsi pandangan ini dengan mengganti model \textit{clustering} global (HMM) menjadi deteksi patahan struktur lokal secara \textit{online}.
+
+\subsection{Filosofi Patahan Struktur (Phase Transitions)}
+Dalam fisika, sistem berpindah fase (seperti air menjadi es) saat mencapai titik kritis \cite{mantegna1999introduction}. Di pasar kripto, perubahan tren dari \textit{bullish} ke \textit{bearish} atau sebaliknya sering kali terjadi secara mendadak melalui lonjakan volatilitas. Algoritma \textit{Bayesian Online Changepoint Detection} (BCD) \cite{adams2007bayesian} dirancang untuk mendeteksi "retakan" ini secara \textit{real-time}.
+
+\subsection{Formulasi Bayesian Online Changepoint Detection}
+BCD bekerja dengan menghitung distribusi probabilitas dari \textit{Run Length} ($r_t$), yaitu durasi sejak terjadinya titik patahan (\textit{changepoint}) terakhir. Probabilitas posisi saat ini berada pada \textit{run length} tertentu dinyatakan sebagai:
+
+\begin{equation}
+    P(r_t | y_{1:t}) = \frac{\sum_{r_{t-1}} P(r_t | r_{t-1}) P(y_t | r_{t-1}, y_{t}^{(r)}) P(r_{t-1} | y_{1:t-1})}{\sum_{r_t} P(r_t | y_{1:t})}
+\end{equation}
+
+Di mana:
+\begin{itemize}
+    \item $P(r_t | r_{t-1})$ adalah \textit{Hazard Function} yang menentukan probabilitas terjadinya \textit{reset} (changepoint).
+    \item $P(y_t | r_{t-1}, y_{t}^{(r)})$ adalah \textit{Predictive Posterior}, yaitu probabilitas data baru ($y_t$) berdasarkan riwayat data dalam rezim saat ini.
+\end{itemize}
+
+Jika data baru sangat tidak konsisten dengan distribusi saat ini, probabilitas \textit{run length} kembali ke nol ($r_t = 0$) akan melonjak, menandakan dimulainya rezim baru.
+
+\subsection{Mengatasi Fat-Tails dengan Distribusi Student-T}
+Salah satu kontribusi ekonofisika yang paling krusial adalah pengakuan atas distribusi non-Gaussian (\textit{Lévy Flights}) \cite{mandelbrot2010misbehavior}. Pasar kripto sering kali mengalami pergerakan ekstrem yang tidak mungkin dijelaskan oleh kurva lonceng normal standar.
+
+Dalam implementasi BTC-QUANT, kami mengganti fungsi distribusi normal pada \textit{Predictive Posterior} BCD dengan \textbf{Student-T Predictive Posterior}:
+
+\begin{equation}
+    y_t | \mathcal{D}_{t-1} \sim St(\mu_{t-1}, \lambda_{t-1}, \nu_{t-1})
+\end{equation}
+
+Distribusi Student-T memiliki parameter \textit{degrees of freedom} ($\nu$) yang memungkinkan model memiliki \textit{kurtosis} lebih tinggi. Secara teknis, ini memungkinkan bot untuk menyerap "noise" atau anomali harga jangka pendek tanpa langsung menghancurkan model rezim yang sedang berjalan.
+
+\subsection{Local Parameter Estimation}
+Berbeda dengan HMM yang mencoba mencari satu set parameter global untuk seluruh data historis (stasioner), BCD melakukan estimasi parameter secara lokal. Model hanya peduli pada data \textit{sejak titik changepoint terakhir}. Hal ini membuat sistem kita mengakui bahwa "sifat fisika" pasar hari ini bisa sangat berbeda dengan bulan lalu, sebuah konsep yang dikenal sebagai \textit{Non-Equilibrium Dynamics}.

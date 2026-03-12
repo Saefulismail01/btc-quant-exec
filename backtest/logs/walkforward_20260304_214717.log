@@ -1,0 +1,45 @@
+2026-03-04 21:47:17,503 [INFO] ========================================================================
+2026-03-04 21:47:17,504 [INFO]   BTC-QUANT TRUE WALK-FORWARD SIMULATION
+2026-03-04 21:47:17,504 [INFO]   Window  : 2026-01-01  →  2026-03-04
+2026-03-04 21:47:17,504 [INFO]   Capital : $10,000
+2026-03-04 21:47:17,505 [INFO] ========================================================================
+2026-03-04 21:47:17,505 [INFO] Loading full dataset from DuckDB with ASOF JOIN...
+2026-03-04 21:47:17,731 [INFO] Loaded 7206 candles | 2022-11-18 08:00:00+00:00 → 2026-03-03 04:00:00+00:00
+2026-03-04 21:47:17,754 [INFO]   Candles in window : 368
+2026-03-04 21:47:17,755 [INFO]   History available : 6,838 candles before window
+2026-03-04 21:47:17,755 [INFO] 
+2026-03-04 21:47:17,756 [INFO] Initializing services...
+2026-03-04 21:47:32,317 [WARNING] [MLP] Failed to load persisted model: 
+2026-03-04 21:47:32,317 [INFO] [RiskManager] Daily state reset for 2026-03-04
+2026-03-04 21:47:32,318 [INFO] [RiskManager] Init: MAX_LEVERAGE=5, RISK_PER_TRADE=2.0%, SAFE_MODE=True
+2026-03-04 21:47:32,319 [INFO] [RiskManager] Singleton initialized.
+2026-03-04 21:47:32,319 [INFO] All services ready.
+
+2026-03-04 21:47:34,044 [INFO] [BCD global] Trained on 500 candles. Found 9 changepoints.
+2026-03-04 21:47:35,950 [INFO] [MLP] Retrained: len=500, hash=760d68c91051
+2026-03-04 21:48:34,159 [INFO]   ▶ [2026-01-29]  46.3%  │ Equity: $    10,298  │ PnL: $     +298  │ Trades:   32  │ ETA: 1.2 min
+2026-03-04 21:49:35,828 [INFO]   ▶ [2026-02-05]  58.0%  │ Equity: $    11,662  │ PnL: $   +1,662  │ Trades:   37  │ ETA: 1.5 min
+2026-03-04 21:50:37,287 [INFO]   ▶ [2026-02-11]  68.4%  │ Equity: $    11,662  │ PnL: $   +1,662  │ Trades:   37  │ ETA: 1.4 min
+2026-03-04 21:51:38,059 [INFO]   ▶ [2026-03-01]  96.7%  │ Equity: $    13,246  │ PnL: $   +3,246  │ Trades:   53  │ ETA: 0.1 min
+2026-03-04 21:51:50,735 [INFO] 
+════════════════════════════════════════════════════════════════════════
+2026-03-04 21:51:50,735 [INFO]   BACKTEST COMPLETE
+2026-03-04 21:51:50,735 [INFO] ════════════════════════════════════════════════════════════════════════
+2026-03-04 21:51:50,741 [INFO]   Window        : 2026-01-01  →  2026-03-04  (62 days)
+2026-03-04 21:51:50,741 [INFO]   Initial Cap   : $   10,000.00
+2026-03-04 21:51:50,741 [INFO]   Final Equity  : $   13,246.20
+2026-03-04 21:51:50,742 [INFO]   Net PnL       : $   +3,246.20  (+32.46%)
+2026-03-04 21:51:50,742 [INFO]   Daily Return  : +0.524%/day
+2026-03-04 21:51:50,742 [INFO]   Trades        : 53  (W:30  L:23)  WR: 56.6%
+2026-03-04 21:51:50,742 [INFO]   Profit Factor : 1.615
+2026-03-04 21:51:50,742 [INFO]   Max Drawdown  : 13.20%
+2026-03-04 21:51:50,744 [INFO]   Sharpe Ratio  : 5.583
+2026-03-04 21:51:50,745 [INFO]   Errors/Skipped: 0 / 105
+2026-03-04 21:51:50,745 [INFO]   Time taken    : 258s
+2026-03-04 21:51:50,745 [INFO] ════════════════════════════════════════════════════════════════════════
+2026-03-04 21:51:50,757 [INFO] 
+  [✓] Trades  → C:\Users\ThinkPad\Documents\Windsurf\btc-scalping-quant-fix\backtest\results\walkforward_trades_202601_202603_20260304_214717.csv
+2026-03-04 21:51:50,758 [INFO]   [✓] Equity  → C:\Users\ThinkPad\Documents\Windsurf\btc-scalping-quant-fix\backtest\results\walkforward_equity_202601_202603_20260304_214717.csv
+2026-03-04 21:51:50,758 [INFO]   [✓] Daily   → C:\Users\ThinkPad\Documents\Windsurf\btc-scalping-quant-fix\backtest\results\walkforward_daily_202601_202603_20260304_214717.csv
+2026-03-04 21:51:50,759 [INFO]   [✓] Summary → C:\Users\ThinkPad\Documents\Windsurf\btc-scalping-quant-fix\backtest\results\walkforward_summary_202601_202603_20260304_214717.json
+2026-03-04 21:51:50,759 [INFO]   [✓] Full log → C:\Users\ThinkPad\Documents\Windsurf\btc-scalping-quant-fix\backtest\logs\walkforward_20260304_214717.log

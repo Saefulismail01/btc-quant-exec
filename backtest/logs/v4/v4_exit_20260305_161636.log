@@ -1,0 +1,791 @@
+2026-03-05 16:16:36,916 [INFO] ========================================================================
+2026-03-05 16:16:36,916 [INFO]   BTC-QUANT v4.1 — SPRINT 1: EXIT MANAGEMENT
+2026-03-05 16:16:36,916 [INFO]   Window  : 2022-11-01  →  2026-03-04
+2026-03-05 16:16:36,917 [INFO]   Capital : $10,000
+2026-03-05 16:16:36,917 [INFO] ========================================================================
+2026-03-05 16:16:36,917 [INFO] Loading full dataset from DuckDB with ASOF JOIN...
+2026-03-05 16:16:36,998 [INFO] Loaded 7206 candles | 2022-11-18 08:00:00+00:00 → 2026-03-03 04:00:00+00:00
+2026-03-05 16:16:37,013 [WARNING] Start 2022-11-01 too early — auto-adjusting to 2023-01-24.
+2026-03-05 16:16:37,013 [INFO]   Candles in window : 6,806
+2026-03-05 16:16:37,013 [INFO]   History available : 400 candles before window
+2026-03-05 16:16:37,015 [INFO] 
+Initializing services...
+2026-03-05 16:16:39,265 [WARNING] [MLP] Failed to load persisted model: 
+2026-03-05 16:16:39,265 [INFO] [RiskManager] Daily state reset for 2026-03-05
+2026-03-05 16:16:39,266 [INFO] [RiskManager] Init: MAX_LEVERAGE=5, RISK_PER_TRADE=2.0%, SAFE_MODE=True
+2026-03-05 16:16:39,266 [INFO] [RiskManager] Singleton initialized.
+2026-03-05 16:16:39,267 [INFO] All services ready.
+
+2026-03-05 16:16:40,784 [INFO] [BCD global] Trained on 401 candles. Found 8 changepoints.
+2026-03-05 16:16:42,174 [INFO] [MLP] Retrained: len=401, hash=06d9c7b3f065
+2026-03-05 16:16:42,175 [INFO]   🟢 OPEN  LONG  @ 23,078.20 | SL=22512.82 TP=24265.50 | TPext=1.5× | Gate=ADVISORY | regime=bull bcd=1.00
+2026-03-05 16:16:42,182 [INFO]   ❌ CLOSE LONG  | SL       | trail=0 | entry=23,078 exit=22,513 | PnL: -200.16 USD | Equity: 9,799.84
+2026-03-05 16:16:43,403 [INFO]   🟢 OPEN  LONG  @ 23,015.00 | SL=22482.79 TP=24132.64 | TPext=1.5× | Gate=ADVISORY | regime=bull bcd=1.00
+2026-03-05 16:16:43,404 [INFO]   ❌ CLOSE LONG  | SL       | trail=0 | entry=23,015 exit=22,483 | PnL: -196.15 USD | Equity: 9,603.69
+2026-03-05 16:16:44,673 [INFO]   🟢 OPEN  SHORT @ 22,627.40 | SL=23188.41 TP=21841.99 | TPext=1.0× | Gate=ADVISORY | regime=neutral bcd=1.00
+2026-03-05 16:16:44,683 [WARNING] [RiskManager] 3 consecutive losses — COOLDOWN 2 candles (8h)
+2026-03-05 16:16:44,683 [INFO]   ❌ CLOSE SHORT | SL       | trail=0 | entry=22,627 exit=23,188 | PnL: -192.23 USD | Equity: 9,411.46
+2026-03-05 16:16:47,736 [WARNING] [RiskManager] De-leveraged: 3 consec losses → leverage 1×
+2026-03-05 16:16:47,737 [INFO]   🟢 OPEN  LONG  @ 23,129.40 | SL=22541.57 TP=24363.83 | TPext=1.5× | Gate=ADVISORY | regime=bull bcd=1.00
+2026-03-05 16:16:47,745 [INFO]   ❌ CLOSE LONG  | SL       | trail=0 | entry=23,129 exit=22,542 | PnL: -188.38 USD | Equity: 9,223.08
+2026-03-05 16:16:48,924 [WARNING] [RiskManager] De-leveraged: 4 consec losses → leverage 1×
+2026-03-05 16:16:48,925 [INFO]   🟢 OPEN  LONG  @ 23,001.90 | SL=22472.47 TP=24113.70 | TPext=1.5× | Gate=ADVISORY | regime=bull bcd=1.00
+2026-03-05 16:16:48,964 [INFO]   ✅ CLOSE LONG  | TRAIL_SL | trail=2 | entry=23,002 exit=23,178 | PnL: +61.34 USD | Equity: 9,284.42
+2026-03-05 16:16:50,251 [WARNING] [RiskManager] De-leveraged: 4 consec losses → leverage 1×
+2026-03-05 16:16:50,252 [INFO]   🟢 OPEN  LONG  @ 23,648.10 | SL=23193.27 TP=24603.25 | TPext=1.5× | Gate=ACTIVE | regime=bull bcd=1.00
+2026-03-05 16:16:50,254 [WARNING] [RiskManager] 5 consecutive losses — COOLDOWN 6 candles (24h)
+2026-03-05 16:16:50,255 [INFO]   ❌ CLOSE LONG  | SL       | trail=0 | entry=23,648 exit=23,193 | PnL: -185.84 USD | Equity: 9,098.58
+2026-03-05 16:16:58,302 [WARNING] [RiskManager] De-leveraged: 5 consec losses → leverage 1×
+2026-03-05 16:16:58,303 [INFO]   🟢 OPEN  SHORT @ 22,856.90 | SL=23345.38 TP=22173.02 | TPext=1.0× | Gate=ACTIVE | regime=neutral bcd=1.00
+2026-03-05 16:16:58,313 [INFO]   ❌ CLOSE SHORT | SL       | trail=0 | entry=22,857 exit=23,345 | PnL: -182.12 USD | Equity: 8,916.46
+2026-03-05 16:16:59,672 [INFO] [MLP] Retrained: len=452, hash=2ea828817855
+2026-03-05 16:16:59,674 [WARNING] [RiskManager] De-leveraged: 6 consec losses → leverage 1×
+2026-03-05 16:16:59,674 [INFO]   🟢 OPEN  SHORT @ 22,975.70 | SL=23414.99 TP=22360.69 | TPext=1.0× | Gate=ACTIVE | regime=neutral bcd=1.00
+2026-03-05 16:16:59,677 [INFO]   ❌ CLOSE SHORT | SL       | trail=0 | entry=22,976 exit=23,415 | PnL: -178.47 USD | Equity: 8,737.99
+2026-03-05 16:17:00,861 [WARNING] [RiskManager] De-leveraged: 7 consec losses → leverage 1×
+2026-03-05 16:17:00,861 [INFO]   🟢 OPEN  LONG  @ 23,379.90 | SL=22891.84 TP=24404.82 | TPext=1.5× | Gate=ACTIVE | regime=bull bcd=1.00
+2026-03-05 16:17:00,879 [INFO]   ❌ CLOSE LONG  | TRAIL_SL | trail=1 | entry=23,380 exit=23,380 | PnL: -0.14 USD | Equity: 8,737.85
+2026-03-05 16:17:02,528 [WARNING] [RiskManager] De-leveraged: 7 consec losses → leverage 1×
+2026-03-05 16:17:02,529 [INFO]   🟢 OPEN  LONG  @ 23,804.90 | SL=23284.46 TP=24897.83 | TPext=1.5× | Gate=ACTIVE | regime=bull bcd=1.00
+2026-03-05 16:17:02,536 [INFO]   ❌ CLOSE LONG  | SL       | trail=0 | entry=23,805 exit=23,284 | PnL: -174.90 USD | Equity: 8,562.96
+2026-03-05 16:17:03,705 [WARNING] [RiskManager] De-leveraged: 8 consec losses → leverage 1×
+2026-03-05 16:17:03,706 [INFO]   🟢 OPEN  LONG  @ 23,532.90 | SL=23046.15 TP=24555.07 | TPext=1.5× | Gate=ACTIVE | regime=bull bcd=1.00
+2026-03-05 16:17:03,723 [INFO]   ❌ CLOSE LONG  | SL       | trail=0 | entry=23,533 exit=23,046 | PnL: -171.40 USD | Equity: 8,391.56
+2026-03-05 16:17:04,841 [WARNING] [RiskManager] De-leveraged: 9 consec losses → leverage 1×
+2026-03-05 16:17:04,841 [INFO]   🟢 OPEN  SHORT @ 23,354.10 | SL=23712.58 TP=22676.58 | TPext=1.5× | Gate=ACTIVE | regime=bear bcd=1.00
+2026-03-05 16:17:04,847 [INFO]   ✅ CLOSE SHORT | TP       | trail=1 | entry=23,354 exit=22,677 | PnL: +317.07 USD | Equity: 8,708.63
+2026-03-05 16:17:05,952 [WARNING] [RiskManager] De-leveraged: 9 consec losses → leverage 1×
+2026-03-05 16:17:05,953 [INFO]   🟢 OPEN  SHORT @ 22,891.90 | SL=23282.03 TP=22154.56 | TPext=1.5× | Gate=ACTIVE | regime=bear bcd=1.00
+2026-03-05 16:17:05,971 [INFO]   ❌ CLOSE SHORT | SL       | trail=0 | entry=22,892 exit=23,282 | PnL: -174.31 USD | Equity: 8,534.31
+2026-03-05 16:17:07,185 [WARNING] [RiskManager] De-leveraged: 10 consec losses → leverage 1×
+2026-03-05 16:17:07,185 [INFO]   🟢 OPEN  SHORT @ 22,898.80 | SL=23265.40 TP=22385.56 | TPext=1.0× | Gate=ACTIVE | regime=neutral bcd=1.00
+2026-03-05 16:17:07,186 [INFO]   ❌ CLOSE SHORT | SL       | trail=0 | entry=22,899 exit=23,265 | PnL: -170.82 USD | Equity: 8,363.49
+2026-03-05 16:17:08,289 [WARNING] [RiskManager] De-leveraged: 11 consec losses → leverage 1×
+2026-03-05 16:17:08,289 [INFO]   🟢 OPEN  LONG  @ 23,086.10 | SL=22680.70 TP=23937.45 | TPext=1.5× | Gate=ACTIVE | regime=bull bcd=1.00
+2026-03-05 16:17:08,296 [INFO]   ❌ CLOSE LONG  | SL       | trail=0 | entry=23,086 exit=22,681 | PnL: -167.40 USD | Equity: 8,196.09
+2026-03-05 16:17:09,481 [WARNING] [RiskManager] De-leveraged: 12 consec losses → leverage 1×
+2026-03-05 16:17:09,482 [INFO]   🟢 OPEN  SHORT @ 22,862.40 | SL=23241.84 TP=22331.18 | TPext=1.0× | Gate=ACTIVE | regime=neutral bcd=1.00
+2026-03-05 16:17:09,491 [INFO]   ✅ CLOSE SHORT | TP       | trail=1 | entry=22,862 exit=22,331 | PnL: +229.36 USD | Equity: 8,425.45
+2026-03-05 16:17:11,181 [INFO] [MLP] Retrained: len=500, hash=f68bf1a31963
+2026-03-05 16:17:11,182 [WARNING] [RiskManager] De-leveraged: 12 consec losses → leverage 1×
+2026-03-05 16:17:11,182 [INFO]   🟢 OPEN  SHORT @ 22,603.80 | SL=23021.35 TP=21726.94 | TPext=1.5× | Gate=ACTIVE | regime=bear bcd=1.00
+2026-03-05 16:17:11,185 [INFO] [RiskManager] Leverage recovered after 2 wins.
+2026-03-05 16:17:11,186 [INFO]   ✅ CLOSE SHORT | TP       | trail=1 | entry=22,604 exit=21,727 | PnL: +353.73 USD | Equity: 8,779.18
+2026-03-05 16:17:12,530 [INFO]   🟢 OPEN  SHORT @ 22,027.30 | SL=22495.66 TP=21043.74 | TPext=1.5× | Gate=ACTIVE | regime=bear bcd=1.00
+2026-03-05 16:17:12,560 [INFO] [RiskManager] Leverage recovered after 3 wins.
+2026-03-05 16:17:12,561 [INFO]   ❌ CLOSE SHORT | TRAIL_SL | trail=1 | entry=22,027 exit=22,027 | PnL: -0.14 USD | Equity: 8,779.04
+2026-03-05 16:17:13,809 [INFO]   🟢 OPEN  SHORT @ 21,931.40 | SL=22265.05 TP=21230.73 | TPext=1.5× | Gate=ACTIVE | regime=bear bcd=1.00
+2026-03-05 16:17:13,823 [INFO] [RiskManager] Leverage recovered after 4 wins.
+2026-03-05 16:17:13,823 [INFO]   ❌ CLOSE SHORT | TRAIL_SL | trail=1 | entry=21,931 exit=21,931 | PnL: -0.14 USD | Equity: 8,778.90
+2026-03-05 16:17:15,049 [INFO]   🟢 OPEN  SHORT @ 21,798.90 | SL=22139.23 TP=21084.21 | TPext=1.5× | Gate=ACTIVE | regime=bear bcd=1.00
+2026-03-05 16:17:15,051 [INFO]   ❌ CLOSE SHORT | SL       | trail=0 | entry=21,799 exit=22,139 | PnL: -175.72 USD | Equity: 8,603.18
+2026-03-05 16:17:16,247 [INFO]   🟢 OPEN  SHORT @ 22,033.30 | SL=22438.76 TP=21181.83 | TPext=1.5× | Gate=ACTIVE | regime=bear bcd=1.00
+2026-03-05 16:17:16,253 [INFO]   ❌ CLOSE SHORT | SL       | trail=0 | entry=22,033 exit=22,439 | PnL: -172.20 USD | Equity: 8,430.98
+2026-03-05 16:17:17,416 [INFO]   🟢 OPEN  SHORT @ 22,097.50 | SL=22467.86 TP=21319.73 | TPext=1.5× | Gate=ACTIVE | regime=bear bcd=1.00
+2026-03-05 16:17:17,417 [WARNING] [RiskManager] 3 consecutive losses — COOLDOWN 2 candles (8h)
+2026-03-05 16:17:17,418 [INFO]   ❌ CLOSE SHORT | SL       | trail=0 | entry=22,098 exit=22,468 | PnL: -168.75 USD | Equity: 8,262.23
+2026-03-05 16:17:20,941 [WARNING] [RiskManager] De-leveraged: 3 consec losses → leverage 1×
+2026-03-05 16:17:20,942 [INFO]   🟢 OPEN  SHORT @ 23,310.60 | SL=23761.22 TP=22679.73 | TPext=1.0× | Gate=ACTIVE | regime=neutral bcd=1.00
+2026-03-05 16:17:20,944 [INFO]   ❌ CLOSE SHORT | SL       | trail=0 | entry=23,311 exit=23,761 | PnL: -165.38 USD | Equity: 8,096.85
+2026-03-05 16:17:22,085 [WARNING] [RiskManager] De-leveraged: 4 consec losses → leverage 1×
+2026-03-05 16:17:22,085 [INFO]   🟢 OPEN  LONG  @ 24,332.60 | SL=23738.66 TP=25142.52 | TPext=1.2× | Gate=ACTIVE | regime=bull bcd=1.00
+2026-03-05 16:17:22,089 [INFO]   ❌ CLOSE LONG  | TRAIL_SL | trail=1 | entry=24,333 exit=24,333 | PnL: -0.13 USD | Equity: 8,096.72
+2026-03-05 16:17:23,255 [WARNING] [RiskManager] De-leveraged: 4 consec losses → leverage 1×
+2026-03-05 16:17:23,255 [INFO]   🟢 OPEN  LONG  @ 24,580.00 | SL=24037.49 TP=25719.27 | TPext=1.5× | Gate=ACTIVE | regime=bull bcd=1.00
+2026-03-05 16:17:23,258 [INFO] [RiskManager] Leverage recovered after 2 wins.
+2026-03-05 16:17:23,259 [INFO]   ❌ CLOSE LONG  | TRAIL_SL | trail=1 | entry=24,580 exit=24,580 | PnL: -0.13 USD | Equity: 8,096.59
+2026-03-05 16:17:24,524 [INFO]   🟢 OPEN  LONG  @ 24,879.00 | SL=24260.56 TP=26177.72 | TPext=1.5× | Gate=ADVISORY | regime=bull bcd=1.00
+2026-03-05 16:17:24,526 [INFO]   ❌ CLOSE LONG  | SL       | trail=0 | entry=24,879 exit=24,261 | PnL: -162.06 USD | Equity: 7,934.53
+2026-03-05 16:17:39,758 [INFO]   ▶ [2023-02-18]   2.3%  │ Equity: $     7,935  │ PnL: $   -2,065  │ Trades:   26  │ ETA: 43.3 min
+2026-03-05 16:17:44,541 [INFO]   🟢 OPEN  LONG  @ 24,929.70 | SL=24357.51 TP=26131.29 | TPext=1.5× | Gate=ADVISORY | regime=bull bcd=1.00
+2026-03-05 16:17:44,543 [INFO]   ❌ CLOSE LONG  | SL       | trail=0 | entry=24,930 exit=24,358 | PnL: -158.82 USD | Equity: 7,775.71
+2026-03-05 16:17:46,994 [INFO]   🟢 OPEN  SHORT @ 24,265.90 | SL=24895.62 TP=22943.50 | TPext=1.5× | Gate=ADVISORY | regime=bear bcd=1.00
+2026-03-05 16:17:46,997 [WARNING] [RiskManager] 3 consecutive losses — COOLDOWN 2 candles (8h)
+2026-03-05 16:17:46,997 [INFO]   ❌ CLOSE SHORT | SL       | trail=0 | entry=24,266 exit=24,896 | PnL: -155.64 USD | Equity: 7,620.07
+2026-03-05 16:17:50,627 [WARNING] [RiskManager] De-leveraged: 3 consec losses → leverage 1×
+2026-03-05 16:17:50,628 [INFO]   🟢 OPEN  LONG  @ 24,944.60 | SL=24299.15 TP=26300.04 | TPext=1.5× | Gate=ADVISORY | regime=bull bcd=1.00
+2026-03-05 16:17:50,636 [INFO]   ❌ CLOSE LONG  | SL       | trail=0 | entry=24,945 exit=24,299 | PnL: -152.52 USD | Equity: 7,467.55
+2026-03-05 16:17:51,873 [WARNING] [RiskManager] De-leveraged: 4 consec losses → leverage 1×
+2026-03-05 16:17:53,031 [WARNING] [RiskManager] De-leveraged: 4 consec losses → leverage 1×
+2026-03-05 16:17:54,246 [WARNING] [RiskManager] De-leveraged: 4 consec losses → leverage 1×
+2026-03-05 16:17:55,394 [WARNING] [RiskManager] De-leveraged: 4 consec losses → leverage 1×
+2026-03-05 16:17:55,395 [INFO]   🟢 OPEN  SHORT @ 24,198.80 | SL=24863.61 TP=22802.69 | TPext=1.5× | Gate=ADVISORY | regime=bear bcd=1.00
+2026-03-05 16:17:55,400 [INFO]   ❌ CLOSE SHORT | TRAIL_SL | trail=1 | entry=24,199 exit=24,199 | PnL: -0.12 USD | Equity: 7,467.43
+2026-03-05 16:17:56,527 [WARNING] [RiskManager] De-leveraged: 4 consec losses → leverage 1×
+2026-03-05 16:17:56,527 [INFO]   🟢 OPEN  SHORT @ 23,781.70 | SL=24437.96 TP=22403.55 | TPext=1.5× | Gate=ADVISORY | regime=bear bcd=1.00
+2026-03-05 16:17:56,530 [WARNING] [RiskManager] 5 consecutive losses — COOLDOWN 6 candles (24h)
+2026-03-05 16:17:56,530 [INFO]   ❌ CLOSE SHORT | SL       | trail=0 | entry=23,782 exit=24,438 | PnL: -149.47 USD | Equity: 7,317.96
+2026-03-05 16:18:05,268 [WARNING] [RiskManager] De-leveraged: 5 consec losses → leverage 1×
+2026-03-05 16:18:06,628 [WARNING] [RiskManager] De-leveraged: 5 consec losses → leverage 1×
+2026-03-05 16:18:07,790 [WARNING] [RiskManager] De-leveraged: 5 consec losses → leverage 1×
+2026-03-05 16:18:07,790 [INFO]   🟢 OPEN  SHORT @ 23,821.50 | SL=24451.61 TP=22498.27 | TPext=1.5× | Gate=ADVISORY | regime=bear bcd=1.00
+2026-03-05 16:18:07,807 [INFO]   ✅ CLOSE SHORT | TRAIL_SL | trail=2 | entry=23,822 exit=23,611 | PnL: +48.67 USD | Equity: 7,366.63
+2026-03-05 16:18:08,969 [WARNING] [RiskManager] De-leveraged: 5 consec losses → leverage 1×
+2026-03-05 16:18:08,970 [INFO]   🟢 OPEN  SHORT @ 23,491.00 | SL=23978.43 TP=22467.41 | TPext=1.5× | Gate=ACTIVE | regime=bear bcd=1.00
+2026-03-05 16:18:08,987 [INFO] [RiskManager] Leverage recovered after 2 wins.
+2026-03-05 16:18:08,987 [INFO]   ❌ CLOSE SHORT | TRAIL_SL | trail=1 | entry=23,491 exit=23,491 | PnL: -0.12 USD | Equity: 7,366.51
+2026-03-05 16:18:10,138 [INFO]   🟢 OPEN  SHORT @ 23,431.60 | SL=23926.56 TP=22392.19 | TPext=1.5× | Gate=ACTIVE | regime=bear bcd=1.00
+2026-03-05 16:18:10,140 [INFO]   ❌ CLOSE SHORT | SL       | trail=0 | entry=23,432 exit=23,927 | PnL: -147.45 USD | Equity: 7,219.07
+2026-03-05 16:18:11,346 [INFO]   🟢 OPEN  SHORT @ 23,709.60 | SL=24216.11 TP=23000.49 | TPext=1.0× | Gate=ACTIVE | regime=neutral bcd=1.00
+2026-03-05 16:18:11,351 [INFO]   ❌ CLOSE SHORT | TRAIL_SL | trail=1 | entry=23,710 exit=23,710 | PnL: -0.12 USD | Equity: 7,218.95
+2026-03-05 16:18:12,791 [INFO]   🟢 OPEN  SHORT @ 23,619.80 | SL=24139.75 TP=22891.87 | TPext=1.0× | Gate=ACTIVE | regime=neutral bcd=1.00
+2026-03-05 16:18:12,799 [INFO] [RiskManager] Leverage recovered after 2 wins.
+2026-03-05 16:18:12,799 [INFO]   ✅ CLOSE SHORT | TP       | trail=0 | entry=23,620 exit=22,892 | PnL: +202.02 USD | Equity: 7,420.97
+2026-03-05 16:18:13,990 [INFO]   🟢 OPEN  LONG  @ 23,457.10 | SL=22998.05 TP=24421.11 | TPext=1.5× | Gate=ACTIVE | regime=bull bcd=1.00
+2026-03-05 16:18:13,992 [INFO]   ❌ CLOSE LONG  | SL       | trail=0 | entry=23,457 exit=22,998 | PnL: -148.54 USD | Equity: 7,272.43
+2026-03-05 16:18:15,178 [INFO]   🟢 OPEN  SHORT @ 22,306.30 | SL=22962.03 TP=21412.13 | TPext=1.2× | Gate=ADVISORY | regime=bear bcd=1.00
+2026-03-05 16:18:15,209 [INFO]   ❌ CLOSE SHORT | TIME_EXIT | held 24c | PnL: -31.79 | Equity: 7,240.64
+2026-03-05 16:18:16,390 [INFO]   🟢 OPEN  SHORT @ 22,408.40 | SL=22714.39 TP=21980.01 | TPext=1.0× | Gate=ACTIVE | regime=neutral bcd=1.00
+2026-03-05 16:18:16,391 [INFO]   ✅ CLOSE SHORT | TP       | trail=0 | entry=22,408 exit=21,980 | PnL: +202.62 USD | Equity: 7,443.26
+2026-03-05 16:18:17,516 [INFO]   🟢 OPEN  SHORT @ 22,339.80 | SL=22636.41 TP=21924.55 | TPext=1.0× | Gate=ACTIVE | regime=neutral bcd=1.00
+2026-03-05 16:18:17,522 [INFO] [RiskManager] Leverage recovered after 2 wins.
+2026-03-05 16:18:17,522 [INFO]   ✅ CLOSE SHORT | TP       | trail=1 | entry=22,340 exit=21,925 | PnL: +208.29 USD | Equity: 7,651.55
+2026-03-05 16:18:18,643 [INFO]   🟢 OPEN  SHORT @ 22,141.80 | SL=22494.86 TP=21647.51 | TPext=1.0× | Gate=ACTIVE | regime=neutral bcd=1.00
+2026-03-05 16:18:18,647 [INFO] [RiskManager] Leverage recovered after 3 wins.
+2026-03-05 16:18:18,648 [INFO]   ✅ CLOSE SHORT | TP       | trail=0 | entry=22,142 exit=21,648 | PnL: +214.12 USD | Equity: 7,865.67
+2026-03-05 16:18:19,885 [INFO]   🟢 OPEN  SHORT @ 21,993.70 | SL=22368.66 TP=21206.27 | TPext=1.5× | Gate=ACTIVE | regime=bear bcd=1.00
+2026-03-05 16:18:19,891 [INFO] [RiskManager] Leverage recovered after 4 wins.
+2026-03-05 16:18:19,891 [INFO]   ✅ CLOSE SHORT | TP       | trail=1 | entry=21,994 exit=21,206 | PnL: +330.23 USD | Equity: 8,195.90
+2026-03-05 16:18:21,107 [INFO]   🟢 OPEN  SHORT @ 21,637.40 | SL=22015.87 TP=20842.61 | TPext=1.5× | Gate=ACTIVE | regime=bear bcd=1.00
+2026-03-05 16:18:21,108 [INFO] [RiskManager] Leverage recovered after 5 wins.
+2026-03-05 16:18:21,109 [INFO]   ✅ CLOSE SHORT | TP       | trail=1 | entry=21,637 exit=20,843 | PnL: +344.10 USD | Equity: 8,540.00
+2026-03-05 16:18:22,258 [INFO]   🟢 OPEN  SHORT @ 20,845.60 | SL=21295.22 TP=19901.39 | TPext=1.5× | Gate=ACTIVE | regime=bear bcd=1.00
+2026-03-05 16:18:22,259 [INFO] [RiskManager] Leverage recovered after 6 wins.
+2026-03-05 16:18:22,260 [INFO]   ✅ CLOSE SHORT | TP       | trail=1 | entry=20,846 exit=19,901 | PnL: +358.54 USD | Equity: 8,898.54
+2026-03-05 16:18:23,418 [INFO]   🟢 OPEN  SHORT @ 20,348.30 | SL=20857.40 TP=19279.18 | TPext=1.5× | Gate=ADVISORY | regime=bear bcd=1.00
+2026-03-05 16:18:23,427 [INFO] [RiskManager] Leverage recovered after 7 wins.
+2026-03-05 16:18:23,428 [INFO]   ❌ CLOSE SHORT | TRAIL_SL | trail=1 | entry=20,348 exit=20,348 | PnL: -0.14 USD | Equity: 8,898.40
+2026-03-05 16:18:24,671 [INFO]   🟢 OPEN  SHORT @ 20,140.30 | SL=20722.77 TP=18917.11 | TPext=1.5× | Gate=ADVISORY | regime=bear bcd=1.00
+2026-03-05 16:18:24,683 [INFO]   ❌ CLOSE SHORT | SL       | trail=0 | entry=20,140 exit=20,723 | PnL: -178.11 USD | Equity: 8,720.29
+2026-03-05 16:18:25,828 [INFO]   🟢 OPEN  SHORT @ 20,347.90 | SL=20854.23 TP=19284.60 | TPext=1.5× | Gate=ADVISORY | regime=bear bcd=1.00
+2026-03-05 16:18:25,830 [INFO]   ❌ CLOSE SHORT | SL       | trail=0 | entry=20,348 exit=20,854 | PnL: -174.55 USD | Equity: 8,545.75
+2026-03-05 16:18:40,905 [INFO]   ▶ [2023-03-14]   4.4%  │ Equity: $     8,546  │ PnL: $   -1,454  │ Trades:   47  │ ETA: 44.3 min
+2026-03-05 16:19:41,139 [INFO]   ▶ [2023-03-21]   5.0%  │ Equity: $     8,546  │ PnL: $   -1,454  │ Trades:   47  │ ETA: 57.5 min
+2026-03-05 16:19:53,097 [INFO]   🟢 OPEN  LONG  @ 28,586.20 | SL=27731.12 TP=30381.86 | TPext=1.5× | Gate=ADVISORY | regime=bull bcd=1.00
+2026-03-05 16:19:53,099 [WARNING] [RiskManager] 3 consecutive losses — COOLDOWN 2 candles (8h)
+2026-03-05 16:19:53,100 [INFO]   ❌ CLOSE LONG  | SL       | trail=0 | entry=28,586 exit=27,731 | PnL: -171.05 USD | Equity: 8,374.69
+2026-03-05 16:19:57,129 [WARNING] [RiskManager] De-leveraged: 3 consec losses → leverage 1×
+2026-03-05 16:19:58,313 [WARNING] [RiskManager] De-leveraged: 3 consec losses → leverage 1×
+2026-03-05 16:19:59,481 [WARNING] [RiskManager] De-leveraged: 3 consec losses → leverage 1×
+2026-03-05 16:20:00,696 [WARNING] [RiskManager] De-leveraged: 3 consec losses → leverage 1×
+2026-03-05 16:20:02,030 [WARNING] [RiskManager] De-leveraged: 3 consec losses → leverage 1×
+2026-03-05 16:20:03,203 [WARNING] [RiskManager] De-leveraged: 3 consec losses → leverage 1×
+2026-03-05 16:20:04,339 [WARNING] [RiskManager] De-leveraged: 3 consec losses → leverage 1×
+2026-03-05 16:20:05,525 [WARNING] [RiskManager] De-leveraged: 3 consec losses → leverage 1×
+2026-03-05 16:20:06,719 [WARNING] [RiskManager] De-leveraged: 3 consec losses → leverage 1×
+2026-03-05 16:20:07,997 [WARNING] [RiskManager] De-leveraged: 3 consec losses → leverage 1×
+2026-03-05 16:20:09,227 [WARNING] [RiskManager] De-leveraged: 3 consec losses → leverage 1×
+2026-03-05 16:20:10,523 [WARNING] [RiskManager] De-leveraged: 3 consec losses → leverage 1×
+2026-03-05 16:20:11,762 [WARNING] [RiskManager] De-leveraged: 3 consec losses → leverage 1×
+2026-03-05 16:20:12,948 [WARNING] [RiskManager] De-leveraged: 3 consec losses → leverage 1×
+2026-03-05 16:20:14,140 [WARNING] [RiskManager] De-leveraged: 3 consec losses → leverage 1×
+2026-03-05 16:20:15,356 [WARNING] [RiskManager] De-leveraged: 3 consec losses → leverage 1×
+2026-03-05 16:20:16,511 [WARNING] [RiskManager] De-leveraged: 3 consec losses → leverage 1×
+2026-03-05 16:20:17,655 [WARNING] [RiskManager] De-leveraged: 3 consec losses → leverage 1×
+2026-03-05 16:20:18,911 [WARNING] [RiskManager] De-leveraged: 3 consec losses → leverage 1×
+2026-03-05 16:20:20,141 [WARNING] [RiskManager] De-leveraged: 3 consec losses → leverage 1×
+2026-03-05 16:20:21,318 [WARNING] [RiskManager] De-leveraged: 3 consec losses → leverage 1×
+2026-03-05 16:20:22,470 [WARNING] [RiskManager] De-leveraged: 3 consec losses → leverage 1×
+2026-03-05 16:20:23,850 [WARNING] [RiskManager] De-leveraged: 3 consec losses → leverage 1×
+2026-03-05 16:20:25,090 [WARNING] [RiskManager] De-leveraged: 3 consec losses → leverage 1×
+2026-03-05 16:20:26,268 [WARNING] [RiskManager] De-leveraged: 3 consec losses → leverage 1×
+2026-03-05 16:20:27,465 [WARNING] [RiskManager] De-leveraged: 3 consec losses → leverage 1×
+2026-03-05 16:20:29,094 [WARNING] [RiskManager] De-leveraged: 3 consec losses → leverage 1×
+2026-03-05 16:20:30,477 [WARNING] [RiskManager] De-leveraged: 3 consec losses → leverage 1×
+2026-03-05 16:20:30,478 [INFO]   🟢 OPEN  SHORT @ 26,887.30 | SL=27666.85 TP=25250.24 | TPext=1.5× | Gate=ADVISORY | regime=bear bcd=1.00
+2026-03-05 16:20:30,490 [INFO]   ❌ CLOSE SHORT | SL       | trail=0 | entry=26,887 exit=27,667 | PnL: -167.63 USD | Equity: 8,207.07
+2026-03-05 16:20:31,881 [WARNING] [RiskManager] De-leveraged: 4 consec losses → leverage 1×
+2026-03-05 16:20:33,160 [WARNING] [RiskManager] De-leveraged: 4 consec losses → leverage 1×
+2026-03-05 16:20:34,430 [WARNING] [RiskManager] De-leveraged: 4 consec losses → leverage 1×
+2026-03-05 16:20:35,839 [WARNING] [RiskManager] De-leveraged: 4 consec losses → leverage 1×
+2026-03-05 16:20:37,118 [WARNING] [RiskManager] De-leveraged: 4 consec losses → leverage 1×
+2026-03-05 16:20:38,390 [WARNING] [RiskManager] De-leveraged: 4 consec losses → leverage 1×
+2026-03-05 16:20:39,678 [WARNING] [RiskManager] De-leveraged: 4 consec losses → leverage 1×
+2026-03-05 16:20:41,032 [WARNING] [RiskManager] De-leveraged: 4 consec losses → leverage 1×
+2026-03-05 16:20:42,343 [WARNING] [RiskManager] De-leveraged: 4 consec losses → leverage 1×
+2026-03-05 16:20:42,344 [INFO]   ▶ [2023-03-30]   5.8%  │ Equity: $     8,207  │ PnL: $   -1,793  │ Trades:   49  │ ETA: 66.3 min
+2026-03-05 16:20:43,714 [WARNING] [RiskManager] De-leveraged: 4 consec losses → leverage 1×
+2026-03-05 16:20:45,108 [WARNING] [RiskManager] De-leveraged: 4 consec losses → leverage 1×
+2026-03-05 16:20:46,384 [WARNING] [RiskManager] De-leveraged: 4 consec losses → leverage 1×
+2026-03-05 16:20:47,744 [WARNING] [RiskManager] De-leveraged: 4 consec losses → leverage 1×
+2026-03-05 16:20:49,070 [WARNING] [RiskManager] De-leveraged: 4 consec losses → leverage 1×
+2026-03-05 16:20:49,070 [INFO]   🟢 OPEN  SHORT @ 27,733.30 | SL=28500.86 TP=26658.71 | TPext=1.0× | Gate=ADVISORY | regime=neutral bcd=1.00
+2026-03-05 16:20:49,072 [WARNING] [RiskManager] 5 consecutive losses — COOLDOWN 6 candles (24h)
+2026-03-05 16:20:49,073 [INFO]   ❌ CLOSE SHORT | SL       | trail=0 | entry=27,733 exit=28,501 | PnL: -164.27 USD | Equity: 8,042.79
+2026-03-05 16:20:58,161 [WARNING] [RiskManager] De-leveraged: 5 consec losses → leverage 1×
+2026-03-05 16:20:58,161 [INFO]   🟢 OPEN  LONG  @ 28,365.50 | SL=27694.32 TP=29774.97 | TPext=1.5× | Gate=ADVISORY | regime=bull bcd=1.00
+2026-03-05 16:20:58,177 [INFO]   ❌ CLOSE LONG  | SL       | trail=0 | entry=28,366 exit=27,694 | PnL: -160.98 USD | Equity: 7,881.81
+2026-03-05 16:20:59,447 [WARNING] [RiskManager] De-leveraged: 6 consec losses → leverage 1×
+2026-03-05 16:20:59,448 [INFO]   🟢 OPEN  LONG  @ 28,161.20 | SL=27631.59 TP=29273.38 | TPext=1.5× | Gate=ACTIVE | regime=bull bcd=1.00
+2026-03-05 16:20:59,449 [INFO]   ❌ CLOSE LONG  | SL       | trail=0 | entry=28,161 exit=27,632 | PnL: -157.76 USD | Equity: 7,724.05
+2026-03-05 16:21:00,925 [WARNING] [RiskManager] De-leveraged: 7 consec losses → leverage 1×
+2026-03-05 16:21:00,925 [INFO]   🟢 OPEN  LONG  @ 27,738.10 | SL=27180.01 TP=28910.09 | TPext=1.5× | Gate=ADVISORY | regime=bull bcd=1.00
+2026-03-05 16:21:00,932 [INFO]   ❌ CLOSE LONG  | TRAIL_SL | trail=1 | entry=27,738 exit=27,738 | PnL: -0.12 USD | Equity: 7,723.92
+2026-03-05 16:21:02,247 [WARNING] [RiskManager] De-leveraged: 7 consec losses → leverage 1×
+2026-03-05 16:21:02,248 [INFO]   🟢 OPEN  LONG  @ 28,071.80 | SL=27485.33 TP=29303.38 | TPext=1.5× | Gate=ACTIVE | regime=bull bcd=1.00
+2026-03-05 16:21:02,271 [INFO] [RiskManager] Leverage recovered after 2 wins.
+2026-03-05 16:21:02,272 [INFO]   ❌ CLOSE LONG  | TRAIL_SL | trail=1 | entry=28,072 exit=28,072 | PnL: -0.12 USD | Equity: 7,723.80
+2026-03-05 16:21:04,970 [INFO]   🟢 OPEN  SHORT @ 28,014.90 | SL=28659.30 TP=27112.73 | TPext=1.0× | Gate=ADVISORY | regime=neutral bcd=1.00
+2026-03-05 16:21:05,036 [INFO] [RiskManager] Leverage recovered after 3 wins.
+2026-03-05 16:21:05,036 [INFO]   ❌ CLOSE SHORT | TIME_EXIT | held 24c | PnL: +33.75 | Equity: 7,757.55
+2026-03-05 16:21:06,468 [INFO]   🟢 OPEN  SHORT @ 28,132.40 | SL=28505.14 TP=27610.57 | TPext=1.0× | Gate=ACTIVE | regime=neutral bcd=1.00
+2026-03-05 16:21:06,476 [INFO]   ❌ CLOSE SHORT | SL       | trail=0 | entry=28,132 exit=28,505 | PnL: -155.28 USD | Equity: 7,602.27
+2026-03-05 16:21:10,299 [INFO]   🟢 OPEN  LONG  @ 29,164.90 | SL=28711.01 TP=30118.07 | TPext=1.5× | Gate=ACTIVE | regime=bull bcd=1.00
+2026-03-05 16:21:10,300 [INFO]   ✅ CLOSE LONG  | TP       | trail=1 | entry=29,165 exit=30,118 | PnL: +319.17 USD | Equity: 7,921.45
+2026-03-05 16:21:11,561 [INFO]   🟢 OPEN  LONG  @ 29,623.10 | SL=29117.84 TP=30684.14 | TPext=1.5× | Gate=ACTIVE | regime=bull bcd=1.00
+2026-03-05 16:21:11,574 [INFO] [RiskManager] Leverage recovered after 2 wins.
+2026-03-05 16:21:11,574 [INFO]   ❌ CLOSE LONG  | TRAIL_SL | trail=1 | entry=29,623 exit=29,623 | PnL: -0.13 USD | Equity: 7,921.32
+2026-03-05 16:21:12,927 [INFO]   🟢 OPEN  LONG  @ 30,003.70 | SL=29461.13 TP=31143.09 | TPext=1.5× | Gate=ACTIVE | regime=bull bcd=1.00
+2026-03-05 16:21:12,947 [INFO] [RiskManager] Leverage recovered after 3 wins.
+2026-03-05 16:21:12,948 [INFO]   ✅ CLOSE LONG  | TRAIL_SL | trail=2 | entry=30,004 exit=30,185 | PnL: +52.68 USD | Equity: 7,974.00
+2026-03-05 16:21:14,344 [INFO]   🟢 OPEN  LONG  @ 30,790.00 | SL=30240.16 TP=31944.66 | TPext=1.5× | Gate=ACTIVE | regime=bull bcd=1.00
+2026-03-05 16:21:14,346 [INFO]   ❌ CLOSE LONG  | SL       | trail=0 | entry=30,790 exit=30,240 | PnL: -159.61 USD | Equity: 7,814.39
+2026-03-05 16:21:15,645 [INFO]   🟢 OPEN  LONG  @ 30,226.70 | SL=29634.72 TP=31469.86 | TPext=1.5× | Gate=ACTIVE | regime=bull bcd=1.00
+2026-03-05 16:21:15,667 [INFO]   ❌ CLOSE LONG  | SL       | trail=0 | entry=30,227 exit=29,635 | PnL: -156.41 USD | Equity: 7,657.98
+2026-03-05 16:21:17,087 [INFO]   🟢 OPEN  LONG  @ 29,831.10 | SL=29400.55 TP=30735.25 | TPext=1.5× | Gate=ACTIVE | regime=bull bcd=1.00
+2026-03-05 16:21:17,090 [WARNING] [RiskManager] 3 consecutive losses — COOLDOWN 2 candles (8h)
+2026-03-05 16:21:17,090 [INFO]   ❌ CLOSE LONG  | SL       | trail=0 | entry=29,831 exit=29,401 | PnL: -153.28 USD | Equity: 7,504.70
+2026-03-05 16:21:21,269 [WARNING] [RiskManager] De-leveraged: 3 consec losses → leverage 1×
+2026-03-05 16:21:21,269 [INFO]   🟢 OPEN  LONG  @ 29,459.60 | SL=28993.29 TP=30438.86 | TPext=1.5× | Gate=ACTIVE | regime=bull bcd=1.00
+2026-03-05 16:21:21,274 [INFO]   ✅ CLOSE LONG  | TP       | trail=1 | entry=29,460 exit=30,439 | PnL: +315.08 USD | Equity: 7,819.78
+2026-03-05 16:21:22,707 [WARNING] [RiskManager] De-leveraged: 3 consec losses → leverage 1×
+2026-03-05 16:21:22,707 [INFO]   🟢 OPEN  LONG  @ 30,369.70 | SL=29861.08 TP=31437.81 | TPext=1.5× | Gate=ACTIVE | regime=bull bcd=1.00
+2026-03-05 16:21:22,717 [INFO]   ❌ CLOSE LONG  | SL       | trail=0 | entry=30,370 exit=29,861 | PnL: -156.52 USD | Equity: 7,663.26
+2026-03-05 16:21:24,167 [WARNING] [RiskManager] De-leveraged: 4 consec losses → leverage 1×
+2026-03-05 16:21:24,168 [INFO]   🟢 OPEN  LONG  @ 30,064.80 | SL=29553.95 TP=31137.59 | TPext=1.5× | Gate=ACTIVE | regime=bull bcd=1.00
+2026-03-05 16:21:24,170 [WARNING] [RiskManager] 5 consecutive losses — COOLDOWN 6 candles (24h)
+2026-03-05 16:21:24,170 [INFO]   ❌ CLOSE LONG  | SL       | trail=0 | entry=30,065 exit=29,554 | PnL: -153.39 USD | Equity: 7,509.87
+2026-03-05 16:21:33,098 [WARNING] [RiskManager] De-leveraged: 5 consec losses → leverage 1×
+2026-03-05 16:21:33,098 [INFO]   🟢 OPEN  SHORT @ 28,601.60 | SL=29228.17 TP=27724.40 | TPext=1.0× | Gate=ACTIVE | regime=neutral bcd=1.00
+2026-03-05 16:21:33,107 [INFO]   ✅ CLOSE SHORT | TP       | trail=1 | entry=28,602 exit=27,724 | PnL: +210.16 USD | Equity: 7,720.02
+2026-03-05 16:21:34,374 [WARNING] [RiskManager] De-leveraged: 5 consec losses → leverage 1×
+2026-03-05 16:21:34,374 [INFO]   🟢 OPEN  SHORT @ 28,032.80 | SL=28671.30 TP=26691.94 | TPext=1.5× | Gate=ADVISORY | regime=bear bcd=1.00
+2026-03-05 16:21:34,409 [INFO] [RiskManager] Leverage recovered after 2 wins.
+2026-03-05 16:21:34,409 [INFO]   ❌ CLOSE SHORT | TIME_EXIT | held 25c | PnL: +105.48 | Equity: 7,825.50
+2026-03-05 16:21:35,707 [INFO]   🟢 OPEN  SHORT @ 28,286.70 | SL=28889.77 TP=27020.25 | TPext=1.5× | Gate=ACTIVE | regime=bear bcd=1.00
+2026-03-05 16:21:35,710 [INFO]   ❌ CLOSE SHORT | SL       | trail=0 | entry=28,287 exit=28,890 | PnL: -156.64 USD | Equity: 7,668.87
+2026-03-05 16:21:36,955 [INFO]   🟢 OPEN  SHORT @ 28,365.00 | SL=28941.26 TP=27154.85 | TPext=1.5× | Gate=ACTIVE | regime=bear bcd=1.00
+2026-03-05 16:21:36,957 [INFO]   ❌ CLOSE SHORT | SL       | trail=0 | entry=28,365 exit=28,941 | PnL: -153.50 USD | Equity: 7,515.37
+2026-03-05 16:21:38,173 [INFO]   🟢 OPEN  SHORT @ 28,940.70 | SL=29560.37 TP=28073.16 | TPext=1.0× | Gate=ACTIVE | regime=neutral bcd=1.00
+2026-03-05 16:21:38,175 [WARNING] [RiskManager] 3 consecutive losses — COOLDOWN 2 candles (8h)
+2026-03-05 16:21:38,175 [INFO]   ❌ CLOSE SHORT | SL       | trail=0 | entry=28,941 exit=29,560 | PnL: -150.43 USD | Equity: 7,364.94
+2026-03-05 16:21:41,705 [WARNING] [RiskManager] De-leveraged: 3 consec losses → leverage 1×
+2026-03-05 16:21:42,951 [WARNING] [RiskManager] De-leveraged: 3 consec losses → leverage 1×
+2026-03-05 16:21:42,951 [INFO]   ▶ [2023-04-27]   8.2%  │ Equity: $     7,365  │ PnL: $   -2,635  │ Trades:   70  │ ETA: 56.7 min
+2026-03-05 16:21:44,146 [WARNING] [RiskManager] De-leveraged: 3 consec losses → leverage 1×
+2026-03-05 16:21:45,354 [WARNING] [RiskManager] De-leveraged: 3 consec losses → leverage 1×
+2026-03-05 16:21:46,605 [WARNING] [RiskManager] De-leveraged: 3 consec losses → leverage 1×
+2026-03-05 16:21:47,899 [WARNING] [RiskManager] De-leveraged: 3 consec losses → leverage 1×
+2026-03-05 16:21:49,397 [WARNING] [RiskManager] De-leveraged: 3 consec losses → leverage 1×
+2026-03-05 16:21:51,083 [WARNING] [RiskManager] De-leveraged: 3 consec losses → leverage 1×
+2026-03-05 16:21:52,341 [WARNING] [RiskManager] De-leveraged: 3 consec losses → leverage 1×
+2026-03-05 16:21:53,726 [WARNING] [RiskManager] De-leveraged: 3 consec losses → leverage 1×
+2026-03-05 16:21:55,305 [WARNING] [RiskManager] De-leveraged: 3 consec losses → leverage 1×
+2026-03-05 16:21:56,768 [WARNING] [RiskManager] De-leveraged: 3 consec losses → leverage 1×
+2026-03-05 16:21:58,063 [WARNING] [RiskManager] De-leveraged: 3 consec losses → leverage 1×
+2026-03-05 16:21:59,360 [WARNING] [RiskManager] De-leveraged: 3 consec losses → leverage 1×
+2026-03-05 16:22:00,719 [WARNING] [RiskManager] De-leveraged: 3 consec losses → leverage 1×
+2026-03-05 16:22:01,985 [WARNING] [RiskManager] De-leveraged: 3 consec losses → leverage 1×
+2026-03-05 16:22:03,321 [WARNING] [RiskManager] De-leveraged: 3 consec losses → leverage 1×
+2026-03-05 16:22:04,620 [WARNING] [RiskManager] De-leveraged: 3 consec losses → leverage 1×
+2026-03-05 16:22:06,272 [WARNING] [RiskManager] De-leveraged: 3 consec losses → leverage 1×
+2026-03-05 16:22:07,744 [WARNING] [RiskManager] De-leveraged: 3 consec losses → leverage 1×
+2026-03-05 16:22:09,036 [WARNING] [RiskManager] De-leveraged: 3 consec losses → leverage 1×
+2026-03-05 16:22:10,357 [WARNING] [RiskManager] De-leveraged: 3 consec losses → leverage 1×
+2026-03-05 16:22:11,771 [WARNING] [RiskManager] De-leveraged: 3 consec losses → leverage 1×
+2026-03-05 16:22:11,772 [INFO]   🟢 OPEN  LONG  @ 29,644.20 | SL=29040.63 TP=30911.69 | TPext=1.5× | Gate=ACTIVE | regime=bull bcd=1.00
+2026-03-05 16:22:11,776 [INFO]   ❌ CLOSE LONG  | SL       | trail=0 | entry=29,644 exit=29,041 | PnL: -147.42 USD | Equity: 7,217.52
+2026-03-05 16:22:13,154 [WARNING] [RiskManager] De-leveraged: 4 consec losses → leverage 1×
+2026-03-05 16:22:14,655 [WARNING] [RiskManager] De-leveraged: 4 consec losses → leverage 1×
+2026-03-05 16:22:14,657 [INFO]   🟢 OPEN  SHORT @ 28,545.60 | SL=29228.57 TP=27111.37 | TPext=1.5× | Gate=ADVISORY | regime=bear bcd=1.00
+2026-03-05 16:22:14,671 [INFO]   ❌ CLOSE SHORT | TRAIL_SL | trail=1 | entry=28,546 exit=28,546 | PnL: -0.12 USD | Equity: 7,217.41
+2026-03-05 16:22:16,021 [WARNING] [RiskManager] De-leveraged: 4 consec losses → leverage 1×
+2026-03-05 16:22:16,022 [INFO]   🟢 OPEN  SHORT @ 28,076.10 | SL=28705.73 TP=26753.89 | TPext=1.5× | Gate=ACTIVE | regime=bear bcd=1.00
+2026-03-05 16:22:16,024 [WARNING] [RiskManager] 5 consecutive losses — COOLDOWN 6 candles (24h)
+2026-03-05 16:22:16,024 [INFO]   ❌ CLOSE SHORT | SL       | trail=0 | entry=28,076 exit=28,706 | PnL: -144.46 USD | Equity: 7,072.94
+2026-03-05 16:22:24,921 [WARNING] [RiskManager] De-leveraged: 5 consec losses → leverage 1×
+2026-03-05 16:22:24,921 [INFO]   🟢 OPEN  SHORT @ 28,292.70 | SL=28912.25 TP=26991.65 | TPext=1.5× | Gate=ACTIVE | regime=bear bcd=1.00
+2026-03-05 16:22:24,924 [INFO]   ❌ CLOSE SHORT | SL       | trail=0 | entry=28,293 exit=28,912 | PnL: -141.57 USD | Equity: 6,931.37
+2026-03-05 16:22:26,273 [WARNING] [RiskManager] De-leveraged: 6 consec losses → leverage 1×
+2026-03-05 16:22:26,273 [INFO]   🟢 OPEN  SHORT @ 28,308.80 | SL=28948.38 TP=26965.68 | TPext=1.5× | Gate=ADVISORY | regime=bear bcd=1.00
+2026-03-05 16:22:26,275 [INFO]   ❌ CLOSE SHORT | SL       | trail=0 | entry=28,309 exit=28,948 | PnL: -138.74 USD | Equity: 6,792.63
+2026-03-05 16:22:27,613 [WARNING] [RiskManager] De-leveraged: 7 consec losses → leverage 1×
+2026-03-05 16:22:29,243 [WARNING] [RiskManager] De-leveraged: 7 consec losses → leverage 1×
+2026-03-05 16:22:30,675 [WARNING] [RiskManager] De-leveraged: 7 consec losses → leverage 1×
+2026-03-05 16:22:30,675 [INFO]   🟢 OPEN  SHORT @ 29,048.60 | SL=29697.97 TP=28139.48 | TPext=1.0× | Gate=ACTIVE | regime=neutral bcd=1.00
+2026-03-05 16:22:30,691 [INFO]   ❌ CLOSE SHORT | SL       | trail=0 | entry=29,049 exit=29,698 | PnL: -135.96 USD | Equity: 6,656.67
+2026-03-05 16:22:32,020 [WARNING] [RiskManager] De-leveraged: 8 consec losses → leverage 1×
+2026-03-05 16:22:33,273 [WARNING] [RiskManager] De-leveraged: 8 consec losses → leverage 1×
+2026-03-05 16:22:34,536 [WARNING] [RiskManager] De-leveraged: 8 consec losses → leverage 1×
+2026-03-05 16:22:35,907 [WARNING] [RiskManager] De-leveraged: 8 consec losses → leverage 1×
+2026-03-05 16:22:37,199 [WARNING] [RiskManager] De-leveraged: 8 consec losses → leverage 1×
+2026-03-05 16:22:37,200 [INFO]   🟢 OPEN  SHORT @ 28,557.90 | SL=29208.94 TP=27190.71 | TPext=1.5× | Gate=ADVISORY | regime=bear bcd=1.00
+2026-03-05 16:22:37,229 [INFO]   ❌ CLOSE SHORT | TIME_EXIT | held 24c | PnL: +85.11 | Equity: 6,741.78
+2026-03-05 16:22:38,623 [WARNING] [RiskManager] De-leveraged: 8 consec losses → leverage 1×
+2026-03-05 16:22:38,624 [INFO]   🟢 OPEN  SHORT @ 27,683.60 | SL=28382.85 TP=26215.17 | TPext=1.5× | Gate=ADVISORY | regime=bear bcd=1.00
+2026-03-05 16:22:38,645 [INFO] [RiskManager] Leverage recovered after 2 wins.
+2026-03-05 16:22:38,646 [INFO]   ✅ CLOSE SHORT | TP       | trail=2 | entry=27,684 exit=26,215 | PnL: +283.05 USD | Equity: 7,024.82
+2026-03-05 16:22:40,129 [INFO]   🟢 OPEN  SHORT @ 26,574.80 | SL=27259.81 TP=25136.27 | TPext=1.5× | Gate=ADVISORY | regime=bear bcd=1.00
+2026-03-05 16:22:40,151 [INFO]   ❌ CLOSE SHORT | SL       | trail=0 | entry=26,575 exit=27,260 | PnL: -140.61 USD | Equity: 6,884.21
+2026-03-05 16:22:41,472 [INFO]   🟢 OPEN  SHORT @ 26,901.90 | SL=27390.55 TP=25875.74 | TPext=1.5× | Gate=ACTIVE | regime=bear bcd=1.00
+2026-03-05 16:22:41,474 [INFO]   ❌ CLOSE SHORT | SL       | trail=0 | entry=26,902 exit=27,391 | PnL: -137.79 USD | Equity: 6,746.42
+2026-03-05 16:22:42,791 [INFO]   🟢 OPEN  SHORT @ 27,216.30 | SL=27732.68 TP=26131.90 | TPext=1.5× | Gate=ACTIVE | regime=bear bcd=1.00
+2026-03-05 16:22:42,812 [INFO]   ❌ CLOSE SHORT | TRAIL_SL | trail=1 | entry=27,216 exit=27,216 | PnL: -0.11 USD | Equity: 6,746.31
+2026-03-05 16:22:44,113 [INFO]   🟢 OPEN  SHORT @ 26,788.00 | SL=27264.14 TP=25788.10 | TPext=1.5× | Gate=ACTIVE | regime=bear bcd=1.00
+2026-03-05 16:22:44,113 [INFO]   ▶ [2023-05-17]  10.0%  │ Equity: $     6,746  │ PnL: $   -3,254  │ Trades:   81  │ ETA: 54.7 min
+2026-03-05 16:22:44,115 [WARNING] [RiskManager] 3 consecutive losses — COOLDOWN 2 candles (8h)
+2026-03-05 16:22:44,115 [INFO]   ❌ CLOSE SHORT | SL       | trail=0 | entry=26,788 exit=27,264 | PnL: -135.03 USD | Equity: 6,611.28
+2026-03-05 16:22:48,158 [WARNING] [RiskManager] De-leveraged: 3 consec losses → leverage 1×
+2026-03-05 16:22:48,158 [INFO]   🟢 OPEN  SHORT @ 27,357.30 | SL=27849.92 TP=26667.63 | TPext=1.0× | Gate=ACTIVE | regime=neutral bcd=1.00
+2026-03-05 16:22:48,162 [INFO]   ✅ CLOSE SHORT | TP       | trail=0 | entry=27,357 exit=26,668 | PnL: +185.01 USD | Equity: 6,796.29
+2026-03-05 16:22:49,457 [WARNING] [RiskManager] De-leveraged: 3 consec losses → leverage 1×
+2026-03-05 16:22:49,457 [INFO]   🟢 OPEN  SHORT @ 27,075.20 | SL=27558.56 TP=26398.49 | TPext=1.0× | Gate=ACTIVE | regime=neutral bcd=1.00
+2026-03-05 16:22:49,463 [INFO] [RiskManager] Leverage recovered after 2 wins.
+2026-03-05 16:22:49,465 [INFO]   ❌ CLOSE SHORT | TRAIL_SL | trail=1 | entry=27,075 exit=27,075 | PnL: -0.11 USD | Equity: 6,796.18
+2026-03-05 16:22:50,951 [INFO]   🟢 OPEN  SHORT @ 26,843.80 | SL=27319.62 TP=25844.59 | TPext=1.5× | Gate=ACTIVE | regime=bear bcd=1.00
+2026-03-05 16:22:50,994 [INFO]   ❌ CLOSE SHORT | SL       | trail=0 | entry=26,844 exit=27,320 | PnL: -136.03 USD | Equity: 6,660.15
+2026-03-05 16:22:52,246 [INFO]   🟢 OPEN  SHORT @ 26,840.20 | SL=27186.81 TP=26354.95 | TPext=1.0× | Gate=ACTIVE | regime=neutral bcd=1.00
+2026-03-05 16:22:52,248 [INFO]   ❌ CLOSE SHORT | SL       | trail=0 | entry=26,840 exit=27,187 | PnL: -133.31 USD | Equity: 6,526.84
+2026-03-05 16:22:53,231 [INFO]   🟢 OPEN  LONG  @ 27,354.60 | SL=26963.39 TP=28176.15 | TPext=1.5× | Gate=ACTIVE | regime=bull bcd=1.00
+2026-03-05 16:22:53,239 [WARNING] [RiskManager] 3 consecutive losses — COOLDOWN 2 candles (8h)
+2026-03-05 16:22:53,239 [INFO]   ❌ CLOSE LONG  | SL       | trail=0 | entry=27,355 exit=26,963 | PnL: -130.64 USD | Equity: 6,396.20
+2026-03-05 16:22:56,863 [WARNING] [RiskManager] De-leveraged: 3 consec losses → leverage 1×
+2026-03-05 16:22:56,863 [INFO]   🟢 OPEN  SHORT @ 26,664.20 | SL=27057.60 TP=25838.06 | TPext=1.5× | Gate=ACTIVE | regime=bear bcd=1.00
+2026-03-05 16:22:56,874 [INFO]   ✅ CLOSE SHORT | TRAIL_SL | trail=2 | entry=26,664 exit=26,533 | PnL: +42.54 USD | Equity: 6,438.74
+2026-03-05 16:22:58,061 [WARNING] [RiskManager] De-leveraged: 3 consec losses → leverage 1×
+2026-03-05 16:22:58,061 [INFO]   🟢 OPEN  SHORT @ 26,216.90 | SL=26652.00 TP=25303.19 | TPext=1.5× | Gate=ACTIVE | regime=bear bcd=1.00
+2026-03-05 16:22:58,067 [INFO]   ❌ CLOSE SHORT | SL       | trail=0 | entry=26,217 exit=26,652 | PnL: -128.88 USD | Equity: 6,309.86
+2026-03-05 16:22:59,283 [WARNING] [RiskManager] De-leveraged: 4 consec losses → leverage 1×
+2026-03-05 16:22:59,285 [INFO]   🟢 OPEN  SHORT @ 26,451.90 | SL=26853.98 TP=25888.98 | TPext=1.0× | Gate=ACTIVE | regime=neutral bcd=1.00
+2026-03-05 16:22:59,296 [WARNING] [RiskManager] 5 consecutive losses — COOLDOWN 6 candles (24h)
+2026-03-05 16:22:59,296 [INFO]   ❌ CLOSE SHORT | SL       | trail=0 | entry=26,452 exit=26,854 | PnL: -126.30 USD | Equity: 6,183.56
+2026-03-05 16:23:08,524 [WARNING] [RiskManager] De-leveraged: 5 consec losses → leverage 1×
+2026-03-05 16:23:09,793 [WARNING] [RiskManager] De-leveraged: 5 consec losses → leverage 1×
+2026-03-05 16:23:09,794 [INFO]   🟢 OPEN  LONG  @ 28,055.70 | SL=27603.25 TP=29005.84 | TPext=1.5× | Gate=ACTIVE | regime=bull bcd=1.00
+2026-03-05 16:23:09,797 [INFO]   ❌ CLOSE LONG  | SL       | trail=0 | entry=28,056 exit=27,603 | PnL: -123.77 USD | Equity: 6,059.79
+2026-03-05 16:23:11,730 [WARNING] [RiskManager] De-leveraged: 6 consec losses → leverage 1×
+2026-03-05 16:23:11,731 [INFO]   🟢 OPEN  LONG  @ 27,908.10 | SL=27449.16 TP=28871.87 | TPext=1.5× | Gate=ACTIVE | regime=bull bcd=1.00
+2026-03-05 16:23:11,756 [INFO]   ❌ CLOSE LONG  | SL       | trail=0 | entry=27,908 exit=27,449 | PnL: -121.29 USD | Equity: 5,938.50
+2026-03-05 16:23:13,501 [WARNING] [RiskManager] De-leveraged: 7 consec losses → leverage 1×
+2026-03-05 16:23:13,503 [INFO]   🟢 OPEN  LONG  @ 27,646.50 | SL=27196.06 TP=28592.43 | TPext=1.5× | Gate=ACTIVE | regime=bull bcd=1.00
+2026-03-05 16:23:13,504 [INFO]   ❌ CLOSE LONG  | SL       | trail=0 | entry=27,646 exit=27,196 | PnL: -118.86 USD | Equity: 5,819.63
+2026-03-05 16:23:15,451 [WARNING] [RiskManager] De-leveraged: 8 consec losses → leverage 1×
+2026-03-05 16:23:15,452 [INFO]   🟢 OPEN  SHORT @ 27,150.40 | SL=27646.53 TP=26455.82 | TPext=1.0× | Gate=ACTIVE | regime=neutral bcd=1.00
+2026-03-05 16:23:15,467 [INFO]   ❌ CLOSE SHORT | TRAIL_SL | trail=1 | entry=27,150 exit=27,150 | PnL: -0.09 USD | Equity: 5,819.54
+2026-03-05 16:23:17,176 [WARNING] [RiskManager] De-leveraged: 8 consec losses → leverage 1×
+2026-03-05 16:23:17,177 [INFO]   🟢 OPEN  SHORT @ 26,884.20 | SL=27359.17 TP=26219.24 | TPext=1.0× | Gate=ACTIVE | regime=neutral bcd=1.00
+2026-03-05 16:23:17,211 [INFO]   ❌ CLOSE SHORT | SL       | trail=0 | entry=26,884 exit=27,359 | PnL: -116.48 USD | Equity: 5,703.05
+2026-03-05 16:23:18,607 [WARNING] [RiskManager] De-leveraged: 9 consec losses → leverage 1×
+2026-03-05 16:23:20,028 [WARNING] [RiskManager] De-leveraged: 9 consec losses → leverage 1×
+2026-03-05 16:23:20,029 [INFO]   🟢 OPEN  LONG  @ 27,102.40 | SL=26742.51 TP=27858.17 | TPext=1.5× | Gate=ACTIVE | regime=bull bcd=1.00
+2026-03-05 16:23:20,031 [INFO]   ❌ CLOSE LONG  | SL       | trail=0 | entry=27,102 exit=26,743 | PnL: -114.15 USD | Equity: 5,588.90
+2026-03-05 16:23:21,785 [WARNING] [RiskManager] De-leveraged: 10 consec losses → leverage 1×
+2026-03-05 16:23:21,786 [INFO]   🟢 OPEN  SHORT @ 26,835.90 | SL=27209.73 TP=26312.54 | TPext=1.0× | Gate=ACTIVE | regime=neutral bcd=1.00
+2026-03-05 16:23:21,790 [INFO]   ✅ CLOSE SHORT | TP       | trail=0 | entry=26,836 exit=26,313 | PnL: +156.40 USD | Equity: 5,745.30
+2026-03-05 16:23:23,357 [WARNING] [RiskManager] De-leveraged: 10 consec losses → leverage 1×
+2026-03-05 16:23:23,358 [INFO]   🟢 OPEN  SHORT @ 26,760.10 | SL=27116.25 TP=26261.50 | TPext=1.0× | Gate=ACTIVE | regime=neutral bcd=1.00
+2026-03-05 16:23:23,360 [INFO] [RiskManager] Leverage recovered after 2 wins.
+2026-03-05 16:23:23,360 [INFO]   ✅ CLOSE SHORT | TP       | trail=1 | entry=26,760 exit=26,261 | PnL: +160.78 USD | Equity: 5,906.08
+2026-03-05 16:23:24,888 [INFO]   🟢 OPEN  SHORT @ 25,991.90 | SL=26412.49 TP=25108.66 | TPext=1.5× | Gate=ACTIVE | regime=bear bcd=1.00
+2026-03-05 16:23:24,894 [INFO] [RiskManager] Leverage recovered after 3 wins.
+2026-03-05 16:23:24,895 [INFO]   ❌ CLOSE SHORT | TRAIL_SL | trail=1 | entry=25,992 exit=25,992 | PnL: -0.09 USD | Equity: 5,905.98
+2026-03-05 16:23:26,120 [INFO]   🟢 OPEN  SHORT @ 25,676.00 | SL=26101.48 TP=24782.49 | TPext=1.5× | Gate=ACTIVE | regime=bear bcd=1.00
+2026-03-05 16:23:26,122 [INFO]   ❌ CLOSE SHORT | SL       | trail=0 | entry=25,676 exit=26,101 | PnL: -118.21 USD | Equity: 5,787.77
+2026-03-05 16:23:27,242 [INFO]   🟢 OPEN  SHORT @ 26,051.20 | SL=26533.87 TP=25037.60 | TPext=1.5× | Gate=ACTIVE | regime=bear bcd=1.00
+2026-03-05 16:23:27,244 [INFO]   ❌ CLOSE SHORT | SL       | trail=0 | entry=26,051 exit=26,534 | PnL: -115.85 USD | Equity: 5,671.92
+2026-03-05 16:23:28,330 [INFO]   🟢 OPEN  SHORT @ 27,073.20 | SL=27648.65 TP=26267.58 | TPext=1.0× | Gate=ACTIVE | regime=neutral bcd=1.00
+2026-03-05 16:23:28,335 [INFO]   ✅ CLOSE SHORT | TP       | trail=0 | entry=27,073 exit=26,268 | PnL: +158.72 USD | Equity: 5,830.65
+2026-03-05 16:23:30,633 [INFO]   🟢 OPEN  SHORT @ 26,333.90 | SL=26983.97 TP=24968.75 | TPext=1.5× | Gate=ADVISORY | regime=bear bcd=1.00
+2026-03-05 16:23:30,670 [INFO] [RiskManager] Leverage recovered after 2 wins.
+2026-03-05 16:23:30,671 [INFO]   ❌ CLOSE SHORT | TIME_EXIT | held 24c | PnL: +106.23 | Equity: 5,936.87
+2026-03-05 16:23:31,892 [INFO]   🟢 OPEN  SHORT @ 26,021.00 | SL=26489.42 TP=25037.32 | TPext=1.5× | Gate=ACTIVE | regime=bear bcd=1.00
+2026-03-05 16:23:31,919 [INFO] [RiskManager] Leverage recovered after 3 wins.
+2026-03-05 16:23:31,920 [INFO]   ✅ CLOSE SHORT | TP       | trail=0 | entry=26,021 exit=25,037 | PnL: +249.25 USD | Equity: 6,186.13
+2026-03-05 16:23:33,108 [INFO]   🟢 OPEN  SHORT @ 25,860.50 | SL=26273.17 TP=24993.90 | TPext=1.5× | Gate=ACTIVE | regime=bear bcd=1.00
+2026-03-05 16:23:33,111 [INFO] [RiskManager] Leverage recovered after 4 wins.
+2026-03-05 16:23:33,112 [INFO]   ✅ CLOSE SHORT | TP       | trail=1 | entry=25,860 exit=24,994 | PnL: +259.72 USD | Equity: 6,445.85
+2026-03-05 16:23:34,300 [INFO]   🟢 OPEN  SHORT @ 25,054.80 | SL=25537.35 TP=24041.44 | TPext=1.5× | Gate=ACTIVE | regime=bear bcd=1.00
+2026-03-05 16:23:34,306 [INFO]   ❌ CLOSE SHORT | SL       | trail=0 | entry=25,055 exit=25,537 | PnL: -129.02 USD | Equity: 6,316.83
+2026-03-05 16:23:35,688 [INFO]   🟢 OPEN  SHORT @ 25,443.00 | SL=25926.99 TP=24765.42 | TPext=1.0× | Gate=ACTIVE | regime=neutral bcd=1.00
+2026-03-05 16:23:35,695 [INFO]   ❌ CLOSE SHORT | SL       | trail=0 | entry=25,443 exit=25,927 | PnL: -126.44 USD | Equity: 6,190.39
+2026-03-05 16:23:37,037 [INFO]   🟢 OPEN  SHORT @ 25,832.40 | SL=26336.11 TP=24774.60 | TPext=1.5× | Gate=ACTIVE | regime=bear bcd=1.00
+2026-03-05 16:23:37,038 [WARNING] [RiskManager] 3 consecutive losses — COOLDOWN 2 candles (8h)
+2026-03-05 16:23:37,038 [INFO]   ❌ CLOSE SHORT | SL       | trail=0 | entry=25,832 exit=26,336 | PnL: -123.91 USD | Equity: 6,066.48
+2026-03-05 16:23:40,407 [WARNING] [RiskManager] De-leveraged: 3 consec losses → leverage 1×
+2026-03-05 16:23:40,408 [INFO]   🟢 OPEN  SHORT @ 26,253.40 | SL=26765.97 TP=25177.01 | TPext=1.5× | Gate=ACTIVE | regime=bear bcd=1.00
+2026-03-05 16:23:40,426 [INFO]   ❌ CLOSE SHORT | SL       | trail=0 | entry=26,253 exit=26,766 | PnL: -121.43 USD | Equity: 5,945.05
+2026-03-05 16:23:41,545 [WARNING] [RiskManager] De-leveraged: 4 consec losses → leverage 1×
+2026-03-05 16:23:41,545 [INFO]   🟢 OPEN  LONG  @ 26,431.10 | SL=26046.98 TP=27237.76 | TPext=1.5× | Gate=ACTIVE | regime=bull bcd=1.00
+2026-03-05 16:23:41,553 [INFO]   ✅ CLOSE LONG  | TP       | trail=2 | entry=26,431 exit=27,238 | PnL: +249.60 USD | Equity: 6,194.65
+2026-03-05 16:23:42,685 [WARNING] [RiskManager] De-leveraged: 4 consec losses → leverage 1×
+2026-03-05 16:23:42,686 [INFO]   🟢 OPEN  LONG  @ 27,054.20 | SL=26598.42 TP=28011.34 | TPext=1.5× | Gate=ACTIVE | regime=bull bcd=1.00
+2026-03-05 16:23:42,689 [INFO] [RiskManager] Leverage recovered after 2 wins.
+2026-03-05 16:23:42,689 [INFO]   ✅ CLOSE LONG  | TP       | trail=1 | entry=27,054 exit=28,011 | PnL: +260.08 USD | Equity: 6,454.73
+2026-03-05 16:23:44,006 [INFO]   🟢 OPEN  LONG  @ 27,973.80 | SL=27426.11 TP=29123.95 | TPext=1.5× | Gate=ACTIVE | regime=bull bcd=1.00
+2026-03-05 16:23:44,010 [INFO] [RiskManager] Leverage recovered after 3 wins.
+2026-03-05 16:23:44,011 [INFO]   ✅ CLOSE LONG  | TP       | trail=1 | entry=27,974 exit=29,124 | PnL: +271.00 USD | Equity: 6,725.72
+2026-03-05 16:23:45,199 [INFO]   🟢 OPEN  LONG  @ 28,860.40 | SL=28251.69 TP=30138.69 | TPext=1.5× | Gate=ACTIVE | regime=bull bcd=1.00
+2026-03-05 16:23:45,199 [INFO]   ▶ [2023-06-21]  13.1%  │ Equity: $     6,726  │ PnL: $   -3,274  │ Trades:  112  │ ETA: 47.2 min
+2026-03-05 16:23:45,202 [INFO] [RiskManager] Leverage recovered after 4 wins.
+2026-03-05 16:23:45,202 [INFO]   ✅ CLOSE LONG  | TP       | trail=1 | entry=28,860 exit=30,139 | PnL: +282.37 USD | Equity: 7,008.10
+2026-03-05 16:23:46,579 [INFO]   🟢 OPEN  LONG  @ 29,837.00 | SL=29144.01 TP=31292.27 | TPext=1.5× | Gate=ADVISORY | regime=bull bcd=1.00
+2026-03-05 16:23:46,595 [INFO] [RiskManager] Leverage recovered after 5 wins.
+2026-03-05 16:23:46,596 [INFO]   ✅ CLOSE LONG  | TP       | trail=0 | entry=29,837 exit=31,292 | PnL: +294.23 USD | Equity: 7,302.32
+2026-03-05 16:23:47,850 [INFO]   🟢 OPEN  LONG  @ 30,125.30 | SL=29447.97 TP=31547.70 | TPext=1.5× | Gate=ACTIVE | regime=bull bcd=1.00
+2026-03-05 16:23:47,858 [INFO] [RiskManager] Leverage recovered after 6 wins.
+2026-03-05 16:23:47,858 [INFO]   ✅ CLOSE LONG  | TRAIL_SL | trail=1 | entry=30,125 exit=30,351 | PnL: +48.57 USD | Equity: 7,350.89
+2026-03-05 16:23:48,995 [INFO]   🟢 OPEN  LONG  @ 30,674.90 | SL=29934.36 TP=32230.04 | TPext=1.5× | Gate=ADVISORY | regime=bull bcd=1.00
+2026-03-05 16:23:49,005 [INFO]   ❌ CLOSE LONG  | SL       | trail=0 | entry=30,675 exit=29,934 | PnL: -147.14 USD | Equity: 7,203.75
+2026-03-05 16:23:50,097 [INFO]   🟢 OPEN  LONG  @ 30,458.00 | SL=29833.36 TP=31769.74 | TPext=1.5× | Gate=ACTIVE | regime=bull bcd=1.00
+2026-03-05 16:23:50,117 [INFO]   ❌ CLOSE LONG  | SL       | trail=0 | entry=30,458 exit=29,833 | PnL: -144.19 USD | Equity: 7,059.56
+2026-03-05 16:23:51,195 [INFO]   🟢 OPEN  LONG  @ 30,399.80 | SL=29814.66 TP=31628.59 | TPext=1.5× | Gate=ACTIVE | regime=bull bcd=1.00
+2026-03-05 16:23:51,208 [INFO]   ❌ CLOSE LONG  | TRAIL_SL | trail=1 | entry=30,400 exit=30,400 | PnL: -0.11 USD | Equity: 7,059.45
+2026-03-05 16:23:52,367 [INFO]   🟢 OPEN  LONG  @ 30,897.70 | SL=30297.41 TP=32158.30 | TPext=1.5× | Gate=ACTIVE | regime=bull bcd=1.00
+2026-03-05 16:23:52,369 [WARNING] [RiskManager] 3 consecutive losses — COOLDOWN 2 candles (8h)
+2026-03-05 16:23:52,369 [INFO]   ❌ CLOSE LONG  | SL       | trail=0 | entry=30,898 exit=30,297 | PnL: -141.30 USD | Equity: 6,918.15
+2026-03-05 16:23:55,837 [WARNING] [RiskManager] De-leveraged: 3 consec losses → leverage 1×
+2026-03-05 16:23:55,837 [INFO]   🟢 OPEN  LONG  @ 30,460.20 | SL=29724.73 TP=32004.69 | TPext=1.5× | Gate=ADVISORY | regime=bull bcd=1.00
+2026-03-05 16:23:55,879 [INFO]   ❌ CLOSE LONG  | TIME_EXIT | held 24c | PnL: +55.56 | Equity: 6,973.71
+2026-03-05 16:23:57,353 [WARNING] [RiskManager] De-leveraged: 3 consec losses → leverage 1×
+2026-03-05 16:23:57,353 [INFO]   🟢 OPEN  LONG  @ 30,857.30 | SL=30386.23 TP=31846.54 | TPext=1.5× | Gate=ACTIVE | regime=bull bcd=1.00
+2026-03-05 16:23:57,356 [INFO]   ❌ CLOSE LONG  | SL       | trail=0 | entry=30,857 exit=30,386 | PnL: -139.59 USD | Equity: 6,834.12
+2026-03-05 16:23:58,921 [WARNING] [RiskManager] De-leveraged: 4 consec losses → leverage 1×
+2026-03-05 16:23:58,921 [INFO]   🟢 OPEN  SHORT @ 30,765.90 | SL=31216.15 TP=30135.56 | TPext=1.0× | Gate=ACTIVE | regime=neutral bcd=1.00
+2026-03-05 16:23:58,929 [INFO]   ❌ CLOSE SHORT | TRAIL_SL | trail=1 | entry=30,766 exit=30,766 | PnL: -0.11 USD | Equity: 6,834.01
+2026-03-05 16:24:00,265 [WARNING] [RiskManager] De-leveraged: 4 consec losses → leverage 1×
+2026-03-05 16:24:00,265 [INFO]   🟢 OPEN  SHORT @ 30,477.70 | SL=30914.78 TP=29865.79 | TPext=1.0× | Gate=ACTIVE | regime=neutral bcd=1.00
+2026-03-05 16:24:00,266 [WARNING] [RiskManager] 5 consecutive losses — COOLDOWN 6 candles (24h)
+2026-03-05 16:24:00,267 [INFO]   ❌ CLOSE SHORT | SL       | trail=0 | entry=30,478 exit=30,915 | PnL: -136.79 USD | Equity: 6,697.22
+2026-03-05 16:24:08,545 [WARNING] [RiskManager] De-leveraged: 5 consec losses → leverage 1×
+2026-03-05 16:24:08,546 [INFO]   🟢 OPEN  SHORT @ 29,992.90 | SL=30591.24 TP=28736.40 | TPext=1.5× | Gate=ACTIVE | regime=bear bcd=1.00
+2026-03-05 16:24:08,574 [INFO]   ❌ CLOSE SHORT | SL       | trail=0 | entry=29,993 exit=30,591 | PnL: -134.05 USD | Equity: 6,563.17
+2026-03-05 16:24:09,788 [WARNING] [RiskManager] De-leveraged: 6 consec losses → leverage 1×
+2026-03-05 16:24:09,790 [INFO]   🟢 OPEN  SHORT @ 30,297.60 | SL=30667.23 TP=29780.12 | TPext=1.0× | Gate=ACTIVE | regime=neutral bcd=1.00
+2026-03-05 16:24:09,791 [INFO]   ❌ CLOSE SHORT | SL       | trail=0 | entry=30,298 exit=30,667 | PnL: -131.37 USD | Equity: 6,431.80
+2026-03-05 16:24:10,991 [WARNING] [RiskManager] De-leveraged: 7 consec losses → leverage 1×
+2026-03-05 16:24:10,991 [INFO]   🟢 OPEN  SHORT @ 30,824.50 | SL=31232.71 TP=30253.01 | TPext=1.0× | Gate=ACTIVE | regime=neutral bcd=1.00
+2026-03-05 16:24:11,003 [INFO]   ❌ CLOSE SHORT | TRAIL_SL | trail=1 | entry=30,824 exit=30,824 | PnL: -0.10 USD | Equity: 6,431.70
+2026-03-05 16:24:12,080 [WARNING] [RiskManager] De-leveraged: 7 consec losses → leverage 1×
+2026-03-05 16:24:13,364 [WARNING] [RiskManager] De-leveraged: 7 consec losses → leverage 1×
+2026-03-05 16:24:14,837 [WARNING] [RiskManager] De-leveraged: 7 consec losses → leverage 1×
+2026-03-05 16:24:16,686 [WARNING] [RiskManager] De-leveraged: 7 consec losses → leverage 1×
+2026-03-05 16:24:18,135 [WARNING] [RiskManager] De-leveraged: 7 consec losses → leverage 1×
+2026-03-05 16:24:18,137 [INFO]   🟢 OPEN  SHORT @ 30,268.10 | SL=30732.11 TP=29618.49 | TPext=1.0× | Gate=ACTIVE | regime=neutral bcd=1.00
+2026-03-05 16:24:18,143 [INFO]   ❌ CLOSE SHORT | SL       | trail=0 | entry=30,268 exit=30,732 | PnL: -128.74 USD | Equity: 6,302.96
+2026-03-05 16:24:19,537 [WARNING] [RiskManager] De-leveraged: 8 consec losses → leverage 1×
+2026-03-05 16:24:19,537 [INFO]   🟢 OPEN  LONG  @ 30,530.60 | SL=30104.44 TP=31425.53 | TPext=1.5× | Gate=ACTIVE | regime=bull bcd=1.00
+2026-03-05 16:24:19,538 [INFO]   ✅ CLOSE LONG  | TP       | trail=1 | entry=30,531 exit=31,426 | PnL: +264.62 USD | Equity: 6,567.58
+2026-03-05 16:24:20,994 [WARNING] [RiskManager] De-leveraged: 8 consec losses → leverage 1×
+2026-03-05 16:24:20,995 [INFO]   🟢 OPEN  LONG  @ 30,915.40 | SL=30438.37 TP=31917.16 | TPext=1.5× | Gate=ACTIVE | regime=bull bcd=1.00
+2026-03-05 16:24:20,997 [INFO] [RiskManager] Leverage recovered after 2 wins.
+2026-03-05 16:24:20,997 [INFO]   ✅ CLOSE LONG  | TRAIL_SL | trail=1 | entry=30,915 exit=31,074 | PnL: +43.68 USD | Equity: 6,611.26
+2026-03-05 16:24:22,375 [INFO]   🟢 OPEN  LONG  @ 31,600.60 | SL=31034.43 TP=32789.55 | TPext=1.5× | Gate=ACTIVE | regime=bull bcd=1.00
+2026-03-05 16:24:22,383 [INFO]   ❌ CLOSE LONG  | SL       | trail=0 | entry=31,601 exit=31,034 | PnL: -132.33 USD | Equity: 6,478.93
+2026-03-05 16:24:24,040 [INFO]   🟢 OPEN  LONG  @ 31,236.50 | SL=30670.78 TP=32424.52 | TPext=1.5× | Gate=ACTIVE | regime=bull bcd=1.00
+2026-03-05 16:24:24,042 [INFO]   ❌ CLOSE LONG  | SL       | trail=0 | entry=31,236 exit=30,671 | PnL: -129.68 USD | Equity: 6,349.25
+2026-03-05 16:24:25,601 [INFO]   🟢 OPEN  SHORT @ 30,099.90 | SL=30842.28 TP=29087.56 | TPext=1.2× | Gate=ACTIVE | regime=bear bcd=1.00
+2026-03-05 16:24:25,637 [INFO]   ❌ CLOSE SHORT | TIME_EXIT | held 24c | PnL: +66.92 | Equity: 6,416.17
+2026-03-05 16:24:27,118 [INFO]   🟢 OPEN  SHORT @ 29,845.60 | SL=30298.50 TP=28894.52 | TPext=1.5× | Gate=ACTIVE | regime=bear bcd=1.00
+2026-03-05 16:24:27,129 [WARNING] [RiskManager] 3 consecutive losses — COOLDOWN 2 candles (8h)
+2026-03-05 16:24:27,129 [INFO]   ❌ CLOSE SHORT | SL       | trail=0 | entry=29,846 exit=30,298 | PnL: -128.43 USD | Equity: 6,287.74
+2026-03-05 16:24:31,438 [WARNING] [RiskManager] De-leveraged: 3 consec losses → leverage 1×
+2026-03-05 16:24:31,438 [INFO]   🟢 OPEN  SHORT @ 29,792.80 | SL=30256.42 TP=28819.19 | TPext=1.5× | Gate=ACTIVE | regime=bear bcd=1.00
+2026-03-05 16:24:31,466 [INFO]   ❌ CLOSE SHORT | SL       | trail=0 | entry=29,793 exit=30,256 | PnL: -125.86 USD | Equity: 6,161.88
+2026-03-05 16:24:32,816 [WARNING] [RiskManager] De-leveraged: 4 consec losses → leverage 1×
+2026-03-05 16:24:32,816 [INFO]   🟢 OPEN  SHORT @ 29,886.00 | SL=30174.45 TP=29482.17 | TPext=1.0× | Gate=ACTIVE | regime=neutral bcd=1.00
+2026-03-05 16:24:32,823 [INFO]   ✅ CLOSE SHORT | TP       | trail=0 | entry=29,886 exit=29,482 | PnL: +172.43 USD | Equity: 6,334.32
+2026-03-05 16:24:34,257 [WARNING] [RiskManager] De-leveraged: 4 consec losses → leverage 1×
+2026-03-05 16:24:34,257 [INFO]   🟢 OPEN  SHORT @ 29,816.40 | SL=30160.95 TP=29334.04 | TPext=1.0× | Gate=ACTIVE | regime=neutral bcd=1.00
+2026-03-05 16:24:34,260 [INFO] [RiskManager] Leverage recovered after 2 wins.
+2026-03-05 16:24:34,260 [INFO]   ✅ CLOSE SHORT | TP       | trail=1 | entry=29,816 exit=29,334 | PnL: +177.26 USD | Equity: 6,511.58
+2026-03-05 16:24:35,750 [INFO]   🟢 OPEN  SHORT @ 29,259.60 | SL=29677.73 TP=28381.52 | TPext=1.5× | Gate=ACTIVE | regime=bear bcd=1.00
+2026-03-05 16:24:35,787 [INFO] [RiskManager] Leverage recovered after 3 wins.
+2026-03-05 16:24:35,787 [INFO]   ❌ CLOSE SHORT | TIME_EXIT | held 24c | PnL: +19.92 | Equity: 6,531.50
+2026-03-05 16:24:37,331 [INFO]   🟢 OPEN  SHORT @ 29,379.00 | SL=29699.37 TP=28706.23 | TPext=1.5× | Gate=ACTIVE | regime=bear bcd=1.00
+2026-03-05 16:24:37,359 [INFO] [RiskManager] Leverage recovered after 4 wins.
+2026-03-05 16:24:37,359 [INFO]   ✅ CLOSE SHORT | TP       | trail=1 | entry=29,379 exit=28,706 | PnL: +274.22 USD | Equity: 6,805.72
+2026-03-05 16:24:38,976 [INFO]   🟢 OPEN  SHORT @ 29,220.80 | SL=29474.58 TP=28865.51 | TPext=1.0× | Gate=ACTIVE | regime=neutral bcd=1.00
+2026-03-05 16:24:38,979 [INFO] [RiskManager] Leverage recovered after 5 wins.
+2026-03-05 16:24:38,980 [INFO]   ✅ CLOSE SHORT | TP       | trail=1 | entry=29,221 exit=28,866 | PnL: +190.45 USD | Equity: 6,996.17
+2026-03-05 16:24:40,379 [INFO]   🟢 OPEN  SHORT @ 28,820.10 | SL=29125.67 TP=28178.40 | TPext=1.5× | Gate=ACTIVE | regime=bear bcd=1.00
+2026-03-05 16:24:40,385 [INFO]   ❌ CLOSE SHORT | SL       | trail=0 | entry=28,820 exit=29,126 | PnL: -140.04 USD | Equity: 6,856.14
+2026-03-05 16:24:41,956 [INFO]   🟢 OPEN  SHORT @ 28,942.90 | SL=29262.56 TP=28495.37 | TPext=1.0× | Gate=ACTIVE | regime=neutral bcd=1.00
+2026-03-05 16:24:41,958 [INFO]   ❌ CLOSE SHORT | SL       | trail=0 | entry=28,943 exit=29,263 | PnL: -137.23 USD | Equity: 6,718.90
+2026-03-05 16:24:43,284 [INFO]   🟢 OPEN  SHORT @ 29,263.60 | SL=29611.83 TP=28776.07 | TPext=1.0× | Gate=ACTIVE | regime=neutral bcd=1.00
+2026-03-05 16:24:43,287 [WARNING] [RiskManager] 3 consecutive losses — COOLDOWN 2 candles (8h)
+2026-03-05 16:24:43,287 [INFO]   ❌ CLOSE SHORT | SL       | trail=0 | entry=29,264 exit=29,612 | PnL: -134.49 USD | Equity: 6,584.42
+2026-03-05 16:24:46,625 [INFO]   ▶ [2023-08-02]  16.8%  │ Equity: $     6,584  │ PnL: $   -3,416  │ Trades:  142  │ ETA: 40.4 min
+2026-03-05 16:24:48,148 [WARNING] [RiskManager] De-leveraged: 3 consec losses → leverage 1×
+2026-03-05 16:24:48,149 [INFO]   🟢 OPEN  LONG  @ 29,570.10 | SL=29175.93 TP=30397.86 | TPext=1.5× | Gate=ACTIVE | regime=bull bcd=1.00
+2026-03-05 16:24:48,151 [INFO]   ❌ CLOSE LONG  | SL       | trail=0 | entry=29,570 exit=29,176 | PnL: -131.79 USD | Equity: 6,452.62
+2026-03-05 16:24:49,820 [WARNING] [RiskManager] De-leveraged: 4 consec losses → leverage 1×
+2026-03-05 16:24:49,821 [INFO]   🟢 OPEN  LONG  @ 29,552.90 | SL=29164.28 TP=30369.01 | TPext=1.5× | Gate=ACTIVE | regime=bull bcd=1.00
+2026-03-05 16:24:49,823 [WARNING] [RiskManager] 5 consecutive losses — COOLDOWN 6 candles (24h)
+2026-03-05 16:24:49,823 [INFO]   ❌ CLOSE LONG  | SL       | trail=0 | entry=29,553 exit=29,164 | PnL: -129.16 USD | Equity: 6,323.47
+2026-03-05 16:25:00,280 [WARNING] [RiskManager] De-leveraged: 5 consec losses → leverage 1×
+2026-03-05 16:25:00,280 [INFO]   🟢 OPEN  SHORT @ 29,244.40 | SL=29647.92 TP=28679.47 | TPext=1.0× | Gate=ACTIVE | regime=neutral bcd=1.00
+2026-03-05 16:25:00,331 [INFO]   ❌ CLOSE SHORT | TIME_EXIT | held 24c | PnL: +122.51 | Equity: 6,445.97
+2026-03-05 16:25:01,993 [WARNING] [RiskManager] De-leveraged: 5 consec losses → leverage 1×
+2026-03-05 16:25:01,994 [INFO]   🟢 OPEN  SHORT @ 29,144.90 | SL=29439.29 TP=28732.76 | TPext=1.0× | Gate=ACTIVE | regime=neutral bcd=1.00
+2026-03-05 16:25:02,000 [INFO]   ❌ CLOSE SHORT | SL       | trail=0 | entry=29,145 exit=29,439 | PnL: -129.02 USD | Equity: 6,316.95
+2026-03-05 16:25:03,748 [WARNING] [RiskManager] De-leveraged: 6 consec losses → leverage 1×
+2026-03-05 16:25:03,748 [INFO]   🟢 OPEN  SHORT @ 29,428.00 | SL=29718.29 TP=29021.59 | TPext=1.0× | Gate=ACTIVE | regime=neutral bcd=1.00
+2026-03-05 16:25:03,751 [INFO]   ❌ CLOSE SHORT | SL       | trail=0 | entry=29,428 exit=29,718 | PnL: -126.44 USD | Equity: 6,190.51
+2026-03-05 16:25:05,327 [WARNING] [RiskManager] De-leveraged: 7 consec losses → leverage 1×
+2026-03-05 16:25:05,328 [INFO]   🟢 OPEN  LONG  @ 29,517.50 | SL=29212.65 TP=30157.68 | TPext=1.5× | Gate=ACTIVE | regime=bull bcd=1.00
+2026-03-05 16:25:05,330 [INFO]   ✅ CLOSE LONG  | TP       | trail=1 | entry=29,518 exit=30,158 | PnL: +259.90 USD | Equity: 6,450.41
+2026-03-05 16:25:07,019 [WARNING] [RiskManager] De-leveraged: 7 consec losses → leverage 1×
+2026-03-05 16:25:07,019 [INFO]   🟢 OPEN  LONG  @ 29,866.40 | SL=29537.39 TP=30557.31 | TPext=1.5× | Gate=ACTIVE | regime=bull bcd=1.00
+2026-03-05 16:25:07,027 [INFO]   ❌ CLOSE LONG  | SL       | trail=0 | entry=29,866 exit=29,537 | PnL: -129.11 USD | Equity: 6,321.30
+2026-03-05 16:25:08,522 [WARNING] [RiskManager] De-leveraged: 8 consec losses → leverage 1×
+2026-03-05 16:25:08,522 [INFO]   🟢 OPEN  LONG  @ 29,749.40 | SL=29369.41 TP=30547.37 | TPext=1.5× | Gate=ACTIVE | regime=bull bcd=1.00
+2026-03-05 16:25:08,524 [INFO]   ❌ CLOSE LONG  | SL       | trail=0 | entry=29,749 exit=29,369 | PnL: -126.53 USD | Equity: 6,194.77
+2026-03-05 16:25:09,927 [WARNING] [RiskManager] De-leveraged: 9 consec losses → leverage 1×
+2026-03-05 16:25:09,927 [INFO]   🟢 OPEN  SHORT @ 29,404.20 | SL=29799.78 TP=28850.38 | TPext=1.0× | Gate=ACTIVE | regime=neutral bcd=1.00
+2026-03-05 16:25:09,971 [INFO]   ❌ CLOSE SHORT | TIME_EXIT | held 24c | PnL: -6.96 | Equity: 6,187.82
+2026-03-05 16:25:11,612 [WARNING] [RiskManager] De-leveraged: 10 consec losses → leverage 2×
+2026-03-05 16:25:11,612 [INFO]   🟢 OPEN  SHORT @ 29,293.30 | SL=29481.58 TP=29029.70 | TPext=1.0× | Gate=ACTIVE | regime=neutral bcd=1.00
+2026-03-05 16:25:11,616 [INFO]   ❌ CLOSE SHORT | SL       | trail=0 | entry=29,293 exit=29,482 | PnL: -123.86 USD | Equity: 6,063.96
+2026-03-05 16:25:13,235 [WARNING] [RiskManager] De-leveraged: 11 consec losses → leverage 2×
+2026-03-05 16:25:13,236 [INFO]   🟢 OPEN  SHORT @ 29,410.50 | SL=29616.48 TP=29122.13 | TPext=1.0× | Gate=ADVISORY | regime=neutral bcd=1.00
+2026-03-05 16:25:13,237 [INFO]   ❌ CLOSE SHORT | SL       | trail=0 | entry=29,410 exit=29,616 | PnL: -121.38 USD | Equity: 5,942.58
+2026-03-05 16:25:14,743 [WARNING] [RiskManager] De-leveraged: 12 consec losses → leverage 2×
+2026-03-05 16:25:14,743 [INFO]   🟢 OPEN  SHORT @ 29,399.80 | SL=29603.35 TP=29114.84 | TPext=1.0× | Gate=ACTIVE | regime=neutral bcd=1.00
+2026-03-05 16:25:14,746 [INFO]   ❌ CLOSE SHORT | SL       | trail=0 | entry=29,400 exit=29,603 | PnL: -118.95 USD | Equity: 5,823.64
+2026-03-05 16:25:16,482 [WARNING] [RiskManager] De-leveraged: 13 consec losses → leverage 1×
+2026-03-05 16:25:16,484 [INFO]   🟢 OPEN  LONG  @ 29,592.90 | SL=29366.92 TP=30067.46 | TPext=1.5× | Gate=ACTIVE | regime=bull bcd=1.00
+2026-03-05 16:25:16,486 [INFO]   ❌ CLOSE LONG  | SL       | trail=0 | entry=29,593 exit=29,367 | PnL: -116.57 USD | Equity: 5,707.07
+2026-03-05 16:25:18,044 [WARNING] [RiskManager] De-leveraged: 14 consec losses → leverage 1×
+2026-03-05 16:25:18,045 [INFO]   🟢 OPEN  SHORT @ 29,353.80 | SL=29612.25 TP=28991.97 | TPext=1.0× | Gate=ACTIVE | regime=neutral bcd=1.00
+2026-03-05 16:25:18,061 [INFO]   ✅ CLOSE SHORT | TP       | trail=1 | entry=29,354 exit=28,992 | PnL: +159.71 USD | Equity: 5,866.78
+2026-03-05 16:25:19,947 [WARNING] [RiskManager] De-leveraged: 14 consec losses → leverage 2×
+2026-03-05 16:25:19,947 [INFO]   🟢 OPEN  SHORT @ 29,098.00 | SL=29331.13 TP=28771.62 | TPext=1.0× | Gate=ACTIVE | regime=neutral bcd=1.00
+2026-03-05 16:25:19,949 [INFO] [RiskManager] Leverage recovered after 2 wins.
+2026-03-05 16:25:19,950 [INFO]   ✅ CLOSE SHORT | TP       | trail=0 | entry=29,098 exit=28,772 | PnL: +164.18 USD | Equity: 6,030.95
+2026-03-05 16:25:21,674 [INFO]   🟢 OPEN  SHORT @ 29,105.50 | SL=29353.00 TP=28758.99 | TPext=1.0× | Gate=ACTIVE | regime=neutral bcd=1.00
+2026-03-05 16:25:21,676 [INFO] [RiskManager] Leverage recovered after 3 wins.
+2026-03-05 16:25:21,676 [INFO]   ✅ CLOSE SHORT | TP       | trail=1 | entry=29,106 exit=28,759 | PnL: +168.77 USD | Equity: 6,199.72
+2026-03-05 16:25:23,551 [INFO]   🟢 OPEN  SHORT @ 28,714.40 | SL=28990.01 TP=28328.55 | TPext=1.0× | Gate=ACTIVE | regime=neutral bcd=1.00
+2026-03-05 16:25:23,567 [INFO] [RiskManager] Leverage recovered after 4 wins.
+2026-03-05 16:25:23,567 [INFO]   ✅ CLOSE SHORT | TP       | trail=0 | entry=28,714 exit=28,329 | PnL: +173.49 USD | Equity: 6,373.22
+2026-03-05 16:25:26,386 [INFO]   🟢 OPEN  SHORT @ 28,540.00 | SL=28833.09 TP=27924.50 | TPext=1.5× | Gate=ACTIVE | regime=bear bcd=1.00
+2026-03-05 16:25:26,390 [INFO] [RiskManager] Leverage recovered after 5 wins.
+2026-03-05 16:25:26,390 [INFO]   ✅ CLOSE SHORT | TP       | trail=1 | entry=28,540 exit=27,925 | PnL: +267.57 USD | Equity: 6,640.79
+2026-03-05 16:25:28,177 [INFO]   🟢 OPEN  SHORT @ 27,920.90 | SL=28269.59 TP=27188.65 | TPext=1.5× | Gate=ACTIVE | regime=bear bcd=1.00
+2026-03-05 16:25:28,179 [INFO] [RiskManager] Leverage recovered after 6 wins.
+2026-03-05 16:25:28,179 [INFO]   ✅ CLOSE SHORT | TP       | trail=0 | entry=27,921 exit=27,189 | PnL: +278.81 USD | Equity: 6,919.60
+2026-03-05 16:25:30,376 [INFO]   🟢 OPEN  SHORT @ 27,889.40 | SL=28253.69 TP=27124.40 | TPext=1.5× | Gate=ACTIVE | regime=bear bcd=1.00
+2026-03-05 16:25:30,379 [INFO] [RiskManager] Leverage recovered after 7 wins.
+2026-03-05 16:25:30,379 [INFO]   ✅ CLOSE SHORT | TP       | trail=1 | entry=27,889 exit=27,124 | PnL: +290.51 USD | Equity: 7,210.11
+2026-03-05 16:25:32,440 [INFO]   🟢 OPEN  SHORT @ 26,609.70 | SL=27374.82 TP=25566.35 | TPext=1.2× | Gate=ADVISORY | regime=bear bcd=1.00
+2026-03-05 16:25:32,502 [INFO] [RiskManager] Leverage recovered after 8 wins.
+2026-03-05 16:25:32,502 [INFO]   ❌ CLOSE SHORT | TIME_EXIT | held 24c | PnL: +93.05 | Equity: 7,303.16
+2026-03-05 16:25:34,305 [INFO]   🟢 OPEN  SHORT @ 26,042.20 | SL=26440.72 TP=25484.28 | TPext=1.0× | Gate=ACTIVE | regime=neutral bcd=1.00
+2026-03-05 16:25:34,314 [INFO] [RiskManager] Leverage recovered after 9 wins.
+2026-03-05 16:25:34,314 [INFO]   ❌ CLOSE SHORT | TRAIL_SL | trail=1 | entry=26,042 exit=26,042 | PnL: -0.12 USD | Equity: 7,303.04
+2026-03-05 16:25:35,728 [INFO]   🟢 OPEN  SHORT @ 25,767.20 | SL=26138.87 TP=24986.69 | TPext=1.5× | Gate=ACTIVE | regime=bear bcd=1.00
+2026-03-05 16:25:35,730 [INFO]   ❌ CLOSE SHORT | SL       | trail=0 | entry=25,767 exit=26,139 | PnL: -146.18 USD | Equity: 7,156.86
+2026-03-05 16:25:37,258 [INFO]   🟢 OPEN  SHORT @ 26,044.40 | SL=26473.10 TP=25444.23 | TPext=1.0× | Gate=ACTIVE | regime=neutral bcd=1.00
+2026-03-05 16:25:37,264 [INFO]   ❌ CLOSE SHORT | SL       | trail=0 | entry=26,044 exit=26,473 | PnL: -143.25 USD | Equity: 7,013.61
+2026-03-05 16:25:39,226 [INFO]   🟢 OPEN  SHORT @ 26,134.30 | SL=26550.35 TP=25551.82 | TPext=1.0× | Gate=ACTIVE | regime=neutral bcd=1.00
+2026-03-05 16:25:39,228 [WARNING] [RiskManager] 3 consecutive losses — COOLDOWN 2 candles (8h)
+2026-03-05 16:25:39,229 [INFO]   ❌ CLOSE SHORT | SL       | trail=0 | entry=26,134 exit=26,550 | PnL: -140.38 USD | Equity: 6,873.23
+2026-03-05 16:25:44,301 [WARNING] [RiskManager] De-leveraged: 3 consec losses → leverage 1×
+2026-03-05 16:25:44,302 [INFO]   🟢 OPEN  LONG  @ 26,430.00 | SL=25960.18 TP=27416.63 | TPext=1.5× | Gate=ACTIVE | regime=bull bcd=1.00
+2026-03-05 16:25:44,306 [INFO]   ❌ CLOSE LONG  | SL       | trail=0 | entry=26,430 exit=25,960 | PnL: -137.57 USD | Equity: 6,735.65
+2026-03-05 16:25:45,694 [WARNING] [RiskManager] De-leveraged: 4 consec losses → leverage 1×
+2026-03-05 16:25:45,694 [INFO]   🟢 OPEN  SHORT @ 25,987.30 | SL=26443.03 TP=25349.28 | TPext=1.0× | Gate=ACTIVE | regime=neutral bcd=1.00
+2026-03-05 16:25:45,733 [WARNING] [RiskManager] 5 consecutive losses — COOLDOWN 6 candles (24h)
+2026-03-05 16:25:45,736 [INFO]   ❌ CLOSE SHORT | TIME_EXIT | held 24c | PnL: -31.44 | Equity: 6,704.21
+2026-03-05 16:25:47,248 [INFO]   ▶ [2023-08-28]  19.1%  │ Equity: $     6,704  │ PnL: $   -3,296  │ Trades:  169  │ ETA: 38.7 min
+2026-03-05 16:25:55,254 [WARNING] [RiskManager] De-leveraged: 5 consec losses → leverage 1×
+2026-03-05 16:25:55,254 [INFO]   🟢 OPEN  LONG  @ 27,820.00 | SL=27337.17 TP=28833.95 | TPext=1.5× | Gate=ACTIVE | regime=bull bcd=1.00
+2026-03-05 16:25:55,256 [INFO]   ❌ CLOSE LONG  | SL       | trail=0 | entry=27,820 exit=27,337 | PnL: -134.19 USD | Equity: 6,570.02
+2026-03-05 16:25:56,713 [WARNING] [RiskManager] De-leveraged: 6 consec losses → leverage 1×
+2026-03-05 16:25:56,714 [INFO]   🟢 OPEN  LONG  @ 27,700.10 | SL=27213.45 TP=28722.06 | TPext=1.5× | Gate=ACTIVE | regime=bull bcd=1.00
+2026-03-05 16:25:56,718 [INFO]   ❌ CLOSE LONG  | SL       | trail=0 | entry=27,700 exit=27,213 | PnL: -131.51 USD | Equity: 6,438.51
+2026-03-05 16:25:58,068 [WARNING] [RiskManager] De-leveraged: 7 consec losses → leverage 1×
+2026-03-05 16:25:58,068 [INFO]   🟢 OPEN  LONG  @ 27,323.50 | SL=26856.21 TP=28304.80 | TPext=1.5× | Gate=ACTIVE | regime=bull bcd=1.00
+2026-03-05 16:25:58,077 [INFO]   ❌ CLOSE LONG  | SL       | trail=0 | entry=27,324 exit=26,856 | PnL: -128.87 USD | Equity: 6,309.64
+2026-03-05 16:25:59,481 [WARNING] [RiskManager] De-leveraged: 8 consec losses → leverage 1×
+2026-03-05 16:25:59,482 [INFO]   🟢 OPEN  LONG  @ 27,291.80 | SL=26849.48 TP=28220.67 | TPext=1.5× | Gate=ACTIVE | regime=bull bcd=1.00
+2026-03-05 16:25:59,484 [INFO]   ❌ CLOSE LONG  | SL       | trail=0 | entry=27,292 exit=26,849 | PnL: -126.29 USD | Equity: 6,183.35
+2026-03-05 16:26:00,870 [WARNING] [RiskManager] De-leveraged: 9 consec losses → leverage 1×
+2026-03-05 16:26:00,871 [INFO]   🟢 OPEN  LONG  @ 26,909.50 | SL=26437.57 TP=27900.56 | TPext=1.5× | Gate=ACTIVE | regime=bull bcd=1.00
+2026-03-05 16:26:00,873 [INFO]   ❌ CLOSE LONG  | SL       | trail=0 | entry=26,910 exit=26,438 | PnL: -123.77 USD | Equity: 6,059.58
+2026-03-05 16:26:02,230 [WARNING] [RiskManager] De-leveraged: 10 consec losses → leverage 1×
+2026-03-05 16:26:02,231 [INFO]   🟢 OPEN  LONG  @ 26,148.70 | SL=25599.34 TP=27302.36 | TPext=1.5× | Gate=ADVISORY | regime=bull bcd=1.00
+2026-03-05 16:26:02,236 [INFO]   ❌ CLOSE LONG  | SL       | trail=0 | entry=26,149 exit=25,599 | PnL: -121.29 USD | Equity: 5,938.29
+2026-03-05 16:26:03,635 [WARNING] [RiskManager] De-leveraged: 11 consec losses → leverage 1×
+2026-03-05 16:26:03,635 [INFO]   🟢 OPEN  SHORT @ 26,033.70 | SL=26532.46 TP=25335.44 | TPext=1.0× | Gate=ACTIVE | regime=neutral bcd=1.00
+2026-03-05 16:26:03,637 [INFO]   ✅ CLOSE SHORT | TP       | trail=0 | entry=26,034 exit=25,335 | PnL: +166.18 USD | Equity: 6,104.47
+2026-03-05 16:26:05,103 [WARNING] [RiskManager] De-leveraged: 11 consec losses → leverage 1×
+2026-03-05 16:26:05,103 [INFO]   🟢 OPEN  SHORT @ 25,798.00 | SL=26325.05 TP=24691.19 | TPext=1.5× | Gate=ACTIVE | regime=bear bcd=1.00
+2026-03-05 16:26:05,147 [INFO] [RiskManager] Leverage recovered after 2 wins.
+2026-03-05 16:26:05,148 [INFO]   ❌ CLOSE SHORT | TIME_EXIT | held 24c | PnL: +11.51 | Equity: 6,115.98
+2026-03-05 16:26:06,555 [INFO]   🟢 OPEN  SHORT @ 25,670.40 | SL=26003.75 TP=24970.36 | TPext=1.5× | Gate=ACTIVE | regime=bear bcd=1.00
+2026-03-05 16:26:06,563 [INFO]   ❌ CLOSE SHORT | SL       | trail=0 | entry=25,670 exit=26,004 | PnL: -122.42 USD | Equity: 5,993.56
+2026-03-05 16:26:07,906 [INFO]   🟢 OPEN  SHORT @ 25,576.30 | SL=25864.22 TP=24971.68 | TPext=1.5× | Gate=ACTIVE | regime=bear bcd=1.00
+2026-03-05 16:26:07,917 [INFO]   ❌ CLOSE SHORT | SL       | trail=0 | entry=25,576 exit=25,864 | PnL: -119.97 USD | Equity: 5,873.59
+2026-03-05 16:26:09,350 [INFO]   🟢 OPEN  SHORT @ 25,766.70 | SL=26066.38 TP=25137.36 | TPext=1.5× | Gate=ACTIVE | regime=bear bcd=1.00
+2026-03-05 16:26:09,352 [WARNING] [RiskManager] 3 consecutive losses — COOLDOWN 2 candles (8h)
+2026-03-05 16:26:09,353 [INFO]   ❌ CLOSE SHORT | SL       | trail=0 | entry=25,767 exit=26,066 | PnL: -117.57 USD | Equity: 5,756.03
+2026-03-05 16:26:13,253 [WARNING] [RiskManager] De-leveraged: 3 consec losses → leverage 1×
+2026-03-05 16:26:13,254 [INFO]   🟢 OPEN  SHORT @ 26,235.60 | SL=26582.98 TP=25749.27 | TPext=1.0× | Gate=ACTIVE | regime=neutral bcd=1.00
+2026-03-05 16:26:13,255 [INFO]   ✅ CLOSE SHORT | TP       | trail=0 | entry=26,236 exit=25,749 | PnL: +161.08 USD | Equity: 5,917.10
+2026-03-05 16:26:14,789 [WARNING] [RiskManager] De-leveraged: 3 consec losses → leverage 1×
+2026-03-05 16:26:14,790 [INFO]   🟢 OPEN  SHORT @ 26,244.10 | SL=26588.89 TP=25761.40 | TPext=1.0× | Gate=ACTIVE | regime=neutral bcd=1.00
+2026-03-05 16:26:14,792 [INFO] [RiskManager] Leverage recovered after 2 wins.
+2026-03-05 16:26:14,794 [INFO]   ✅ CLOSE SHORT | TP       | trail=1 | entry=26,244 exit=25,761 | PnL: +165.58 USD | Equity: 6,082.69
+2026-03-05 16:26:16,201 [INFO]   🟢 OPEN  SHORT @ 25,829.80 | SL=26207.59 TP=25300.89 | TPext=1.0× | Gate=ACTIVE | regime=neutral bcd=1.00
+2026-03-05 16:26:16,224 [INFO] [RiskManager] Leverage recovered after 3 wins.
+2026-03-05 16:26:16,224 [INFO]   ✅ CLOSE SHORT | TP       | trail=0 | entry=25,830 exit=25,301 | PnL: +170.22 USD | Equity: 6,252.90
+2026-03-05 16:26:17,568 [INFO]   🟢 OPEN  SHORT @ 25,591.90 | SL=25878.41 TP=25190.79 | TPext=1.0× | Gate=ACTIVE | regime=neutral bcd=1.00
+2026-03-05 16:26:17,569 [INFO] [RiskManager] Leverage recovered after 4 wins.
+2026-03-05 16:26:17,570 [INFO]   ✅ CLOSE SHORT | TP       | trail=1 | entry=25,592 exit=25,191 | PnL: +174.98 USD | Equity: 6,427.89
+2026-03-05 16:26:19,028 [INFO]   🟢 OPEN  SHORT @ 25,102.50 | SL=25457.98 TP=24356.00 | TPext=1.5× | Gate=ACTIVE | regime=bear bcd=1.00
+2026-03-05 16:26:19,031 [INFO]   ❌ CLOSE SHORT | SL       | trail=0 | entry=25,102 exit=25,458 | PnL: -128.66 USD | Equity: 6,299.23
+2026-03-05 16:26:20,402 [INFO]   🟢 OPEN  SHORT @ 25,150.40 | SL=25517.83 TP=24378.79 | TPext=1.5× | Gate=ACTIVE | regime=bear bcd=1.00
+2026-03-05 16:26:20,404 [INFO]   ❌ CLOSE SHORT | SL       | trail=0 | entry=25,150 exit=25,518 | PnL: -126.09 USD | Equity: 6,173.14
+2026-03-05 16:26:21,750 [INFO]   🟢 OPEN  SHORT @ 25,788.20 | SL=26218.59 TP=25185.65 | TPext=1.0× | Gate=ACTIVE | regime=neutral bcd=1.00
+2026-03-05 16:26:21,753 [WARNING] [RiskManager] 3 consecutive losses — COOLDOWN 2 candles (8h)
+2026-03-05 16:26:21,753 [INFO]   ❌ CLOSE SHORT | SL       | trail=0 | entry=25,788 exit=26,219 | PnL: -123.56 USD | Equity: 6,049.58
+2026-03-05 16:26:25,995 [WARNING] [RiskManager] De-leveraged: 3 consec losses → leverage 1×
+2026-03-05 16:26:25,995 [INFO]   🟢 OPEN  LONG  @ 26,192.40 | SL=25710.82 TP=27203.72 | TPext=1.5× | Gate=ACTIVE | regime=bull bcd=1.00
+2026-03-05 16:26:26,037 [INFO]   ❌ CLOSE LONG  | TIME_EXIT | held 24c | PnL: +75.58 | Equity: 6,125.15
+2026-03-05 16:26:27,732 [WARNING] [RiskManager] De-leveraged: 3 consec losses → leverage 1×
+2026-03-05 16:26:27,733 [INFO]   🟢 OPEN  LONG  @ 26,524.20 | SL=26135.11 TP=27341.28 | TPext=1.5× | Gate=ACTIVE | regime=bull bcd=1.00
+2026-03-05 16:26:27,746 [INFO] [RiskManager] Leverage recovered after 2 wins.
+2026-03-05 16:26:27,746 [INFO]   ✅ CLOSE LONG  | TP       | trail=1 | entry=26,524 exit=27,341 | PnL: +257.16 USD | Equity: 6,382.31
+2026-03-05 16:26:29,225 [INFO]   🟢 OPEN  LONG  @ 27,184.70 | SL=26824.70 TP=27940.71 | TPext=1.5× | Gate=ACTIVE | regime=bull bcd=1.00
+2026-03-05 16:26:29,227 [INFO]   ❌ CLOSE LONG  | SL       | trail=0 | entry=27,185 exit=26,825 | PnL: -127.75 USD | Equity: 6,254.56
+2026-03-05 16:26:30,599 [INFO]   🟢 OPEN  LONG  @ 27,258.80 | SL=26894.30 TP=28024.26 | TPext=1.5× | Gate=ACTIVE | regime=bull bcd=1.00
+2026-03-05 16:26:30,601 [INFO]   ❌ CLOSE LONG  | SL       | trail=0 | entry=27,259 exit=26,894 | PnL: -125.19 USD | Equity: 6,129.37
+2026-03-05 16:26:31,979 [INFO]   🟢 OPEN  LONG  @ 26,803.20 | SL=26391.27 TP=27668.24 | TPext=1.5× | Gate=ACTIVE | regime=bull bcd=1.00
+2026-03-05 16:26:31,991 [INFO]   ✅ CLOSE LONG  | TRAIL_SL | trail=2 | entry=26,803 exit=26,941 | PnL: +40.76 USD | Equity: 6,170.14
+2026-03-05 16:26:33,350 [INFO]   🟢 OPEN  LONG  @ 27,106.40 | SL=26648.34 TP=28068.32 | TPext=1.5× | Gate=ACTIVE | regime=bull bcd=1.00
+2026-03-05 16:26:33,359 [WARNING] [RiskManager] 3 consecutive losses — COOLDOWN 2 candles (8h)
+2026-03-05 16:26:33,360 [INFO]   ❌ CLOSE LONG  | SL       | trail=0 | entry=27,106 exit=26,648 | PnL: -123.50 USD | Equity: 6,046.64
+2026-03-05 16:26:37,437 [WARNING] [RiskManager] De-leveraged: 3 consec losses → leverage 1×
+2026-03-05 16:26:37,438 [INFO]   🟢 OPEN  LONG  @ 26,567.70 | SL=26103.44 TP=27542.64 | TPext=1.5× | Gate=ACTIVE | regime=bull bcd=1.00
+2026-03-05 16:26:37,463 [INFO]   ❌ CLOSE LONG  | SL       | trail=0 | entry=26,568 exit=26,103 | PnL: -121.03 USD | Equity: 5,925.61
+2026-03-05 16:26:38,782 [WARNING] [RiskManager] De-leveraged: 4 consec losses → leverage 1×
+2026-03-05 16:26:38,783 [INFO]   🟢 OPEN  SHORT @ 26,432.50 | SL=26678.41 TP=26088.23 | TPext=1.0× | Gate=ACTIVE | regime=neutral bcd=1.00
+2026-03-05 16:26:38,785 [INFO]   ✅ CLOSE SHORT | TP       | trail=1 | entry=26,432 exit=26,088 | PnL: +165.82 USD | Equity: 6,091.43
+2026-03-05 16:26:40,142 [WARNING] [RiskManager] De-leveraged: 4 consec losses → leverage 1×
+2026-03-05 16:26:40,142 [INFO]   🟢 OPEN  SHORT @ 26,232.40 | SL=26506.92 TP=25848.07 | TPext=1.0× | Gate=ACTIVE | regime=neutral bcd=1.00
+2026-03-05 16:26:40,163 [WARNING] [RiskManager] 5 consecutive losses — COOLDOWN 6 candles (24h)
+2026-03-05 16:26:40,163 [INFO]   ❌ CLOSE SHORT | SL       | trail=0 | entry=26,232 exit=26,507 | PnL: -121.93 USD | Equity: 5,969.50
+2026-03-05 16:26:47,764 [INFO]   ▶ [2023-09-27]  21.8%  │ Equity: $     5,970  │ PnL: $   -4,030  │ Trades:  196  │ ETA: 36.5 min
+2026-03-05 16:26:51,067 [WARNING] [RiskManager] De-leveraged: 5 consec losses → leverage 1×
+2026-03-05 16:26:51,067 [INFO]   🟢 OPEN  SHORT @ 26,445.70 | SL=26799.30 TP=25950.65 | TPext=1.0× | Gate=ACTIVE | regime=neutral bcd=1.00
+2026-03-05 16:26:51,070 [INFO]   ❌ CLOSE SHORT | SL       | trail=0 | entry=26,446 exit=26,799 | PnL: -119.49 USD | Equity: 5,850.02
+2026-03-05 16:26:53,203 [WARNING] [RiskManager] De-leveraged: 6 consec losses → leverage 1×
+2026-03-05 16:26:53,203 [INFO]   🟢 OPEN  SHORT @ 26,464.40 | SL=26819.13 TP=25967.78 | TPext=1.0× | Gate=ACTIVE | regime=neutral bcd=1.00
+2026-03-05 16:26:53,205 [INFO]   ❌ CLOSE SHORT | SL       | trail=0 | entry=26,464 exit=26,819 | PnL: -117.09 USD | Equity: 5,732.92
+2026-03-05 16:26:55,036 [WARNING] [RiskManager] De-leveraged: 7 consec losses → leverage 1×
+2026-03-05 16:26:55,036 [INFO]   🟢 OPEN  SHORT @ 27,012.30 | SL=27408.65 TP=26457.41 | TPext=1.0× | Gate=ACTIVE | regime=neutral bcd=1.00
+2026-03-05 16:26:55,070 [INFO]   ❌ CLOSE SHORT | SL       | trail=0 | entry=27,012 exit=27,409 | PnL: -114.75 USD | Equity: 5,618.17
+2026-03-05 16:26:56,602 [WARNING] [RiskManager] De-leveraged: 8 consec losses → leverage 1×
+2026-03-05 16:26:56,602 [INFO]   🟢 OPEN  SHORT @ 27,091.10 | SL=27381.61 TP=26684.39 | TPext=1.0× | Gate=ADVISORY | regime=neutral bcd=1.00
+2026-03-05 16:26:56,604 [INFO]   ❌ CLOSE SHORT | SL       | trail=0 | entry=27,091 exit=27,382 | PnL: -112.45 USD | Equity: 5,505.72
+2026-03-05 16:26:58,197 [WARNING] [RiskManager] De-leveraged: 9 consec losses → leverage 1×
+2026-03-05 16:26:58,198 [INFO]   🟢 OPEN  LONG  @ 27,981.40 | SL=27525.53 TP=28603.04 | TPext=1.2× | Gate=ACTIVE | regime=bull bcd=1.00
+2026-03-05 16:26:58,205 [INFO]   ❌ CLOSE LONG  | TRAIL_SL | trail=1 | entry=27,981 exit=27,981 | PnL: -0.09 USD | Equity: 5,505.63
+2026-03-05 16:27:00,153 [WARNING] [RiskManager] De-leveraged: 9 consec losses → leverage 1×
+2026-03-05 16:27:00,153 [INFO]   🟢 OPEN  LONG  @ 28,183.20 | SL=27725.96 TP=29143.40 | TPext=1.5× | Gate=ACTIVE | regime=bull bcd=1.00
+2026-03-05 16:27:00,156 [INFO]   ❌ CLOSE LONG  | SL       | trail=0 | entry=28,183 exit=27,726 | PnL: -110.20 USD | Equity: 5,395.43
+2026-03-05 16:27:01,913 [WARNING] [RiskManager] De-leveraged: 10 consec losses → leverage 1×
+2026-03-05 16:27:01,914 [INFO]   🟢 OPEN  LONG  @ 28,015.00 | SL=27521.63 TP=29051.07 | TPext=1.5× | Gate=ACTIVE | regime=bull bcd=1.00
+2026-03-05 16:27:01,916 [INFO]   ❌ CLOSE LONG  | SL       | trail=0 | entry=28,015 exit=27,522 | PnL: -107.99 USD | Equity: 5,287.44
+2026-03-05 16:27:03,738 [WARNING] [RiskManager] De-leveraged: 11 consec losses → leverage 1×
+2026-03-05 16:27:03,740 [INFO]   🟢 OPEN  LONG  @ 27,955.30 | SL=27443.56 TP=29029.95 | TPext=1.5× | Gate=ACTIVE | regime=bull bcd=1.00
+2026-03-05 16:27:03,743 [INFO]   ❌ CLOSE LONG  | SL       | trail=0 | entry=27,955 exit=27,444 | PnL: -105.83 USD | Equity: 5,181.60
+2026-03-05 16:27:05,813 [WARNING] [RiskManager] De-leveraged: 12 consec losses → leverage 1×
+2026-03-05 16:27:05,814 [INFO]   🟢 OPEN  LONG  @ 27,477.60 | SL=26927.37 TP=28633.08 | TPext=1.5× | Gate=ACTIVE | regime=bull bcd=1.00
+2026-03-05 16:27:05,859 [INFO]   ❌ CLOSE LONG  | TIME_EXIT | held 24c | PnL: +82.54 | Equity: 5,264.15
+2026-03-05 16:27:07,532 [WARNING] [RiskManager] De-leveraged: 12 consec losses → leverage 1×
+2026-03-05 16:27:07,532 [INFO]   🟢 OPEN  LONG  @ 27,890.90 | SL=27402.99 TP=28915.51 | TPext=1.5× | Gate=ACTIVE | regime=bull bcd=1.00
+2026-03-05 16:27:07,550 [INFO]   ❌ CLOSE LONG  | SL       | trail=0 | entry=27,891 exit=27,403 | PnL: -105.37 USD | Equity: 5,158.78
+2026-03-05 16:27:09,005 [WARNING] [RiskManager] De-leveraged: 13 consec losses → leverage 1×
+2026-03-05 16:27:09,005 [INFO]   🟢 OPEN  LONG  @ 27,804.60 | SL=27464.81 TP=28518.16 | TPext=1.5× | Gate=ACTIVE | regime=bull bcd=1.00
+2026-03-05 16:27:09,007 [INFO]   ❌ CLOSE LONG  | SL       | trail=0 | entry=27,805 exit=27,465 | PnL: -103.26 USD | Equity: 5,055.52
+2026-03-05 16:27:10,600 [WARNING] [RiskManager] De-leveraged: 14 consec losses → leverage 1×
+2026-03-05 16:27:10,601 [INFO]   🟢 OPEN  LONG  @ 27,455.90 | SL=27092.94 TP=28218.12 | TPext=1.5× | Gate=ACTIVE | regime=bull bcd=1.00
+2026-03-05 16:27:10,615 [INFO]   ❌ CLOSE LONG  | SL       | trail=0 | entry=27,456 exit=27,093 | PnL: -101.19 USD | Equity: 4,954.33
+2026-03-05 16:27:12,616 [WARNING] [RiskManager] De-leveraged: 15 consec losses → leverage 1×
+2026-03-05 16:27:12,616 [INFO]   🟢 OPEN  SHORT @ 27,381.20 | SL=27731.22 TP=26891.17 | TPext=1.0× | Gate=ACTIVE | regime=neutral bcd=1.00
+2026-03-05 16:27:12,623 [INFO]   ✅ CLOSE SHORT | TP       | trail=1 | entry=27,381 exit=26,891 | PnL: +138.64 USD | Equity: 5,092.97
+2026-03-05 16:27:14,403 [WARNING] [RiskManager] De-leveraged: 15 consec losses → leverage 1×
+2026-03-05 16:27:14,403 [INFO]   🟢 OPEN  SHORT @ 27,185.00 | SL=27560.27 TP=26396.94 | TPext=1.5× | Gate=ACTIVE | regime=bear bcd=1.00
+2026-03-05 16:27:14,423 [INFO] [RiskManager] Leverage recovered after 2 wins.
+2026-03-05 16:27:14,424 [INFO]   ✅ CLOSE SHORT | TRAIL_SL | trail=2 | entry=27,185 exit=27,060 | PnL: +33.87 USD | Equity: 5,126.84
+2026-03-05 16:27:15,772 [INFO]   🟢 OPEN  SHORT @ 26,768.90 | SL=27100.66 TP=26072.21 | TPext=1.5× | Gate=ACTIVE | regime=bear bcd=1.00
+2026-03-05 16:27:15,790 [INFO]   ❌ CLOSE SHORT | SL       | trail=0 | entry=26,769 exit=27,101 | PnL: -102.62 USD | Equity: 5,024.22
+2026-03-05 16:27:17,286 [INFO]   🟢 OPEN  SHORT @ 27,030.10 | SL=27275.86 TP=26514.00 | TPext=1.5× | Gate=ACTIVE | regime=bear bcd=1.00
+2026-03-05 16:27:17,289 [INFO]   ❌ CLOSE SHORT | SL       | trail=0 | entry=27,030 exit=27,276 | PnL: -100.56 USD | Equity: 4,923.66
+2026-03-05 16:27:18,604 [INFO]   🟢 OPEN  SHORT @ 27,221.40 | SL=27497.81 TP=26640.93 | TPext=1.5× | Gate=ACTIVE | regime=bear bcd=1.00
+2026-03-05 16:27:18,607 [WARNING] [RiskManager] 3 consecutive losses — COOLDOWN 2 candles (8h)
+2026-03-05 16:27:18,607 [INFO]   ❌ CLOSE SHORT | SL       | trail=0 | entry=27,221 exit=27,498 | PnL: -98.55 USD | Equity: 4,825.11
+2026-03-05 16:27:23,579 [WARNING] [RiskManager] De-leveraged: 3 consec losses → leverage 1×
+2026-03-05 16:27:23,580 [INFO]   🟢 OPEN  LONG  @ 28,054.00 | SL=27324.46 TP=29048.83 | TPext=1.2× | Gate=ADVISORY | regime=bull bcd=1.00
+2026-03-05 16:27:23,594 [INFO]   ✅ CLOSE LONG  | TP       | trail=1 | entry=28,054 exit=29,049 | PnL: +131.52 USD | Equity: 4,956.62
+2026-03-05 16:27:25,062 [WARNING] [RiskManager] De-leveraged: 3 consec losses → leverage 1×
+2026-03-05 16:27:25,063 [INFO]   🟢 OPEN  LONG  @ 28,498.00 | SL=27908.90 TP=29735.11 | TPext=1.5× | Gate=ACTIVE | regime=bull bcd=1.00
+2026-03-05 16:27:25,085 [INFO] [RiskManager] Leverage recovered after 2 wins.
+2026-03-05 16:27:25,085 [INFO]   ✅ CLOSE LONG  | TP       | trail=1 | entry=28,498 exit=29,735 | PnL: +208.10 USD | Equity: 5,164.72
+2026-03-05 16:27:26,508 [INFO]   🟢 OPEN  LONG  @ 29,228.50 | SL=28655.37 TP=30432.07 | TPext=1.5× | Gate=ACTIVE | regime=bull bcd=1.00
+2026-03-05 16:27:26,534 [INFO] [RiskManager] Leverage recovered after 3 wins.
+2026-03-05 16:27:26,534 [INFO]   ✅ CLOSE LONG  | TP       | trail=2 | entry=29,228 exit=30,432 | PnL: +216.84 USD | Equity: 5,381.56
+2026-03-05 16:27:27,836 [INFO]   🟢 OPEN  LONG  @ 29,981.50 | SL=29455.88 TP=31085.30 | TPext=1.5× | Gate=ACTIVE | regime=bull bcd=1.00
+2026-03-05 16:27:27,843 [INFO] [RiskManager] Leverage recovered after 4 wins.
+2026-03-05 16:27:27,843 [INFO]   ✅ CLOSE LONG  | TP       | trail=1 | entry=29,982 exit=31,085 | PnL: +225.94 USD | Equity: 5,607.50
+2026-03-05 16:27:29,185 [INFO]   🟢 OPEN  LONG  @ 30,864.10 | SL=30231.97 TP=32191.58 | TPext=1.5× | Gate=ACTIVE | regime=bull bcd=1.00
+2026-03-05 16:27:29,188 [INFO] [RiskManager] Leverage recovered after 5 wins.
+2026-03-05 16:27:29,188 [INFO]   ✅ CLOSE LONG  | TP       | trail=1 | entry=30,864 exit=32,192 | PnL: +235.43 USD | Equity: 5,842.92
+2026-03-05 16:27:30,613 [INFO]   🟢 OPEN  LONG  @ 31,339.90 | SL=30637.78 TP=32814.34 | TPext=1.5× | Gate=ACTIVE | regime=bull bcd=1.00
+2026-03-05 16:27:30,616 [INFO] [RiskManager] Leverage recovered after 6 wins.
+2026-03-05 16:27:30,616 [INFO]   ✅ CLOSE LONG  | TP       | trail=1 | entry=31,340 exit=32,814 | PnL: +245.31 USD | Equity: 6,088.23
+2026-03-05 16:27:48,298 [INFO]   ▶ [2023-10-25]  24.2%  │ Equity: $     6,088  │ PnL: $   -3,912  │ Trades:  219  │ ETA: 34.9 min
+2026-03-05 16:28:09,392 [INFO]   🟢 OPEN  SHORT @ 33,705.50 | SL=34638.04 TP=31747.16 | TPext=1.5× | Gate=ADVISORY | regime=bear bcd=1.00
+2026-03-05 16:28:09,410 [INFO]   ❌ CLOSE SHORT | SL       | trail=0 | entry=33,706 exit=34,638 | PnL: -121.86 USD | Equity: 5,966.37
+2026-03-05 16:28:15,688 [INFO]   🟢 OPEN  SHORT @ 34,276.50 | SL=34888.19 TP=32991.95 | TPext=1.5× | Gate=ADVISORY | regime=bear bcd=1.00
+2026-03-05 16:28:15,692 [INFO]   ❌ CLOSE SHORT | SL       | trail=0 | entry=34,276 exit=34,888 | PnL: -119.42 USD | Equity: 5,846.95
+2026-03-05 16:28:23,806 [INFO]   🟢 OPEN  SHORT @ 34,219.90 | SL=34837.63 TP=32922.67 | TPext=1.5× | Gate=ACTIVE | regime=bear bcd=1.00
+2026-03-05 16:28:23,834 [WARNING] [RiskManager] 3 consecutive losses — COOLDOWN 2 candles (8h)
+2026-03-05 16:28:23,835 [INFO]   ❌ CLOSE SHORT | SL       | trail=0 | entry=34,220 exit=34,838 | PnL: -117.03 USD | Equity: 5,729.92
+2026-03-05 16:28:27,899 [WARNING] [RiskManager] De-leveraged: 3 consec losses → leverage 1×
+2026-03-05 16:28:29,314 [WARNING] [RiskManager] De-leveraged: 3 consec losses → leverage 1×
+2026-03-05 16:28:29,314 [INFO]   🟢 OPEN  LONG  @ 35,437.40 | SL=34718.25 TP=36947.61 | TPext=1.5× | Gate=ACTIVE | regime=bull bcd=1.00
+2026-03-05 16:28:29,321 [INFO]   ❌ CLOSE LONG  | SL       | trail=0 | entry=35,437 exit=34,718 | PnL: -114.69 USD | Equity: 5,615.23
+2026-03-05 16:28:30,728 [WARNING] [RiskManager] De-leveraged: 4 consec losses → leverage 1×
+2026-03-05 16:28:30,728 [INFO]   🟢 OPEN  LONG  @ 35,377.50 | SL=34646.28 TP=36913.06 | TPext=1.5× | Gate=ACTIVE | regime=bull bcd=1.00
+2026-03-05 16:28:30,730 [WARNING] [RiskManager] 5 consecutive losses — COOLDOWN 6 candles (24h)
+2026-03-05 16:28:30,731 [INFO]   ❌ CLOSE LONG  | SL       | trail=0 | entry=35,378 exit=34,646 | PnL: -112.39 USD | Equity: 5,502.83
+2026-03-05 16:28:40,114 [WARNING] [RiskManager] De-leveraged: 5 consec losses → leverage 1×
+2026-03-05 16:28:40,114 [INFO]   🟢 OPEN  LONG  @ 34,759.50 | SL=33964.87 TP=36428.22 | TPext=1.5× | Gate=ADVISORY | regime=bull bcd=1.00
+2026-03-05 16:28:40,133 [INFO]   ❌ CLOSE LONG  | TRAIL_SL | trail=1 | entry=34,760 exit=34,760 | PnL: -0.09 USD | Equity: 5,502.74
+2026-03-05 16:28:41,607 [WARNING] [RiskManager] De-leveraged: 5 consec losses → leverage 1×
+2026-03-05 16:28:41,638 [INFO]   🟢 OPEN  LONG  @ 35,103.50 | SL=34496.76 TP=36377.65 | TPext=1.5× | Gate=ACTIVE | regime=bull bcd=1.00
+2026-03-05 16:28:41,696 [INFO]   ❌ CLOSE LONG  | SL       | trail=0 | entry=35,104 exit=34,497 | PnL: -110.14 USD | Equity: 5,392.60
+2026-03-05 16:28:43,970 [WARNING] [RiskManager] De-leveraged: 6 consec losses → leverage 1×
+2026-03-05 16:28:43,971 [INFO]   🟢 OPEN  LONG  @ 35,001.30 | SL=34390.46 TP=36284.06 | TPext=1.5× | Gate=ACTIVE | regime=bull bcd=1.00
+2026-03-05 16:28:44,006 [INFO]   ✅ CLOSE LONG  | TP       | trail=1 | entry=35,001 exit=36,284 | PnL: +226.40 USD | Equity: 5,619.00
+2026-03-05 16:28:45,520 [WARNING] [RiskManager] De-leveraged: 6 consec losses → leverage 1×
+2026-03-05 16:28:47,323 [WARNING] [RiskManager] De-leveraged: 6 consec losses → leverage 1×
+2026-03-05 16:28:47,324 [INFO]   🟢 OPEN  LONG  @ 36,455.50 | SL=35693.19 TP=38056.35 | TPext=1.5× | Gate=ACTIVE | regime=bull bcd=1.00
+2026-03-05 16:28:47,327 [INFO] [RiskManager] Leverage recovered after 2 wins.
+2026-03-05 16:28:47,328 [INFO]   ✅ CLOSE LONG  | TP       | trail=0 | entry=36,456 exit=38,056 | PnL: +235.91 USD | Equity: 5,854.91
+2026-03-05 16:28:49,001 [INFO]   🟢 OPEN  LONG  @ 36,816.90 | SL=36063.55 TP=38398.93 | TPext=1.5× | Gate=ACTIVE | regime=bull bcd=1.00
+2026-03-05 16:28:49,002 [INFO]   ▶ [2023-11-09]  25.5%  │ Equity: $     5,855  │ PnL: $   -4,145  │ Trades:  228  │ ETA: 35.5 min
+2026-03-05 16:28:49,004 [INFO]   ❌ CLOSE LONG  | SL       | trail=0 | entry=36,817 exit=36,064 | PnL: -117.19 USD | Equity: 5,737.72
+2026-03-05 16:28:50,561 [INFO]   🟢 OPEN  LONG  @ 37,141.50 | SL=36256.40 TP=39000.21 | TPext=1.5× | Gate=ADVISORY | regime=bull bcd=1.00
+2026-03-05 16:28:50,563 [INFO]   ❌ CLOSE LONG  | SL       | trail=0 | entry=37,142 exit=36,256 | PnL: -114.85 USD | Equity: 5,622.87
+2026-03-05 16:28:52,347 [INFO]   🟢 OPEN  LONG  @ 36,399.50 | SL=35366.22 TP=38569.39 | TPext=1.5× | Gate=ADVISORY | regime=bull bcd=1.00
+2026-03-05 16:28:52,395 [INFO]   ❌ CLOSE LONG  | TIME_EXIT | held 24c | PnL: +51.94 | Equity: 5,674.82
+2026-03-05 16:28:54,285 [INFO]   🟢 OPEN  LONG  @ 36,486.20 | SL=35835.24 TP=37853.22 | TPext=1.5× | Gate=ACTIVE | regime=bull bcd=1.00
+2026-03-05 16:28:54,293 [WARNING] [RiskManager] 3 consecutive losses — COOLDOWN 2 candles (8h)
+2026-03-05 16:28:54,294 [INFO]   ❌ CLOSE LONG  | SL       | trail=0 | entry=36,486 exit=35,835 | PnL: -113.59 USD | Equity: 5,561.23
+2026-03-05 16:29:01,763 [WARNING] [RiskManager] De-leveraged: 3 consec losses → leverage 1×
+2026-03-05 16:29:01,763 [INFO]   🟢 OPEN  SHORT @ 35,305.90 | SL=36175.24 TP=34088.83 | TPext=1.0× | Gate=ADVISORY | regime=neutral bcd=1.00
+2026-03-05 16:29:01,767 [INFO]   ❌ CLOSE SHORT | SL       | trail=0 | entry=35,306 exit=36,175 | PnL: -111.31 USD | Equity: 5,449.92

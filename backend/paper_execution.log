@@ -1,0 +1,774 @@
+2026-03-02 08:42:47,331 [   INFO]  [BOOT] Starting Paper Execution Daemon...
+2026-03-02 08:42:47,333 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 08:42:48,977 [   INFO] [BCD global] Trained on 150 candles. Found 4 changepoints.
+2026-03-02 08:42:55,671 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 08:42:58,001 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 08:43:01,712 [   INFO]  [CYCLE] Signal: SHORT | Status: SUSPENDED | Conviction: 0.0%
+2026-03-02 08:43:01,809 [  ERROR]  [CRITICAL] Loop error: Catalog Error: Table with name paper_trades does not exist!
+Did you mean "pg_prepared_statements"?
+
+LINE 1: SELECT * FROM paper_trades WHERE status = 'OPEN'
+                      ^
+Traceback (most recent call last):
+  File "C:\Users\ThinkPad\Documents\Windsurf\btc-scalping-quant\backend\paper_executor.py", line 51, in run_executor
+    paper_svc.process_signal(signal)
+  File "C:\Users\ThinkPad\Documents\Windsurf\btc-scalping-quant\backend\app\services\paper_trade_service.py", line 48, in process_signal
+    current_pos = self.get_open_position()
+                  ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ThinkPad\Documents\Windsurf\btc-scalping-quant\backend\app\services\paper_trade_service.py", line 32, in get_open_position
+    with duckdb.connect(self.db_path) as con:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ThinkPad\Documents\Windsurf\btc-scalping-quant\backend\app\services\paper_trade_service.py", line 33, in get_open_position
+    df = con.execute("SELECT * FROM paper_trades WHERE status = 'OPEN'").fetchdf()
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_duckdb.CatalogException: Catalog Error: Table with name paper_trades does not exist!
+Did you mean "pg_prepared_statements"?
+
+LINE 1: SELECT * FROM paper_trades WHERE status = 'OPEN'
+                      ^
+2026-03-02 08:43:11,826 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 08:43:14,602 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 08:43:15,679 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 08:43:19,683 [   INFO]  [CYCLE] Signal: SHORT | Status: SUSPENDED | Conviction: 0.0%
+2026-03-02 08:43:19,779 [  ERROR]  [CRITICAL] Loop error: Catalog Error: Table with name paper_trades does not exist!
+Did you mean "pg_prepared_statements"?
+
+LINE 1: SELECT * FROM paper_trades WHERE status = 'OPEN'
+                      ^
+Traceback (most recent call last):
+  File "C:\Users\ThinkPad\Documents\Windsurf\btc-scalping-quant\backend\paper_executor.py", line 51, in run_executor
+    paper_svc.process_signal(signal)
+  File "C:\Users\ThinkPad\Documents\Windsurf\btc-scalping-quant\backend\app\services\paper_trade_service.py", line 48, in process_signal
+    current_pos = self.get_open_position()
+                  ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ThinkPad\Documents\Windsurf\btc-scalping-quant\backend\app\services\paper_trade_service.py", line 32, in get_open_position
+    with duckdb.connect(self.db_path) as con:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ThinkPad\Documents\Windsurf\btc-scalping-quant\backend\app\services\paper_trade_service.py", line 33, in get_open_position
+    df = con.execute("SELECT * FROM paper_trades WHERE status = 'OPEN'").fetchdf()
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_duckdb.CatalogException: Catalog Error: Table with name paper_trades does not exist!
+Did you mean "pg_prepared_statements"?
+
+LINE 1: SELECT * FROM paper_trades WHERE status = 'OPEN'
+                      ^
+2026-03-02 08:43:29,788 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 08:43:32,803 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 08:43:33,734 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 08:43:37,737 [   INFO]  [CYCLE] Signal: SHORT | Status: SUSPENDED | Conviction: 0.0%
+2026-03-02 08:43:37,810 [  ERROR]  [CRITICAL] Loop error: Catalog Error: Table with name paper_trades does not exist!
+Did you mean "pg_prepared_statements"?
+
+LINE 1: SELECT * FROM paper_trades WHERE status = 'OPEN'
+                      ^
+Traceback (most recent call last):
+  File "C:\Users\ThinkPad\Documents\Windsurf\btc-scalping-quant\backend\paper_executor.py", line 51, in run_executor
+    paper_svc.process_signal(signal)
+  File "C:\Users\ThinkPad\Documents\Windsurf\btc-scalping-quant\backend\app\services\paper_trade_service.py", line 48, in process_signal
+    current_pos = self.get_open_position()
+                  ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ThinkPad\Documents\Windsurf\btc-scalping-quant\backend\app\services\paper_trade_service.py", line 32, in get_open_position
+    with duckdb.connect(self.db_path) as con:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ThinkPad\Documents\Windsurf\btc-scalping-quant\backend\app\services\paper_trade_service.py", line 33, in get_open_position
+    df = con.execute("SELECT * FROM paper_trades WHERE status = 'OPEN'").fetchdf()
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_duckdb.CatalogException: Catalog Error: Table with name paper_trades does not exist!
+Did you mean "pg_prepared_statements"?
+
+LINE 1: SELECT * FROM paper_trades WHERE status = 'OPEN'
+                      ^
+2026-03-02 08:43:47,814 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 08:43:50,657 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 08:43:51,613 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 08:43:56,477 [   INFO]  [CYCLE] Signal: SHORT | Status: SUSPENDED | Conviction: 0.0%
+2026-03-02 08:43:56,541 [  ERROR]  [CRITICAL] Loop error: Catalog Error: Table with name paper_trades does not exist!
+Did you mean "pg_prepared_statements"?
+
+LINE 1: SELECT * FROM paper_trades WHERE status = 'OPEN'
+                      ^
+Traceback (most recent call last):
+  File "C:\Users\ThinkPad\Documents\Windsurf\btc-scalping-quant\backend\paper_executor.py", line 51, in run_executor
+    paper_svc.process_signal(signal)
+  File "C:\Users\ThinkPad\Documents\Windsurf\btc-scalping-quant\backend\app\services\paper_trade_service.py", line 48, in process_signal
+    current_pos = self.get_open_position()
+                  ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ThinkPad\Documents\Windsurf\btc-scalping-quant\backend\app\services\paper_trade_service.py", line 32, in get_open_position
+    with duckdb.connect(self.db_path) as con:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ThinkPad\Documents\Windsurf\btc-scalping-quant\backend\app\services\paper_trade_service.py", line 33, in get_open_position
+    df = con.execute("SELECT * FROM paper_trades WHERE status = 'OPEN'").fetchdf()
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_duckdb.CatalogException: Catalog Error: Table with name paper_trades does not exist!
+Did you mean "pg_prepared_statements"?
+
+LINE 1: SELECT * FROM paper_trades WHERE status = 'OPEN'
+                      ^
+2026-03-02 08:44:06,557 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 08:44:09,462 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 08:44:10,419 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 08:44:14,482 [   INFO]  [CYCLE] Signal: SHORT | Status: SUSPENDED | Conviction: 0.0%
+2026-03-02 08:44:14,566 [  ERROR]  [CRITICAL] Loop error: Catalog Error: Table with name paper_trades does not exist!
+Did you mean "pg_prepared_statements"?
+
+LINE 1: SELECT * FROM paper_trades WHERE status = 'OPEN'
+                      ^
+Traceback (most recent call last):
+  File "C:\Users\ThinkPad\Documents\Windsurf\btc-scalping-quant\backend\paper_executor.py", line 51, in run_executor
+    paper_svc.process_signal(signal)
+  File "C:\Users\ThinkPad\Documents\Windsurf\btc-scalping-quant\backend\app\services\paper_trade_service.py", line 48, in process_signal
+    current_pos = self.get_open_position()
+                  ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ThinkPad\Documents\Windsurf\btc-scalping-quant\backend\app\services\paper_trade_service.py", line 32, in get_open_position
+    with duckdb.connect(self.db_path) as con:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ThinkPad\Documents\Windsurf\btc-scalping-quant\backend\app\services\paper_trade_service.py", line 33, in get_open_position
+    df = con.execute("SELECT * FROM paper_trades WHERE status = 'OPEN'").fetchdf()
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_duckdb.CatalogException: Catalog Error: Table with name paper_trades does not exist!
+Did you mean "pg_prepared_statements"?
+
+LINE 1: SELECT * FROM paper_trades WHERE status = 'OPEN'
+                      ^
+2026-03-02 08:44:24,578 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 08:44:27,137 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 08:44:28,148 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 08:44:32,029 [   INFO]  [CYCLE] Signal: SHORT | Status: SUSPENDED | Conviction: 0.0%
+2026-03-02 08:44:32,132 [  ERROR]  [CRITICAL] Loop error: Catalog Error: Table with name paper_trades does not exist!
+Did you mean "pg_prepared_statements"?
+
+LINE 1: SELECT * FROM paper_trades WHERE status = 'OPEN'
+                      ^
+Traceback (most recent call last):
+  File "C:\Users\ThinkPad\Documents\Windsurf\btc-scalping-quant\backend\paper_executor.py", line 51, in run_executor
+    paper_svc.process_signal(signal)
+  File "C:\Users\ThinkPad\Documents\Windsurf\btc-scalping-quant\backend\app\services\paper_trade_service.py", line 48, in process_signal
+    current_pos = self.get_open_position()
+                  ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ThinkPad\Documents\Windsurf\btc-scalping-quant\backend\app\services\paper_trade_service.py", line 32, in get_open_position
+    with duckdb.connect(self.db_path) as con:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ThinkPad\Documents\Windsurf\btc-scalping-quant\backend\app\services\paper_trade_service.py", line 33, in get_open_position
+    df = con.execute("SELECT * FROM paper_trades WHERE status = 'OPEN'").fetchdf()
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_duckdb.CatalogException: Catalog Error: Table with name paper_trades does not exist!
+Did you mean "pg_prepared_statements"?
+
+LINE 1: SELECT * FROM paper_trades WHERE status = 'OPEN'
+                      ^
+2026-03-02 08:44:42,140 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 08:44:45,275 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 08:44:46,401 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 08:44:50,598 [   INFO]  [CYCLE] Signal: SHORT | Status: SUSPENDED | Conviction: 0.0%
+2026-03-02 08:44:50,678 [  ERROR]  [CRITICAL] Loop error: Catalog Error: Table with name paper_trades does not exist!
+Did you mean "pg_prepared_statements"?
+
+LINE 1: SELECT * FROM paper_trades WHERE status = 'OPEN'
+                      ^
+Traceback (most recent call last):
+  File "C:\Users\ThinkPad\Documents\Windsurf\btc-scalping-quant\backend\paper_executor.py", line 51, in run_executor
+    paper_svc.process_signal(signal)
+  File "C:\Users\ThinkPad\Documents\Windsurf\btc-scalping-quant\backend\app\services\paper_trade_service.py", line 48, in process_signal
+    current_pos = self.get_open_position()
+                  ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ThinkPad\Documents\Windsurf\btc-scalping-quant\backend\app\services\paper_trade_service.py", line 32, in get_open_position
+    with duckdb.connect(self.db_path) as con:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ThinkPad\Documents\Windsurf\btc-scalping-quant\backend\app\services\paper_trade_service.py", line 33, in get_open_position
+    df = con.execute("SELECT * FROM paper_trades WHERE status = 'OPEN'").fetchdf()
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_duckdb.CatalogException: Catalog Error: Table with name paper_trades does not exist!
+Did you mean "pg_prepared_statements"?
+
+LINE 1: SELECT * FROM paper_trades WHERE status = 'OPEN'
+                      ^
+2026-03-02 08:45:00,687 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 08:45:03,545 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 08:45:04,506 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 08:45:09,132 [   INFO]  [CYCLE] Signal: SHORT | Status: SUSPENDED | Conviction: 0.0%
+2026-03-02 08:45:09,189 [  ERROR]  [CRITICAL] Loop error: Catalog Error: Table with name paper_trades does not exist!
+Did you mean "pg_prepared_statements"?
+
+LINE 1: SELECT * FROM paper_trades WHERE status = 'OPEN'
+                      ^
+Traceback (most recent call last):
+  File "C:\Users\ThinkPad\Documents\Windsurf\btc-scalping-quant\backend\paper_executor.py", line 51, in run_executor
+    paper_svc.process_signal(signal)
+  File "C:\Users\ThinkPad\Documents\Windsurf\btc-scalping-quant\backend\app\services\paper_trade_service.py", line 48, in process_signal
+    if signal.is_fallback:
+                  ^^^^^^^^^
+  File "C:\Users\ThinkPad\Documents\Windsurf\btc-scalping-quant\backend\app\services\paper_trade_service.py", line 32, in get_open_position
+  File "C:\Users\ThinkPad\Documents\Windsurf\btc-scalping-quant\backend\app\services\paper_trade_service.py", line 33, in get_open_position
+    def get_open_position(self) -> Optional[Dict[str, Any]]:
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_duckdb.CatalogException: Catalog Error: Table with name paper_trades does not exist!
+Did you mean "pg_prepared_statements"?
+
+LINE 1: SELECT * FROM paper_trades WHERE status = 'OPEN'
+                      ^
+2026-03-02 08:45:19,210 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 08:45:22,268 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 08:45:23,225 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 08:45:28,367 [   INFO]  [CYCLE] Signal: SHORT | Status: SUSPENDED | Conviction: 0.0%
+2026-03-02 08:45:28,466 [  ERROR]  [CRITICAL] Loop error: Catalog Error: Table with name paper_trades does not exist!
+Did you mean "pg_prepared_statements"?
+
+LINE 1: SELECT * FROM paper_trades WHERE status = 'OPEN'
+                      ^
+Traceback (most recent call last):
+  File "C:\Users\ThinkPad\Documents\Windsurf\btc-scalping-quant\backend\paper_executor.py", line 51, in run_executor
+    paper_svc.process_signal(signal)
+  File "C:\Users\ThinkPad\Documents\Windsurf\btc-scalping-quant\backend\app\services\paper_trade_service.py", line 48, in process_signal
+    if signal.is_fallback:
+                  ^^^^^^^^^
+  File "C:\Users\ThinkPad\Documents\Windsurf\btc-scalping-quant\backend\app\services\paper_trade_service.py", line 32, in get_open_position
+  File "C:\Users\ThinkPad\Documents\Windsurf\btc-scalping-quant\backend\app\services\paper_trade_service.py", line 33, in get_open_position
+    def get_open_position(self) -> Optional[Dict[str, Any]]:
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_duckdb.CatalogException: Catalog Error: Table with name paper_trades does not exist!
+Did you mean "pg_prepared_statements"?
+
+LINE 1: SELECT * FROM paper_trades WHERE status = 'OPEN'
+                      ^
+2026-03-02 08:45:38,473 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 08:45:40,899 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 08:45:41,837 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 08:45:46,302 [   INFO]  [CYCLE] Signal: SHORT | Status: SUSPENDED | Conviction: 0.0%
+2026-03-02 08:45:46,373 [  ERROR]  [CRITICAL] Loop error: Catalog Error: Table with name paper_trades does not exist!
+Did you mean "pg_prepared_statements"?
+
+LINE 1: SELECT * FROM paper_trades WHERE status = 'OPEN'
+                      ^
+Traceback (most recent call last):
+  File "C:\Users\ThinkPad\Documents\Windsurf\btc-scalping-quant\backend\paper_executor.py", line 51, in run_executor
+    paper_svc.process_signal(signal)
+  File "C:\Users\ThinkPad\Documents\Windsurf\btc-scalping-quant\backend\app\services\paper_trade_service.py", line 48, in process_signal
+    if signal.is_fallback:
+                  ^^^^^^^^^
+  File "C:\Users\ThinkPad\Documents\Windsurf\btc-scalping-quant\backend\app\services\paper_trade_service.py", line 32, in get_open_position
+  File "C:\Users\ThinkPad\Documents\Windsurf\btc-scalping-quant\backend\app\services\paper_trade_service.py", line 33, in get_open_position
+    def get_open_position(self) -> Optional[Dict[str, Any]]:
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_duckdb.CatalogException: Catalog Error: Table with name paper_trades does not exist!
+Did you mean "pg_prepared_statements"?
+
+LINE 1: SELECT * FROM paper_trades WHERE status = 'OPEN'
+                      ^
+2026-03-02 08:45:52,317 [   INFO]  [BOOT] Starting Paper Execution Daemon...
+2026-03-02 08:45:52,499 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 08:45:53,057 [   INFO] [BCD global] Trained on 150 candles. Found 4 changepoints.
+2026-03-02 08:45:56,387 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 08:45:56,507 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 08:45:57,993 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 08:45:59,298 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 08:46:00,320 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 08:46:02,198 [   INFO]  [CYCLE] Signal: SHORT | Status: SUSPENDED | Conviction: 0.0%
+2026-03-02 08:46:04,428 [   INFO]  [CYCLE] Signal: SHORT | Status: SUSPENDED | Conviction: 0.0%
+2026-03-02 08:47:02,291 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 08:47:04,585 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 08:47:18,286 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 08:47:20,538 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 08:47:28,134 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 08:47:29,150 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 08:47:32,408 [   INFO]  [CYCLE] Signal: SHORT | Status: SUSPENDED | Conviction: 0.0%
+2026-03-02 08:47:33,418 [   INFO]  [CYCLE] Signal: SHORT | Status: SUSPENDED | Conviction: 0.0%
+2026-03-02 08:48:32,824 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 08:48:33,607 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 08:48:37,381 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 08:48:39,259 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 08:48:39,332 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 08:48:40,919 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 08:48:43,653 [   INFO]  [CYCLE] Signal: SHORT | Status: SUSPENDED | Conviction: 0.0%
+2026-03-02 08:48:45,261 [   INFO]  [CYCLE] Signal: SHORT | Status: SUSPENDED | Conviction: 0.0%
+2026-03-02 08:49:43,752 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 08:49:45,343 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 08:49:52,636 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 08:49:54,086 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 08:49:55,252 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 08:49:56,953 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 08:49:59,222 [   INFO]  [CYCLE] Signal: SHORT | Status: SUSPENDED | Conviction: 0.0%
+2026-03-02 08:50:01,230 [   INFO]  [CYCLE] Signal: SHORT | Status: SUSPENDED | Conviction: 0.0%
+2026-03-02 08:50:59,302 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 08:51:01,346 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 08:51:02,710 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 08:51:03,764 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 08:51:04,204 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 08:51:05,256 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 08:51:07,940 [   INFO]  [CYCLE] Signal: SHORT | Status: SUSPENDED | Conviction: 0.0%
+2026-03-02 08:51:10,716 [   INFO]  [CYCLE] Signal: SHORT | Status: SUSPENDED | Conviction: 0.0%
+2026-03-02 08:52:08,004 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 08:52:10,792 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 08:52:11,497 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 08:52:13,718 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 08:52:16,625 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 08:52:18,162 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 08:52:18,173 [   INFO]  [CYCLE] Signal: SHORT | Status: SUSPENDED | Conviction: 0.0%
+2026-03-02 08:52:22,698 [   INFO]  [CYCLE] Signal: SHORT | Status: SUSPENDED | Conviction: 0.0%
+2026-03-02 08:53:18,240 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 08:53:21,315 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 08:53:22,420 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 08:53:22,768 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 08:53:25,834 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 08:53:26,000 [   INFO]  [CYCLE] Signal: SHORT | Status: SUSPENDED | Conviction: 0.0%
+2026-03-02 08:53:26,720 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 08:53:30,715 [   INFO]  [CYCLE] Signal: SHORT | Status: SUSPENDED | Conviction: 0.0%
+2026-03-02 08:54:26,056 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 08:54:29,051 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 08:54:30,417 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 08:54:30,792 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 08:54:33,618 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 08:54:34,760 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 08:54:34,907 [   INFO]  [CYCLE] Signal: SHORT | Status: SUSPENDED | Conviction: 0.0%
+2026-03-02 08:54:39,107 [   INFO]  [CYCLE] Signal: SHORT | Status: SUSPENDED | Conviction: 0.0%
+2026-03-02 08:55:34,971 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 08:55:38,463 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 08:55:39,168 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 08:55:39,437 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 08:55:42,429 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 08:55:43,504 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 08:55:44,576 [   INFO]  [CYCLE] Signal: LONG | Status: SUSPENDED | Conviction: 0.0%
+2026-03-02 08:55:47,921 [   INFO]  [CYCLE] Signal: LONG | Status: SUSPENDED | Conviction: 0.0%
+2026-03-02 08:56:44,640 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 08:56:47,412 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 08:56:47,991 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 08:56:48,842 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 08:56:50,869 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 08:56:51,817 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 08:56:54,114 [   INFO]  [CYCLE] Signal: LONG | Status: SUSPENDED | Conviction: 0.0%
+2026-03-02 08:56:57,520 [   INFO]  [CYCLE] Signal: LONG | Status: SUSPENDED | Conviction: 0.0%
+2026-03-02 08:57:54,160 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 08:57:57,032 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 08:57:57,578 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 08:57:57,977 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 08:58:00,541 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 08:58:01,553 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 08:58:03,456 [   INFO]  [CYCLE] Signal: LONG | Status: SUSPENDED | Conviction: 0.0%
+2026-03-02 08:58:07,930 [   INFO]  [CYCLE] Signal: LONG | Status: SUSPENDED | Conviction: 0.0%
+2026-03-02 08:59:03,533 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 08:59:06,371 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 08:59:07,337 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 08:59:08,207 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 08:59:11,144 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 08:59:12,127 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 08:59:13,020 [   INFO]  [CYCLE] Signal: LONG | Status: SUSPENDED | Conviction: 0.0%
+2026-03-02 08:59:17,838 [   INFO]  [CYCLE] Signal: LONG | Status: SUSPENDED | Conviction: 0.0%
+2026-03-02 09:00:13,070 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:00:16,219 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:00:17,475 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:00:17,937 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:00:20,995 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:00:22,243 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:00:23,320 [   INFO]  [CYCLE] Signal: LONG | Status: SUSPENDED | Conviction: 0.0%
+2026-03-02 09:00:28,334 [   INFO]  [CYCLE] Signal: LONG | Status: SUSPENDED | Conviction: 0.0%
+2026-03-02 09:01:23,373 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:01:27,875 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:01:28,390 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:01:29,434 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:01:32,703 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:01:34,211 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:01:35,079 [   INFO]  [CYCLE] Signal: LONG | Status: SUSPENDED | Conviction: 0.0%
+2026-03-02 09:01:39,415 [   INFO]  [CYCLE] Signal: LONG | Status: SUSPENDED | Conviction: 0.0%
+2026-03-02 09:02:35,139 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:02:39,315 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:02:39,483 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:02:40,866 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:02:43,759 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:02:45,156 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:02:46,617 [   INFO]  [CYCLE] Signal: LONG | Status: SUSPENDED | Conviction: 0.0%
+2026-03-02 09:02:50,916 [   INFO]  [CYCLE] Signal: LONG | Status: SUSPENDED | Conviction: 0.0%
+2026-03-02 09:03:46,678 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:03:50,996 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:03:51,109 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:03:52,702 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:03:55,102 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:03:56,581 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:03:58,282 [   INFO]  [CYCLE] Signal: LONG | Status: SUSPENDED | Conviction: 0.0%
+2026-03-02 09:04:01,989 [   INFO]  [CYCLE] Signal: LONG | Status: SUSPENDED | Conviction: 0.0%
+2026-03-02 09:04:58,333 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:05:02,054 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:05:02,738 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:05:04,200 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:05:06,519 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:05:08,023 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:05:10,179 [   INFO]  [CYCLE] Signal: LONG | Status: SUSPENDED | Conviction: 0.0%
+2026-03-02 09:05:12,576 [   INFO]  [CYCLE] Signal: LONG | Status: SUSPENDED | Conviction: 0.0%
+2026-03-02 09:06:10,241 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:06:12,656 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:06:14,412 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:06:16,296 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:06:16,943 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:06:18,390 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:06:21,956 [   INFO]  [CYCLE] Signal: LONG | Status: SUSPENDED | Conviction: 0.0%
+2026-03-02 09:06:23,599 [   INFO]  [CYCLE] Signal: LONG | Status: SUSPENDED | Conviction: 0.0%
+2026-03-02 09:07:22,043 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:07:23,653 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:07:26,575 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:07:27,992 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:07:28,121 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:07:29,460 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:07:33,251 [   INFO]  [CYCLE] Signal: SHORT | Status: SUSPENDED | Conviction: 0.0%
+2026-03-02 09:07:34,675 [   INFO]  [CYCLE] Signal: SHORT | Status: SUSPENDED | Conviction: 0.0%
+2026-03-02 09:10:06,609 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:10:08,027 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:10:11,284 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:10:12,910 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:10:13,342 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:10:16,238 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:10:19,019 [   INFO]  [CYCLE] Signal: SHORT | Status: SUSPENDED | Conviction: 0.0%
+2026-03-02 09:10:21,696 [   INFO]  [CYCLE] Signal: SHORT | Status: SUSPENDED | Conviction: 0.0%
+2026-03-02 09:11:19,089 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:11:21,854 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:11:34,733 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:11:38,140 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:11:40,124 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:11:41,142 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:11:44,220 [   INFO]  [CYCLE] Signal: SHORT | Status: SUSPENDED | Conviction: 0.0%
+2026-03-02 09:11:44,937 [   INFO]  [CYCLE] Signal: SHORT | Status: SUSPENDED | Conviction: 0.0%
+2026-03-02 09:12:44,374 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:12:45,038 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:12:53,271 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:12:53,784 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:12:56,828 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:12:57,302 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:13:01,930 [   INFO]  [CYCLE] Signal: SHORT | Status: SUSPENDED | Conviction: 0.0%
+2026-03-02 09:13:03,701 [   INFO]  [CYCLE] Signal: SHORT | Status: SUSPENDED | Conviction: 0.0%
+2026-03-02 09:14:02,101 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:14:03,929 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:14:22,267 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:14:25,237 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:14:29,511 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:14:31,371 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:14:33,862 [   INFO]  [CYCLE] Signal: SHORT | Status: SUSPENDED | Conviction: 0.0%
+2026-03-02 09:14:36,482 [   INFO]  [CYCLE] Signal: SHORT | Status: SUSPENDED | Conviction: 0.0%
+2026-03-02 09:15:34,248 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:15:37,146 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:15:39,683 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:15:41,929 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:15:43,236 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:15:45,092 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:15:46,456 [   INFO]  [CYCLE] Signal: SHORT | Status: SUSPENDED | Conviction: 0.0%
+2026-03-02 09:15:50,836 [   INFO]  [CYCLE] Signal: SHORT | Status: SUSPENDED | Conviction: 0.0%
+2026-03-02 09:16:46,556 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:16:49,531 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:16:50,593 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:16:50,928 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:16:53,720 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:16:54,743 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:16:55,729 [   INFO]  [CYCLE] Signal: SHORT | Status: SUSPENDED | Conviction: 0.0%
+2026-03-02 09:16:58,973 [   INFO]  [CYCLE] Signal: SHORT | Status: SUSPENDED | Conviction: 0.0%
+2026-03-02 09:17:55,785 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:17:58,800 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:17:59,031 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:17:59,800 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:18:01,914 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:18:02,881 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:18:04,576 [   INFO]  [CYCLE] Signal: SHORT | Status: SUSPENDED | Conviction: 0.0%
+2026-03-02 09:18:07,305 [   INFO]  [CYCLE] Signal: SHORT | Status: SUSPENDED | Conviction: 0.0%
+2026-03-02 09:19:04,639 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:19:07,348 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:19:07,355 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:19:08,354 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:19:10,099 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:19:11,010 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:19:13,180 [   INFO]  [CYCLE] Signal: SHORT | Status: SUSPENDED | Conviction: 0.0%
+2026-03-02 09:19:15,349 [   INFO]  [CYCLE] Signal: SHORT | Status: SUSPENDED | Conviction: 0.0%
+2026-03-02 09:20:13,235 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:20:15,404 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:20:16,259 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:20:17,297 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:20:18,020 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:20:18,887 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:20:22,007 [   INFO]  [CYCLE] Signal: SHORT | Status: SUSPENDED | Conviction: 0.0%
+2026-03-02 09:20:24,737 [   INFO]  [CYCLE] Signal: SHORT | Status: SUSPENDED | Conviction: 0.0%
+2026-03-02 09:21:22,064 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:21:24,829 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:21:25,163 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:21:26,171 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:21:27,738 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:21:28,698 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:21:31,348 [   INFO]  [CYCLE] Signal: SHORT | Status: SUSPENDED | Conviction: 0.0%
+2026-03-02 09:21:34,064 [   INFO]  [CYCLE] Signal: SHORT | Status: SUSPENDED | Conviction: 0.0%
+2026-03-02 09:22:31,419 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:22:34,113 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:22:34,457 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:22:35,569 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:22:37,179 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:22:38,168 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:22:41,297 [   INFO]  [CYCLE] Signal: SHORT | Status: SUSPENDED | Conviction: 0.0%
+2026-03-02 09:22:42,984 [   INFO]  [CYCLE] Signal: SHORT | Status: SUSPENDED | Conviction: 0.0%
+2026-03-02 09:23:41,402 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:23:43,040 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:23:44,359 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:23:45,567 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:23:46,221 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:23:47,291 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:23:50,758 [   INFO]  [CYCLE] Signal: SHORT | Status: SUSPENDED | Conviction: 0.0%
+2026-03-02 09:23:51,945 [   INFO]  [CYCLE] Signal: SHORT | Status: SUSPENDED | Conviction: 0.0%
+2026-03-02 09:24:06,529 [   INFO]  [BOOT] Starting Paper Execution Daemon...
+2026-03-02 09:24:06,589 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:24:07,285 [   INFO] [BCD global] Trained on 150 candles. Found 4 changepoints.
+2026-03-02 09:24:11,435 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:24:13,554 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:24:18,914 [   INFO]  [CYCLE] Signal: SHORT | Status: ADVISORY | Conviction: 1.2%
+2026-03-02 09:24:50,822 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:24:52,007 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:24:55,047 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:24:56,068 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:24:56,314 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:24:57,609 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:25:01,467 [   INFO]  [CYCLE] Signal: SHORT | Status: SUSPENDED | Conviction: 0.0%
+2026-03-02 09:25:02,787 [   INFO]  [CYCLE] Signal: SHORT | Status: SUSPENDED | Conviction: 0.0%
+2026-03-02 09:25:18,979 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:25:22,029 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:25:23,024 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:25:27,398 [   INFO]  [CYCLE] Signal: SHORT | Status: ADVISORY | Conviction: 1.2%
+2026-03-02 09:26:01,521 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:26:02,849 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:26:04,433 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:26:05,604 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:26:05,719 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:26:06,605 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:26:10,121 [   INFO]  [CYCLE] Signal: SHORT | Status: SUSPENDED | Conviction: 0.0%
+2026-03-02 09:26:11,099 [   INFO]  [CYCLE] Signal: SHORT | Status: SUSPENDED | Conviction: 0.0%
+2026-03-02 09:26:27,457 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:27:10,199 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:27:13,712 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:27:15,872 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:27:20,682 [   INFO]  [CYCLE] Signal: SHORT | Status: SUSPENDED | Conviction: 0.0%
+2026-03-02 09:28:05,698 [   INFO]  [BOOT] Starting Paper Execution Daemon...
+2026-03-02 09:28:05,755 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:28:06,891 [   INFO] [BCD global] Trained on 150 candles. Found 4 changepoints.
+2026-03-02 09:28:11,355 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:28:13,313 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:28:17,983 [   INFO]  [CYCLE] Signal: SHORT | Status: ACTIVE | Conviction: 1.2%
+2026-03-02 09:28:18,278 [   INFO]  [PAPER] OPEN SHORT @ 66147.1 | Size: 238.00 USDT | SL: 68213.9 | TP: 63873.62
+2026-03-02 09:28:20,796 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:28:23,782 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:28:24,859 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:28:30,406 [   INFO]  [CYCLE] Signal: SHORT | Status: SUSPENDED | Conviction: 0.0%
+2026-03-02 09:29:18,290 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:29:21,425 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:29:22,764 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:29:27,170 [   INFO]  [CYCLE] Signal: SHORT | Status: ACTIVE | Conviction: 1.2%
+2026-03-02 09:29:30,486 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:29:35,173 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:29:36,896 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:29:41,237 [   INFO]  [CYCLE] Signal: SHORT | Status: SUSPENDED | Conviction: 0.0%
+2026-03-02 09:30:27,369 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:30:30,439 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:30:31,450 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:30:36,847 [   INFO]  [CYCLE] Signal: SHORT | Status: ACTIVE | Conviction: 1.2%
+2026-03-02 09:30:41,270 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:30:44,126 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:30:45,101 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:30:49,958 [   INFO]  [CYCLE] Signal: SHORT | Status: SUSPENDED | Conviction: 0.0%
+2026-03-02 09:31:36,938 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:31:39,755 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:31:41,059 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:31:46,049 [   INFO]  [CYCLE] Signal: SHORT | Status: ACTIVE | Conviction: 1.2%
+2026-03-02 09:31:50,082 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:31:52,998 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:31:54,005 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:31:59,043 [   INFO]  [CYCLE] Signal: SHORT | Status: SUSPENDED | Conviction: 0.0%
+2026-03-02 09:32:46,133 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:32:59,094 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:33:03,086 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:33:09,614 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:33:13,600 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:33:14,245 [   INFO]  [CYCLE] Signal: SHORT | Status: ACTIVE | Conviction: 1.2%
+2026-03-02 09:33:16,181 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:33:20,863 [   INFO]  [CYCLE] Signal: SHORT | Status: SUSPENDED | Conviction: 0.0%
+2026-03-02 09:34:14,667 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:34:17,423 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:34:18,425 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:34:20,947 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:34:23,956 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:34:24,356 [   INFO]  [CYCLE] Signal: SHORT | Status: ADVISORY | Conviction: 0.7%
+2026-03-02 09:34:24,889 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:34:29,678 [   INFO]  [CYCLE] Signal: SHORT | Status: SUSPENDED | Conviction: 0.0%
+2026-03-02 09:35:24,402 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:35:27,119 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:35:28,178 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:35:29,727 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:35:32,616 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:35:33,613 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:35:34,056 [   INFO]  [CYCLE] Signal: SHORT | Status: ADVISORY | Conviction: 0.7%
+2026-03-02 09:35:38,084 [   INFO]  [CYCLE] Signal: SHORT | Status: SUSPENDED | Conviction: 0.0%
+2026-03-02 09:36:34,154 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:36:36,959 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:36:37,987 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:36:38,167 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:36:41,365 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:36:42,284 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:36:43,694 [   INFO]  [CYCLE] Signal: SHORT | Status: ADVISORY | Conviction: 0.7%
+2026-03-02 09:36:47,196 [   INFO]  [CYCLE] Signal: SHORT | Status: SUSPENDED | Conviction: 0.0%
+2026-03-02 09:37:43,760 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:37:46,699 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:37:47,268 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:37:47,749 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:37:50,178 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:37:51,063 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:37:52,658 [   INFO]  [CYCLE] Signal: SHORT | Status: ADVISORY | Conviction: 0.7%
+2026-03-02 09:37:55,753 [   INFO]  [CYCLE] Signal: SHORT | Status: SUSPENDED | Conviction: 0.0%
+2026-03-02 09:38:52,722 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:38:55,510 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:38:55,830 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:38:56,525 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:38:58,733 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:38:59,648 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:39:02,884 [   INFO]  [CYCLE] Signal: SHORT | Status: ADVISORY | Conviction: 0.7%
+2026-03-02 09:39:04,040 [   INFO]  [CYCLE] Signal: SHORT | Status: SUSPENDED | Conviction: 0.0%
+2026-03-02 09:39:18,183 [   INFO]  [BOOT] Starting Paper Execution Daemon...
+2026-03-02 09:39:18,244 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:39:19,355 [   INFO] [BCD global] Trained on 150 candles. Found 4 changepoints.
+2026-03-02 09:39:25,412 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:39:27,565 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:39:31,896 [   INFO]  [CYCLE] Signal: SHORT | Status: ADVISORY | Conviction: 0.7%
+2026-03-02 09:40:02,951 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:40:04,101 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:40:05,990 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:40:07,120 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:40:07,174 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:40:08,608 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:40:12,748 [   INFO]  [CYCLE] Signal: SHORT | Status: ADVISORY | Conviction: 0.7%
+2026-03-02 09:40:13,542 [   INFO]  [CYCLE] Signal: SHORT | Status: SUSPENDED | Conviction: 0.0%
+2026-03-02 09:40:31,944 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:40:34,707 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:40:35,747 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:40:40,752 [   INFO]  [CYCLE] Signal: SHORT | Status: ADVISORY | Conviction: 0.7%
+2026-03-02 09:41:12,815 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:41:13,627 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:41:15,704 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:41:16,401 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:41:16,739 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:41:17,293 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:41:21,993 [   INFO]  [CYCLE] Signal: SHORT | Status: ADVISORY | Conviction: 0.7%
+2026-03-02 09:41:22,087 [   INFO]  [CYCLE] Signal: SHORT | Status: SUSPENDED | Conviction: 0.0%
+2026-03-02 09:41:40,827 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:41:45,511 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:41:46,978 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:41:52,080 [   INFO]  [CYCLE] Signal: SHORT | Status: ADVISORY | Conviction: 0.7%
+2026-03-02 09:42:22,062 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:42:22,156 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:42:27,907 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:42:28,770 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:42:31,100 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:42:31,553 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:42:35,717 [   INFO]  [CYCLE] Signal: SHORT | Status: SUSPENDED | Conviction: 0.0%
+2026-03-02 09:42:35,928 [   INFO]  [CYCLE] Signal: SHORT | Status: ADVISORY | Conviction: 0.7%
+2026-03-02 09:42:52,154 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:42:55,499 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:42:56,772 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:43:01,471 [   INFO]  [CYCLE] Signal: SHORT | Status: ADVISORY | Conviction: 0.7%
+2026-03-02 09:43:35,781 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:43:36,002 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:43:42,219 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:43:42,341 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:43:44,440 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:43:44,461 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:43:49,320 [   INFO]  [CYCLE] Signal: SHORT | Status: SUSPENDED | Conviction: 0.0%
+2026-03-02 09:43:49,552 [   INFO]  [CYCLE] Signal: SHORT | Status: ADVISORY | Conviction: 0.7%
+2026-03-02 09:44:01,547 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:44:06,134 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:44:07,496 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:44:12,353 [   INFO]  [CYCLE] Signal: SHORT | Status: ADVISORY | Conviction: 0.7%
+2026-03-02 09:44:49,384 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:44:49,603 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:44:52,842 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:44:53,022 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:44:54,777 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:44:54,923 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:44:59,154 [   INFO]  [CYCLE] Signal: SHORT | Status: ADVISORY | Conviction: 0.7%
+2026-03-02 09:44:59,452 [   INFO]  [CYCLE] Signal: SHORT | Status: SUSPENDED | Conviction: 0.0%
+2026-03-02 09:45:12,412 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:45:15,159 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:45:16,105 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:45:20,462 [   INFO]  [CYCLE] Signal: SHORT | Status: ADVISORY | Conviction: 0.7%
+2026-03-02 09:45:59,214 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:45:59,496 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:46:05,187 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:46:05,484 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:46:07,919 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:46:08,347 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:46:12,598 [   INFO]  [CYCLE] Signal: SHORT | Status: SUSPENDED | Conviction: 0.0%
+2026-03-02 09:46:13,895 [   INFO]  [CYCLE] Signal: SHORT | Status: ADVISORY | Conviction: 0.7%
+2026-03-02 09:46:20,510 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:46:26,922 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:46:28,721 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:46:34,233 [   INFO]  [CYCLE] Signal: SHORT | Status: ADVISORY | Conviction: 0.7%
+2026-03-02 09:47:12,714 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:47:13,993 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:47:18,795 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:47:20,992 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:47:21,320 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:47:22,819 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:47:25,787 [   INFO]  [CYCLE] Signal: SHORT | Status: SUSPENDED | Conviction: 0.0%
+2026-03-02 09:47:27,193 [   INFO]  [CYCLE] Signal: SHORT | Status: ADVISORY | Conviction: 0.7%
+2026-03-02 09:47:34,312 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:47:37,746 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:47:38,727 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:47:43,212 [   INFO]  [CYCLE] Signal: SHORT | Status: ADVISORY | Conviction: 0.7%
+2026-03-02 09:48:25,898 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:48:27,284 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:48:31,152 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:48:32,396 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:48:32,524 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:48:34,111 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:48:37,951 [   INFO]  [CYCLE] Signal: SHORT | Status: SUSPENDED | Conviction: 0.0%
+2026-03-02 09:48:39,604 [   INFO]  [CYCLE] Signal: SHORT | Status: ADVISORY | Conviction: 0.7%
+2026-03-02 09:48:43,415 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:48:46,672 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:48:47,838 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:48:52,661 [   INFO]  [CYCLE] Signal: SHORT | Status: ADVISORY | Conviction: 0.7%
+2026-03-02 09:49:38,011 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:49:39,664 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:49:42,748 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:49:43,994 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:49:44,133 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:49:45,393 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:49:49,273 [   INFO]  [CYCLE] Signal: SHORT | Status: SUSPENDED | Conviction: 0.0%
+2026-03-02 09:49:50,289 [   INFO]  [CYCLE] Signal: SHORT | Status: ADVISORY | Conviction: 0.7%
+2026-03-02 09:49:52,709 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:49:55,576 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:49:56,493 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:50:01,115 [   INFO]  [CYCLE] Signal: SHORT | Status: ADVISORY | Conviction: 0.7%
+2026-03-02 09:50:49,349 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:50:50,347 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:50:55,768 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:50:56,513 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:50:57,938 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:50:58,590 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:51:01,408 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:51:02,857 [   INFO]  [CYCLE] Signal: SHORT | Status: SUSPENDED | Conviction: 0.0%
+2026-03-02 09:51:03,310 [   INFO]  [CYCLE] Signal: SHORT | Status: ACTIVE | Conviction: 1.2%
+2026-03-02 09:51:06,202 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:51:08,013 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:51:12,845 [   INFO]  [CYCLE] Signal: SHORT | Status: ACTIVE | Conviction: 1.2%
+2026-03-02 09:52:02,950 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:52:03,436 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:52:08,912 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:52:09,348 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:52:11,683 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:52:12,387 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:52:12,957 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:52:16,538 [   INFO]  [CYCLE] Signal: SHORT | Status: SUSPENDED | Conviction: 0.0%
+2026-03-02 09:52:17,237 [   INFO]  [CYCLE] Signal: SHORT | Status: ACTIVE | Conviction: 1.2%
+2026-03-02 09:52:19,366 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:52:21,754 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:52:27,174 [   INFO]  [CYCLE] Signal: SHORT | Status: ADVISORY | Conviction: 0.7%
+2026-03-02 09:53:17,159 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:53:17,473 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:53:21,059 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:53:21,533 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:53:22,051 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:53:22,794 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:53:26,559 [   INFO]  [CYCLE] Signal: SHORT | Status: SUSPENDED | Conviction: 0.0%
+2026-03-02 09:53:27,386 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:53:27,527 [   INFO]  [CYCLE] Signal: SHORT | Status: ACTIVE | Conviction: 1.2%
+2026-03-02 09:53:30,531 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:53:31,494 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:53:36,617 [   INFO]  [CYCLE] Signal: SHORT | Status: ACTIVE | Conviction: 1.2%
+2026-03-02 09:54:26,591 [   INFO]  [CYCLE] Fetching latest signal...
+2026-03-02 09:54:30,944 [   INFO] HTTP Request: GET https://api.alternative.me/fng/ "HTTP/1.1 200 OK"
+2026-03-02 09:54:32,111 [   INFO] HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-02 09:54:37,793 [   INFO]  [CYCLE] Signal: SHORT | Status: SUSPENDED | Conviction: 0.0%

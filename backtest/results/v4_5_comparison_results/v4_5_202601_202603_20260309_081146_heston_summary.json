@@ -1,0 +1,47 @@
+{
+  "model": "HESTON_v4.5",
+  "window_start": "2026-01-01",
+  "window_end": "2026-03-04",
+  "initial_capital": 10000.0,
+  "final_equity": 17609.61,
+  "net_pnl_usd": 7609.61,
+  "net_pnl_pct": 76.0961,
+  "daily_return_pct": 1.2274,
+  "n_days": 62,
+  "n_trades": 77,
+  "n_wins": 38,
+  "n_losses": 39,
+  "win_rate_pct": 49.35,
+  "avg_winner_usd": 541.38,
+  "avg_loser_usd": 332.38,
+  "rr_ratio": 1.629,
+  "profit_factor": 1.587,
+  "max_drawdown_pct": 17.1,
+  "sharpe_ratio": 3.409,
+  "avg_hold_candles": 4.05,
+  "exit_distribution": {
+    "TIME_EXIT": 28,
+    "SL": 22,
+    "TRAIL_TP": 14,
+    "TP": 13
+  },
+  "regime_summary": {
+    "bear": {
+      "trades": 41,
+      "win_rate": 48.8,
+      "total_pnl": 3471.01
+    },
+    "bull": {
+      "trades": 36,
+      "win_rate": 50.0,
+      "total_pnl": 4138.6
+    }
+  },
+  "vol_regime_summary": {
+    "Low": {
+      "trades": 77,
+      "win_rate": 49.4,
+      "total_pnl": 7609.61
+    }
+  }
+}

@@ -1,0 +1,59 @@
+\documentclass[a4paper,11pt]{article}
+
+% --- Preamble ---
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[indonesian]{babel}
+\usepackage{geometry}
+\geometry{margin=1in}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric, arrows.meta, positioning, fit, backgrounds}
+
+% Custom Colors
+\definecolor{darkblue}{RGB}{0, 51, 102}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=darkblue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+    pdftitle={BTC-QUANT: Evolusi Model & Landasan Ekonofisika},
+}
+
+\title{
+    \textbf{\huge BTC-QUANT SCALPING SYSTEM}\\
+    \large Evolusi Arsitektur Strategi: Dari Markovian ke Bayesian Ekonofisika
+}
+\author{Saeful Ismail \& Miftah Farid Mahardika}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Laporan teknis ini mendokumentasikan perjalanan pengembangan sistem trading \textit{high-frequency scalping} untuk instrumen Bitcoin. Fokus utama dokumen ini adalah transisi arsitektur dari model \textit{Hidden Markov Model} (HMM) yang bersifat kaku menuju sistem berbasis \textit{Bayesian Online Changepoint Detection} (BCD) yang didasarkan pada prinsip-prinsip ekonofisika. Kami menyajikan hasil validasi \textit{Golden Model} v4.4 yang menunjukkan stabilitas performa jangka panjang dengan \textit{Sharpe Ratio} > 2.0 dan \textit{Max Drawdown} terkendali.
+\end{abstract}
+
+\tableofcontents
+\newpage
+
+% --- Sections ---
+\include{sections/01_introduction}
+\include{sections/02_theoretical_background}
+\include{sections/03_architecture}
+\include{sections/04_evolution_v4}
+\include{sections/05_results}
+\include{sections/06_conclusion}
+
+% --- References ---
+\bibliographystyle{plain}
+\bibliography{references}
+
+\end{document}

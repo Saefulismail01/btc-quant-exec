@@ -1,0 +1,27 @@
+# ==========================================
+# BTC-QUANT-BTC: QUANT SCALPING DEPENDENCIES
+# ==========================================
+
+# 1. Data Ingestion & Execution
+ccxt>=4.2.0              # Async crypto trading API (mendukung WebSockets/Pro)
+websockets>=12.0         # Underlying websocket protocol
+python-dotenv>=1.0.1     # Manajemen Environment Variables (API Keys)
+
+# 2. Fast Local Storage
+duckdb>=0.10.0           # Timeseries/OLAP database in-memory/file
+
+# 3. Data Processing & Technicals
+pandas==2.2.2            # Data manipulation (pinned stable)
+numpy>=2.2.6             # Numerical computing (>=2.2.6 required by pandas-ta)
+pandas-ta                # Indikator teknikal (EMA20, EMA50, ATR14)
+
+# 4. Machine Learning & Math (CPU Optimized)
+hmmlearn>=0.3.0          # Hidden Markov Model (Layer 1 Regime)
+scikit-learn>=1.4.0      # Data scaling & preprocessing
+
+# 5. Frontend Dashboard & Alerts
+streamlit>=1.31.0        # Web dashboard
+python-telegram-bot>=20.8 # Notifikasi asinkron
+
+# 6. Terminal UI (Bonus untuk CLI)
+rich>=13.7.0             # Untuk membuat visualisasi "MARKET SNAPSHOT" di terminal server

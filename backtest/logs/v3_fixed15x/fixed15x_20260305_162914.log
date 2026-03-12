@@ -1,0 +1,21 @@
+2026-03-05 16:29:14,918 [INFO] ========================================================================
+2026-03-05 16:29:14,919 [INFO]   BTC-QUANT v3 FIXED 15x WALK-FORWARD
+2026-03-05 16:29:14,919 [INFO]   Window   : 2024-01-01  →  2026-03-04
+2026-03-05 16:29:14,919 [INFO]   Capital  : $10,000
+2026-03-05 16:29:14,919 [INFO]   Position : $1,000 × 15x = $15,000 notional
+2026-03-05 16:29:14,919 [INFO]   SL       : 1.333%  |  TP min: 0.710%
+2026-03-05 16:29:14,920 [INFO]   Fee/trip : $12.00
+2026-03-05 16:29:14,920 [INFO]   Max Hold : 1 candle(s) = 4h
+2026-03-05 16:29:14,920 [INFO] ========================================================================
+2026-03-05 16:29:14,923 [INFO] Loading full dataset from DuckDB with ASOF JOIN...
+2026-03-05 16:29:15,000 [INFO] Loaded 7206 candles | 2022-11-18 08:00:00+00:00 → 2026-03-03 04:00:00+00:00
+2026-03-05 16:29:15,012 [INFO]   Candles in window : 4,754
+2026-03-05 16:29:15,012 [INFO]   History available : 2,452 candles before window
+
+2026-03-05 16:29:15,013 [INFO] Initializing services...
+2026-03-05 16:29:17,388 [WARNING] [MLP] Failed to load persisted model: 
+2026-03-05 16:29:17,388 [INFO] All services ready.
+
+2026-03-05 16:29:20,057 [INFO] [BCD global] Trained on 500 candles. Found 11 changepoints.
+2026-03-05 16:29:22,921 [INFO] [MLP] Retrained: len=500, hash=e8ab241f9e19
+2026-03-05 16:30:18,800 [INFO]   ▶ [2024-01-04]   0.5%  │ Equity: $     9,155  │ PnL: $     -845  │ Trades:   16  │ ETA: 220.1 min

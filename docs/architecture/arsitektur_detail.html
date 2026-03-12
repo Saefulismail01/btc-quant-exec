@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BTC Quant — Architecture v3</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #ffffff;
+            font-family: 'Inter', sans-serif;
+            color: #1e293b;
+            padding: 60px 40px 100px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: 800;
+            color: #0f172a;
+            letter-spacing: -0.5px;
+        }
+
+        .header p {
+            font-size: 13px;
+            color: #475569;
+            margin-top: 8px;
+        }
+
+        .header .version-badge {
+            display: inline-block;
+            background: #2563eb;
+            color: #fff;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 20px;
+            margin-top: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .diagram-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 1200px;
+            gap: 0;
+        }
+
+        /* Rows */
+        .row {
+            display: grid;
+            gap: 24px;
+            width: 100%;
+            justify-items: center;
+        }
+
+        .row-1 {
+            grid-template-columns: 1fr;
+            max-width: 560px;
+        }
+
+        .row-2 {
+            grid-template-columns: 1fr 1fr;
+            max-width: 940px;
+        }
+
+        .row-3 {
+            grid-template-columns: 1fr 1fr 1fr;
+            max-width: 1160px;
+        }
+
+        .row-4 {
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            max-width: 1160px;
+        }
+
+        /* Section label - Ultra Minimalist */
+        .section-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            color: #94a3b8;
+            padding: 2px 0;
+            font-size: 9px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin: 40px 0 16px;
+        }
+        .section-label .dot {
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+        }
+
+        /* Connector - Ultra Minimalist */
+        .connector {
+            width: 1px;
+            height: 40px;
+            background: #f1f5f9;
+            margin: 0 auto;
+        }
+
+        .connector-wide {
+            height: 40px;
+            width: 100%;
+            max-width: 940px;
+            position: relative;
+            display: flex;
+            justify-content: center;
+        }
+
+        /* Box Card - Minimalist Version */
+        .box {
+            border: 1px solid #f1f5f9;
+            border-radius: 8px;
+            padding: 20px;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            background: #ffffff;
+            transition: border-color 0.2s, background 0.2s;
+        }
+
+        .box:hover {
+            border-color: #cbd5e1;
+            background: #fafafa;
+        }
+
+        .box.accent-blue {
+            border-top: 3px solid #3b82f6;
+        }
+
+        .box.accent-yellow {
+            border-top: 3px solid #eab308;
+        }
+
+        .box.accent-green {
+            border-top: 3px solid #10b981;
+        }
+
+        .box.accent-purple {
+            border-top: 3px solid #8b5cf6;
+        }
+
+        .box.accent-orange {
+            border-top: 3px solid #f97316;
+        }
+
+        .box.accent-teal {
+            border-top: 3px solid #14b8a6;
+        }
+
+        .box.accent-red {
+            border-top: 3px solid #ef4444;
+        }
+
+        .box.accent-slate {
+            border-top: 3px solid #64748b;
+        }
+
+        .box-icon {
+            font-size: 18px;
+            margin-bottom: 12px;
+            opacity: 0.8;
+        }
+
+        .box-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 4px;
+        }
+
+        .box-subtitle {
+            font-size: 10px;
+            color: #64748b;
+            line-height: 1.6;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #f8fafc;
+        }
+
+        .box ul {
+            list-style: none;
+            flex-grow: 1;
+            margin-bottom: 14px;
+        }
+
+        .box ul li {
+            font-size: 10px;
+            color: #475569;
+            margin-bottom: 8px;
+            padding-left: 14px;
+            position: relative;
+            font-weight: 500;
+            line-height: 1.5;
+        }
+
+        .box ul li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: #94a3b8;
+            font-size: 12px;
+            top: -1px;
+        }
+
+        .box ul li b {
+            color: #334155;
+        }
+
+        .box-footer {
+            font-size: 9px;
+            font-family: 'Inter', sans-serif;
+            background: transparent;
+            padding: 4px 0;
+            color: #94a3b8;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            align-self: flex-start;
+            margin-top: auto;
+        }
+
+        /* Tags / Badges - Minimalist */
+        .tag {
+            display: inline-flex;
+            align-items: center;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 9px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-right: 4px;
+            margin-bottom: 4px;
+            background: #f1f5f9;
+            color: #475569;
+        }
+
+        .tag-blue {
+            background: #eff6ff;
+            color: #3b82f6;
+        }
+
+        .tag-green {
+            background: #f0fdf4;
+            color: #10b981;
+        }
+
+        .tag-yellow {
+            background: #fefce8;
+            color: #ca8a04;
+        }
+
+        .tag-red {
+            background: #fef2f2;
+            color: #ef4444;
+        }
+
+        .tag-purple {
+            background: #faf5ff;
+            color: #8b5cf6;
+        }
+
+        .tag-teal {
+            background: #f0fdfa;
+            color: #0d9488;
+        }
+
+        .tag-orange {
+            background: #fff7ed;
+            color: #ea580c;
+        }
+
+        /* Grid for compact items */
+        .mini-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin: 12px 0;
+        }
+
+        .mini-card {
+            background: #fdfdfd;
+            border: 1px solid #f1f5f9;
+            border-radius: 4px;
+            padding: 8px;
+            text-align: center;
+        }
+
+        .mini-card .mc-label {
+            font-size: 8px;
+            color: #94a3b8;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 2px;
+        }
+
+        .mini-card .mc-val {
+            font-size: 9.5px;
+            font-weight: 700;
+            color: #475569;
+        }
+
+        /* Wide box footer */
+        .api-endpoint {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 4px;
+        }
+
+        .method-badge {
+            font-size: 8px;
+            font-weight: 800;
+            color: #94a3b8;
+            text-transform: uppercase;
+        }
+
+        .endpoint-path {
+            font-size: 10px;
+            font-weight: 600;
+            color: #475569;
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Cross-feature arrow annotation */
+        .cross-note {
+            width: 100%;
+            max-width: 1160px;
+            position: relative;
+            height: 20px;
+            margin: 8px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .cross-note-inner {
+            font-size: 9px;
+            font-weight: 600;
+            color: #94a3b8;
+            background: #fff;
+            padding: 0 10px;
+            border-radius: 0;
+            border: none;
+            letter-spacing: 0.3px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header">
+        <h1>⚡ BTC Quant Signal Engine</h1>
+        <p>7-Layer Algorithmic Trading Pipeline · BTC/USDT Perpetual Futures</p>
+        <div class="version-badge">Arsitektur v3.0 · Maret 2026</div>
+    </div>
+
+    <div class="diagram-container">
+
+        <!-- ═══ UPSTREAM APIs ═══ -->
+        <div class="section-label">
+            <span class="dot" style="background:#facc15;"></span>
+            Upstream APIs
+        </div>
+        <div class="row row-3">
+            <div class="box accent-yellow">
+                <div class="box-icon">🔌</div>
+                <div class="box-title">Binance FAPI</div>
+                <div class="box-subtitle">Bursa derivatif · Data harga, volume, dan OI real-time & historis.</div>
+                <ul>
+                    <li>OHLCV 4H — via <b>fapiPublicGetKlines</b></li>
+                    <li>Taker Buy Volume (untuk CVD)</li>
+                    <li>Open Interest History</li>
+                    <li>Funding Rate Cycle</li>
+                </ul>
+                <div class="box-footer">ccxt · binanceusdm</div>
+            </div>
+            <div class="box accent-slate">
+                <div class="box-icon">😨</div>
+                <div class="box-title">Alternative.me</div>
+                <div class="box-subtitle">Sumber psikologi pasar global · Digunakan sebagai sinyal risiko kontrarif.
+                </div>
+                <ul>
+                    <li>Crypto Fear &amp; Greed Index</li>
+                    <li>Daily score 0–100</li>
+                    <li>Up to 1200 hari historis</li>
+                </ul>
+                <div class="box-footer">httpx async · fng API</div>
+            </div>
+            <div class="box accent-slate">
+                <div class="box-icon">🤖</div>
+                <div class="box-title">LLM Provider (Kimi)</div>
+                <div class="box-subtitle">Large Language Model untuk sintesis narasi kualitatif dari data kuantitatif.
+                </div>
+                <ul>
+                    <li>Zero-Shot Chain-of-Thought</li>
+                    <li>Menerima Decision Context JSON</li>
+                    <li>Output: Verdict + Rationale</li>
+                </ul>
+                <div class="box-footer">ai_agent.py · Kimi API</div>
+            </div>
+        </div>
+
+        <div class="connector"></div>
+
+        <!-- ═══ LAYER 0: INGESTION ═══ -->
+        <div class="section-label">
+            <span class="dot" style="background:#0ea5e9;"></span>
+            Layer 0 — Data Ingestion &amp; Storage
+        </div>
+        <div class="row row-2">
+            <div class="box accent-blue">
+                <div class="box-icon">📥</div>
+                <div class="box-title">CryptoDataFetcher</div>
+                <div class="box-subtitle">Pipeline utama sinkronisasi data dari Binance ke DuckDB. Berjalan setiap 4
+                    jam.</div>
+                <ul>
+                    <li><b>CVD per-candle:</b> Taker Buy Vol − Taker Sell Vol</li>
+                    <li>Fetch OI history &amp; Funding Rate</li>
+                    <li>Fetch Fear &amp; Greed Index (async)</li>
+                    <li>Backfill 7.200 candle historis (~3 thn)</li>
+                </ul>
+                <div class="box-footer">data_engine.py</div>
+            </div>
+            <div class="box accent-teal">
+                <div class="box-icon">🗄️</div>
+                <div class="box-title">DuckDB Storage</div>
+                <div class="box-subtitle">Penyimpanan columnar lokal yang dioptimalkan untuk query timeseries DataFrame.
+                </div>
+                <div class="mini-grid">
+                    <div class="mini-card">
+                        <div class="mc-label">btc_ohlcv_4h</div>
+                        <div class="mc-val" style="color:#22d3ee;">+CVD</div>
+                    </div>
+                    <div class="mini-card">
+                        <div class="mc-label">market_metrics</div>
+                        <div class="mc-val" style="color:#22d3ee;">+FGI</div>
+                    </div>
+                    <div class="mini-card">
+                        <div class="mc-label">paper_account</div>
+                        <div class="mc-val" style="color:#64748b;">P&amp;L</div>
+                    </div>
+                    <div class="mini-card">
+                        <div class="mc-label">ASOF JOIN</div>
+                        <div class="mc-val" style="color:#22d3ee;">Auto-Align</div>
+                    </div>
+                </div>
+                <div class="box-footer">duckdb_repo.py</div>
+            </div>
+        </div>
+
+        <div class="connector"></div>
+
+        <!-- ═══ ORCHESTRATOR ═══ -->
+        <div class="section-label">
+            <span class="dot" style="background:#c084fc;"></span>
+            Orchestrator — Signal Service
+        </div>
+        <div class="row row-1">
+            <div class="box accent-purple">
+                <div class="box-icon">⏱️</div>
+                <div class="box-title">Signal Dispatcher</div>
+                <div class="box-subtitle">Titik awal eksekusi per request. Mengatur urutan ketat L1→L2→L3→L4→L5 agar
+                    state L1 tersedia sebelum L3 dipanggil.</div>
+                <ul>
+                    <li>Hitung EMA-20, EMA-50, ATR-14</li>
+                    <li>Tentukan trend direction (BULL/BEAR)</li>
+                    <li>Dispatch ke L1→L2→L3 secara berurutan</li>
+                    <li>Trigger Risk Evaluation (L4)</li>
+                    <li>FGI Sentiment Risk Filter</li>
+                    <li>Assemble SignalResponse JSON final</li>
+                </ul>
+                <div class="box-footer">signal_service.py</div>
+            </div>
+        </div>
+
+        <div class="connector"></div>
+
+        <!-- ═══ LAYERS 1-3: ANALYSIS ═══ -->
+        <div class="section-label">
+            <span class="dot" style="background:#3b82f6;"></span>
+            Layers 1–3 — Analysis Engines
+        </div>
+        <div class="row row-3">
+
+            <!-- L1 -->
+            <div class="box accent-blue">
+                <div class="box-icon">🧠</div>
+                <div class="box-title">L1 · BCD Regime Engine</div>
+                <div class="box-subtitle">Bayesian Changepoint Detection · Mendeteksi perubahan regime pasar secara
+                    probabilistik tanpa label.</div>
+                <ul>
+                    <li>BOCPD Algorithm (custom)</li>
+                    <li>Input: 5-dim (Return, Vol, OI)</li>
+                    <li>Transition Probability Matrix</li>
+                    <li>Fallback: HMM/GMM (via env switch)</li>
+                </ul>
+                <div style="margin-bottom:10px;">
+                    <span class="tag tag-green">🟢 BULL</span>
+                    <span class="tag tag-red">🔴 BEAR</span>
+                    <span class="tag tag-yellow">⚪ SIDEWAYS</span>
+                </div>
+                <div class="box-footer">layer1_bcd.py</div>
+            </div>
+
+            <!-- L2 -->
+            <div class="box" style="border-color:#1e293b;">
+                <div class="box-icon">📊</div>
+                <div class="box-title">L2 · Technical Alignment</div>
+                <div class="box-subtitle">Pemeriksaan kelayakan struktural menggunakan indikator klasik untuk memastikan
+                    tren aman dieksekusi.</div>
+                <ul>
+                    <li>EMA-20 / EMA-50 Cross</li>
+                    <li>Ichimoku Cloud Structure</li>
+                    <li>RSI + MACD Momentum</li>
+                    <li>OBV + MFI Volume Confirm</li>
+                </ul>
+                <div style="margin-bottom:10px;">
+                    <span class="tag tag-green">≥ +3 ALIGNED</span>
+                    <span class="tag tag-red">≤ −3 ALIGNED</span>
+                </div>
+                <div class="box-footer">ema_service.py</div>
+            </div>
+
+            <!-- L3 -->
+            <div class="box accent-purple">
+                <div class="box-icon">🔮</div>
+                <div class="box-title">L3 · MLP Neural Net</div>
+                <div class="box-subtitle">MLPClassifier dengan Smart Labeling dan Cache Signature Protection. Features
+                    ditingkatkan dari 5 ke 9 dimensi.</div>
+                <ul>
+                    <li><b>Input: 9 fitur</b> (Price + Micro + Senti)</li>
+                    <li>RSI, MACD, EMA-dist, Return, ATR</li>
+                    <li>CVD norm, Funding, OI Change</li>
+                    <li>FGI / 100.0 (Sentiment)</li>
+                    <li>Smart Label: 0.5× ATR threshold</li>
+                    <li>Arch: 128→64 (base) / 256→128 (+HMM)</li>
+                    <li>Cache Signature auto-invalidation</li>
+                </ul>
+                <div style="margin-bottom:10px;">
+                    <span class="tag tag-red">0 BEAR</span>
+                    <span class="tag" style="background:#1c1c1c;color:#94a3b8;">1 NEUTRAL</span>
+                    <span class="tag tag-green">2 BULL</span>
+                </div>
+                <div class="box-footer">layer3_ai.py</div>
+            </div>
+
+        </div>
+
+        <div class="cross-note">
+            <div class="cross-note-inner">↔ L1 State Vector (One-Hot) dikirim sebagai fitur tambahan ke L3 · HMM
+                Cross-Feature Bridge</div>
+        </div>
+
+        <div class="connector"></div>
+
+        <!-- ═══ LAYER 4: RISK & DECISION ═══ -->
+        <div class="section-label">
+            <span class="dot" style="background:#f97316;"></span>
+            Layer 4 — Risk &amp; Decision
+        </div>
+        <div class="row row-4">
+
+            <div class="box accent-orange">
+                <div class="box-icon">📐</div>
+                <div class="box-title">Directional Spectrum</div>
+                <div class="box-subtitle">Mengubah sinyal biner masing-masing layer menjadi bias diskret berkelanjutan.
+                </div>
+                <ul>
+                    <li>L1 → posterior vote</li>
+                    <li>L2 → binary alignment</li>
+                    <li>L3 → MLP confidence</li>
+                    <li>Output: bias ∈ [−1, +1]</li>
+                </ul>
+                <div class="box-footer">spectrum.py</div>
+            </div>
+
+            <div class="box accent-orange">
+                <div class="box-icon">🛡️</div>
+                <div class="box-title">RiskManager</div>
+                <div class="box-subtitle">Lapisan keamanan modal yang menghitung sizing dan mengatur leverage secara
+                    adaptif.</div>
+                <ul>
+                    <li>Fixed Risk 2% per trade</li>
+                    <li>Daily Loss Cap −5% (auto)</li>
+                    <li>Adaptive Leverage (streak)</li>
+                    <li>Max Leverage Cap: 5×</li>
+                </ul>
+                <div class="box-footer">risk_manager.py</div>
+            </div>
+
+            <div class="box accent-orange">
+                <div class="box-icon">📊</div>
+                <div class="box-title">Heston + Econophysics</div>
+                <div class="box-subtitle">Mengestimasi volatilitas dinamis untuk menentukan multiplier SL/TP secara
+                    adaptif.</div>
+                <ul>
+                    <li>Heston SV Model: dv=−γ(v−η)dt</li>
+                    <li>Modul A: Transition Matrix</li>
+                    <li>Modul B: SL/TP Multipliers</li>
+                    <li>Preset: Normal / Caution / Defensive</li>
+                </ul>
+                <div class="box-footer">layer1_volatility.py</div>
+            </div>
+
+            <div class="box accent-orange">
+                <div class="box-icon">😱</div>
+                <div class="box-title">FGI Sentiment Filter</div>
+                <div class="box-subtitle">Filter kontrarif berbasis emosi pasar. Memberikan penalti sizing saat kondisi
+                    ekstrim.</div>
+                <ul>
+                    <li>FGI &gt;80 (Extreme Greed): −25%</li>
+                    <li>FGI &lt;20 + LONG: −25% size</li>
+                    <li>Output: sentiment_adjustment</li>
+                    <li>Tertulis di SignalResponse</li>
+                </ul>
+                <div class="box-footer">signal_service.py L317</div>
+            </div>
+
+        </div>
+
+        <div class="connector"></div>
+
+        <!-- ═══ LAYER 5: LLM NARRATIVE ═══ -->
+        <div class="section-label">
+            <span class="dot" style="background:#10b981;"></span>
+            Layer 5 — LLM Narrative Agent
+        </div>
+        <div class="row row-1">
+            <div class="box accent-green">
+                <div class="box-icon">💬</div>
+                <div class="box-title">Narrative Service</div>
+                <div class="box-subtitle">Mengubah Decision Context JSON (dari L4) menjadi teks analisis taktis yang
+                    bisa dibaca trader. Verdict dibatasi oleh Truth Enforcer agar tidak bertentangan dengan skor
+                    kuantitatif.</div>
+                <ul>
+                    <li>Input: Confluence Score, Regime, Vol, FGI, MLP bias</li>
+                    <li>LLM: Zero-Shot CoT reasoning — Output: <b>verdict + rationale</b></li>
+                    <li>Truth Enforcer: grade disesuaikan jika verdict bertentangan dengan skor</li>
+                </ul>
+                <div class="box-footer">narrative_service.py · kimi_agent.py</div>
+            </div>
+        </div>
+
+        <div class="connector"></div>
+
+        <!-- ═══ END CLIENTS ═══ -->
+        <div class="section-label">
+            <span class="dot" style="background:#64748b;"></span>
+            End Clients
+        </div>
+        <div class="row row-2">
+            <div class="box accent-blue">
+                <div class="box-icon">🌐</div>
+                <div class="box-title">FastAPI REST Server</div>
+                <div class="box-subtitle">Backend Python mengekspos core quant engine agar siap dikonsumsi dashboard /
+                    execution bot.</div>
+                <div style="margin-top:8px; margin-bottom:14px;">
+                    <div class="api-endpoint">
+                        <span class="method-badge">GET</span>
+                        <span class="endpoint-path">/api/v1/signal</span>
+                    </div>
+                    <div class="api-endpoint">
+                        <span class="method-badge">GET</span>
+                        <span class="endpoint-path">/api/v1/metrics</span>
+                    </div>
+                    <div class="api-endpoint">
+                        <span class="method-badge">GET</span>
+                        <span class="endpoint-path">/api/v1/health</span>
+                    </div>
+                </div>
+                <div class="box-footer">run.py · Uvicorn ASGI</div>
+            </div>
+            <div class="box accent-slate">
+                <div class="box-icon">💹</div>
+                <div class="box-title">React Dashboard</div>
+                <div class="box-subtitle">Antarmuka visual terminal untuk memantau signal, risiko, dan trade plan secara
+                    real-time.</div>
+                <div class="mini-grid">
+                    <div class="mini-card">
+                        <div class="mc-label">Signal</div>
+                        <div class="mc-val" style="color:#4ade80;">Card</div>
+                    </div>
+                    <div class="mini-card">
+                        <div class="mc-label">Risk</div>
+                        <div class="mc-val" style="color:#fb923c;">Panel</div>
+                    </div>
+                    <div class="mini-card">
+                        <div class="mc-label">Metrics</div>
+                        <div class="mc-val" style="color:#22d3ee;">FGI/OI</div>
+                    </div>
+                    <div class="mini-card">
+                        <div class="mc-label">LLM</div>
+                        <div class="mc-val" style="color:#c084fc;">Rationale</div>
+                    </div>
+                </div>
+                <div class="box-footer">frontend/ · Vite + React</div>
+            </div>
+        </div>
+
+    </div>
+
+    <div style="text-align:center; margin-top:80px; font-size:10px; color:#334155; font-weight:600;">
+        BTC Quant Signal Engine v3.0 · Algoritmic Pipeline · Updated March 2026
+    </div>
+
+</body>
+
+</html>

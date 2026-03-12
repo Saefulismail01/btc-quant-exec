@@ -1,0 +1,25 @@
+2026-03-04 11:48:15,874 [INFO] ========================================================================
+2026-03-04 11:48:15,875 [INFO]   BTC-QUANT TRUE WALK-FORWARD SIMULATION
+2026-03-04 11:48:15,875 [INFO]   Window  : 2022-11-01  →  2026-03-03
+2026-03-04 11:48:15,875 [INFO]   Capital : $10,000
+2026-03-04 11:48:15,875 [INFO] ========================================================================
+2026-03-04 11:48:15,875 [INFO] Loading full dataset from DuckDB with ASOF JOIN...
+2026-03-04 11:48:15,945 [INFO] Loaded 7206 candles | 2022-11-18 08:00:00+00:00 → 2026-03-03 04:00:00+00:00
+2026-03-04 11:48:15,957 [WARNING] Requested start 2022-11-01 is too early — DB requires 400 warmup candles. Auto-adjusting start to 2023-01-24.
+2026-03-04 11:48:15,958 [INFO]   Candles in window : 6,805
+2026-03-04 11:48:15,959 [INFO]   History available : 400 candles before window
+2026-03-04 11:48:15,959 [INFO] 
+2026-03-04 11:48:15,959 [INFO] Initializing services...
+2026-03-04 11:48:18,417 [WARNING] [MLP] Failed to load persisted model: 
+2026-03-04 11:48:18,417 [INFO] [RiskManager] Daily state reset for 2026-03-04
+2026-03-04 11:48:18,417 [INFO] [RiskManager] Init: MAX_LEVERAGE=5, RISK_PER_TRADE=2.0%, SAFE_MODE=True
+2026-03-04 11:48:18,418 [INFO] [RiskManager] Singleton initialized.
+2026-03-04 11:48:18,418 [INFO] All services ready.
+
+2026-03-04 11:48:19,431 [INFO] [BCD global] Trained on 401 candles. Found 8 changepoints.
+2026-03-04 11:48:20,469 [INFO] [MLP] Retrained: len=401, hash=06d9c7b3f065
+2026-03-04 11:48:32,533 [INFO] [MLP] Retrained: len=453, hash=b33bdb454e32
+2026-03-04 11:49:18,429 [INFO]   ▶ [2023-02-19]   2.3%  │ Equity: $     8,975  │ PnL: $   -1,025  │ Trades:   29  │ ETA: 42.1 min
+2026-03-04 11:50:19,326 [INFO]   ▶ [2023-03-16]   4.6%  │ Equity: $     8,894  │ PnL: $   -1,106  │ Trades:   46  │ ETA: 42.1 min
+2026-03-04 11:51:20,034 [INFO]   ▶ [2023-03-23]   5.2%  │ Equity: $     8,542  │ PnL: $   -1,458  │ Trades:   48  │ ETA: 55.3 min
+2026-03-04 11:52:20,473 [INFO]   ▶ [2023-04-21]   7.7%  │ Equity: $     7,866  │ PnL: $   -2,134  │ Trades:   71  │ ETA: 48.6 min

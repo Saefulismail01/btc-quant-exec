@@ -1,0 +1,22 @@
+{
+  "run_timestamp": "20260303_161852",
+  "window_start": "2022-11-01",
+  "window_end": "2026-03-03",
+  "initial_capital": 10000.0,
+  "final_equity": 69789.39,
+  "net_pnl_usd": 59789.39,
+  "net_pnl_pct": 597.8939,
+  "daily_return_pct": 0.4909,
+  "n_days": 1218,
+  "n_candles": 6805,
+  "n_trades": 989,
+  "n_wins": 461,
+  "n_losses": 528,
+  "win_rate_pct": 46.61,
+  "profit_factor": 1.209,
+  "max_drawdown_pct": 45.38,
+  "sharpe_ratio": 1.568,
+  "n_skipped": 256,
+  "n_errors": 0,
+  "elapsed_seconds": 3111.9
+}

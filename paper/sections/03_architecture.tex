@@ -1,0 +1,116 @@
+\section{Arsitektur Sistem: 6-Layer Pipeline}
+\label{sec:architecture}
+
+Sistem BTC-QUANT dibangun di atas arsitektur modular enam lapis (\textit{6-Layer Pipeline}) yang mentransformasi data pasar mentah menjadi sinyal eksekusi yang tervalidasi secara statistik.
+
+ \subsection{Ikhtisar Signal Stack}
+Setiap lapisan dalam sistem ini memiliki tanggung jawab spesifik yang saling mengonfirmasi:
+\begin{itemize}
+    \item \textbf{Layer 1 (Regime Detection):} Menggunakan BCD (seperti yang dijelaskan pada Bab 2) untuk menentukan bias arah pasar.
+    \item \textbf{Layer 2 (Technical Alignment):} Memastikan konfluensi antara harga saat ini dengan \textit{Exponential Moving Average} (EMA 20 dan 50).
+    \item \textbf{Layer 3 (AI Intelligence):} Menggunakan \textit{Multi-Layer Perceptron} (MLP) yang dilatih secara \textit{online} untuk memprediksi probabilitas arah lilin berikutnya.
+    \item \textbf{Layer 4 (Volatility Gate):} Filter berbasis rasio volatilitas ATR yang memblokir entri pada kondisi pasar \textit{high-chaos}. Model Heston stokastik diintegrasikan penuh pada v4.5 (R\&D).
+\end{itemize}
+
+\begin{figure}[h!]
+\centering
+\begin{tikzpicture}[
+    every node/.style = {align=center},
+    box/.style = {
+        rectangle, rounded corners=4pt,
+        minimum width=8cm, minimum height=0.9cm,
+        text centered, font=\small
+    },
+    layer/.style    = {box, draw=darkblue, fill=blue!8, text=darkblue},
+    decision/.style = {box, draw=orange!70!black, fill=orange!12, text=orange!80!black},
+    outbox/.style   = {rectangle, rounded corners=4pt,
+                       minimum width=3.6cm, minimum height=0.9cm,
+                       text centered, font=\small},
+    input/.style    = {box, draw=gray!60, fill=gray!10, text=black},
+    arrow/.style    = {-{Stealth[length=5pt]}, thick, darkblue},
+    skiparrow/.style= {-{Stealth[length=5pt]}, thick, red!60!black, dashed},
+]
+
+% --- Pipeline utama (vertikal, x=0) ---
+\node[input]    (data) at (0, 0)
+    {Data Pasar: BTC/USDT 4H OHLCV};
+\node[layer]    (l1)   at (0,-1.6)
+    {\textbf{Layer 1 --- Regime Detection}\\
+     \footnotesize BCD + Student-T Posterior};
+\node[layer]    (l2)   at (0,-3.2)
+    {\textbf{Layer 2 --- Technical Alignment}\\
+     \footnotesize EMA 20/50 Confluence Check};
+\node[layer]    (l3)   at (0,-4.8)
+    {\textbf{Layer 3 --- AI Intelligence}\\
+     \footnotesize MLP Online-Trained: Probabilitas Arah Candle};
+\node[layer]    (l4)   at (0,-6.4)
+    {\textbf{Layer 4 --- Volatility Gate}\\
+     \footnotesize $\mathrm{ATR}_{14}/\mathrm{price}_t \;\rightarrow\;$ Vol Multiplier};
+\node[decision] (spec) at (0,-8.0)
+    {\textbf{Directional Spectrum Score}\\
+     \footnotesize Weighted Voter Alignment (L1--L4)};
+\node[decision] (gate) at (0,-9.6)
+    {\textbf{Trade Gate}\\
+     \footnotesize ACTIVE \;/\; ADVISORY \;/\; INACTIVE};
+
+% --- Output nodes (vertikal di bawah gate, digeser kiri/kanan) ---
+\node[outbox, draw=red!60!black, fill=red!8, text=red!70!black]
+    (skip) at (-3.2,-12.4)
+    {\textbf{SKIP}\\
+     \footnotesize Tidak Ada Entri};
+\node[outbox, draw=green!50!black, fill=green!10, text=green!40!black]
+    (exec) at ( 3.2,-12.4)
+    {\textbf{EXECUTE}: LONG / SHORT\\
+     \footnotesize SL 1.333\% \; TP 0.71\% \; 6c};
+
+% --- Panah pipeline utama ---
+\draw[arrow] (data) -- (l1);
+\draw[arrow] (l1)   -- (l2);
+\draw[arrow] (l2)   -- (l3);
+\draw[arrow] (l3)   -- (l4);
+\draw[arrow] (l4)   -- (spec);
+\draw[arrow] (spec) -- (gate);
+
+% --- Percabangan dari gate ---
+% turun dari gate ke titik cabang
+\draw[darkblue, thick] (gate.south) -- (0,-11.5);
+% cabang kiri ke SKIP
+\draw[skiparrow] (0,-11.5) -| (skip.north)
+    node[pos=0.25, above, font=\footnotesize, text=red!60!black] {INACTIVE};
+% cabang kanan ke EXECUTE
+\draw[arrow] (0,-11.5) -| (exec.north)
+    node[pos=0.25, above, font=\footnotesize, text=green!40!black] {ACTIVE/ADVISORY};
+
+\end{tikzpicture}
+\caption{Arsitektur \textit{Signal Pipeline} BTC-QUANT v4.4. Data pasar diproses secara berurutan melalui empat layer sebelum mencapai \textit{Trade Gate}. Entri hanya dieksekusi saat skor \textit{Directional Spectrum} memenuhi ambang batas ACTIVE atau ADVISORY.}
+\label{fig:architecture}
+\end{figure}
+
+\subsection{Layer 4: \textit{Volatility Gate}}
+
+Layer 4 berfungsi sebagai \textbf{\textit{Go/Stop Gate}} yang memfilter kondisi pasar bervolatilitas ekstrem sebelum sinyal dari L1--L3 dieksekusi. Implementasinya pada \textbf{v4.4 Golden Model} menggunakan rasio volatilitas berbasis ATR (\textit{Average True Range}) terhadap harga saat ini sebagai proksi kondisi pasar:
+
+\begin{equation}
+    \text{vol\_ratio} = \frac{\text{ATR}_{14}}{\text{price}_t}
+\end{equation}
+
+Nilai \textit{vol\_ratio} ini kemudian dikonversi menjadi \textit{multiplier} yang memodulasi skor \textit{Directional Spectrum}. Jika kondisi volatilitas terlalu ekstrem, skor akhir akan jatuh ke bawah ambang batas \textit{Trade Gate}, sehingga seluruh entri diblokir (\textit{SKIP}). Pendekatan ini sengaja dibuat sederhana dan deterministik untuk memastikan stabilitas sistem produksi.
+
+\textbf{Catatan mengenai Model Heston:} Persamaan difusi volatilitas stokastik \textit{mean-reverting} Heston \cite{heston1993closed} ---
+
+\begin{equation}
+    dv(t) = -\gamma(v - \eta)\,dt + \kappa \sqrt{v}\, dB_v(t)
+\end{equation}
+
+--- diintegrasikan secara penuh pada \textbf{v4.5 Heston Adaptive} (fase R\&D), di mana SL/TP dikalkulasi secara adaptif berdasarkan estimasi volatilitas stokastik aktual. Pada v4.4, Layer 4 mengadopsi \textit{prinsip} mean-reversion volatilitas sebagai landasan konseptual, namun implementasinya menggunakan ATR sebagai aproksimasi yang lebih stabil untuk konteks produksi.
+
+\subsection{Directional Spectrum \& Trade Gate}
+Keputusan akhir diambil melalui integrasi suara (\textit{voter alignment}) dari ketiga lapisan pertama yang dimodulasi oleh pengali volatilitas dari Layer 4. Hasilnya adalah skor \textit{Directional Spectrum} yang diklasifikasikan ke dalam tiga gerbang (\textit{Trade Gate}):
+
+\begin{enumerate}
+    \item \textbf{ACTIVE:} Sinyal sangat kuat dan semua lapisan selaras (Win Rate tertinggi).
+    \item \textbf{ADVISORY:} Sinyal moderat dengan konfirmasi cukup dari mayoritas lapisan.
+    \item \textbf{INACTIVE:} Terjadi konflik sinyal antar lapisan atau filter volatilitas aktif (entri dilarang).
+\end{enumerate}
+
+Arsitektur ini memastikan bahwa bot hanya masuk ke dalam pasar saat terjadi konfluensi antara struktur harga fisik (L1), tren teknikal (L2), dan probabilitas kecerdasan buatan (L3) di bawah kondisi volatilitas yang stabil (L4).

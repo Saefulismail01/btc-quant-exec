@@ -1,0 +1,387 @@
+2026-03-10 14:34:10,838 [INFO] ========================================================================
+2026-03-10 14:34:10,838 [INFO]   BTC-QUANT EVOLUTION ENGINE — v4.4 Golden | Full L1-L4 + Fixed $1k×15x
+2026-03-10 14:34:10,840 [INFO]   Window  : 2024-01-01  →  2026-03-04
+2026-03-10 14:34:10,841 [INFO]   Capital : $10,000
+2026-03-10 14:34:10,843 [INFO]   Layers  : full  |  Sizing: fixed
+2026-03-10 14:34:10,843 [INFO] ========================================================================
+2026-03-10 14:34:11,083 [INFO] Loaded 7237 candles | 2022-11-18 08:00:00+00:00 → 2026-03-08 08:00:00+00:00
+2026-03-10 14:34:11,088 [INFO]   Candles in window : 4,759
+
+2026-03-10 14:34:11,089 [INFO] Initializing services...
+2026-03-10 14:34:11,091 [INFO] All services ready.
+
+2026-03-10 14:34:13,762 [INFO]   🟢 OPEN  SHORT @ 42,370 | SL=42,935 TP=42,069 | notional=$15,000 (1.5x) | regime=bear gate=ACTIVE
+2026-03-10 14:34:13,772 [INFO]   ❌ CLOSE SHORT | SL           | held=4c | PnL: -211.95 | Eq: 9,788.05
+2026-03-10 14:34:16,651 [INFO]   🟢 OPEN  SHORT @ 43,556 | SL=44,137 TP=43,247 | notional=$15,000 (1.5x) | regime=neutral gate=ACTIVE
+2026-03-10 14:34:16,655 [INFO]   ❌ CLOSE SHORT | SL           | held=2c | PnL: -211.95 | Eq: 9,576.10
+2026-03-10 14:34:19,389 [INFO]   🟢 OPEN  LONG  @ 45,435 | SL=44,829 TP=45,758 | notional=$15,000 (1.6x) | regime=bull gate=ACTIVE
+2026-03-10 14:34:19,393 [INFO]   ✅ CLOSE LONG  | TP           | held=2c | PnL: +94.50 | Eq: 9,670.60
+2026-03-10 14:34:22,254 [INFO]   🟢 OPEN  LONG  @ 45,487 | SL=44,880 TP=45,810 | notional=$15,000 (1.6x) | regime=bull gate=ACTIVE
+2026-03-10 14:34:22,255 [INFO]   ▶ [2024-01-02]   0.2%  │ Eq: $     9,671  │ T:    3  │ ETA: 110.5m
+2026-03-10 14:34:22,259 [INFO]   ❌ CLOSE LONG  | SL           | held=2c | PnL: -211.95 | Eq: 9,458.65
+2026-03-10 14:34:24,605 [INFO]   🟢 OPEN  LONG  @ 45,073 | SL=44,472 TP=45,393 | notional=$15,000 (1.6x) | regime=bull gate=ACTIVE
+2026-03-10 14:34:24,608 [INFO]   ✅ CLOSE LONG  | TP           | held=2c | PnL: +94.50 | Eq: 9,553.15
+2026-03-10 14:34:26,827 [INFO]   🟢 OPEN  LONG  @ 45,298 | SL=44,694 TP=45,619 | notional=$15,000 (1.6x) | regime=bull gate=ACTIVE
+2026-03-10 14:34:26,832 [INFO]   ❌ CLOSE LONG  | SL           | held=2c | PnL: -211.95 | Eq: 9,341.20
+2026-03-10 14:34:29,137 [INFO]   🟢 OPEN  SHORT @ 43,729 | SL=44,312 TP=43,418 | notional=$15,000 (1.6x) | regime=neutral gate=ADVISORY
+2026-03-10 14:34:29,140 [INFO]   ✅ CLOSE SHORT | TRAIL_TP     | held=2c | PnL: +375.10 | Eq: 9,716.30
+2026-03-10 14:34:46,225 [INFO]   🟢 OPEN  LONG  @ 43,950 | SL=43,364 TP=44,262 | notional=$15,000 (1.5x) | regime=bull gate=ADVISORY
+2026-03-10 14:34:46,226 [INFO]   ▶ [2024-01-04]   0.5%  │ Eq: $     9,716  │ T:    7  │ ETA: 126.1m
+2026-03-10 14:34:46,229 [INFO]   ❌ CLOSE LONG  | SL           | held=2c | PnL: -211.95 | Eq: 9,504.35
+2026-03-10 14:35:31,069 [INFO]   🟢 OPEN  LONG  @ 44,239 | SL=43,649 TP=44,553 | notional=$15,000 (1.6x) | regime=bull gate=ACTIVE
+2026-03-10 14:35:31,070 [INFO]   ▶ [2024-01-07]   0.8%  │ Eq: $     9,504  │ T:    8  │ ETA: 157.2m
+2026-03-10 14:35:31,072 [INFO]   ❌ CLOSE LONG  | SL           | held=2c | PnL: -211.95 | Eq: 9,292.40
+2026-03-10 14:35:37,621 [INFO]   🟢 OPEN  LONG  @ 44,637 | SL=44,042 TP=44,954 | notional=$15,000 (1.6x) | regime=bull gate=ADVISORY
+2026-03-10 14:35:37,624 [INFO]   ✅ CLOSE LONG  | TRAIL_TP     | held=2c | PnL: +784.25 | Eq: 10,076.65
+2026-03-10 14:35:40,063 [INFO]   🟢 OPEN  LONG  @ 47,007 | SL=46,380 TP=47,340 | notional=$15,000 (1.5x) | regime=bull gate=ADVISORY
+2026-03-10 14:35:40,066 [INFO]   ❌ CLOSE LONG  | SL           | held=2c | PnL: -211.95 | Eq: 9,864.70
+2026-03-10 14:35:42,325 [INFO]   🟢 OPEN  LONG  @ 46,933 | SL=46,307 TP=47,266 | notional=$15,000 (1.5x) | regime=bull gate=ADVISORY
+2026-03-10 14:35:42,325 [INFO]   ▶ [2024-01-09]   1.0%  │ Eq: $     9,865  │ T:   11  │ ETA: 149.2m
+2026-03-10 14:35:42,333 [INFO]   ❌ CLOSE LONG  | SL           | held=3c | PnL: -211.95 | Eq: 9,652.75
+2026-03-10 14:35:44,997 [INFO]   🟢 OPEN  LONG  @ 46,869 | SL=46,244 TP=47,202 | notional=$15,000 (1.6x) | regime=bull gate=ADVISORY
+2026-03-10 14:35:45,002 [INFO]   ❌ CLOSE LONG  | SL           | held=2c | PnL: -211.95 | Eq: 9,440.80
+2026-03-10 14:37:18,973 [INFO]   🟢 OPEN  SHORT @ 42,666 | SL=43,235 TP=42,363 | notional=$15,000 (1.6x) | regime=bear gate=ADVISORY
+2026-03-10 14:37:18,974 [INFO]   ▶ [2024-01-14]   1.7%  │ Eq: $     9,441  │ T:   13  │ ETA: 178.6m
+2026-03-10 14:37:18,978 [INFO]   ✅ CLOSE SHORT | TP           | held=2c | PnL: +94.50 | Eq: 9,535.30
+2026-03-10 14:37:21,512 [INFO]   🟢 OPEN  SHORT @ 42,572 | SL=43,139 TP=42,270 | notional=$15,000 (1.6x) | regime=bear gate=ADVISORY
+2026-03-10 14:37:21,517 [INFO]   ✅ CLOSE SHORT | TP           | held=3c | PnL: +94.50 | Eq: 9,629.80
+2026-03-10 14:37:23,979 [INFO]   🟢 OPEN  SHORT @ 42,279 | SL=42,842 TP=41,979 | notional=$15,000 (1.6x) | regime=bear gate=ADVISORY
+2026-03-10 14:37:23,982 [INFO]   ❌ CLOSE SHORT | SL           | held=2c | PnL: -211.95 | Eq: 9,417.85
+2026-03-10 14:37:26,396 [INFO]   🟢 OPEN  SHORT @ 42,515 | SL=43,082 TP=42,213 | notional=$15,000 (1.6x) | regime=bear gate=ADVISORY
+2026-03-10 14:37:26,400 [INFO]   ❌ CLOSE SHORT | SL           | held=3c | PnL: -211.95 | Eq: 9,205.90
+2026-03-10 14:37:28,838 [INFO]   🟢 OPEN  SHORT @ 42,895 | SL=43,467 TP=42,590 | notional=$15,000 (1.6x) | regime=bear gate=ADVISORY
+2026-03-10 14:37:28,847 [INFO]   ❌ CLOSE SHORT | SL           | held=3c | PnL: -211.95 | Eq: 8,993.95
+2026-03-10 14:37:33,583 [INFO]   🟢 OPEN  SHORT @ 42,842 | SL=43,413 TP=42,538 | notional=$15,000 (1.7x) | regime=bear gate=ADVISORY
+2026-03-10 14:37:33,584 [INFO]   ▶ [2024-01-17]   2.0%  │ Eq: $     8,994  │ T:   18  │ ETA: 163.9m
+2026-03-10 14:37:33,589 [INFO]   ✅ CLOSE SHORT | TRAIL_TP     | held=3c | PnL: +115.37 | Eq: 9,109.32
+2026-03-10 14:37:36,061 [INFO]   🟢 OPEN  SHORT @ 42,478 | SL=43,045 TP=42,177 | notional=$15,000 (1.6x) | regime=bear gate=ADVISORY
+2026-03-10 14:37:36,073 [INFO]   ❌ CLOSE SHORT | TIME_EXIT     | held=6c | PnL: -61.65 | Eq: 9,047.67
+2026-03-10 14:37:38,863 [INFO]   🟢 OPEN  SHORT @ 42,619 | SL=43,187 TP=42,316 | notional=$15,000 (1.7x) | regime=bear gate=ACTIVE
+2026-03-10 14:37:38,866 [INFO]   ✅ CLOSE SHORT | TRAIL_TP     | held=2c | PnL: +444.07 | Eq: 9,491.74
+2026-03-10 14:37:41,801 [INFO]   🟢 OPEN  SHORT @ 41,323 | SL=41,874 TP=41,030 | notional=$15,000 (1.6x) | regime=bear gate=ADVISORY
+2026-03-10 14:37:41,810 [INFO]   ✅ CLOSE SHORT | TRAIL_TP     | held=4c | PnL: +142.67 | Eq: 9,634.41
+2026-03-10 14:37:47,430 [INFO]   🟢 OPEN  SHORT @ 40,897 | SL=41,442 TP=40,607 | notional=$15,000 (1.6x) | regime=bear gate=ADVISORY
+2026-03-10 14:37:47,432 [INFO]   ▶ [2024-01-19]   2.3%  │ Eq: $     9,634  │ T:   22  │ ETA: 151.0m
+2026-03-10 14:37:47,441 [INFO]   ❌ CLOSE SHORT | SL           | held=2c | PnL: -211.95 | Eq: 9,422.46
+2026-03-10 14:37:50,669 [INFO]   🟢 OPEN  SHORT @ 41,662 | SL=42,218 TP=41,366 | notional=$15,000 (1.6x) | regime=bear gate=ADVISORY
+2026-03-10 14:37:50,680 [INFO]   ❌ CLOSE SHORT | TIME_EXIT     | held=6c | PnL: -22.66 | Eq: 9,399.80
+2026-03-10 14:37:54,479 [INFO]   🟢 OPEN  SHORT @ 41,692 | SL=42,248 TP=41,396 | notional=$15,000 (1.6x) | regime=bear gate=ACTIVE
+2026-03-10 14:37:54,500 [INFO]   ✅ CLOSE SHORT | TIME_EXIT     | held=6c | PnL: +28.22 | Eq: 9,428.02
+2026-03-10 14:37:58,610 [INFO]   🟢 OPEN  SHORT @ 41,580 | SL=42,134 TP=41,285 | notional=$15,000 (1.6x) | regime=bear gate=ACTIVE
+2026-03-10 14:37:58,611 [INFO]   ▶ [2024-01-21]   2.6%  │ Eq: $     9,428  │ T:   25  │ ETA: 140.5m
+2026-03-10 14:37:58,615 [INFO]   ✅ CLOSE SHORT | TRAIL_TP     | held=2c | PnL: +181.87 | Eq: 9,609.89
+2026-03-10 14:38:03,944 [INFO]   🟢 OPEN  SHORT @ 41,043 | SL=41,590 TP=40,751 | notional=$15,000 (1.6x) | regime=bear gate=ACTIVE
+2026-03-10 14:38:03,960 [INFO]   ✅ CLOSE SHORT | TP           | held=2c | PnL: +94.50 | Eq: 9,704.39
+2026-03-10 14:38:08,065 [INFO]   🟢 OPEN  SHORT @ 40,775 | SL=41,318 TP=40,485 | notional=$15,000 (1.5x) | regime=bear gate=ACTIVE
+2026-03-10 14:38:08,074 [INFO]   ✅ CLOSE SHORT | TRAIL_TP     | held=2c | PnL: +432.28 | Eq: 10,136.67
+2026-03-10 14:38:13,203 [INFO]   🟢 OPEN  SHORT @ 39,567 | SL=40,094 TP=39,286 | notional=$15,000 (1.5x) | regime=bear gate=ADVISORY
+2026-03-10 14:38:13,203 [INFO]   ▶ [2024-01-22]   2.8%  │ Eq: $    10,137  │ T:   28  │ ETA: 142.5m
+2026-03-10 14:38:13,206 [INFO]   ❌ CLOSE SHORT | SL           | held=2c | PnL: -211.95 | Eq: 9,924.72
+2026-03-10 14:38:15,863 [INFO]   🟢 OPEN  SHORT @ 39,774 | SL=40,304 TP=39,492 | notional=$15,000 (1.5x) | regime=bear gate=ACTIVE
+2026-03-10 14:38:15,867 [INFO]   ✅ CLOSE SHORT | TRAIL_TP     | held=2c | PnL: +205.42 | Eq: 10,130.14
+2026-03-10 14:38:21,104 [INFO]   🟢 OPEN  SHORT @ 39,197 | SL=39,720 TP=38,919 | notional=$15,000 (1.5x) | regime=bear gate=ADVISORY
+2026-03-10 14:38:21,112 [INFO]   ❌ CLOSE SHORT | SL           | held=2c | PnL: -211.95 | Eq: 9,918.19
+2026-03-10 14:38:31,051 [INFO]   🟢 OPEN  SHORT @ 39,890 | SL=40,422 TP=39,607 | notional=$15,000 (1.5x) | regime=bear gate=ADVISORY
+2026-03-10 14:38:31,060 [INFO]   ▶ [2024-01-23]   2.9%  │ Eq: $     9,918  │ T:   31  │ ETA: 146.1m
+2026-03-10 14:38:31,071 [INFO]   ✅ CLOSE SHORT | TP           | held=2c | PnL: +94.50 | Eq: 10,012.69
+2026-03-10 14:38:39,807 [INFO]   🟢 OPEN  SHORT @ 39,979 | SL=40,512 TP=39,696 | notional=$15,000 (1.5x) | regime=bear gate=ADVISORY
+2026-03-10 14:38:39,828 [INFO]   ✅ CLOSE SHORT | TP           | held=3c | PnL: +94.50 | Eq: 10,107.19
+2026-03-10 14:38:45,026 [INFO]   🟢 OPEN  SHORT @ 39,797 | SL=40,328 TP=39,515 | notional=$15,000 (1.5x) | regime=bear gate=ADVISORY
+2026-03-10 14:38:45,027 [INFO]   ▶ [2024-01-24]   3.0%  │ Eq: $    10,107  │ T:   33  │ ETA: 148.4m
+2026-03-10 14:38:45,047 [INFO]   ❌ CLOSE SHORT | TIME_EXIT     | held=6c | PnL: -81.92 | Eq: 10,025.27
+2026-03-10 14:38:50,118 [INFO]   🟢 OPEN  SHORT @ 39,983 | SL=40,516 TP=39,699 | notional=$15,000 (1.5x) | regime=bear gate=ACTIVE
+2026-03-10 14:38:50,142 [INFO]   ❌ CLOSE SHORT | SL           | held=4c | PnL: -211.95 | Eq: 9,813.32
+2026-03-10 14:38:53,931 [INFO]   🟢 OPEN  SHORT @ 41,272 | SL=41,822 TP=40,979 | notional=$15,000 (1.5x) | regime=neutral gate=ACTIVE
+2026-03-10 14:38:53,936 [INFO]   ❌ CLOSE SHORT | SL           | held=2c | PnL: -211.95 | Eq: 9,601.37
+2026-03-10 14:39:00,143 [INFO]   🟢 OPEN  SHORT @ 41,806 | SL=42,364 TP=41,510 | notional=$15,000 (1.6x) | regime=neutral gate=ACTIVE
+2026-03-10 14:39:00,143 [INFO]   ▶ [2024-01-26]   3.3%  │ Eq: $     9,601  │ T:   36  │ ETA: 143.1m
+2026-03-10 14:39:00,148 [INFO]   ✅ CLOSE SHORT | TP           | held=3c | PnL: +94.50 | Eq: 9,695.87
+2026-03-10 14:39:03,551 [INFO]   🟢 OPEN  LONG  @ 41,745 | SL=41,188 TP=42,041 | notional=$15,000 (1.5x) | regime=bull gate=ACTIVE
+2026-03-10 14:39:03,564 [INFO]   ✅ CLOSE LONG  | TRAIL_TP     | held=3c | PnL: +116.46 | Eq: 9,812.33
+2026-03-10 14:39:07,595 [INFO]   🟢 OPEN  LONG  @ 42,102 | SL=41,541 TP=42,401 | notional=$15,000 (1.5x) | regime=bull gate=ACTIVE
+2026-03-10 14:39:07,599 [INFO]   ✅ CLOSE LONG  | TP           | held=2c | PnL: +94.50 | Eq: 9,906.83
+2026-03-10 14:39:10,955 [INFO]   🟢 OPEN  LONG  @ 42,370 | SL=41,805 TP=42,671 | notional=$15,000 (1.5x) | regime=bull gate=ACTIVE
+2026-03-10 14:39:10,956 [INFO]   ▶ [2024-01-28]   3.4%  │ Eq: $     9,907  │ T:   39  │ ETA: 140.9m
+2026-03-10 14:39:10,963 [INFO]   ❌ CLOSE LONG  | SL           | held=3c | PnL: -211.95 | Eq: 9,694.88
+2026-03-10 14:39:13,990 [INFO]   🟢 OPEN  LONG  @ 41,771 | SL=41,214 TP=42,067 | notional=$15,000 (1.5x) | regime=bull gate=ACTIVE
+2026-03-10 14:39:13,994 [INFO]   ✅ CLOSE LONG  | TRAIL_TP     | held=2c | PnL: +180.41 | Eq: 9,875.29
+2026-03-10 14:39:16,921 [INFO]   🟢 OPEN  LONG  @ 42,306 | SL=41,742 TP=42,607 | notional=$15,000 (1.5x) | regime=bull gate=ACTIVE
+2026-03-10 14:39:16,929 [INFO]   ✅ CLOSE LONG  | TRAIL_TP     | held=3c | PnL: +100.32 | Eq: 9,975.61
+2026-03-10 14:39:19,925 [INFO]   🟢 OPEN  LONG  @ 42,623 | SL=42,055 TP=42,926 | notional=$15,000 (1.5x) | regime=bull gate=ACTIVE
+2026-03-10 14:39:19,930 [INFO]   ✅ CLOSE LONG  | TRAIL_TP     | held=2c | PnL: +221.85 | Eq: 10,197.46
+2026-03-10 14:39:23,807 [INFO]   🟢 OPEN  LONG  @ 43,288 | SL=42,711 TP=43,595 | notional=$15,000 (1.5x) | regime=bull gate=ACTIVE
+2026-03-10 14:39:23,808 [INFO]   ▶ [2024-01-29]   3.6%  │ Eq: $    10,197  │ T:   43  │ ETA: 138.1m
+2026-03-10 14:39:23,816 [INFO]   ✅ CLOSE LONG  | TP           | held=4c | PnL: +94.50 | Eq: 10,291.96
+2026-03-10 14:39:27,089 [INFO]   🟢 OPEN  LONG  @ 43,356 | SL=42,778 TP=43,663 | notional=$15,000 (1.5x) | regime=bull gate=ACTIVE
+2026-03-10 14:39:27,091 [INFO]   ❌ CLOSE LONG  | SL           | held=2c | PnL: -211.95 | Eq: 10,080.01
+2026-03-10 14:39:29,834 [INFO]   🟢 OPEN  LONG  @ 42,918 | SL=42,346 TP=43,223 | notional=$15,000 (1.5x) | regime=bull gate=ACTIVE
+2026-03-10 14:39:29,839 [INFO]   ❌ CLOSE LONG  | SL           | held=3c | PnL: -211.95 | Eq: 9,868.06
+2026-03-10 14:39:32,597 [INFO]   🟢 OPEN  LONG  @ 42,630 | SL=42,062 TP=42,933 | notional=$15,000 (1.5x) | regime=bull gate=ACTIVE
+2026-03-10 14:39:32,602 [INFO]   ✅ CLOSE LONG  | TRAIL_TP     | held=2c | PnL: +229.45 | Eq: 10,097.51
+2026-03-10 14:39:36,112 [INFO]   🟢 OPEN  LONG  @ 43,316 | SL=42,739 TP=43,624 | notional=$15,000 (1.5x) | regime=bull gate=ACTIVE
+2026-03-10 14:39:36,114 [INFO]   ▶ [2024-01-31]   3.9%  │ Eq: $    10,098  │ T:   47  │ ETA: 134.7m
+2026-03-10 14:39:36,118 [INFO]   ❌ CLOSE LONG  | SL           | held=2c | PnL: -211.95 | Eq: 9,885.56
+2026-03-10 14:39:41,560 [INFO]   🟢 OPEN  LONG  @ 42,182 | SL=41,620 TP=42,482 | notional=$15,000 (1.5x) | regime=bull gate=ACTIVE
+2026-03-10 14:39:41,565 [INFO]   ✅ CLOSE LONG  | TRAIL_TP     | held=2c | PnL: +101.05 | Eq: 9,986.61
+2026-03-10 14:39:45,180 [INFO]   🟢 OPEN  LONG  @ 42,500 | SL=41,934 TP=42,802 | notional=$15,000 (1.5x) | regime=bull gate=ACTIVE
+2026-03-10 14:39:45,184 [INFO]   ✅ CLOSE LONG  | TRAIL_TP     | held=2c | PnL: +190.06 | Eq: 10,176.67
+2026-03-10 14:39:49,166 [INFO]   🟢 OPEN  LONG  @ 43,073 | SL=42,498 TP=43,378 | notional=$15,000 (1.5x) | regime=bull gate=ACTIVE
+2026-03-10 14:39:49,167 [INFO]   ▶ [2024-02-01]   4.0%  │ Eq: $    10,177  │ T:   50  │ ETA: 134.7m
+2026-03-10 14:39:49,180 [INFO]   ✅ CLOSE LONG  | TP           | held=5c | PnL: +94.50 | Eq: 10,271.17
+2026-03-10 14:39:52,642 [INFO]   🟢 OPEN  LONG  @ 43,044 | SL=42,470 TP=43,350 | notional=$15,000 (1.5x) | regime=bull gate=ACTIVE
+2026-03-10 14:39:52,647 [INFO]   ✅ CLOSE LONG  | TP           | held=2c | PnL: +94.50 | Eq: 10,365.67
+2026-03-10 14:39:56,784 [INFO]   🟢 OPEN  LONG  @ 43,155 | SL=42,580 TP=43,462 | notional=$15,000 (1.4x) | regime=bull gate=ACTIVE
+2026-03-10 14:39:56,801 [INFO]   ❌ CLOSE LONG  | TIME_EXIT     | held=6c | PnL: -60.52 | Eq: 10,305.15
+2026-03-10 14:40:00,773 [INFO]   🟢 OPEN  LONG  @ 43,016 | SL=42,442 TP=43,321 | notional=$15,000 (1.5x) | regime=bull gate=ACTIVE
+2026-03-10 14:40:00,775 [INFO]   ▶ [2024-02-04]   4.3%  │ Eq: $    10,305  │ T:   53  │ ETA: 130.1m
+2026-03-10 14:40:00,789 [INFO]   ❌ CLOSE LONG  | SL           | held=5c | PnL: -211.95 | Eq: 10,093.20
+2026-03-10 14:40:04,803 [INFO]   🟢 OPEN  LONG  @ 42,570 | SL=42,003 TP=42,873 | notional=$15,000 (1.5x) | regime=bull gate=ACTIVE
+2026-03-10 14:40:04,810 [INFO]   ✅ CLOSE LONG  | TRAIL_TP     | held=2c | PnL: +160.20 | Eq: 10,253.40
+2026-03-10 14:40:09,466 [INFO]   🟢 OPEN  LONG  @ 43,059 | SL=42,485 TP=43,365 | notional=$15,000 (1.5x) | regime=bull gate=ACTIVE
+2026-03-10 14:40:09,474 [INFO]   ✅ CLOSE LONG  | TP           | held=2c | PnL: +94.50 | Eq: 10,347.90
+2026-03-10 14:40:12,330 [INFO]   🟢 OPEN  LONG  @ 42,630 | SL=42,061 TP=42,932 | notional=$15,000 (1.4x) | regime=bull gate=ACTIVE
+2026-03-10 14:40:12,332 [INFO]   ▶ [2024-02-05]   4.5%  │ Eq: $    10,348  │ T:   56  │ ETA: 128.5m
+2026-03-10 14:40:12,338 [INFO]   ✅ CLOSE LONG  | TP           | held=3c | PnL: +94.50 | Eq: 10,442.40
+2026-03-10 14:40:16,142 [INFO]   🟢 OPEN  LONG  @ 42,830 | SL=42,259 TP=43,134 | notional=$15,000 (1.4x) | regime=bull gate=ACTIVE
+2026-03-10 14:40:16,148 [INFO]   ✅ CLOSE LONG  | TRAIL_TP     | held=3c | PnL: +128.86 | Eq: 10,571.26
+2026-03-10 14:40:19,901 [INFO]   🟢 OPEN  LONG  @ 43,232 | SL=42,656 TP=43,539 | notional=$15,000 (1.4x) | regime=bull gate=ACTIVE
+2026-03-10 14:40:19,930 [INFO]   ❌ CLOSE LONG  | TIME_EXIT     | held=6c | PnL: -72.44 | Eq: 10,498.82
+2026-03-10 14:40:23,361 [INFO]   🟢 OPEN  LONG  @ 43,058 | SL=42,484 TP=43,364 | notional=$15,000 (1.4x) | regime=bull gate=ACTIVE
+2026-03-10 14:40:23,362 [INFO]   ▶ [2024-02-07]   4.7%  │ Eq: $    10,499  │ T:   59  │ ETA: 125.0m
+2026-03-10 14:40:23,369 [INFO]   ✅ CLOSE LONG  | TRAIL_TP     | held=2c | PnL: +429.87 | Eq: 10,928.69
+2026-03-10 14:40:26,390 [INFO]   🟢 OPEN  LONG  @ 44,326 | SL=43,735 TP=44,641 | notional=$15,000 (1.4x) | regime=bull gate=ACTIVE
+2026-03-10 14:40:26,396 [INFO]   ✅ CLOSE LONG  | TRAIL_TP     | held=3c | PnL: +107.02 | Eq: 11,035.71
+2026-03-10 14:40:29,986 [INFO]   🟢 OPEN  LONG  @ 44,678 | SL=44,082 TP=44,995 | notional=$15,000 (1.4x) | regime=bull gate=ACTIVE
+2026-03-10 14:40:29,988 [INFO]   ✅ CLOSE LONG  | TRAIL_TP     | held=2c | PnL: +183.47 | Eq: 11,219.18
+2026-03-10 14:40:33,130 [INFO]   🟢 OPEN  LONG  @ 45,260 | SL=44,657 TP=45,581 | notional=$15,000 (1.3x) | regime=bull gate=ACTIVE
+2026-03-10 14:40:33,133 [INFO]   ✅ CLOSE LONG  | TRAIL_TP     | held=2c | PnL: +248.63 | Eq: 11,467.81
+2026-03-10 14:40:35,512 [INFO]   🟢 OPEN  LONG  @ 46,046 | SL=45,433 TP=46,373 | notional=$15,000 (1.3x) | regime=bull gate=ACTIVE
+2026-03-10 14:40:35,513 [INFO]   ▶ [2024-02-09]   4.9%  │ Eq: $    11,468  │ T:   63  │ ETA: 123.9m
+2026-03-10 14:40:35,516 [INFO]   ✅ CLOSE LONG  | TRAIL_TP     | held=2c | PnL: +349.40 | Eq: 11,817.21
+2026-03-10 14:40:38,438 [INFO]   🟢 OPEN  LONG  @ 47,156 | SL=46,527 TP=47,491 | notional=$15,000 (1.3x) | regime=bull gate=ACTIVE
+2026-03-10 14:40:38,441 [INFO]   ✅ CLOSE LONG  | TP           | held=2c | PnL: +94.50 | Eq: 11,911.71
+2026-03-10 14:40:41,407 [INFO]   🟢 OPEN  LONG  @ 47,486 | SL=46,853 TP=47,823 | notional=$15,000 (1.3x) | regime=bull gate=ACTIVE
+2026-03-10 14:40:41,419 [INFO]   ❌ CLOSE LONG  | SL           | held=4c | PnL: -211.95 | Eq: 11,699.76
+2026-03-10 14:40:44,954 [INFO]   🟢 OPEN  LONG  @ 47,173 | SL=46,544 TP=47,508 | notional=$15,000 (1.3x) | regime=bull gate=ACTIVE
+2026-03-10 14:40:44,957 [INFO]   ✅ CLOSE LONG  | TRAIL_TP     | held=2c | PnL: +95.60 | Eq: 11,795.36
+2026-03-10 14:40:48,225 [INFO]   🟢 OPEN  LONG  @ 47,511 | SL=46,878 TP=47,849 | notional=$15,000 (1.3x) | regime=bull gate=ACTIVE
+2026-03-10 14:40:48,226 [INFO]   ▶ [2024-02-10]   5.1%  │ Eq: $    11,795  │ T:   67  │ ETA: 122.4m
+2026-03-10 14:40:48,229 [INFO]   ✅ CLOSE LONG  | TRAIL_TP     | held=2c | PnL: +305.58 | Eq: 12,100.94
+2026-03-10 14:40:51,549 [INFO]   🟢 OPEN  LONG  @ 48,517 | SL=47,870 TP=48,862 | notional=$15,000 (1.2x) | regime=bull gate=ACTIVE
+2026-03-10 14:40:51,562 [INFO]   ❌ CLOSE LONG  | TIME_EXIT     | held=6c | PnL: -129.02 | Eq: 11,971.92
+2026-03-10 14:40:54,833 [INFO]   🟢 OPEN  LONG  @ 48,139 | SL=47,497 TP=48,480 | notional=$15,000 (1.3x) | regime=bull gate=ACTIVE
+2026-03-10 14:40:54,841 [INFO]   ✅ CLOSE LONG  | TRAIL_TP     | held=3c | PnL: +544.77 | Eq: 12,516.69
+2026-03-10 14:40:58,564 [INFO]   🟢 OPEN  LONG  @ 49,925 | SL=49,260 TP=50,280 | notional=$15,000 (1.2x) | regime=bull gate=ACTIVE
+2026-03-10 14:40:58,565 [INFO]   ▶ [2024-02-12]   5.4%  │ Eq: $    12,517  │ T:   70  │ ETA: 119.9m
+2026-03-10 14:40:58,569 [INFO]   ✅ CLOSE LONG  | TP           | held=2c | PnL: +94.50 | Eq: 12,611.19
+2026-03-10 14:41:01,659 [INFO]   🟢 OPEN  LONG  @ 49,944 | SL=49,278 TP=50,298 | notional=$15,000 (1.2x) | regime=bull gate=ACTIVE
+2026-03-10 14:41:01,669 [INFO]   ❌ CLOSE LONG  | SL           | held=4c | PnL: -211.95 | Eq: 12,399.24
+2026-03-10 14:41:05,649 [INFO]   🟢 OPEN  LONG  @ 48,753 | SL=48,103 TP=49,099 | notional=$15,000 (1.2x) | regime=bull gate=ADVISORY
+2026-03-10 14:41:05,654 [INFO]   ✅ CLOSE LONG  | TRAIL_TP     | held=2c | PnL: +278.23 | Eq: 12,677.47
+2026-03-10 14:41:09,436 [INFO]   🟢 OPEN  LONG  @ 49,696 | SL=49,034 TP=50,049 | notional=$15,000 (1.2x) | regime=bull gate=ADVISORY
+2026-03-10 14:41:09,437 [INFO]   ▶ [2024-02-13]   5.5%  │ Eq: $    12,677  │ T:   73  │ ETA: 119.2m
+2026-03-10 14:41:09,441 [INFO]   ✅ CLOSE LONG  | TRAIL_TP     | held=3c | PnL: +562.93 | Eq: 13,240.40
+2026-03-10 14:41:13,490 [INFO]   🟢 OPEN  LONG  @ 51,601 | SL=50,913 TP=51,968 | notional=$15,000 (1.1x) | regime=bull gate=ADVISORY
+2026-03-10 14:41:13,500 [INFO]   ✅ CLOSE LONG  | TRAIL_TP     | held=4c | PnL: +214.36 | Eq: 13,454.76
+2026-03-10 14:41:16,763 [INFO]   🟢 OPEN  LONG  @ 52,380 | SL=51,682 TP=52,752 | notional=$15,000 (1.1x) | regime=bull gate=ADVISORY
+2026-03-10 14:41:16,767 [INFO]   ❌ CLOSE LONG  | SL           | held=2c | PnL: -211.95 | Eq: 13,242.81
+2026-03-10 14:41:19,707 [INFO]   🟢 OPEN  LONG  @ 52,359 | SL=51,661 TP=52,731 | notional=$15,000 (1.1x) | regime=bull gate=ADVISORY
+2026-03-10 14:41:19,709 [INFO]   ▶ [2024-02-15]   5.7%  │ Eq: $    13,243  │ T:   76  │ ETA: 117.8m
+2026-03-10 14:41:19,713 [INFO]   ❌ CLOSE LONG  | SL           | held=2c | PnL: -211.95 | Eq: 13,030.86
+2026-03-10 14:41:22,875 [INFO]   🟢 OPEN  LONG  @ 52,022 | SL=51,329 TP=52,391 | notional=$15,000 (1.2x) | regime=bull gate=ADVISORY
+2026-03-10 14:41:22,882 [INFO]   ✅ CLOSE LONG  | TP           | held=4c | PnL: +94.50 | Eq: 13,125.36
+2026-03-10 14:41:25,837 [INFO]   🟢 OPEN  LONG  @ 52,241 | SL=51,545 TP=52,612 | notional=$15,000 (1.1x) | regime=bull gate=ADVISORY
+2026-03-10 14:41:25,848 [INFO]   ❌ CLOSE LONG  | SL           | held=6c | PnL: -211.95 | Eq: 12,913.41
+2026-03-10 14:41:28,533 [INFO]   🟢 OPEN  LONG  @ 51,724 | SL=51,034 TP=52,091 | notional=$15,000 (1.2x) | regime=bull gate=ACTIVE
+2026-03-10 14:41:28,537 [INFO]   ❌ CLOSE LONG  | SL           | held=2c | PnL: -211.95 | Eq: 12,701.46
+2026-03-10 14:41:31,568 [INFO]   🟢 OPEN  LONG  @ 51,429 | SL=50,743 TP=51,794 | notional=$15,000 (1.2x) | regime=bull gate=ACTIVE
+2026-03-10 14:41:31,569 [INFO]   ▶ [2024-02-17]   6.0%  │ Eq: $    12,701  │ T:   80  │ ETA: 114.8m
+2026-03-10 14:41:31,572 [INFO]   ✅ CLOSE LONG  | TP           | held=2c | PnL: +94.50 | Eq: 12,795.96
+2026-03-10 14:41:34,581 [INFO]   🟢 OPEN  LONG  @ 51,518 | SL=50,831 TP=51,884 | notional=$15,000 (1.2x) | regime=bull gate=ACTIVE
+2026-03-10 14:41:34,586 [INFO]   ✅ CLOSE LONG  | TP           | held=2c | PnL: +94.50 | Eq: 12,890.46
+2026-03-10 14:41:37,366 [INFO]   🟢 OPEN  LONG  @ 51,861 | SL=51,170 TP=52,229 | notional=$15,000 (1.2x) | regime=bull gate=ACTIVE
+2026-03-10 14:41:37,371 [INFO]   ✅ CLOSE LONG  | TP           | held=3c | PnL: +94.50 | Eq: 12,984.96
+2026-03-10 14:41:43,915 [INFO]   🟢 OPEN  LONG  @ 52,104 | SL=51,409 TP=52,474 | notional=$15,000 (1.2x) | regime=bull gate=ACTIVE
+2026-03-10 14:41:43,916 [INFO]   ▶ [2024-02-19]   6.2%  │ Eq: $    12,985  │ T:   83  │ ETA: 114.6m
+2026-03-10 14:41:43,919 [INFO]   ✅ CLOSE LONG  | TP           | held=2c | PnL: +94.50 | Eq: 13,079.46
+2026-03-10 14:41:46,958 [INFO]   🟢 OPEN  LONG  @ 52,376 | SL=51,678 TP=52,748 | notional=$15,000 (1.1x) | regime=bull gate=ACTIVE
+2026-03-10 14:41:46,970 [INFO]   ❌ CLOSE LONG  | SL           | held=4c | PnL: -211.95 | Eq: 12,867.51
+2026-03-10 14:41:50,833 [INFO]   🟢 OPEN  LONG  @ 51,609 | SL=50,921 TP=51,975 | notional=$15,000 (1.2x) | regime=bull gate=ACTIVE
+2026-03-10 14:41:50,838 [INFO]   ✅ CLOSE LONG  | TRAIL_TP     | held=2c | PnL: +196.37 | Eq: 13,063.88
+2026-03-10 14:41:54,853 [INFO]   🟢 OPEN  LONG  @ 52,326 | SL=51,628 TP=52,697 | notional=$15,000 (1.1x) | regime=bull gate=ACTIVE
+2026-03-10 14:41:54,853 [INFO]   ▶ [2024-02-20]   6.3%  │ Eq: $    13,064  │ T:   86  │ ETA: 114.0m
+2026-03-10 14:41:54,856 [INFO]   ❌ CLOSE LONG  | SL           | held=2c | PnL: -211.95 | Eq: 12,851.93
+2026-03-10 14:42:07,411 [INFO]   🟢 OPEN  SHORT @ 51,600 | SL=52,288 TP=51,234 | notional=$15,000 (1.2x) | regime=neutral gate=ACTIVE
+2026-03-10 14:42:07,412 [INFO]   ▶ [2024-02-21]   6.5%  │ Eq: $    12,852  │ T:   87  │ ETA: 115.1m
+2026-03-10 14:42:07,417 [INFO]   ✅ CLOSE SHORT | TRAIL_TP     | held=2c | PnL: +108.99 | Eq: 12,960.92
+2026-03-10 14:42:10,551 [INFO]   🟢 OPEN  SHORT @ 51,184 | SL=51,866 TP=50,820 | notional=$15,000 (1.2x) | regime=bear gate=ACTIVE
+2026-03-10 14:42:10,557 [INFO]   ❌ CLOSE SHORT | SL           | held=2c | PnL: -211.95 | Eq: 12,748.97
+2026-03-10 14:42:16,658 [INFO]   🟢 OPEN  SHORT @ 51,612 | SL=52,300 TP=51,246 | notional=$15,000 (1.2x) | regime=neutral gate=ACTIVE
+2026-03-10 14:42:16,664 [INFO]   ✅ CLOSE SHORT | TP           | held=3c | PnL: +94.50 | Eq: 12,843.47
+2026-03-10 14:42:19,610 [INFO]   🟢 OPEN  SHORT @ 51,630 | SL=52,318 TP=51,263 | notional=$15,000 (1.2x) | regime=neutral gate=ACTIVE
+2026-03-10 14:42:19,611 [INFO]   ▶ [2024-02-22]   6.6%  │ Eq: $    12,843  │ T:   90  │ ETA: 114.8m
+2026-03-10 14:42:19,614 [INFO]   ✅ CLOSE SHORT | TP           | held=2c | PnL: +94.50 | Eq: 12,937.97
+2026-03-10 14:42:23,115 [INFO]   🟢 OPEN  SHORT @ 51,317 | SL=52,001 TP=50,953 | notional=$15,000 (1.2x) | regime=neutral gate=ACTIVE
+2026-03-10 14:42:23,120 [INFO]   ✅ CLOSE SHORT | TRAIL_TP     | held=2c | PnL: +94.57 | Eq: 13,032.54
+2026-03-10 14:42:26,298 [INFO]   🟢 OPEN  SHORT @ 50,952 | SL=51,631 TP=50,591 | notional=$15,000 (1.2x) | regime=neutral gate=ACTIVE
+2026-03-10 14:42:26,308 [INFO]   ✅ CLOSE SHORT | TP           | held=4c | PnL: +94.50 | Eq: 13,127.04
+2026-03-10 14:42:29,227 [INFO]   🟢 OPEN  SHORT @ 50,772 | SL=51,449 TP=50,411 | notional=$15,000 (1.1x) | regime=neutral gate=ACTIVE
+2026-03-10 14:42:29,235 [INFO]   ❌ CLOSE SHORT | SL           | held=5c | PnL: -211.95 | Eq: 12,915.09
+2026-03-10 14:42:58,930 [INFO]   🟢 OPEN  SHORT @ 51,328 | SL=52,012 TP=50,963 | notional=$15,000 (1.2x) | regime=bear gate=ACTIVE
+2026-03-10 14:42:58,932 [INFO]   ▶ [2024-02-26]   7.1%  │ Eq: $    12,915  │ T:   94  │ ETA: 115.4m
+2026-03-10 14:42:58,938 [INFO]   ❌ CLOSE SHORT | SL           | held=2c | PnL: -211.95 | Eq: 12,703.14
+2026-03-10 14:43:03,335 [INFO]   🟢 OPEN  LONG  @ 52,872 | SL=52,168 TP=53,248 | notional=$15,000 (1.2x) | regime=bull gate=ACTIVE
+2026-03-10 14:43:03,339 [INFO]   ✅ CLOSE LONG  | TRAIL_TP     | held=2c | PnL: +453.07 | Eq: 13,156.21
+2026-03-10 14:43:06,310 [INFO]   🟢 OPEN  LONG  @ 54,512 | SL=53,785 TP=54,899 | notional=$15,000 (1.1x) | regime=bull gate=ACTIVE
+2026-03-10 14:43:06,313 [INFO]   ✅ CLOSE LONG  | TRAIL_TP     | held=2c | PnL: +425.08 | Eq: 13,581.29
+2026-03-10 14:43:09,621 [INFO]   🟢 OPEN  LONG  @ 56,100 | SL=55,352 TP=56,498 | notional=$15,000 (1.1x) | regime=bull gate=ADVISORY
+2026-03-10 14:43:09,622 [INFO]   ▶ [2024-02-27]   7.2%  │ Eq: $    13,581  │ T:   97  │ ETA: 115.5m
+2026-03-10 14:43:09,627 [INFO]   ✅ CLOSE LONG  | TRAIL_TP     | held=2c | PnL: +168.48 | Eq: 13,749.77
+2026-03-10 14:43:14,925 [INFO]   🟢 OPEN  LONG  @ 56,775 | SL=56,018 TP=57,178 | notional=$15,000 (1.1x) | regime=bull gate=ADVISORY
+2026-03-10 14:43:14,930 [INFO]   ✅ CLOSE LONG  | TP           | held=2c | PnL: +94.50 | Eq: 13,844.27
+2026-03-10 14:43:18,327 [INFO]   🟢 OPEN  LONG  @ 57,074 | SL=56,314 TP=57,480 | notional=$15,000 (1.1x) | regime=bull gate=ADVISORY
+2026-03-10 14:43:18,330 [INFO]   ✅ CLOSE LONG  | TRAIL_TP     | held=2c | PnL: +310.08 | Eq: 14,154.35
+2026-03-10 14:43:20,984 [INFO]   🟢 OPEN  LONG  @ 58,300 | SL=57,523 TP=58,714 | notional=$15,000 (1.1x) | regime=bull gate=ADVISORY
+2026-03-10 14:43:20,985 [INFO]   ▶ [2024-02-28]   7.3%  │ Eq: $    14,154  │ T:  100  │ ETA: 115.8m
+2026-03-10 14:43:20,988 [INFO]   ✅ CLOSE LONG  | TRAIL_TP     | held=2c | PnL: +682.68 | Eq: 14,837.03
+2026-03-10 14:43:23,832 [INFO]   🟢 OPEN  LONG  @ 61,000 | SL=60,187 TP=61,433 | notional=$15,000 (1.0x) | regime=bull gate=ADVISORY
+2026-03-10 14:43:23,836 [INFO]   ❌ CLOSE LONG  | SL           | held=2c | PnL: -211.95 | Eq: 14,625.08
+2026-03-10 14:44:21,947 [INFO]   🟢 OPEN  LONG  @ 61,900 | SL=61,075 TP=62,339 | notional=$15,000 (1.0x) | regime=bull gate=ADVISORY
+2026-03-10 14:44:21,948 [INFO]   ▶ [2024-03-02]   7.7%  │ Eq: $    14,625  │ T:  102  │ ETA: 121.5m
+2026-03-10 14:44:21,960 [INFO]   ❌ CLOSE LONG  | TIME_EXIT     | held=6c | PnL: -12.00 | Eq: 14,613.08
+2026-03-10 14:44:24,869 [INFO]   🟢 OPEN  LONG  @ 61,900 | SL=61,075 TP=62,339 | notional=$15,000 (1.0x) | regime=bull gate=ADVISORY
+2026-03-10 14:44:24,872 [INFO]   ✅ CLOSE LONG  | TRAIL_TP     | held=2c | PnL: +205.39 | Eq: 14,818.47
+2026-03-10 14:44:28,034 [INFO]   🟢 OPEN  LONG  @ 62,797 | SL=61,960 TP=63,243 | notional=$15,000 (1.0x) | regime=bull gate=ADVISORY
+2026-03-10 14:44:28,038 [INFO]   ✅ CLOSE LONG  | TRAIL_TP     | held=2c | PnL: +161.61 | Eq: 14,980.08
+2026-03-10 14:44:30,527 [INFO]   🟢 OPEN  LONG  @ 63,524 | SL=62,677 TP=63,975 | notional=$15,000 (1.0x) | regime=bull gate=ADVISORY
+2026-03-10 14:44:30,530 [INFO]   ✅ CLOSE LONG  | TRAIL_TP     | held=2c | PnL: +410.70 | Eq: 15,390.78
+2026-03-10 14:44:32,934 [INFO]   🟢 OPEN  LONG  @ 65,314 | SL=64,443 TP=65,778 | notional=$15,000 (1.0x) | regime=bull gate=ADVISORY
+2026-03-10 14:44:32,935 [INFO]   ▶ [2024-03-04]   8.0%  │ Eq: $    15,391  │ T:  106  │ ETA: 119.4m
+2026-03-10 14:44:32,938 [INFO]   ✅ CLOSE LONG  | TRAIL_TP     | held=2c | PnL: +486.18 | Eq: 15,876.96
+2026-03-10 14:44:35,471 [INFO]   🟢 OPEN  LONG  @ 67,483 | SL=66,584 TP=67,962 | notional=$15,000 (0.9x) | regime=bull gate=ADVISORY
+2026-03-10 14:44:35,475 [INFO]   ✅ CLOSE LONG  | TRAIL_TP     | held=2c | PnL: +148.17 | Eq: 16,025.13
+2026-03-10 14:44:37,963 [INFO]   🟢 OPEN  LONG  @ 68,204 | SL=67,295 TP=68,688 | notional=$15,000 (0.9x) | regime=bull gate=ADVISORY
+2026-03-10 14:44:37,967 [INFO]   ❌ CLOSE LONG  | SL           | held=2c | PnL: -211.95 | Eq: 15,813.18
+2026-03-10 14:46:00,837 [INFO]   🟢 OPEN  LONG  @ 69,208 | SL=68,286 TP=69,699 | notional=$15,000 (0.9x) | regime=bull gate=ADVISORY
+2026-03-10 14:46:00,838 [INFO]   ▶ [2024-03-10]   8.7%  │ Eq: $    15,813  │ T:  109  │ ETA: 124.1m
+2026-03-10 14:46:00,840 [INFO]   ✅ CLOSE LONG  | TP           | held=2c | PnL: +94.50 | Eq: 15,907.68
+2026-03-10 14:46:03,406 [INFO]   🟢 OPEN  LONG  @ 69,640 | SL=68,711 TP=70,134 | notional=$15,000 (0.9x) | regime=bull gate=ADVISORY
+2026-03-10 14:46:03,419 [INFO]   ❌ CLOSE LONG  | SL           | held=3c | PnL: -211.95 | Eq: 15,695.73
+2026-03-10 14:46:08,763 [INFO]   🟢 OPEN  LONG  @ 69,002 | SL=68,082 TP=69,492 | notional=$15,000 (1.0x) | regime=bull gate=ADVISORY
+2026-03-10 14:46:08,769 [INFO]   ✅ CLOSE LONG  | TRAIL_TP     | held=2c | PnL: +471.03 | Eq: 16,166.76
+2026-03-10 14:46:11,665 [INFO]   🟢 OPEN  LONG  @ 71,224 | SL=70,274 TP=71,729 | notional=$15,000 (0.9x) | regime=bull gate=ADVISORY
+2026-03-10 14:46:11,665 [INFO]   ▶ [2024-03-11]   8.8%  │ Eq: $    16,167  │ T:  112  │ ETA: 123.7m
+2026-03-10 14:46:11,668 [INFO]   ✅ CLOSE LONG  | TRAIL_TP     | held=2c | PnL: +164.40 | Eq: 16,331.16
+2026-03-10 14:46:13,594 [INFO]   🟢 OPEN  LONG  @ 72,061 | SL=71,101 TP=72,573 | notional=$15,000 (0.9x) | regime=bull gate=ADVISORY
+2026-03-10 14:46:13,596 [INFO]   ✅ CLOSE LONG  | TP           | held=2c | PnL: +94.50 | Eq: 16,425.66
+2026-03-10 14:46:15,971 [INFO]   🟢 OPEN  LONG  @ 72,154 | SL=71,192 TP=72,666 | notional=$15,000 (0.9x) | regime=bull gate=ADVISORY
+2026-03-10 14:46:15,977 [INFO]   ❌ CLOSE LONG  | SL           | held=4c | PnL: -211.95 | Eq: 16,213.71
+2026-03-10 14:46:18,106 [INFO]   🟢 OPEN  LONG  @ 71,779 | SL=70,822 TP=72,289 | notional=$15,000 (0.9x) | regime=bull gate=ADVISORY
+2026-03-10 14:46:18,108 [INFO]   ❌ CLOSE LONG  | SL           | held=2c | PnL: -211.95 | Eq: 16,001.76
+2026-03-10 14:46:22,101 [INFO]   🟢 OPEN  LONG  @ 72,136 | SL=71,174 TP=72,648 | notional=$15,000 (0.9x) | regime=bull gate=ADVISORY
+2026-03-10 14:46:22,101 [INFO]   ▶ [2024-03-13]   9.1%  │ Eq: $    16,002  │ T:  116  │ ETA: 122.0m
+2026-03-10 14:46:22,105 [INFO]   ✅ CLOSE LONG  | TRAIL_TP     | held=2c | PnL: +198.87 | Eq: 16,200.63
+2026-03-10 14:46:24,245 [INFO]   🟢 OPEN  LONG  @ 73,150 | SL=72,175 TP=73,669 | notional=$15,000 (0.9x) | regime=bull gate=ADVISORY
+2026-03-10 14:46:24,255 [INFO]   ✅ CLOSE LONG  | TP           | held=5c | PnL: +94.50 | Eq: 16,295.13
+2026-03-10 14:46:26,334 [INFO]   🟢 OPEN  LONG  @ 73,281 | SL=72,304 TP=73,801 | notional=$15,000 (0.9x) | regime=bull gate=ADVISORY
+2026-03-10 14:46:26,337 [INFO]   ❌ CLOSE LONG  | SL           | held=2c | PnL: -211.95 | Eq: 16,083.18
+2026-03-10 14:49:18,692 [INFO]   🟢 OPEN  LONG  @ 70,734 | SL=69,791 TP=71,236 | notional=$15,000 (0.9x) | regime=bull gate=ADVISORY
+2026-03-10 14:49:18,693 [INFO]   ▶ [2024-03-26]  10.8%  │ Eq: $    16,083  │ T:  119  │ ETA: 125.4m
+2026-03-10 14:49:18,696 [INFO]   ❌ CLOSE LONG  | SL           | held=2c | PnL: -211.95 | Eq: 15,871.23
+2026-03-10 14:49:23,445 [INFO]   🟢 OPEN  LONG  @ 70,044 | SL=69,110 TP=70,541 | notional=$15,000 (0.9x) | regime=bull gate=ADVISORY
+2026-03-10 14:49:23,448 [INFO]   ✅ CLOSE LONG  | TP           | held=2c | PnL: +94.50 | Eq: 15,965.73
+2026-03-10 14:49:25,741 [INFO]   🟢 OPEN  LONG  @ 69,799 | SL=68,868 TP=70,294 | notional=$15,000 (0.9x) | regime=bull gate=ADVISORY
+2026-03-10 14:49:25,744 [INFO]   ❌ CLOSE LONG  | SL           | held=2c | PnL: -211.95 | Eq: 15,753.78
+2026-03-10 14:49:34,135 [INFO]   🟢 OPEN  LONG  @ 69,533 | SL=68,606 TP=70,026 | notional=$15,000 (1.0x) | regime=bull gate=ADVISORY
+2026-03-10 14:49:34,136 [INFO]   ▶ [2024-03-27]  10.9%  │ Eq: $    15,754  │ T:  122  │ ETA: 125.1m
+2026-03-10 14:49:34,140 [INFO]   ✅ CLOSE LONG  | TRAIL_TP     | held=2c | PnL: +187.37 | Eq: 15,941.15
+2026-03-10 14:49:36,768 [INFO]   🟢 OPEN  LONG  @ 70,457 | SL=69,518 TP=70,957 | notional=$15,000 (0.9x) | regime=bull gate=ADVISORY
+2026-03-10 14:49:36,772 [INFO]   ✅ CLOSE LONG  | TRAIL_TP     | held=2c | PnL: +174.99 | Eq: 16,116.14
+2026-03-10 14:49:39,687 [INFO]   🟢 OPEN  LONG  @ 71,335 | SL=70,384 TP=71,842 | notional=$15,000 (0.9x) | regime=bull gate=ADVISORY
+2026-03-10 14:49:39,693 [INFO]   ❌ CLOSE LONG  | SL           | held=3c | PnL: -211.95 | Eq: 15,904.19
+2026-03-10 14:49:42,275 [INFO]   🟢 OPEN  LONG  @ 70,492 | SL=69,552 TP=70,992 | notional=$15,000 (0.9x) | regime=bull gate=ADVISORY
+2026-03-10 14:49:42,280 [INFO]   ❌ CLOSE LONG  | SL           | held=3c | PnL: -211.95 | Eq: 15,692.24
+2026-03-10 14:49:50,580 [INFO]   🟢 OPEN  LONG  @ 69,904 | SL=68,972 TP=70,400 | notional=$15,000 (1.0x) | regime=bull gate=ADVISORY
+2026-03-10 14:49:50,580 [INFO]   ▶ [2024-03-29]  11.2%  │ Eq: $    15,692  │ T:  126  │ ETA: 124.1m
+2026-03-10 14:49:50,591 [INFO]   ❌ CLOSE LONG  | TIME_EXIT     | held=6c | PnL: -68.11 | Eq: 15,624.13
+2026-03-10 14:49:53,169 [INFO]   🟢 OPEN  LONG  @ 69,642 | SL=68,714 TP=70,137 | notional=$15,000 (1.0x) | regime=bull gate=ACTIVE
+2026-03-10 14:49:53,172 [INFO]   ✅ CLOSE LONG  | TRAIL_TP     | held=2c | PnL: +144.03 | Eq: 15,768.16
+2026-03-10 14:49:55,765 [INFO]   🟢 OPEN  LONG  @ 70,366 | SL=69,429 TP=70,866 | notional=$15,000 (1.0x) | regime=bull gate=ACTIVE
+2026-03-10 14:49:55,769 [INFO]   ✅ CLOSE LONG  | TRAIL_TP     | held=3c | PnL: +151.84 | Eq: 15,920.00
+2026-03-10 14:49:58,297 [INFO]   🟢 OPEN  LONG  @ 71,135 | SL=70,187 TP=71,640 | notional=$15,000 (0.9x) | regime=bull gate=ACTIVE
+2026-03-10 14:49:58,302 [INFO]   ❌ CLOSE LONG  | SL           | held=3c | PnL: -211.95 | Eq: 15,708.05
+2026-03-10 14:50:01,988 [INFO]   🟢 OPEN  LONG  @ 69,637 | SL=68,709 TP=70,131 | notional=$15,000 (1.0x) | regime=bull gate=ACTIVE
+2026-03-10 14:50:01,990 [INFO]   ▶ [2024-04-01]  11.5%  │ Eq: $    15,708  │ T:  130  │ ETA: 122.0m
+2026-03-10 14:50:01,994 [INFO]   ❌ CLOSE LONG  | SL           | held=2c | PnL: -211.95 | Eq: 15,496.10
+2026-03-10 14:50:06,957 [INFO]   🟢 OPEN  LONG  @ 68,281 | SL=67,371 TP=68,766 | notional=$15,000 (1.0x) | regime=bull gate=ACTIVE
+2026-03-10 14:50:06,964 [INFO]   ✅ CLOSE LONG  | TRAIL_TP     | held=2c | PnL: +299.73 | Eq: 15,795.83
+2026-03-10 14:50:11,390 [INFO]   🟢 OPEN  LONG  @ 69,700 | SL=68,771 TP=70,195 | notional=$15,000 (0.9x) | regime=bull gate=ACTIVE
+2026-03-10 14:50:11,393 [INFO]   ❌ CLOSE LONG  | SL           | held=2c | PnL: -211.95 | Eq: 15,583.88
+2026-03-10 14:50:19,845 [INFO]   🟢 OPEN  SHORT @ 64,928 | SL=65,794 TP=64,467 | notional=$15,000 (1.0x) | regime=neutral gate=ADVISORY
+2026-03-10 14:50:19,846 [INFO]   ▶ [2024-04-02]  11.7%  │ Eq: $    15,584  │ T:  133  │ ETA: 122.3m
+2026-03-10 14:50:19,849 [INFO]   ❌ CLOSE SHORT | SL           | held=2c | PnL: -211.95 | Eq: 15,371.93
+2026-03-10 14:50:22,744 [INFO]   🟢 OPEN  SHORT @ 65,505 | SL=66,378 TP=65,040 | notional=$15,000 (1.0x) | regime=neutral gate=ADVISORY
+2026-03-10 14:50:22,750 [INFO]   ❌ CLOSE SHORT | SL           | held=2c | PnL: -211.95 | Eq: 15,159.98
+2026-03-10 14:50:26,878 [INFO]   🟢 OPEN  SHORT @ 66,181 | SL=67,063 TP=65,711 | notional=$15,000 (1.0x) | regime=neutral gate=ADVISORY
+2026-03-10 14:50:26,883 [INFO]   ✅ CLOSE SHORT | TP           | held=2c | PnL: +94.50 | Eq: 15,254.48
+2026-03-10 14:50:30,422 [INFO]   🟢 OPEN  SHORT @ 65,874 | SL=66,752 TP=65,406 | notional=$15,000 (1.0x) | regime=neutral gate=ADVISORY
+2026-03-10 14:50:30,423 [INFO]   ▶ [2024-04-03]  11.8%  │ Eq: $    15,254  │ T:  136  │ ETA: 122.1m
+2026-03-10 14:50:30,429 [INFO]   ✅ CLOSE SHORT | TP           | held=4c | PnL: +94.50 | Eq: 15,348.98
+2026-03-10 14:50:33,482 [INFO]   🟢 OPEN  SHORT @ 66,105 | SL=66,986 TP=65,635 | notional=$15,000 (1.0x) | regime=neutral gate=ADVISORY
+2026-03-10 14:50:33,486 [INFO]   ❌ CLOSE SHORT | SL           | held=2c | PnL: -211.95 | Eq: 15,137.03
+2026-03-10 14:50:48,546 [INFO]   🟢 OPEN  SHORT @ 66,937 | SL=67,830 TP=66,462 | notional=$15,000 (1.0x) | regime=bear gate=ADVISORY
+2026-03-10 14:50:48,548 [INFO]   ▶ [2024-04-05]  12.0%  │ Eq: $    15,137  │ T:  138  │ ETA: 121.9m
+2026-03-10 14:50:48,555 [INFO]   ❌ CLOSE SHORT | SL           | held=2c | PnL: -211.95 | Eq: 14,925.08
+2026-03-10 14:51:38,986 [INFO]   🟢 OPEN  LONG  @ 72,473 | SL=71,507 TP=72,987 | notional=$15,000 (1.0x) | regime=bull gate=ADVISORY
+2026-03-10 14:51:38,988 [INFO]   ▶ [2024-04-08]  12.4%  │ Eq: $    14,925  │ T:  139  │ ETA: 123.4m
+2026-03-10 14:51:38,992 [INFO]   ❌ CLOSE LONG  | SL           | held=2c | PnL: -211.95 | Eq: 14,713.13
+2026-03-10 14:51:41,817 [INFO]   🟢 OPEN  LONG  @ 71,807 | SL=70,850 TP=72,317 | notional=$15,000 (1.0x) | regime=bull gate=ADVISORY
+2026-03-10 14:51:41,825 [INFO]   ❌ CLOSE LONG  | SL           | held=3c | PnL: -211.95 | Eq: 14,501.18
+2026-03-10 14:52:06,385 [INFO]   🟢 OPEN  LONG  @ 70,121 | SL=69,186 TP=70,619 | notional=$15,000 (1.0x) | regime=bull gate=ADVISORY
+2026-03-10 14:52:06,387 [INFO]   ▶ [2024-04-10]  12.7%  │ Eq: $    14,501  │ T:  141  │ ETA: 123.3m
+2026-03-10 14:52:06,390 [INFO]   ✅ CLOSE LONG  | TRAIL_TP     | held=2c | PnL: +154.75 | Eq: 14,655.93
+2026-03-10 14:52:14,024 [INFO]   🟢 OPEN  LONG  @ 70,043 | SL=69,110 TP=70,541 | notional=$15,000 (1.0x) | regime=bull gate=ADVISORY
+2026-03-10 14:52:14,028 [INFO]   ✅ CLOSE LONG  | TP           | held=2c | PnL: +94.50 | Eq: 14,750.43
+2026-03-10 14:52:16,426 [INFO]   🟢 OPEN  LONG  @ 70,491 | SL=69,552 TP=70,992 | notional=$15,000 (1.0x) | regime=bull gate=ADVISORY
+2026-03-10 14:52:16,427 [INFO]   ▶ [2024-04-11]  12.8%  │ Eq: $    14,750  │ T:  143  │ ETA: 123.0m
+2026-03-10 14:52:16,430 [INFO]   ✅ CLOSE LONG  | TRAIL_TP     | held=2c | PnL: +103.52 | Eq: 14,853.95
+2026-03-10 14:52:18,623 [INFO]   🟢 OPEN  LONG  @ 71,034 | SL=70,087 TP=71,539 | notional=$15,000 (1.0x) | regime=bull gate=ADVISORY
+2026-03-10 14:52:18,628 [INFO]   ❌ CLOSE LONG  | SL           | held=3c | PnL: -211.95 | Eq: 14,642.00
+2026-03-10 14:52:24,494 [INFO]   🟢 OPEN  SHORT @ 67,136 | SL=68,031 TP=66,660 | notional=$15,000 (1.0x) | regime=neutral gate=ADVISORY
+2026-03-10 14:52:24,503 [INFO]   ✅ CLOSE SHORT | TRAIL_TP     | held=5c | PnL: +514.68 | Eq: 15,156.68
+2026-03-10 14:54:29,887 [INFO]   🟢 OPEN  LONG  @ 66,410 | SL=65,525 TP=66,882 | notional=$15,000 (1.0x) | regime=bull gate=ADVISORY
+2026-03-10 14:54:29,887 [INFO]   ▶ [2024-04-23]  14.2%  │ Eq: $    15,157  │ T:  146  │ ETA: 122.2m
+2026-03-10 14:54:29,892 [INFO]   ✅ CLOSE LONG  | TP           | held=3c | PnL: +94.50 | Eq: 15,251.18
+2026-03-10 14:54:32,049 [INFO]   🟢 OPEN  LONG  @ 66,393 | SL=65,508 TP=66,865 | notional=$15,000 (1.0x) | regime=bull gate=ADVISORY
+2026-03-10 14:54:32,054 [INFO]   ✅ CLOSE LONG  | TP           | held=3c | PnL: +94.50 | Eq: 15,345.68
+2026-03-10 14:54:41,306 [INFO]   🟢 OPEN  SHORT @ 64,594 | SL=65,455 TP=64,135 | notional=$15,000 (1.0x) | regime=neutral gate=ADVISORY
+2026-03-10 14:54:41,307 [INFO]   ▶ [2024-04-24]  14.4%  │ Eq: $    15,346  │ T:  148  │ ETA: 121.5m
+2026-03-10 14:54:41,310 [INFO]   ✅ CLOSE SHORT | TP           | held=2c | PnL: +94.50 | Eq: 15,440.18
+2026-03-10 14:54:50,375 [INFO]   🟢 OPEN  SHORT @ 63,827 | SL=64,678 TP=63,374 | notional=$15,000 (1.0x) | regime=neutral gate=ADVISORY
+2026-03-10 14:54:50,381 [INFO]   ❌ CLOSE SHORT | SL           | held=2c | PnL: -211.95 | Eq: 15,228.23
+2026-03-10 14:54:56,945 [INFO]   🟢 OPEN  SHORT @ 64,479 | SL=65,338 TP=64,021 | notional=$15,000 (1.0x) | regime=neutral gate=ADVISORY
+2026-03-10 14:54:56,946 [INFO]   ▶ [2024-04-25]  14.6%  │ Eq: $    15,228  │ T:  150  │ ETA: 121.4m
+2026-03-10 14:54:56,950 [INFO]   ✅ CLOSE SHORT | TP           | held=2c | PnL: +94.50 | Eq: 15,322.73
+2026-03-10 14:55:00,025 [INFO]   🟢 OPEN  SHORT @ 64,237 | SL=65,093 TP=63,781 | notional=$15,000 (1.0x) | regime=neutral gate=ACTIVE
+2026-03-10 14:55:00,032 [INFO]   ✅ CLOSE SHORT | TRAIL_TP     | held=2c | PnL: +164.37 | Eq: 15,487.10
+2026-03-10 14:55:04,962 [INFO]   🟢 OPEN  SHORT @ 63,481 | SL=64,328 TP=63,031 | notional=$15,000 (1.0x) | regime=neutral gate=ADVISORY
+2026-03-10 14:55:04,972 [INFO]   ✅ CLOSE SHORT | TP           | held=3c | PnL: +94.50 | Eq: 15,581.60
+2026-03-10 14:55:11,215 [INFO]   🟢 OPEN  SHORT @ 63,047 | SL=63,888 TP=62,600 | notional=$15,000 (1.0x) | regime=neutral gate=ADVISORY
+2026-03-10 14:55:11,216 [INFO]   ▶ [2024-04-27]  14.8%  │ Eq: $    15,582  │ T:  153  │ ETA: 121.3m
+2026-03-10 14:55:11,237 [INFO]   ❌ CLOSE SHORT | SL           | held=6c | PnL: -211.95 | Eq: 15,369.65
+2026-03-10 14:55:13,753 [INFO]   🟢 OPEN  SHORT @ 63,990 | SL=64,843 TP=63,535 | notional=$15,000 (1.0x) | regime=neutral gate=ACTIVE
+2026-03-10 14:55:13,757 [INFO]   ✅ CLOSE SHORT | TRAIL_TP     | held=2c | PnL: +112.40 | Eq: 15,482.05
+2026-03-10 14:55:16,316 [INFO]   🟢 OPEN  SHORT @ 63,459 | SL=64,305 TP=63,009 | notional=$15,000 (1.0x) | regime=neutral gate=ACTIVE
+2026-03-10 14:55:16,322 [INFO]   ✅ CLOSE SHORT | TP           | held=3c | PnL: +94.50 | Eq: 15,576.55
+2026-03-10 14:55:19,061 [INFO]   🟢 OPEN  SHORT @ 63,088 | SL=63,929 TP=62,640 | notional=$15,000 (1.0x) | regime=bear gate=ACTIVE
+2026-03-10 14:55:19,064 [INFO]   ✅ CLOSE SHORT | TRAIL_TP     | held=2c | PnL: +160.69 | Eq: 15,737.24
+2026-03-10 14:55:22,208 [INFO]   🟢 OPEN  SHORT @ 62,362 | SL=63,193 TP=61,919 | notional=$15,000 (1.0x) | regime=bear gate=ACTIVE
+2026-03-10 14:55:22,210 [INFO]   ▶ [2024-04-29]  15.0%  │ Eq: $    15,737  │ T:  157  │ ETA: 119.8m
+2026-03-10 14:55:22,213 [INFO]   ✅ CLOSE SHORT | TP           | held=2c | PnL: +94.50 | Eq: 15,831.74
+2026-03-10 14:55:26,830 [INFO]   🟢 OPEN  SHORT @ 63,012 | SL=63,852 TP=62,565 | notional=$15,000 (0.9x) | regime=bear gate=ACTIVE
+2026-03-10 14:55:26,835 [INFO]   ❌ CLOSE SHORT | SL           | held=2c | PnL: -211.95 | Eq: 15,619.79
+2026-03-10 14:55:30,782 [INFO]   🟢 OPEN  SHORT @ 63,842 | SL=64,693 TP=63,389 | notional=$15,000 (1.0x) | regime=neutral gate=ACTIVE
+2026-03-10 14:55:30,787 [INFO]   ✅ CLOSE SHORT | TRAIL_TP     | held=2c | PnL: +156.84 | Eq: 15,776.63
+2026-03-10 14:55:33,307 [INFO]   🟢 OPEN  SHORT @ 63,124 | SL=63,965 TP=62,676 | notional=$15,000 (1.0x) | regime=bear gate=ACTIVE
+2026-03-10 14:55:33,308 [INFO]   ▶ [2024-04-30]  15.2%  │ Eq: $    15,777  │ T:  160  │ ETA: 119.7m
+2026-03-10 14:55:33,312 [INFO]   ✅ CLOSE SHORT | TRAIL_TP     | held=2c | PnL: +548.54 | Eq: 16,325.17

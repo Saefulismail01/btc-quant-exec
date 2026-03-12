@@ -1,0 +1,74 @@
+{
+  "run_timestamp": "20260309_081146",
+  "window_start": "2026-01-01",
+  "window_end": "2026-03-04",
+  "initial_capital": 10000.0,
+  "elapsed_seconds": 981.4,
+  "metrics": {
+    "net_pnl_pct": {
+      "golden": 30.0406,
+      "heston": 76.0961,
+      "delta": 46.0555,
+      "winner": "HESTON"
+    },
+    "win_rate_pct": {
+      "golden": 57.36,
+      "heston": 49.35,
+      "delta": -8.01,
+      "winner": "GOLDEN"
+    },
+    "profit_factor": {
+      "golden": 1.278,
+      "heston": 1.587,
+      "delta": 0.309,
+      "winner": "HESTON"
+    },
+    "max_drawdown_pct": {
+      "golden": 20.75,
+      "heston": 17.1,
+      "delta": -3.65,
+      "winner": "HESTON"
+    },
+    "sharpe_ratio": {
+      "golden": 2.299,
+      "heston": 3.409,
+      "delta": 1.11,
+      "winner": "HESTON"
+    },
+    "rr_ratio": {
+      "golden": 0.95,
+      "heston": 1.629,
+      "delta": 0.679,
+      "winner": "HESTON"
+    },
+    "daily_return_pct": {
+      "golden": 0.4845,
+      "heston": 1.2274,
+      "delta": 0.7429,
+      "winner": "HESTON"
+    },
+    "n_trades": {
+      "golden": 129,
+      "heston": 77,
+      "delta": -52,
+      "winner": "GOLDEN"
+    },
+    "avg_winner_usd": {
+      "golden": 186.67,
+      "heston": 541.38,
+      "delta": 354.71,
+      "winner": "HESTON"
+    },
+    "avg_loser_usd": {
+      "golden": 196.54,
+      "heston": 332.38,
+      "delta": 135.84,
+      "winner": "GOLDEN"
+    }
+  },
+  "golden_skipped": 149,
+  "heston_skipped": 137,
+  "golden_errors": 0,
+  "heston_errors": 0,
+  "verdict": "\ud83d\udfe2 HESTON WINS (7/10 metrics)"
+}

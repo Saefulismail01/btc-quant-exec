@@ -1,0 +1,21 @@
+window,state_id,regime_label,n_runs,mean_duration_candles,median_duration_candles,max_duration_candles,min_duration_candles,frequency_pct,implied_persistence
+W1-Early,0,Low Volatility Sideways,1,14.0,14.0,14,14,8.5,0.9286
+W1-Early,1,High Volatility Sideways,1,21.0,21.0,21,21,12.7,0.9524
+W1-Early,2,High Volatility Sideways,1,28.0,28.0,28,28,17.0,0.9643
+W1-Early,3,High Volatility Sideways,1,13.0,13.0,13,13,7.9,0.9231
+W1-Early,4,Bullish Trend,1,1.0,1.0,1,1,0.6,0.0
+W1-Early,5,Low Volatility Sideways,1,88.0,88.0,88,88,53.3,0.9886
+W2-Mid,0,Bullish Trend,1,14.0,14.0,14,14,8.2,0.9286
+W2-Mid,1,Bearish Trend,1,13.0,13.0,13,13,7.6,0.9231
+W2-Mid,2,Low Volatility Sideways,1,8.0,8.0,8,8,4.7,0.875
+W2-Mid,3,Low Volatility Sideways,1,9.0,9.0,9,9,5.3,0.8889
+W2-Mid,4,Low Volatility Sideways,1,82.0,82.0,82,82,48.2,0.9878
+W2-Mid,5,Low Volatility Sideways,1,23.0,23.0,23,23,13.5,0.9565
+W2-Mid,6,Bearish Trend,1,13.0,13.0,13,13,7.6,0.9231
+W2-Mid,7,Bearish Trend,1,8.0,8.0,8,8,4.7,0.875
+W3-Recent,0,Low Volatility Sideways,1,14.0,14.0,14,14,8.5,0.9286
+W3-Recent,1,Bearish Trend,1,7.0,7.0,7,7,4.2,0.8571
+W3-Recent,2,High Volatility Sideways,1,73.0,73.0,73,73,44.2,0.9863
+W3-Recent,3,Low Volatility Sideways,1,32.0,32.0,32,32,19.4,0.9688
+W3-Recent,4,Bearish Trend,1,14.0,14.0,14,14,8.5,0.9286
+W3-Recent,5,High Volatility Sideways,1,25.0,25.0,25,25,15.2,0.96

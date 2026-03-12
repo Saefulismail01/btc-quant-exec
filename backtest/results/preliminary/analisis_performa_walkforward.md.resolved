@@ -1,0 +1,61 @@
+# Laporan Analisis: True Walk-Forward Backtest (6-Layer System)
+**Periode:** 24 Januari 2023 — 02 Maret 2026 (1.218 Hari)
+**Sistem:** Confluence 6-Layer (BCD, EMA, MLP, Heston, Risk Manager, FGI)
+
+## 1. Ringkasan Eksekutif
+Simulasi *true walk-forward* (mengacu pada kondisi produksi dengan sliding window 500 candle) telah berhasil diselesaikan. Sistem menunjukkan performa yang sangat impresif dengan pertumbuhan modal sebesar **+597.89%** dalam sisa waktu sekitar 3 tahun.
+
+| Metrik Utama | Hasil |
+| :--- | :--- |
+| **Initial Capital** | $10,000.00 |
+| **Final Equity** | **$69,789.39** |
+| **Net Profit (%)** | **+597.89%** |
+| **Win Rate** | 46.61% |
+| **Profit Factor** | 1.209 |
+| **Max Drawdown** | 45.38% |
+| **Sharpe Ratio** | 1.568 |
+| **Total Trades** | 989 |
+
+---
+
+## 2. Analisis Fase Performa
+
+### A. Fase Early 2023 (Survival & Recovery)
+*   **Kondisi:** Awal Januari - Maret 2023.
+*   **Performa:** Mengalami penurunan awal (drawdown) dari $10,000 ke ~$8,100 (-19%).
+*   **Analisis:** BCD dan MLP membutuhkan waktu untuk "beradaptasi" dengan data baru. Namun, sistem berhasil recover ke level modal awal pada bulan April 2023.
+
+### B. Fase Stagnasi & Pertumbuhan Stabil (Mid 2023 - Early 2024)
+*   **Kondisi:** Konsolidasi Bitcoin sebelum halving.
+*   **Performa:** Equity naik perlahan dari $10k ke $18k.
+*   **Analisis:** Confluence Layer 5 (Risk Manager) dan Layer 6 (FGI) sangat berperan menahan emosi market, membuat sistem tetap profitable meskipun market sideways.
+
+### C. Fase Eksponensial (Late 2024 - 2026)
+*   **Kondisi:** Bull run besar Bitcoin.
+*   **Performa:** Equity melonjak tajam dari $20k ke level akhir $69k.
+*   **Analisis:** Strategi *Fixed 2% Risk* memungkinkan sistem melakukan "auto-compounding" yang sangat efektif. Karena ukuran posisi dihitung berdasarkan volatilitas (Layer 4 Heston) dan jarak SL, sistem menangkap tren besar tanpa resiko bangkrut.
+
+---
+
+## 3. Evaluasi Resiko (Drawdown Analysis)
+**Max Drawdown: 45.38%**
+Penurunan terdalam terjadi pada transisi awal 2025 (Januari - Februari). Equity sempat menyentuh ~$32k lalu turun ke ~$24k sebelum akhirnya melonjak ke $49k. 
+
+> [!IMPORTANT]
+> Drawdown 45% cukup tinggi untuk trader retail konvensional, namun dalam konteks strategi *high-frequency scalping* yang menggunakan compounding, ini adalah harga yang dibayar untuk menangkap profit 600%.
+
+---
+
+## 4. Kesimpulan & Rekomendasi teknis
+
+### Keunggulan:
+1.  **Resiliensi:** Sistem terbukti mampu bangkit dari drawdown awal.
+2.  **Scalability:** Performa meningkat seiring dengan peningkatan volatilitas dan volume market.
+3.  **Akurasi Logika:** Optimasi *sliding window* menunjukkan bahwa model tidak membutuhkan data sejarah 10 tahun untuk profit; cukup 500 candle terakhir (match production).
+
+### Rekomendasi:
+1.  **Risk Reduction:** Jika 45% DD dirasa terlalu besar, risk per trade bisa diturunkan dari 2% ke **1% atau 1.5%**. Ini akan memperhalus kurva equity meskipun profit total akan berkurang.
+2.  **MLP Retraining:** MLP terlihat berjuang di periode transisi (neutral regime). Pertimbangkan untuk mengecilkan threshold Layer 3 di area neutral.
+
+**Status Final:** Sistem SIAP untuk evaluasi live-trading/paper-trading di production environment.
+

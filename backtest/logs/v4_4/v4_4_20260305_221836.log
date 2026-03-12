@@ -1,0 +1,260 @@
+2026-03-05 22:18:36,446 [INFO] ========================================================================
+2026-03-05 22:18:36,446 [INFO]   BTC-QUANT v4.4 — BREAKEVEN LOCK ENGINE
+2026-03-05 22:18:36,447 [INFO]   Window   : 2026-01-01  →  2026-03-04
+2026-03-05 22:18:36,447 [INFO]   Capital  : $10,000
+2026-03-05 22:18:36,448 [INFO]   Position : $1,000 × 15x = $15,000 notional
+2026-03-05 22:18:36,448 [INFO]   SL       : 1.333%  |  TP: 0.710%
+2026-03-05 22:18:36,449 [INFO]   Fee/trip : $12.00
+2026-03-05 22:18:36,449 [INFO]   Max Hold : 6 candles = 24h (safety net)
+2026-03-05 22:18:36,450 [INFO]   v4.4 Rule: Floating profit → breakeven lock + hold
+2026-03-05 22:18:36,451 [INFO]   v4.4 Rule: Floating loss   → TIME_EXIT candle 1
+2026-03-05 22:18:36,452 [INFO] ========================================================================
+2026-03-05 22:18:36,452 [INFO] Loading full dataset from DuckDB with ASOF JOIN...
+2026-03-05 22:18:36,672 [INFO] Loaded 7206 candles | 2022-11-18 08:00:00+00:00 → 2026-03-03 04:00:00+00:00
+2026-03-05 22:18:36,696 [INFO]   Candles in window : 368
+2026-03-05 22:18:36,697 [INFO]   History available : 6,838 candles before window
+
+2026-03-05 22:18:36,697 [INFO] Initializing services...
+2026-03-05 22:18:57,296 [WARNING] [MLP] Failed to load persisted model: 
+2026-03-05 22:18:57,296 [INFO] All services ready.
+
+2026-03-05 22:18:59,598 [INFO] [BCD global] Trained on 500 candles. Found 9 changepoints.
+2026-03-05 22:19:03,344 [INFO] [MLP] Retrained: len=500, hash=760d68c91051
+2026-03-05 22:19:03,346 [INFO]   🟢 OPEN  SHORT @ 87,825 | SL=88,995 TP=87,201 | regime=neutral bcd=1.00 gate=ACTIVE
+2026-03-05 22:19:03,359 [INFO]   ❌ CLOSE SHORT | SL            | held=6c | entry=87,825 exit=88,995 | PnL: -211.95 | Equity: 9,788.05
+2026-03-05 22:19:06,599 [INFO]   🟢 OPEN  LONG  @ 88,899 | SL=87,714 TP=89,530 | regime=bull bcd=1.00 gate=ACTIVE
+2026-03-05 22:19:06,604 [INFO]   ✅ CLOSE LONG  | TP            | held=2c | entry=88,899 exit=89,530 | PnL: +94.50 | Equity: 9,882.55
+2026-03-05 22:19:09,055 [INFO]   🟢 OPEN  LONG  @ 89,458 | SL=88,266 TP=90,093 | regime=bull bcd=1.00 gate=ACTIVE
+2026-03-05 22:19:09,056 [INFO]   ▶ [2026-01-02]   2.2%  │ Equity: $     9,883  │ Trades:    2  │ Open: YES  │ ETA: 8.8m
+2026-03-05 22:19:09,059 [INFO]   ✅ CLOSE LONG  | TP            | held=2c | entry=89,458 exit=90,093 | PnL: +94.50 | Equity: 9,977.05
+2026-03-05 22:19:12,148 [INFO]   🟢 OPEN  LONG  @ 89,865 | SL=88,667 TP=90,503 | regime=bull bcd=1.00 gate=ACTIVE
+2026-03-05 22:19:12,162 [INFO]   ✅ CLOSE LONG  | TIME_EXIT      | held=6c [SAFETY NET] | entry=89,865 exit=90,092 | PnL: +25.86 | Equity: 10,002.91
+2026-03-05 22:19:14,946 [INFO]   🟢 OPEN  LONG  @ 90,092 | SL=88,891 TP=90,731 | regime=bull bcd=1.00 gate=ACTIVE
+2026-03-05 22:19:14,949 [INFO]   ✅ CLOSE LONG  | TRAIL_TP      | held=2c | entry=90,092 exit=91,193 | PnL: +171.30 | Equity: 10,174.21
+2026-03-05 22:19:17,972 [INFO]   🟢 OPEN  LONG  @ 91,193 | SL=89,977 TP=91,840 | regime=bull bcd=1.00 gate=ACTIVE
+2026-03-05 22:19:17,986 [INFO]   ✅ CLOSE LONG  | TRAIL_TP      | held=6c | entry=91,193 exit=92,835 | PnL: +258.17 | Equity: 10,432.38
+2026-03-05 22:19:20,567 [INFO]   🟢 OPEN  LONG  @ 92,835 | SL=91,598 TP=93,494 | regime=bull bcd=1.00 gate=ACTIVE
+2026-03-05 22:19:20,568 [INFO]   ▶ [2026-01-05]   6.5%  │ Equity: $    10,432  │ Trades:    6  │ Open: YES  │ ETA: 5.5m
+2026-03-05 22:19:20,573 [INFO]   ✅ CLOSE LONG  | TRAIL_TP      | held=3c | entry=92,835 exit=93,900 | PnL: +160.03 | Equity: 10,592.41
+2026-03-05 22:19:22,942 [INFO]   🟢 OPEN  LONG  @ 93,900 | SL=92,648 TP=94,567 | regime=bull bcd=1.00 gate=ACTIVE
+2026-03-05 22:19:22,946 [INFO]   ✅ CLOSE LONG  | TP            | held=2c | entry=93,900 exit=94,567 | PnL: +94.50 | Equity: 10,686.91
+2026-03-05 22:19:25,448 [INFO]   🟢 OPEN  LONG  @ 93,822 | SL=92,572 TP=94,489 | regime=bull bcd=1.00 gate=ACTIVE
+2026-03-05 22:19:25,460 [INFO]   ❌ CLOSE LONG  | SL            | held=5c | entry=93,822 exit=92,572 | PnL: -211.95 | Equity: 10,474.96
+2026-03-05 22:19:27,816 [INFO]   🟢 OPEN  LONG  @ 92,062 | SL=90,835 TP=92,716 | regime=bull bcd=1.00 gate=ACTIVE
+2026-03-05 22:19:27,819 [INFO]   ✅ CLOSE LONG  | TRAIL_TP      | held=2c | entry=92,062 exit=92,778 | PnL: +104.66 | Equity: 10,579.62
+2026-03-05 22:19:30,405 [INFO]   🟢 OPEN  LONG  @ 92,778 | SL=91,541 TP=93,437 | regime=bull bcd=1.00 gate=ACTIVE
+2026-03-05 22:19:30,409 [INFO]   ❌ CLOSE LONG  | SL            | held=3c | entry=92,778 exit=91,541 | PnL: -211.95 | Equity: 10,367.67
+2026-03-05 22:19:33,360 [INFO]   🟢 OPEN  LONG  @ 91,303 | SL=90,086 TP=91,951 | regime=bull bcd=1.00 gate=ACTIVE
+2026-03-05 22:19:33,361 [INFO]   ▶ [2026-01-07]  10.6%  │ Equity: $    10,368  │ Trades:   11  │ Open: YES  │ ETA: 5.1m
+2026-03-05 22:19:33,370 [INFO]   ❌ CLOSE LONG  | SL            | held=4c | entry=91,303 exit=90,086 | PnL: -211.95 | Equity: 10,155.72
+2026-03-05 22:19:36,240 [INFO]   🟢 OPEN  LONG  @ 90,510 | SL=89,303 TP=91,153 | regime=bull bcd=1.00 gate=ACTIVE
+2026-03-05 22:19:36,243 [INFO]   ❌ CLOSE LONG  | SL            | held=2c | entry=90,510 exit=89,303 | PnL: -211.95 | Equity: 9,943.77
+2026-03-05 22:19:39,016 [INFO]   🟢 OPEN  LONG  @ 90,730 | SL=89,521 TP=91,374 | regime=bull bcd=1.00 gate=ACTIVE
+2026-03-05 22:19:39,019 [INFO]   ✅ CLOSE LONG  | TP            | held=2c | entry=90,730 exit=91,374 | PnL: +94.50 | Equity: 10,038.27
+2026-03-05 22:19:42,173 [INFO]   🟢 OPEN  LONG  @ 91,060 | SL=89,846 TP=91,706 | regime=bull bcd=1.00 gate=ACTIVE
+2026-03-05 22:19:42,180 [INFO]   ❌ CLOSE LONG  | SL            | held=3c | entry=91,060 exit=89,846 | PnL: -211.95 | Equity: 9,826.32
+2026-03-05 22:19:45,421 [INFO]   🟢 OPEN  LONG  @ 90,398 | SL=89,193 TP=91,040 | regime=bull bcd=1.00 gate=ACTIVE
+2026-03-05 22:19:45,422 [INFO]   ▶ [2026-01-09]  13.6%  │ Equity: $     9,826  │ Trades:   15  │ Open: YES  │ ETA: 5.1m
+2026-03-05 22:19:45,425 [INFO]   ✅ CLOSE LONG  | TP            | held=2c | entry=90,398 exit=91,040 | PnL: +94.50 | Equity: 9,920.82
+2026-03-05 22:19:48,477 [INFO]   🟢 OPEN  LONG  @ 90,291 | SL=89,087 TP=90,932 | regime=bull bcd=1.00 gate=ACTIVE
+2026-03-05 22:19:48,497 [INFO]   ✅ CLOSE LONG  | TIME_EXIT      | held=6c [SAFETY NET] | entry=90,291 exit=90,591 | PnL: +37.97 | Equity: 9,958.79
+2026-03-05 22:19:51,832 [INFO]   🟢 OPEN  LONG  @ 90,591 | SL=89,384 TP=91,235 | regime=bull bcd=1.00 gate=ACTIVE
+2026-03-05 22:19:51,845 [INFO]   ✅ CLOSE LONG  | TP            | held=6c | entry=90,591 exit=91,235 | PnL: +94.50 | Equity: 10,053.29
+2026-03-05 22:19:55,067 [INFO]   🟢 OPEN  LONG  @ 90,645 | SL=89,436 TP=91,288 | regime=bull bcd=1.00 gate=ADVISORY
+2026-03-05 22:19:55,072 [INFO]   ✅ CLOSE LONG  | TRAIL_TP      | held=2c | entry=90,645 exit=91,766 | PnL: +173.59 | Equity: 10,226.88
+2026-03-05 22:19:58,487 [INFO]   🟢 OPEN  LONG  @ 91,766 | SL=90,543 TP=92,418 | regime=bull bcd=1.00 gate=ACTIVE
+2026-03-05 22:19:58,488 [INFO]   ▶ [2026-01-12]  18.0%  │ Equity: $    10,227  │ Trades:   19  │ Open: YES  │ ETA: 4.7m
+2026-03-05 22:19:58,494 [INFO]   ❌ CLOSE LONG  | SL            | held=2c | entry=91,766 exit=90,543 | PnL: -211.95 | Equity: 10,014.93
+2026-03-05 22:20:01,480 [INFO]   🟢 OPEN  LONG  @ 90,574 | SL=89,367 TP=91,217 | regime=bull bcd=1.00 gate=ACTIVE
+2026-03-05 22:20:01,484 [INFO]   ✅ CLOSE LONG  | TRAIL_TP      | held=2c | entry=90,574 exit=91,822 | PnL: +194.68 | Equity: 10,209.61
+2026-03-05 22:20:04,411 [INFO]   🟢 OPEN  LONG  @ 91,822 | SL=90,598 TP=92,474 | regime=bull bcd=1.00 gate=ACTIVE
+2026-03-05 22:20:04,420 [INFO]   ✅ CLOSE LONG  | TP            | held=4c | entry=91,822 exit=92,474 | PnL: +94.50 | Equity: 10,304.11
+2026-03-05 22:20:08,001 [INFO]   🟢 OPEN  LONG  @ 91,962 | SL=90,736 TP=92,615 | regime=bull bcd=1.00 gate=ACTIVE
+2026-03-05 22:20:08,004 [INFO]   ✅ CLOSE LONG  | TRAIL_TP      | held=2c | entry=91,962 exit=94,180 | PnL: +349.68 | Equity: 10,653.79
+2026-03-05 22:20:11,491 [INFO]   🟢 OPEN  LONG  @ 94,180 | SL=92,924 TP=94,848 | regime=bull bcd=1.00 gate=ACTIVE
+2026-03-05 22:20:11,491 [INFO]   ▶ [2026-01-13]  20.7%  │ Equity: $    10,654  │ Trades:   23  │ Open: YES  │ ETA: 4.7m
+2026-03-05 22:20:11,496 [INFO]   ✅ CLOSE LONG  | TRAIL_TP      | held=2c | entry=94,180 exit=95,666 | PnL: +224.71 | Equity: 10,878.50
+2026-03-05 22:20:14,083 [INFO]   🟢 OPEN  LONG  @ 95,666 | SL=94,390 TP=96,345 | regime=bull bcd=1.00 gate=ACTIVE
+2026-03-05 22:20:14,090 [INFO]   ✅ CLOSE LONG  | TRAIL_TP      | held=3c | entry=95,666 exit=96,692 | PnL: +148.90 | Equity: 11,027.40
+2026-03-05 22:20:16,778 [INFO]   🟢 OPEN  LONG  @ 96,692 | SL=95,403 TP=97,378 | regime=bull bcd=1.00 gate=ACTIVE
+2026-03-05 22:20:16,781 [INFO]   ✅ CLOSE LONG  | TP            | held=2c | entry=96,692 exit=97,378 | PnL: +94.50 | Equity: 11,121.90
+2026-03-05 22:20:19,068 [INFO]   🟢 OPEN  LONG  @ 96,908 | SL=95,616 TP=97,596 | regime=bull bcd=1.00 gate=ACTIVE
+2026-03-05 22:20:19,076 [INFO]   ❌ CLOSE LONG  | SL            | held=4c | entry=96,908 exit=95,616 | PnL: -211.95 | Equity: 10,909.95
+2026-03-05 22:20:21,606 [INFO]   🟢 OPEN  LONG  @ 96,717 | SL=95,428 TP=97,404 | regime=bull bcd=1.00 gate=ACTIVE
+2026-03-05 22:20:21,607 [INFO]   ▶ [2026-01-15]  23.7%  │ Equity: $    10,910  │ Trades:   27  │ Open: YES  │ ETA: 4.5m
+2026-03-05 22:20:21,610 [INFO]   ❌ CLOSE LONG  | SL            | held=2c | entry=96,717 exit=95,428 | PnL: -211.95 | Equity: 10,698.00
+2026-03-05 22:20:24,251 [INFO]   🟢 OPEN  LONG  @ 95,567 | SL=94,293 TP=96,246 | regime=bull bcd=1.00 gate=ACTIVE
+2026-03-05 22:20:24,260 [INFO]   ❌ CLOSE LONG  | SL            | held=4c | entry=95,567 exit=94,293 | PnL: -211.95 | Equity: 10,486.05
+2026-03-05 22:20:27,188 [INFO]   🟢 OPEN  LONG  @ 94,538 | SL=93,277 TP=95,209 | regime=bull bcd=1.00 gate=ACTIVE
+2026-03-05 22:20:27,191 [INFO]   ✅ CLOSE LONG  | TRAIL_TP      | held=2c | entry=94,538 exit=95,504 | PnL: +141.30 | Equity: 10,627.35
+2026-03-05 22:20:29,623 [INFO]   🟢 OPEN  LONG  @ 95,504 | SL=94,231 TP=96,182 | regime=bull bcd=1.00 gate=ACTIVE
+2026-03-05 22:20:29,633 [INFO]   ❌ CLOSE LONG  | TIME_EXIT      | held=6c [SAFETY NET] | entry=95,504 exit=95,108 | PnL: -74.17 | Equity: 10,553.18
+2026-03-05 22:20:32,114 [INFO]   🟢 OPEN  LONG  @ 95,108 | SL=93,840 TP=95,783 | regime=bull bcd=1.00 gate=ACTIVE
+2026-03-05 22:20:32,114 [INFO]   ▶ [2026-01-17]  27.5%  │ Equity: $    10,553  │ Trades:   31  │ Open: YES  │ ETA: 4.2m
+2026-03-05 22:20:32,128 [INFO]   ❌ CLOSE LONG  | SL            | held=6c | entry=95,108 exit=93,840 | PnL: -211.95 | Equity: 10,341.23
+2026-03-05 22:20:34,675 [INFO]   🟢 OPEN  LONG  @ 93,614 | SL=92,366 TP=94,279 | regime=bull bcd=1.00 gate=ACTIVE
+2026-03-05 22:20:34,677 [INFO]   ❌ CLOSE LONG  | SL            | held=2c | entry=93,614 exit=92,366 | PnL: -211.95 | Equity: 10,129.28
+2026-03-05 22:20:37,005 [INFO]   🟢 OPEN  LONG  @ 92,788 | SL=91,551 TP=93,447 | regime=bull bcd=1.00 gate=ACTIVE
+2026-03-05 22:20:37,019 [INFO]   ❌ CLOSE LONG  | SL            | held=6c | entry=92,788 exit=91,551 | PnL: -211.95 | Equity: 9,917.33
+2026-03-05 22:20:39,621 [INFO]   🟢 OPEN  SHORT @ 91,136 | SL=92,351 TP=90,489 | regime=neutral bcd=1.00 gate=ACTIVE
+2026-03-05 22:20:39,624 [INFO]   ✅ CLOSE SHORT | TP            | held=2c | entry=91,136 exit=90,489 | PnL: +94.50 | Equity: 10,011.83
+2026-03-05 22:20:41,900 [INFO]   🟢 OPEN  SHORT @ 90,644 | SL=91,852 TP=90,001 | regime=neutral bcd=1.00 gate=ACTIVE
+2026-03-05 22:20:41,904 [INFO]   ✅ CLOSE SHORT | TRAIL_TP      | held=2c | entry=90,644 exit=88,391 | PnL: +360.93 | Equity: 10,372.76
+2026-03-05 22:20:44,250 [INFO]   🟢 OPEN  SHORT @ 88,391 | SL=89,569 TP=87,763 | regime=bear bcd=1.00 gate=ACTIVE
+2026-03-05 22:20:44,250 [INFO]   ▶ [2026-01-20]  32.4%  │ Equity: $    10,373  │ Trades:   36  │ Open: YES  │ ETA: 3.7m
+2026-03-05 22:20:44,253 [INFO]   ❌ CLOSE SHORT | SL            | held=2c | entry=88,391 exit=89,569 | PnL: -211.95 | Equity: 10,160.81
+2026-03-05 22:20:46,548 [INFO]   🟢 OPEN  SHORT @ 89,171 | SL=90,360 TP=88,538 | regime=neutral bcd=1.00 gate=ACTIVE
+2026-03-05 22:20:46,551 [INFO]   ❌ CLOSE SHORT | SL            | held=2c | entry=89,171 exit=90,360 | PnL: -211.95 | Equity: 9,948.86
+2026-03-05 22:20:49,548 [INFO]   🟢 OPEN  SHORT @ 90,237 | SL=91,440 TP=89,596 | regime=neutral bcd=1.00 gate=ACTIVE
+2026-03-05 22:20:49,551 [INFO]   ✅ CLOSE SHORT | TRAIL_TP      | held=2c | entry=90,237 exit=89,411 | PnL: +125.26 | Equity: 10,074.12
+2026-03-05 22:20:51,220 [INFO]   🟢 OPEN  SHORT @ 89,411 | SL=90,603 TP=88,777 | regime=bear bcd=1.00 gate=ACTIVE
+2026-03-05 22:20:51,227 [INFO]   ✅ CLOSE SHORT | TP            | held=4c | entry=89,411 exit=88,777 | PnL: +94.50 | Equity: 10,168.62
+2026-03-05 22:20:52,924 [INFO]   🟢 OPEN  SHORT @ 88,954 | SL=90,139 TP=88,322 | regime=bear bcd=1.00 gate=ACTIVE
+2026-03-05 22:20:52,935 [INFO]   ❌ CLOSE SHORT | TIME_EXIT      | held=6c [SAFETY NET] | entry=88,954 exit=89,711 | PnL: -139.75 | Equity: 10,028.87
+2026-03-05 22:20:55,249 [INFO]   🟢 OPEN  SHORT @ 89,711 | SL=90,907 TP=89,074 | regime=bear bcd=1.00 gate=ACTIVE
+2026-03-05 22:20:55,250 [INFO]   ▶ [2026-01-23]  36.8%  │ Equity: $    10,029  │ Trades:   41  │ Open: YES  │ ETA: 3.4m
+2026-03-05 22:20:55,265 [INFO]   ✅ CLOSE SHORT | TIME_EXIT      | held=6c [SAFETY NET] | entry=89,711 exit=89,235 | PnL: +67.62 | Equity: 10,096.49
+2026-03-05 22:20:57,199 [INFO]   🟢 OPEN  SHORT @ 89,235 | SL=90,425 TP=88,601 | regime=bear bcd=1.00 gate=ACTIVE
+2026-03-05 22:20:57,205 [INFO]   ✅ CLOSE SHORT | TP            | held=4c | entry=89,235 exit=88,601 | PnL: +94.50 | Equity: 10,190.99
+2026-03-05 22:20:59,232 [INFO]   🟢 OPEN  SHORT @ 88,630 | SL=89,812 TP=88,001 | regime=bear bcd=1.00 gate=ACTIVE
+2026-03-05 22:20:59,241 [INFO]   ✅ CLOSE SHORT | TRAIL_TP      | held=3c | entry=88,630 exit=86,459 | PnL: +355.41 | Equity: 10,546.40
+2026-03-05 22:21:01,243 [INFO]   🟢 OPEN  SHORT @ 86,459 | SL=87,612 TP=85,846 | regime=bear bcd=1.00 gate=ACTIVE
+2026-03-05 22:21:01,247 [INFO]   ❌ CLOSE SHORT | SL            | held=2c | entry=86,459 exit=87,612 | PnL: -211.95 | Equity: 10,334.45
+2026-03-05 22:21:03,143 [INFO]   🟢 OPEN  SHORT @ 87,233 | SL=88,396 TP=86,614 | regime=bear bcd=1.00 gate=ACTIVE
+2026-03-05 22:21:03,147 [INFO]   ❌ CLOSE SHORT | SL            | held=3c | entry=87,233 exit=88,396 | PnL: -211.95 | Equity: 10,122.50
+2026-03-05 22:21:05,068 [INFO]   🟢 OPEN  SHORT @ 87,610 | SL=88,777 TP=86,987 | regime=bear bcd=1.00 gate=ACTIVE
+2026-03-05 22:21:05,072 [INFO]   ❌ CLOSE SHORT | SL            | held=3c | entry=87,610 exit=88,777 | PnL: -211.95 | Equity: 9,910.55
+2026-03-05 22:21:06,580 [INFO]   🟢 OPEN  SHORT @ 88,745 | SL=89,928 TP=88,115 | regime=bear bcd=1.00 gate=ACTIVE
+2026-03-05 22:21:06,581 [INFO]   ▶ [2026-01-27]  42.5%  │ Equity: $     9,911  │ Trades:   47  │ Open: YES  │ ETA: 2.9m
+2026-03-05 22:21:06,583 [INFO]   ✅ CLOSE SHORT | TRAIL_TP      | held=2c | entry=88,745 exit=87,948 | PnL: +122.73 | Equity: 10,033.28
+2026-03-05 22:21:07,999 [INFO]   🟢 OPEN  SHORT @ 87,948 | SL=89,120 TP=87,323 | regime=bear bcd=1.00 gate=ACTIVE
+2026-03-05 22:21:08,002 [INFO]   ✅ CLOSE SHORT | TP            | held=2c | entry=87,948 exit=87,323 | PnL: +94.50 | Equity: 10,127.78
+2026-03-05 22:21:09,670 [INFO]   🟢 OPEN  SHORT @ 88,378 | SL=89,556 TP=87,751 | regime=bear bcd=1.00 gate=ACTIVE
+2026-03-05 22:21:09,675 [INFO]   ❌ CLOSE SHORT | SL            | held=4c | entry=88,378 exit=89,556 | PnL: -211.95 | Equity: 9,915.83
+2026-03-05 22:21:11,263 [INFO]   🟢 OPEN  SHORT @ 90,037 | SL=91,237 TP=89,398 | regime=bear bcd=1.00 gate=ACTIVE
+2026-03-05 22:21:11,266 [INFO]   ✅ CLOSE SHORT | TRAIL_TP      | held=2c | entry=90,037 exit=89,364 | PnL: +100.17 | Equity: 10,016.00
+2026-03-05 22:21:12,887 [INFO]   🟢 OPEN  SHORT @ 89,364 | SL=90,555 TP=88,729 | regime=bear bcd=1.00 gate=ACTIVE
+2026-03-05 22:21:12,890 [INFO]   ✅ CLOSE SHORT | TRAIL_TP      | held=2c | entry=89,364 exit=88,003 | PnL: +216.35 | Equity: 10,232.35
+2026-03-05 22:21:14,369 [INFO]   🟢 OPEN  SHORT @ 88,003 | SL=89,176 TP=87,378 | regime=bear bcd=1.00 gate=ACTIVE
+2026-03-05 22:21:14,373 [INFO]   ✅ CLOSE SHORT | TRAIL_TP      | held=3c | entry=88,003 exit=84,898 | PnL: +517.28 | Equity: 10,749.63
+2026-03-05 22:21:15,807 [INFO]   🟢 OPEN  SHORT @ 84,898 | SL=86,030 TP=84,295 | regime=bear bcd=1.00 gate=ACTIVE
+2026-03-05 22:21:15,810 [INFO]   ✅ CLOSE SHORT | TP            | held=2c | entry=84,898 exit=84,295 | PnL: +94.50 | Equity: 10,844.13
+2026-03-05 22:21:17,338 [INFO]   🟢 OPEN  SHORT @ 84,605 | SL=85,732 TP=84,004 | regime=bear bcd=1.00 gate=ADVISORY
+2026-03-05 22:21:17,338 [INFO]   ▶ [2026-01-29]  47.1%  │ Equity: $    10,844  │ Trades:   54  │ Open: YES  │ ETA: 2.6m
+2026-03-05 22:21:17,340 [INFO]   ✅ CLOSE SHORT | TRAIL_TP      | held=2c | entry=84,605 exit=82,770 | PnL: +313.27 | Equity: 11,157.40
+2026-03-05 22:21:18,741 [INFO]   🟢 OPEN  SHORT @ 82,770 | SL=83,873 TP=82,182 | regime=bear bcd=1.00 gate=ADVISORY
+2026-03-05 22:21:18,745 [INFO]   ❌ CLOSE SHORT | SL            | held=3c | entry=82,770 exit=83,873 | PnL: -211.95 | Equity: 10,945.45
+2026-03-05 22:21:20,209 [INFO]   🟢 OPEN  SHORT @ 84,200 | SL=85,322 TP=83,602 | regime=bear bcd=1.00 gate=ADVISORY
+2026-03-05 22:21:20,213 [INFO]   ✅ CLOSE SHORT | TRAIL_TP      | held=3c | entry=84,200 exit=83,514 | PnL: +110.14 | Equity: 11,055.59
+2026-03-05 22:21:21,771 [INFO]   🟢 OPEN  SHORT @ 83,514 | SL=84,628 TP=82,921 | regime=bear bcd=1.00 gate=ADVISORY
+2026-03-05 22:21:21,774 [INFO]   ✅ CLOSE SHORT | TRAIL_TP      | held=2c | entry=83,514 exit=81,269 | PnL: +391.37 | Equity: 11,446.96
+2026-03-05 22:21:23,267 [INFO]   🟢 OPEN  SHORT @ 81,269 | SL=82,352 TP=80,692 | regime=bear bcd=1.00 gate=ADVISORY
+2026-03-05 22:21:23,269 [INFO]   ✅ CLOSE SHORT | TRAIL_TP      | held=2c | entry=81,269 exit=78,707 | PnL: +460.84 | Equity: 11,907.80
+2026-03-05 22:23:20,987 [INFO]   🟢 OPEN  SHORT @ 69,754 | SL=70,684 TP=69,259 | regime=neutral bcd=1.00 gate=ADVISORY
+2026-03-05 22:23:20,987 [INFO]   ▶ [2026-02-14]  72.8%  │ Equity: $    11,908  │ Trades:   59  │ Open: YES  │ ETA: 1.6m
+2026-03-05 22:23:20,991 [INFO]   ✅ CLOSE SHORT | TP            | held=3c | entry=69,754 exit=69,259 | PnL: +94.50 | Equity: 12,002.30
+2026-03-05 22:23:26,651 [INFO]   🟢 OPEN  SHORT @ 69,068 | SL=69,989 TP=68,578 | regime=neutral bcd=1.00 gate=ADVISORY
+2026-03-05 22:23:26,653 [INFO]   ✅ CLOSE SHORT | TP            | held=2c | entry=69,068 exit=68,578 | PnL: +94.50 | Equity: 12,096.80
+2026-03-05 22:23:28,128 [INFO]   🟢 OPEN  SHORT @ 68,797 | SL=69,714 TP=68,308 | regime=bear bcd=1.00 gate=ADVISORY
+2026-03-05 22:23:28,130 [INFO]   ✅ CLOSE SHORT | TP            | held=2c | entry=68,797 exit=68,308 | PnL: +94.50 | Equity: 12,191.30
+2026-03-05 22:23:29,546 [INFO]   🟢 OPEN  SHORT @ 68,552 | SL=69,466 TP=68,066 | regime=bear bcd=1.00 gate=ADVISORY
+2026-03-05 22:23:29,550 [INFO]   ❌ CLOSE SHORT | SL            | held=2c | entry=68,552 exit=69,466 | PnL: -211.95 | Equity: 11,979.35
+2026-03-05 22:23:30,913 [INFO]   🟢 OPEN  SHORT @ 67,506 | SL=68,405 TP=67,026 | regime=bear bcd=1.00 gate=ADVISORY
+2026-03-05 22:23:30,915 [INFO]   ❌ CLOSE SHORT | SL            | held=2c | entry=67,506 exit=68,405 | PnL: -211.95 | Equity: 11,767.40
+2026-03-05 22:23:40,693 [INFO]   🟢 OPEN  SHORT @ 67,476 | SL=68,375 TP=66,997 | regime=neutral bcd=1.00 gate=ADVISORY
+2026-03-05 22:23:40,693 [INFO]   ▶ [2026-02-17]  78.2%  │ Equity: $    11,767  │ Trades:   64  │ Open: YES  │ ETA: 1.3m
+2026-03-05 22:23:40,696 [INFO]   ❌ CLOSE SHORT | SL            | held=3c | entry=67,476 exit=68,375 | PnL: -211.95 | Equity: 11,555.45
+2026-03-05 22:23:42,161 [INFO]   🟢 OPEN  SHORT @ 67,345 | SL=68,243 TP=66,867 | regime=bear bcd=1.00 gate=ADVISORY
+2026-03-05 22:23:42,164 [INFO]   ✅ CLOSE SHORT | TRAIL_TP      | held=2c | entry=67,345 exit=66,138 | PnL: +256.88 | Equity: 11,812.33
+2026-03-05 22:23:43,675 [INFO]   🟢 OPEN  SHORT @ 66,138 | SL=67,020 TP=65,669 | regime=bear bcd=1.00 gate=ADVISORY
+2026-03-05 22:23:43,679 [INFO]   ❌ CLOSE SHORT | SL            | held=3c | entry=66,138 exit=67,020 | PnL: -211.95 | Equity: 11,600.38
+2026-03-05 22:23:45,122 [INFO]   🟢 OPEN  SHORT @ 67,180 | SL=68,076 TP=66,703 | regime=bear bcd=1.00 gate=ADVISORY
+2026-03-05 22:23:45,124 [INFO]   ✅ CLOSE SHORT | TRAIL_TP      | held=2c | entry=67,180 exit=66,363 | PnL: +170.58 | Equity: 11,770.96
+2026-03-05 22:23:46,621 [INFO]   🟢 OPEN  SHORT @ 66,363 | SL=67,247 TP=65,892 | regime=bear bcd=1.00 gate=ADVISORY
+2026-03-05 22:23:46,625 [INFO]   ❌ CLOSE SHORT | SL            | held=3c | entry=66,363 exit=67,247 | PnL: -211.95 | Equity: 11,559.01
+2026-03-05 22:23:47,988 [INFO]   🟢 OPEN  SHORT @ 67,327 | SL=68,225 TP=66,849 | regime=bear bcd=1.00 gate=ACTIVE
+2026-03-05 22:23:47,991 [INFO]   ❌ CLOSE SHORT | SL            | held=2c | entry=67,327 exit=68,225 | PnL: -211.95 | Equity: 11,347.06
+2026-03-05 22:23:49,415 [INFO]   🟢 OPEN  SHORT @ 67,290 | SL=68,187 TP=66,813 | regime=bear bcd=1.00 gate=ACTIVE
+2026-03-05 22:23:49,419 [INFO]   ❌ CLOSE SHORT | SL            | held=3c | entry=67,290 exit=68,187 | PnL: -211.95 | Equity: 11,135.11
+2026-03-05 22:23:52,258 [INFO]   🟢 OPEN  SHORT @ 67,637 | SL=68,539 TP=67,157 | regime=bear bcd=1.00 gate=ACTIVE
+2026-03-05 22:23:52,258 [INFO]   ▶ [2026-02-21]  83.4%  │ Equity: $    11,135  │ Trades:   71  │ Open: YES  │ ETA: 1.0m
+2026-03-05 22:23:52,262 [INFO]   ❌ CLOSE SHORT | SL            | held=3c | entry=67,637 exit=68,539 | PnL: -211.95 | Equity: 10,923.16
+2026-03-05 22:23:53,747 [INFO]   🟢 OPEN  SHORT @ 68,572 | SL=69,486 TP=68,085 | regime=bear bcd=1.00 gate=ACTIVE
+2026-03-05 22:23:53,749 [INFO]   ✅ CLOSE SHORT | TRAIL_TP      | held=2c | entry=68,572 exit=67,933 | PnL: +127.65 | Equity: 11,050.81
+2026-03-05 22:23:55,467 [INFO]   🟢 OPEN  SHORT @ 67,933 | SL=68,839 TP=67,451 | regime=bear bcd=1.00 gate=ACTIVE
+2026-03-05 22:23:55,472 [INFO]   ✅ CLOSE SHORT | TP            | held=4c | entry=67,933 exit=67,451 | PnL: +94.50 | Equity: 11,145.31
+2026-03-05 22:23:56,992 [INFO]   🟢 OPEN  SHORT @ 67,660 | SL=68,562 TP=67,180 | regime=neutral bcd=1.00 gate=ACTIVE
+2026-03-05 22:23:56,995 [INFO]   ✅ CLOSE SHORT | TRAIL_TP      | held=3c | entry=67,660 exit=64,894 | PnL: +601.19 | Equity: 11,746.50
+2026-03-05 22:23:58,553 [INFO]   🟢 OPEN  SHORT @ 64,894 | SL=65,759 TP=64,433 | regime=bear bcd=1.00 gate=ACTIVE
+2026-03-05 22:23:58,556 [INFO]   ❌ CLOSE SHORT | SL            | held=2c | entry=64,894 exit=65,759 | PnL: -211.95 | Equity: 11,534.55
+2026-03-05 22:24:00,075 [INFO]   🟢 OPEN  SHORT @ 66,171 | SL=67,053 TP=65,701 | regime=bear bcd=1.00 gate=ACTIVE
+2026-03-05 22:24:00,079 [INFO]   ✅ CLOSE SHORT | TRAIL_TP      | held=2c | entry=66,171 exit=64,274 | PnL: +418.00 | Equity: 11,952.55
+2026-03-05 22:24:01,559 [INFO]   🟢 OPEN  SHORT @ 64,274 | SL=65,131 TP=63,818 | regime=bear bcd=1.00 gate=ADVISORY
+2026-03-05 22:24:01,561 [INFO]   ✅ CLOSE SHORT | TRAIL_TP      | held=2c | entry=64,274 exit=63,570 | PnL: +152.16 | Equity: 12,104.71
+2026-03-05 22:24:02,980 [INFO]   🟢 OPEN  SHORT @ 63,570 | SL=64,418 TP=63,119 | regime=bear bcd=1.00 gate=ADVISORY
+2026-03-05 22:24:02,981 [INFO]   ▶ [2026-02-24]  88.3%  │ Equity: $    12,105  │ Trades:   78  │ Open: YES  │ ETA: 0.7m
+2026-03-05 22:24:02,983 [INFO]   ✅ CLOSE SHORT | TP            | held=2c | entry=63,570 exit=63,119 | PnL: +94.50 | Equity: 12,199.21
+2026-03-05 22:24:04,527 [INFO]   🟢 OPEN  SHORT @ 63,192 | SL=64,035 TP=62,744 | regime=bear bcd=1.00 gate=ADVISORY
+2026-03-05 22:24:04,530 [INFO]   ❌ CLOSE SHORT | SL            | held=2c | entry=63,192 exit=64,035 | PnL: -211.95 | Equity: 11,987.26
+2026-03-05 22:24:05,959 [INFO]   🟢 OPEN  SHORT @ 64,405 | SL=65,264 TP=63,948 | regime=bear bcd=1.00 gate=ADVISORY
+2026-03-05 22:24:05,962 [INFO]   ❌ CLOSE SHORT | SL            | held=2c | entry=64,405 exit=65,264 | PnL: -211.95 | Equity: 11,775.31
+2026-03-05 22:24:08,820 [INFO]   🟢 OPEN  SHORT @ 65,001 | SL=65,868 TP=64,540 | regime=bear bcd=1.00 gate=ADVISORY
+2026-03-05 22:24:08,823 [INFO]   ❌ CLOSE SHORT | SL            | held=2c | entry=65,001 exit=65,868 | PnL: -211.95 | Equity: 11,563.36
+2026-03-05 22:24:13,225 [INFO]   🟢 OPEN  SHORT @ 67,952 | SL=68,858 TP=67,470 | regime=neutral bcd=1.00 gate=ADVISORY
+2026-03-05 22:24:13,225 [INFO]   ▶ [2026-02-25]  91.3%  │ Equity: $    11,563  │ Trades:   82  │ Open: YES  │ ETA: 0.5m
+2026-03-05 22:24:13,234 [INFO]   ✅ CLOSE SHORT | TRAIL_TP      | held=4c | entry=67,952 exit=67,353 | PnL: +120.25 | Equity: 11,683.61
+2026-03-05 22:24:21,892 [INFO]   🟢 OPEN  SHORT @ 66,094 | SL=66,975 TP=65,625 | regime=bear bcd=1.00 gate=ADVISORY
+2026-03-05 22:24:21,895 [INFO]   ✅ CLOSE SHORT | TRAIL_TP      | held=2c | entry=66,094 exit=65,365 | PnL: +153.38 | Equity: 11,836.99
+2026-03-05 22:24:23,361 [INFO]   🟢 OPEN  SHORT @ 65,365 | SL=66,237 TP=64,901 | regime=bear bcd=1.00 gate=ADVISORY
+2026-03-05 22:24:23,362 [INFO]   ▶ [2026-02-27]  94.3%  │ Equity: $    11,837  │ Trades:   84  │ Open: YES  │ ETA: 0.3m
+2026-03-05 22:24:23,364 [INFO]   ✅ CLOSE SHORT | TRAIL_TP      | held=3c | entry=65,365 exit=63,788 | PnL: +349.89 | Equity: 12,186.88
+2026-03-05 22:24:24,772 [INFO]   🟢 OPEN  SHORT @ 63,788 | SL=64,639 TP=63,336 | regime=bear bcd=1.00 gate=ADVISORY
+2026-03-05 22:24:24,774 [INFO]   ❌ CLOSE SHORT | SL            | held=2c | entry=63,788 exit=64,639 | PnL: -211.95 | Equity: 11,974.93
+2026-03-05 22:24:26,238 [INFO]   🟢 OPEN  SHORT @ 64,800 | SL=65,664 TP=64,340 | regime=bear bcd=1.00 gate=ADVISORY
+2026-03-05 22:24:26,240 [INFO]   ❌ CLOSE SHORT | SL            | held=2c | entry=64,800 exit=65,664 | PnL: -211.95 | Equity: 11,762.98
+2026-03-05 22:24:49,936 [INFO] 
+════════════════════════════════════════════════════════════════════════
+2026-03-05 22:24:49,937 [INFO]   BACKTEST COMPLETE — v4.4 Breakeven Lock Engine
+2026-03-05 22:24:49,937 [INFO] ════════════════════════════════════════════════════════════════════════
+2026-03-05 22:24:49,960 [INFO]   Window        : 2026-01-01  →  2026-03-04  (62 days)
+2026-03-05 22:24:49,960 [INFO]   Capital Start : $   10,000.00
+2026-03-05 22:24:49,960 [INFO]   Capital End   : $   11,762.98
+2026-03-05 22:24:49,961 [INFO]   Net PnL       : $   +1,762.98  (+17.63%)
+2026-03-05 22:24:49,961 [INFO]   Daily Return  : +0.2844%/day
+2026-03-05 22:24:49,961 [INFO]   Trades        : 87  (W:51  L:36)  WR: 58.6%
+2026-03-05 22:24:49,963 [INFO]   R:R Ratio     : 1:0.87  (avg_win:$180  avg_loss:$206)
+2026-03-05 22:24:49,963 [INFO]   Profit Factor : 1.238
+2026-03-05 22:24:49,964 [INFO]   Max Drawdown  : 10.89%
+2026-03-05 22:24:49,964 [INFO]   Sharpe Ratio  : 2.323
+2026-03-05 22:24:49,965 [INFO]   Avg Hold      : 2.9 candles  (max: 6)
+2026-03-05 22:24:49,965 [INFO]   ── Exit Distribution ──
+2026-03-05 22:24:49,965 [INFO]      SL             :   34  (39.1%)
+2026-03-05 22:24:49,965 [INFO]      TIME_EXIT      :    5  (5.7%)
+2026-03-05 22:24:49,965 [INFO]      TP             :   18  (20.7%)
+2026-03-05 22:24:49,967 [INFO]      TRAIL_TP       :   30  (34.5%)
+2026-03-05 22:24:49,967 [INFO]   ── v4.4 Specific ──
+2026-03-05 22:24:49,968 [INFO]      Trades held >1 candle    : 87 (100.0%)
+2026-03-05 22:24:49,968 [INFO]      Breakeven SL hits        : 0
+2026-03-05 22:24:49,968 [INFO]   ── Regime Breakdown ──
+2026-03-05 22:24:49,969 [INFO]      bear      :   44 trades  WR=54.5%  PnL=$+778
+2026-03-05 22:24:49,969 [INFO]      bull      :   33 trades  WR=60.6%  PnL=$+129
+2026-03-05 22:24:49,969 [INFO]      neutral   :   10 trades  WR=70.0%  PnL=$+855
+2026-03-05 22:24:49,970 [INFO]   Errors/Skipped : 0 / 114
+2026-03-05 22:24:49,970 [INFO]   Time taken     : 353s
+2026-03-05 22:24:49,971 [INFO] ════════════════════════════════════════════════════════════════════════
+2026-03-05 22:24:49,971 [INFO] 
+  ── v4.4 vs v3 Acceptance Criteria ──
+2026-03-05 22:24:49,972 [INFO]      ✅ WR > v3 (>48.1%)  (58.6% vs 48.14%)
+2026-03-05 22:24:49,972 [INFO]      ❌ R:R > v3 (>1.15)  (1:0.87 vs 1:1.149)
+2026-03-05 22:24:49,972 [INFO]      ✅ PF > v3 (>1.067)  (1.238 vs 1.067)
+2026-03-05 22:24:49,973 [INFO]      ✅ MDD ≤ v3 (≤22.5%)  (10.89% vs 22.48%)
+2026-03-05 22:24:49,973 [INFO]      ✅ Daily > v3 (>0.138%)  (0.2844% vs 0.1383%)
+2026-03-05 22:24:49,973 [INFO] 
+  🟢 v4.4 IMPROVEMENT CONFIRMED  (4/5 criteria passed)
+2026-03-05 22:24:49,973 [INFO] ════════════════════════════════════════════════════════════════════════
+2026-03-05 22:24:49,989 [INFO] 
+  [✓] Trades  → v4_4_202601_202603_20260305_221836_trades.csv
+2026-03-05 22:24:49,991 [INFO]   [✓] Equity  → v4_4_202601_202603_20260305_221836_equity.csv
+2026-03-05 22:24:49,991 [INFO]   [✓] Daily   → v4_4_202601_202603_20260305_221836_daily.csv
+2026-03-05 22:24:49,992 [INFO]   [✓] Summary → v4_4_202601_202603_20260305_221836_summary.json
+2026-03-05 22:24:49,992 [INFO]   [✓] Log     → v4_4_20260305_221836.log

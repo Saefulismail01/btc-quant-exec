@@ -1,0 +1,68 @@
+2026-03-05 16:13:53,461 [INFO] ========================================================================
+2026-03-05 16:13:53,461 [INFO]   BTC-QUANT v4.1 — SPRINT 1: EXIT MANAGEMENT
+2026-03-05 16:13:53,461 [INFO]   Window  : 2022-11-01  →  2026-03-04
+2026-03-05 16:13:53,462 [INFO]   Capital : $10,000
+2026-03-05 16:13:53,462 [INFO] ========================================================================
+2026-03-05 16:13:53,462 [INFO] Loading full dataset from DuckDB with ASOF JOIN...
+2026-03-05 16:13:53,650 [INFO] Loaded 7206 candles | 2022-11-18 08:00:00+00:00 → 2026-03-03 04:00:00+00:00
+2026-03-05 16:13:53,672 [WARNING] Start 2022-11-01 too early — auto-adjusting to 2023-01-24.
+2026-03-05 16:13:53,674 [INFO]   Candles in window : 6,806
+2026-03-05 16:13:53,674 [INFO]   History available : 400 candles before window
+2026-03-05 16:13:53,675 [INFO] 
+Initializing services...
+2026-03-05 16:14:03,749 [WARNING] [MLP] Failed to load persisted model: 
+2026-03-05 16:14:03,750 [INFO] [RiskManager] Daily state reset for 2026-03-05
+2026-03-05 16:14:03,750 [INFO] [RiskManager] Init: MAX_LEVERAGE=5, RISK_PER_TRADE=2.0%, SAFE_MODE=True
+2026-03-05 16:14:03,751 [INFO] [RiskManager] Singleton initialized.
+2026-03-05 16:14:03,751 [INFO] All services ready.
+
+2026-03-05 16:14:04,856 [INFO] [BCD global] Trained on 401 candles. Found 8 changepoints.
+2026-03-05 16:14:06,000 [INFO] [MLP] Retrained: len=401, hash=06d9c7b3f065
+2026-03-05 16:14:08,119 [WARNING] [RiskManager] 3 consecutive losses — COOLDOWN 2 candles (8h)
+2026-03-05 16:14:10,978 [WARNING] [RiskManager] De-leveraged: 3 consec losses → leverage 1×
+2026-03-05 16:14:11,875 [WARNING] [RiskManager] De-leveraged: 4 consec losses → leverage 1×
+2026-03-05 16:14:12,926 [WARNING] [RiskManager] De-leveraged: 4 consec losses → leverage 1×
+2026-03-05 16:14:12,929 [WARNING] [RiskManager] 5 consecutive losses — COOLDOWN 6 candles (24h)
+2026-03-05 16:14:20,188 [WARNING] [RiskManager] De-leveraged: 5 consec losses → leverage 1×
+2026-03-05 16:14:21,411 [INFO] [MLP] Retrained: len=452, hash=2ea828817855
+2026-03-05 16:14:21,413 [WARNING] [RiskManager] De-leveraged: 6 consec losses → leverage 1×
+2026-03-05 16:14:22,566 [WARNING] [RiskManager] De-leveraged: 7 consec losses → leverage 1×
+2026-03-05 16:14:23,906 [WARNING] [RiskManager] De-leveraged: 7 consec losses → leverage 1×
+2026-03-05 16:14:25,053 [WARNING] [RiskManager] De-leveraged: 8 consec losses → leverage 1×
+2026-03-05 16:14:26,326 [WARNING] [RiskManager] De-leveraged: 9 consec losses → leverage 1×
+2026-03-05 16:14:27,478 [WARNING] [RiskManager] De-leveraged: 9 consec losses → leverage 1×
+2026-03-05 16:14:28,690 [WARNING] [RiskManager] De-leveraged: 10 consec losses → leverage 1×
+2026-03-05 16:14:29,811 [WARNING] [RiskManager] De-leveraged: 11 consec losses → leverage 1×
+2026-03-05 16:14:31,012 [WARNING] [RiskManager] De-leveraged: 12 consec losses → leverage 1×
+2026-03-05 16:14:32,385 [INFO] [MLP] Retrained: len=500, hash=f68bf1a31963
+2026-03-05 16:14:32,386 [WARNING] [RiskManager] De-leveraged: 12 consec losses → leverage 1×
+2026-03-05 16:14:32,388 [INFO] [RiskManager] Leverage recovered after 2 wins.
+2026-03-05 16:14:33,848 [INFO] [RiskManager] Leverage recovered after 3 wins.
+2026-03-05 16:14:35,365 [INFO] [RiskManager] Leverage recovered after 4 wins.
+2026-03-05 16:14:42,119 [WARNING] [RiskManager] 3 consecutive losses — COOLDOWN 2 candles (8h)
+2026-03-05 16:14:46,765 [WARNING] [RiskManager] De-leveraged: 3 consec losses → leverage 1×
+2026-03-05 16:14:48,120 [WARNING] [RiskManager] De-leveraged: 4 consec losses → leverage 1×
+2026-03-05 16:14:49,378 [WARNING] [RiskManager] De-leveraged: 4 consec losses → leverage 1×
+2026-03-05 16:14:49,381 [INFO] [RiskManager] Leverage recovered after 2 wins.
+2026-03-05 16:15:05,595 [INFO]   ▶ [2023-02-18]   2.2%  │ Equity: $     7,935  │ PnL: $   -2,065  │ Trades:   26  │ ETA: 45.1 min
+2026-03-05 16:15:20,414 [WARNING] [RiskManager] 3 consecutive losses — COOLDOWN 2 candles (8h)
+2026-03-05 16:15:25,299 [WARNING] [RiskManager] De-leveraged: 3 consec losses → leverage 1×
+2026-03-05 16:15:26,648 [WARNING] [RiskManager] De-leveraged: 4 consec losses → leverage 1×
+2026-03-05 16:15:28,093 [WARNING] [RiskManager] De-leveraged: 4 consec losses → leverage 1×
+2026-03-05 16:15:29,503 [WARNING] [RiskManager] De-leveraged: 4 consec losses → leverage 1×
+2026-03-05 16:15:31,389 [WARNING] [RiskManager] De-leveraged: 4 consec losses → leverage 1×
+2026-03-05 16:15:33,319 [WARNING] [RiskManager] De-leveraged: 4 consec losses → leverage 1×
+2026-03-05 16:15:33,321 [WARNING] [RiskManager] 5 consecutive losses — COOLDOWN 6 candles (24h)
+2026-03-05 16:15:44,105 [WARNING] [RiskManager] De-leveraged: 5 consec losses → leverage 1×
+2026-03-05 16:15:45,477 [WARNING] [RiskManager] De-leveraged: 5 consec losses → leverage 1×
+2026-03-05 16:15:47,145 [WARNING] [RiskManager] De-leveraged: 5 consec losses → leverage 1×
+2026-03-05 16:15:48,559 [WARNING] [RiskManager] De-leveraged: 5 consec losses → leverage 1×
+2026-03-05 16:15:48,582 [INFO] [RiskManager] Leverage recovered after 2 wins.
+2026-03-05 16:15:53,915 [INFO] [RiskManager] Leverage recovered after 2 wins.
+2026-03-05 16:16:00,887 [INFO] [RiskManager] Leverage recovered after 2 wins.
+2026-03-05 16:16:02,344 [INFO] [RiskManager] Leverage recovered after 3 wins.
+2026-03-05 16:16:03,826 [INFO] [RiskManager] Leverage recovered after 4 wins.
+2026-03-05 16:16:05,537 [INFO] [RiskManager] Leverage recovered after 5 wins.
+2026-03-05 16:16:07,197 [INFO]   ▶ [2023-03-09]   3.9%  │ Equity: $     8,540  │ PnL: $   -1,460  │ Trades:   43  │ ETA: 50.2 min
+2026-03-05 16:16:07,199 [INFO] [RiskManager] Leverage recovered after 6 wins.
+2026-03-05 16:16:08,658 [INFO] [RiskManager] Leverage recovered after 7 wins.

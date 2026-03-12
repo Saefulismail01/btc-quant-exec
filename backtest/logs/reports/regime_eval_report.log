@@ -1,0 +1,153 @@
+
+
+══════════════════════════════════════════════════════════════════════
+  REGIME DETECTION ACCURACY — 2023
+  Evaluated  : 2078 candles  |  Forward window: 12 × 4H
+  Date range : 2023-01-17 → 2023-12-29
+══════════════════════════════════════════════════════════════════════
+
+  Overall Accuracy            :  18.7%  🔴 POOR
+  Macro F1                    :   8.6%
+  Weighted F1                 :   7.1%
+
+──────────────────────────────────────────────────────────────────────
+  PER-CLASS METRICS
+──────────────────────────────────────────────────────────────────────
+  Class                               Prec   Recall      F1   Support
+  -------------------------------- ------- -------- ------- ---------
+  Bearish Trend                      18.5%    96.4%    31.0%       389
+  Bullish Trend                       0.0%     0.0%     0.0%       444 ⚠ WEAK
+  High Volatility Sideways            0.0%     0.0%     0.0%       484 ⚠ WEAK
+  Low Volatility Sideways            28.0%     1.8%     3.5%       761 ⚠ WEAK
+
+──────────────────────────────────────────────────────────────────────
+  CONFUSION MATRIX  (rows = Actual, cols = Predicted)
+──────────────────────────────────────────────────────────────────────
+  Actual \ Pred          BEAR   BULL  HV-SW  LV-SW
+  ------------------------------------------------
+  BEAR                    375      0      0     14
+  BULL                    436      0      0      8
+  HV-SW                   470      0      0     14
+  LV-SW                   747      0      0     14
+
+──────────────────────────────────────────────────────────────────────
+  TRANSITION LAG ANALYSIS
+──────────────────────────────────────────────────────────────────────
+  GT regime transitions detected : 394
+  Avg lag to detect (candles)    : 3.7
+  Median lag : N/A
+  Detected within 6 candles      : 25.4%
+  Never detected (>24 candle)    : 68.0%
+
+  Responsiveness rating          : 🔴 BLIND
+
+──────────────────────────────────────────────────────────────────────
+  PREDICTION DISTRIBUTION  (HMM output bias check)
+──────────────────────────────────────────────────────────────────────
+  Label                              Pred %      GT %      Bias
+  -------------------------------- --------  --------  --------
+  Bearish Trend                       97.6%     18.7%    +78.9% ← OVER-PREDICTED
+  Bullish Trend                        0.0%     21.4%    -21.4% ← UNDER-PREDICTED
+  High Volatility Sideways             0.0%     23.3%    -23.3% ← UNDER-PREDICTED
+  Low Volatility Sideways              2.4%     36.6%    -34.2% ← UNDER-PREDICTED
+
+──────────────────────────────────────────────────────────────────────
+  SCALER CONTAMINATION CHECK
+──────────────────────────────────────────────────────────────────────
+  Status         : ✅ CLEAN
+  Cache stable   : ✅ Yes
+  Note           : Cache path stabil (label konsisten antara call #1 dan #2)
+
+
+
+══════════════════════════════════════════════════════════════════════
+  REGIME DETECTION ACCURACY — 2025
+  Evaluated  : 2078 candles  |  Forward window: 12 × 4H
+  Date range : 2025-01-17 → 2025-12-29
+══════════════════════════════════════════════════════════════════════
+
+  Overall Accuracy            :  20.1%  🔴 POOR
+  Macro F1                    :   8.8%
+  Weighted F1                 :   7.4%
+
+──────────────────────────────────────────────────────────────────────
+  PER-CLASS METRICS
+──────────────────────────────────────────────────────────────────────
+  Class                               Prec   Recall      F1   Support
+  -------------------------------- ------- -------- ------- ---------
+  Bearish Trend                      19.9%    99.0%    33.2%       412
+  Bullish Trend                       0.0%     0.0%     0.0%       401 ⚠ WEAK
+  High Volatility Sideways            0.0%     0.0%     0.0%       430 ⚠ WEAK
+  Low Volatility Sideways            29.0%     1.1%     2.1%       835 ⚠ WEAK
+
+──────────────────────────────────────────────────────────────────────
+  CONFUSION MATRIX  (rows = Actual, cols = Predicted)
+──────────────────────────────────────────────────────────────────────
+  Actual \ Pred          BEAR   BULL  HV-SW  LV-SW
+  ------------------------------------------------
+  BEAR                    408      0      0      4
+  BULL                    391      0      0     10
+  HV-SW                   422      0      0      8
+  LV-SW                   826      0      0      9
+
+──────────────────────────────────────────────────────────────────────
+  TRANSITION LAG ANALYSIS
+──────────────────────────────────────────────────────────────────────
+  GT regime transitions detected : 412
+  Avg lag to detect (candles)    : 2.4
+  Median lag : N/A
+  Detected within 6 candles      : 23.8%
+  Never detected (>24 candle)    : 72.3%
+
+  Responsiveness rating          : 🔴 BLIND
+
+──────────────────────────────────────────────────────────────────────
+  PREDICTION DISTRIBUTION  (HMM output bias check)
+──────────────────────────────────────────────────────────────────────
+  Label                              Pred %      GT %      Bias
+  -------------------------------- --------  --------  --------
+  Bearish Trend                       98.5%     19.8%    +78.7% ← OVER-PREDICTED
+  Bullish Trend                        0.0%     19.3%    -19.3% ← UNDER-PREDICTED
+  High Volatility Sideways             0.0%     20.7%    -20.7% ← UNDER-PREDICTED
+  Low Volatility Sideways              1.5%     40.2%    -38.7% ← UNDER-PREDICTED
+
+──────────────────────────────────────────────────────────────────────
+  SCALER CONTAMINATION CHECK
+──────────────────────────────────────────────────────────────────────
+  Status         : ✅ CLEAN
+  Cache stable   : ✅ Yes
+  Note           : Cache path stabil (label konsisten antara call #1 dan #2)
+
+══════════════════════════════════════════════════════════════════════
+  FINAL VERDICT
+══════════════════════════════════════════════════════════════════════
+
+  [2023]
+    Accuracy  : 18.7%
+    Macro F1  : 8.6%
+    Worst class: Bullish Trend (F1=0.0%)
+    ⚠ BIAS     : HMM over-predicts 'Bearish Trend' (97.6% of outputs)
+    Avg lag   : 3.7 candles (15h)
+    Pct never : 68.0% transitions never detected
+
+  [2025]
+    Accuracy  : 20.1%
+    Macro F1  : 8.8%
+    Worst class: Bullish Trend (F1=0.0%)
+    ⚠ BIAS     : HMM over-predicts 'Bearish Trend' (98.5% of outputs)
+    Avg lag   : 2.4 candles (10h)
+    Pct never : 72.3% transitions never detected
+
+  REKOMENDASI PRIORITAS:
+  1. [KRITIS] Accuracy < 50% — perluas training window HMM dari
+     100 → minimal 300 candle untuk distribusi fitur lebih representatif.
+  3. [BUG] Bias 'Bearish Trend' di tahun 2023 (97.6%)
+     — periksa fallback logic di _run_inference & label_states.
+  3. [BUG] Bias 'Bearish Trend' di tahun 2025 (98.5%)
+     — periksa fallback logic di _run_inference & label_states.
+  4. [IMPROVEMENT] Implementasikan Trend Continuity filter di Layer 2 EMA
+     sebagai override saat HMM gagal konvergen (score log-lik < threshold).
+
+══════════════════════════════════════════════════════════════════════
+  Report generated: 2026-02-27 16:47:20
+══════════════════════════════════════════════════════════════════════

@@ -1,0 +1,20 @@
+window,regime_label,n_candles,coverage_pct,mean_return,std_return,skewness,excess_kurtosis,is_fat_tail,jb_p_value,is_non_gaussian,forward_1c_mean,forward_1c_winrate,forward_1c_t_stat,forward_1c_p_value,forward_1c_predictive,forward_3c_mean,forward_3c_winrate,forward_3c_t_stat,forward_3c_p_value,forward_3c_predictive,forward_5c_mean,forward_5c_winrate,forward_5c_t_stat,forward_5c_p_value,forward_5c_predictive,predictive_horizon_count,pass_i00
+W1-Early,Low Volatility Sideways,14,8.5,0.00044,0.010564,0.213,1.0112,True,0.7039,False,0.000391,0.5,0.1333,0.896,False,0.002778,0.4286,0.6677,0.516,False,0.002287,0.5,0.4001,0.6956,False,0,False
+W1-Early,High Volatility Sideways,21,12.7,-0.00099,0.009739,-1.0419,1.8644,True,0.0327,True,-0.00094,0.5714,-0.4316,0.6706,False,-0.003752,0.4286,-1.0719,0.2965,False,-0.005073,0.2381,-1.2686,0.2192,False,0,False
+W1-Early,High Volatility Sideways,28,17.0,-0.000684,0.008849,-0.9502,2.1508,True,0.0082,True,-0.002363,0.4643,-0.9992,0.3266,False,-0.00528,0.3929,-1.627,0.1154,False,-0.005887,0.3929,-1.7131,0.0982,True,1,False
+W1-Early,High Volatility Sideways,13,7.9,-0.000248,0.014567,-2.2851,5.1308,True,0.0,True,0.00345,0.7692,2.0802,0.0596,True,0.006854,0.5385,1.8428,0.0902,True,0.007303,0.7692,2.0699,0.0607,True,3,True
+W1-Early,Low Volatility Sideways,88,53.3,0.000376,0.006475,-0.2619,3.8536,True,0.0,True,0.000417,0.6092,0.5942,0.5539,False,0.001216,0.6353,1.1785,0.2419,False,0.00196,0.6627,1.5843,0.117,False,0,False
+W2-Mid,Bullish Trend,14,8.2,0.002014,0.008471,-0.1413,-0.0036,False,0.977,False,0.001302,0.5,0.5207,0.6113,False,0.001736,0.4286,0.554,0.589,False,-0.0007,0.3571,-0.1547,0.8794,False,0,False
+W2-Mid,Bearish Trend,13,7.6,-0.002095,0.004743,-0.2017,-1.1106,False,0.6852,False,-0.001732,0.4615,-1.4004,0.1867,False,-0.004549,0.2308,-1.9809,0.071,True,-0.005864,0.3077,-2.2968,0.0404,True,2,True
+W2-Mid,Low Volatility Sideways,8,4.7,-0.000684,0.005027,-0.0011,-0.5552,False,0.9499,False,,,,,False,,,,,False,,,,,False,0,False
+W2-Mid,Low Volatility Sideways,9,5.3,0.000332,0.001728,0.4955,-0.8676,False,0.7223,False,,,,,False,,,,,False,,,,,False,0,False
+W2-Mid,Low Volatility Sideways,82,48.2,-0.000348,0.006818,0.2527,0.8685,False,0.1782,False,-0.000726,0.4512,-0.9139,0.3635,False,-0.001834,0.3902,-1.3986,0.1657,False,-0.002875,0.3659,-1.6443,0.104,False,0,False
+W2-Mid,Low Volatility Sideways,23,13.5,-0.000301,0.007313,-1.1432,1.6407,True,0.0225,True,-0.000792,0.5217,-0.4146,0.6824,False,-0.003473,0.5652,-0.9342,0.3604,False,-0.008759,0.6522,-1.533,0.1395,False,0,False
+W2-Mid,Bearish Trend,13,7.6,-0.005942,0.013,-0.5262,-0.2749,False,0.7259,False,-0.006807,0.3846,-1.5694,0.1425,False,-0.017237,0.3077,-2.3569,0.0363,True,-0.025234,0.3077,-2.8062,0.0159,True,2,True
+W2-Mid,Bearish Trend,8,4.7,-0.006856,0.016264,-1.3146,1.0208,True,0.2656,False,,,,,False,,,,,False,,,,,False,0,False
+W3-Recent,Low Volatility Sideways,14,8.5,0.000208,0.013616,-1.893,3.747,True,0.0003,True,-0.000252,0.6429,-0.0662,0.9482,False,-0.006228,0.4286,-0.9469,0.361,False,-0.018345,0.2143,-2.3445,0.0356,True,1,False
+W3-Recent,Bearish Trend,7,4.2,-0.012077,0.009018,-0.7993,-1.1341,False,0.5711,False,,,,,False,,,,,False,,,,,False,0,False
+W3-Recent,High Volatility Sideways,73,44.2,-0.00058,0.014766,-0.4705,0.6277,False,0.1428,False,6.4e-05,0.5068,0.0387,0.9692,False,0.001518,0.5205,0.5276,0.5994,False,0.00286,0.4384,0.8441,0.4014,False,0,False
+W3-Recent,Low Volatility Sideways,32,19.4,0.000116,0.006906,-1.2601,1.7726,True,0.0018,True,-0.001354,0.5625,-0.7636,0.4509,False,-0.002748,0.5,-1.2097,0.2356,False,-0.00535,0.4688,-1.7682,0.0869,True,1,False
+W3-Recent,Bearish Trend,14,8.5,-0.002815,0.015491,-0.7804,0.4198,False,0.4668,False,0.000551,0.5714,0.1744,0.8642,False,0.005098,0.6429,0.7297,0.4785,False,0.0118,0.5714,1.2215,0.2436,False,0,False
+W3-Recent,High Volatility Sideways,25,15.2,0.000798,0.013589,-0.0286,0.1779,False,0.982,False,0.000579,0.5417,0.2008,0.8426,False,-0.000556,0.4091,-0.1103,0.9132,False,-0.002754,0.35,-0.4463,0.6604,False,0,False

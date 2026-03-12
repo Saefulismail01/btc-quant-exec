@@ -1,0 +1,139 @@
+
+════════════════════════════════════════════════════════════════════════
+  LAZARUS-BTC · HMM DIRECTIONAL CALIBRATION EVALUATOR
+  Run at: 2026-03-01 09:30:49
+  Log file: C:\Users\ThinkPad\Documents\Windsurf\btc-scalping-quant\backtest\logs\regime_eval_20260301_093049.log
+════════════════════════════════════════════════════════════════════════
+
+========================================================================
+  EVALUATING DB_LIVE
+========================================================================
+  Data: (168, 10) | 2026-02-01 → 2026-03-01 | $62,868–$78,801
+[HMM global] Active features: ['log_return', 'realized_vol', 'hl_spread', 'volume_zscore', 'vol_trend', 'oi_rate_of_change']
+Model is not converging.  Current: -762.2096204011056 is not greater than -762.0949781121253. Delta is -0.11464228898023521
+Model is not converging.  Current: -723.7520684346574 is not greater than -723.4340694783087. Delta is -0.31799895634867426
+Model is not converging.  Current: -552.1119834582418 is not greater than -548.7716084106851. Delta is -3.3403750475566767
+Model is not converging.  Current: -210.2150522950005 is not greater than -207.39157247351255. Delta is -2.8234798214879504
+[HMM BIC] scores={2: np.float64(178649.23), 3: np.float64(169701.07), 4: np.float64(137872.61), 5: np.float64(129710.92), 6: np.float64(49594.49)}  → optimal n_states=6 (BIC=49594.5)
+Model is not converging.  Current: -210.2150522950005 is not greater than -207.39157247351255. Delta is -2.8234798214879504
+[HMM] Transition matrix anomaly: {'calm': {'baseline': 0.79, 'actual': 0.3035, 'deviation': '61.6%', 'note': 'calm lebih cepat berganti dari baseline Paper 2025'}}
+[HMM global] Trained on 117 candles. n_states=6. Regime map: {0: 'High Volatility Sideways'}
+[HMM] Transition matrix anomaly: {'crash': {'baseline': 0.48, 'actual': 0.2136, 'deviation': '55.5%', 'note': 'crash lebih cepat berganti dari baseline Paper 2025'}, 'calm': {'baseline': 0.79, 'actual': 0.5338, 'deviation': '32.4%', 'note': 'calm lebih cepat berganti dari baseline Paper 2025'}}
+Model is not converging.  Current: -438.3591802384089 is not greater than -379.3098410673783. Delta is -59.049339171030624
+[HMM] Transition matrix anomaly: {'bear_weak': {'baseline': 0.92, 'actual': 0.3996, 'deviation': '56.6%', 'note': 'bear_weak lebih cepat berganti dari baseline Paper 2025'}, 'crash': {'baseline': 0.48, 'actual': 0.2896, 'deviation': '39.7%', 'note': 'crash lebih cepat berganti dari baseline Paper 2025'}, 'bull_weak': {'baseline': 0.49, 'actual': 0.2394, 'deviation': '51.1%', 'note': 'bull_weak lebih cepat berganti dari baseline Paper 2025'}}
+Model is not converging.  Current: -213.300245600147 is not greater than 114.90684341506658. Delta is -328.20708901521357
+[HMM] Transition matrix anomaly: {'calm': {'baseline': 0.79, 'actual': 0.2989, 'deviation': '62.2%', 'note': 'calm lebih cepat berganti dari baseline Paper 2025'}}
+Model is not converging.  Current: -324.667220130121 is not greater than -322.5617254306708. Delta is -2.105494699450219
+[HMM] Transition matrix anomaly: {'bear_weak': {'baseline': 0.92, 'actual': 0.5756, 'deviation': '37.4%', 'note': 'bear_weak lebih cepat berganti dari baseline Paper 2025'}, 'bull_weak': {'baseline': 0.49, 'actual': 0.2971, 'deviation': '39.4%', 'note': 'bull_weak lebih cepat berganti dari baseline Paper 2025'}, 'calm': {'baseline': 0.79, 'actual': 0.158, 'deviation': '80.0%', 'note': 'calm lebih cepat berganti dari baseline Paper 2025'}}
+Model is not converging.  Current: -305.84908038638207 is not greater than -303.04910583860544. Delta is -2.7999745477766282
+[HMM] Transition matrix anomaly: {'bear_weak': {'baseline': 0.92, 'actual': 0.5512, 'deviation': '40.1%', 'note': 'bear_weak lebih cepat berganti dari baseline Paper 2025'}, 'crash': {'baseline': 0.48, 'actual': 0.2484, 'deviation': '48.2%', 'note': 'crash lebih cepat berganti dari baseline Paper 2025'}}
+Model is not converging.  Current: -309.8418655568557 is not greater than -304.2732287503529. Delta is -5.568636806502752
+[HMM] Transition matrix anomaly: {'bear_weak': {'baseline': 0.92, 'actual': 0.5665, 'deviation': '38.4%', 'note': 'bear_weak lebih cepat berganti dari baseline Paper 2025'}, 'crash': {'baseline': 0.48, 'actual': 0.2403, 'deviation': '49.9%', 'note': 'crash lebih cepat berganti dari baseline Paper 2025'}, 'calm': {'baseline': 0.79, 'actual': 0.3474, 'deviation': '56.0%', 'note': 'calm lebih cepat berganti dari baseline Paper 2025'}}
+Model is not converging.  Current: -474.1351824352524 is not greater than -450.6675242441818. Delta is -23.467658191070598
+[HMM] Transition matrix anomaly: {'bear_weak': {'baseline': 0.92, 'actual': 0.3488, 'deviation': '62.1%', 'note': 'bear_weak lebih cepat berganti dari baseline Paper 2025'}, 'calm': {'baseline': 0.79, 'actual': 0.3366, 'deviation': '57.4%', 'note': 'calm lebih cepat berganti dari baseline Paper 2025'}}
+Model is not converging.  Current: 58.19663886712695 is not greater than 74.31938499053233. Delta is -16.122746123405378
+[HMM] Transition matrix anomaly: {'bull_weak': {'baseline': 0.49, 'actual': 0.31, 'deviation': '36.7%', 'note': 'bull_weak lebih cepat berganti dari baseline Paper 2025'}, 'calm': {'baseline': 0.79, 'actual': 0.5464, 'deviation': '30.8%', 'note': 'calm lebih cepat berganti dari baseline Paper 2025'}}
+Model is not converging.  Current: -184.640973796166 is not greater than -184.49790302184448. Delta is -0.14307077432152937
+[HMM] Transition matrix anomaly: {'crash': {'baseline': 0.48, 'actual': 0.1886, 'deviation': '60.7%', 'note': 'crash lebih cepat berganti dari baseline Paper 2025'}, 'calm': {'baseline': 0.79, 'actual': 0.3388, 'deviation': '57.1%', 'note': 'calm lebih cepat berganti dari baseline Paper 2025'}}
+Model is not converging.  Current: -482.9235465752006 is not greater than -449.1243855472811. Delta is -33.79916102791947
+[HMM] Transition matrix anomaly: {'bear_weak': {'baseline': 0.92, 'actual': 0.365, 'deviation': '60.3%', 'note': 'bear_weak lebih cepat berganti dari baseline Paper 2025'}, 'crash': {'baseline': 0.48, 'actual': 0.867, 'deviation': '80.6%', 'note': 'crash lebih persisten dari baseline Paper 2025'}, 'calm': {'baseline': 0.79, 'actual': 0.2626, 'deviation': '66.8%', 'note': 'calm lebih cepat berganti dari baseline Paper 2025'}}
+Model is not converging.  Current: -370.2042412680529 is not greater than -348.55225685019155. Delta is -21.651984417861343
+[HMM] Transition matrix anomaly: {'bear_weak': {'baseline': 0.92, 'actual': 0.3081, 'deviation': '66.5%', 'note': 'bear_weak lebih cepat berganti dari baseline Paper 2025'}, 'bull_weak': {'baseline': 0.49, 'actual': 0.3373, 'deviation': '31.2%', 'note': 'bull_weak lebih cepat berganti dari baseline Paper 2025'}, 'calm': {'baseline': 0.79, 'actual': 0.248, 'deviation': '68.6%', 'note': 'calm lebih cepat berganti dari baseline Paper 2025'}}
+Model is not converging.  Current: -242.25021919290705 is not greater than 75.25423449906663. Delta is -317.5044536919737
+[HMM] Transition matrix anomaly: {'crash': {'baseline': 0.48, 'actual': 0.192, 'deviation': '60.0%', 'note': 'crash lebih cepat berganti dari baseline Paper 2025'}, 'calm': {'baseline': 0.79, 'actual': 0.3915, 'deviation': '50.4%', 'note': 'calm lebih cepat berganti dari baseline Paper 2025'}}
+Model is not converging.  Current: -196.62743081528683 is not greater than -190.5755422740714. Delta is -6.051888541215419
+[HMM] Transition matrix anomaly: {'calm': {'baseline': 0.79, 'actual': 0.4767, 'deviation': '39.7%', 'note': 'calm lebih cepat berganti dari baseline Paper 2025'}}
+Model is not converging.  Current: -252.1864446499086 is not greater than 58.186417525098285. Delta is -310.3728621750069
+[HMM] Transition matrix anomaly: {'crash': {'baseline': 0.48, 'actual': 0.2303, 'deviation': '52.0%', 'note': 'crash lebih cepat berganti dari baseline Paper 2025'}, 'calm': {'baseline': 0.79, 'actual': 0.4209, 'deviation': '46.7%', 'note': 'calm lebih cepat berganti dari baseline Paper 2025'}}
+Model is not converging.  Current: -552.2153934750141 is not greater than -522.1749700568356. Delta is -30.040423418178534
+[HMM] Transition matrix anomaly: {'bear_weak': {'baseline': 0.92, 'actual': 0.4434, 'deviation': '51.8%', 'note': 'bear_weak lebih cepat berganti dari baseline Paper 2025'}, 'calm': {'baseline': 0.79, 'actual': 0.4653, 'deviation': '41.1%', 'note': 'calm lebih cepat berganti dari baseline Paper 2025'}}
+Model is not converging.  Current: -371.08823526376693 is not greater than -363.3190348993676. Delta is -7.769200364399353
+[HMM] Transition matrix anomaly: {'bull_weak': {'baseline': 0.49, 'actual': 0.3332, 'deviation': '32.0%', 'note': 'bull_weak lebih cepat berganti dari baseline Paper 2025'}, 'calm': {'baseline': 0.79, 'actual': 0.4451, 'deviation': '43.7%', 'note': 'calm lebih cepat berganti dari baseline Paper 2025'}}
+Model is not converging.  Current: -532.618517453219 is not greater than -483.5159633304726. Delta is -49.10255412274648
+[HMM] Transition matrix anomaly: {'bear_weak': {'baseline': 0.92, 'actual': 0.324, 'deviation': '64.8%', 'note': 'bear_weak lebih cepat berganti dari baseline Paper 2025'}, 'calm': {'baseline': 0.79, 'actual': 0.3328, 'deviation': '57.9%', 'note': 'calm lebih cepat berganti dari baseline Paper 2025'}}
+Model is not converging.  Current: -527.5856969058963 is not greater than -527.5798855187264. Delta is -0.005811387169842419
+[HMM] Transition matrix anomaly: {'bear_weak': {'baseline': 0.92, 'actual': 0.4559, 'deviation': '50.4%', 'note': 'bear_weak lebih cepat berganti dari baseline Paper 2025'}, 'crash': {'baseline': 0.48, 'actual': 0.0, 'deviation': '100.0%', 'note': 'crash lebih cepat berganti dari baseline Paper 2025'}, 'bull_weak': {'baseline': 0.49, 'actual': 0.1957, 'deviation': '60.1%', 'note': 'bull_weak lebih cepat berganti dari baseline Paper 2025'}, 'calm': {'baseline': 0.79, 'actual': 0.2544, 'deviation': '67.8%', 'note': 'calm lebih cepat berganti dari baseline Paper 2025'}}
+Model is not converging.  Current: -621.9531696543665 is not greater than -621.4447651122838. Delta is -0.5084045420827579
+[HMM] Transition matrix anomaly: {'bear_weak': {'baseline': 0.92, 'actual': 0.3011, 'deviation': '67.3%', 'note': 'bear_weak lebih cepat berganti dari baseline Paper 2025'}, 'calm': {'baseline': 0.79, 'actual': 0.4775, 'deviation': '39.6%', 'note': 'calm lebih cepat berganti dari baseline Paper 2025'}}
+Model is not converging.  Current: -522.2275978169016 is not greater than -522.2233570124697. Delta is -0.004240804431901779
+[HMM] Transition matrix anomaly: {'bear_weak': {'baseline': 0.92, 'actual': 0.6212, 'deviation': '32.5%', 'note': 'bear_weak lebih cepat berganti dari baseline Paper 2025'}, 'crash': {'baseline': 0.48, 'actual': 0.3116, 'deviation': '35.1%', 'note': 'crash lebih cepat berganti dari baseline Paper 2025'}, 'bull_weak': {'baseline': 0.49, 'actual': 0.3331, 'deviation': '32.0%', 'note': 'bull_weak lebih cepat berganti dari baseline Paper 2025'}, 'calm': {'baseline': 0.79, 'actual': 0.5089, 'deviation': '35.6%', 'note': 'calm lebih cepat berganti dari baseline Paper 2025'}}
+Model is not converging.  Current: -339.95899281321414 is not greater than -318.23015553029774. Delta is -21.728837282916402
+[HMM] Transition matrix anomaly: {'bear_weak': {'baseline': 0.92, 'actual': 0.4583, 'deviation': '50.2%', 'note': 'bear_weak lebih cepat berganti dari baseline Paper 2025'}, 'bull_weak': {'baseline': 0.49, 'actual': 0.8667, 'deviation': '76.9%', 'note': 'bull_weak lebih persisten dari baseline Paper 2025'}, 'calm': {'baseline': 0.79, 'actual': 0.18, 'deviation': '77.2%', 'note': 'calm lebih cepat berganti dari baseline Paper 2025'}}
+Model is not converging.  Current: -373.36914045084177 is not greater than -373.3584126680806. Delta is -0.010727782761193794
+[HMM] Transition matrix anomaly: {'calm': {'baseline': 0.79, 'actual': 0.3057, 'deviation': '61.3%', 'note': 'calm lebih cepat berganti dari baseline Paper 2025'}}
+Model is not converging.  Current: -922.2178546831891 is not greater than -921.3589582599598. Delta is -0.8588964232293392
+Model is not converging.  Current: -808.5918137725911 is not greater than -808.3002185407836. Delta is -0.2915952318074915
+Model is not converging.  Current: -666.0703145685757 is not greater than -665.5937819290101. Delta is -0.476532639565562
+[HMM BIC] scores={2: np.float64(260551.5), 3: np.float64(228672.91), 4: np.float64(216818.36), 5: np.float64(190280.06), 6: np.float64(188222.57)}  → optimal n_states=6 (BIC=188222.6)
+Model is not converging.  Current: -666.0703145685757 is not greater than -665.5937819290101. Delta is -0.476532639565562
+[HMM] Transition matrix anomaly: {'bear_weak': {'baseline': 0.92, 'actual': 0.3501, 'deviation': '61.9%', 'note': 'bear_weak lebih cepat berganti dari baseline Paper 2025'}, 'crash': {'baseline': 0.48, 'actual': 0.2122, 'deviation': '55.8%', 'note': 'crash lebih cepat berganti dari baseline Paper 2025'}, 'calm': {'baseline': 0.79, 'actual': 0.281, 'deviation': '64.4%', 'note': 'calm lebih cepat berganti dari baseline Paper 2025'}}
+Model is not converging.  Current: -575.5304701123425 is not greater than -575.4715544408974. Delta is -0.058915671445106454
+[HMM] Transition matrix anomaly: {'bear_weak': {'baseline': 0.92, 'actual': 0.4735, 'deviation': '48.5%', 'note': 'bear_weak lebih cepat berganti dari baseline Paper 2025'}, 'crash': {'baseline': 0.48, 'actual': 0.2745, 'deviation': '42.8%', 'note': 'crash lebih cepat berganti dari baseline Paper 2025'}, 'calm': {'baseline': 0.79, 'actual': 0.3946, 'deviation': '50.0%', 'note': 'calm lebih cepat berganti dari baseline Paper 2025'}}
+Model is not converging.  Current: -580.4744735850534 is not greater than -580.4218997908691. Delta is -0.052573794184240796
+[HMM] Transition matrix anomaly: {'bear_weak': {'baseline': 0.92, 'actual': 0.4527, 'deviation': '50.8%', 'note': 'bear_weak lebih cepat berganti dari baseline Paper 2025'}, 'crash': {'baseline': 0.48, 'actual': 0.2972, 'deviation': '38.1%', 'note': 'crash lebih cepat berganti dari baseline Paper 2025'}, 'calm': {'baseline': 0.79, 'actual': 0.5013, 'deviation': '36.5%', 'note': 'calm lebih cepat berganti dari baseline Paper 2025'}}
+Model is not converging.  Current: -697.2580993661012 is not greater than -697.0456190604891. Delta is -0.21248030561207543
+[HMM] Transition matrix anomaly: {'bear_weak': {'baseline': 0.92, 'actual': 0.2941, 'deviation': '68.0%', 'note': 'bear_weak lebih cepat berganti dari baseline Paper 2025'}, 'bull_weak': {'baseline': 0.49, 'actual': 0.3333, 'deviation': '32.0%', 'note': 'bull_weak lebih cepat berganti dari baseline Paper 2025'}, 'calm': {'baseline': 0.79, 'actual': 0.3974, 'deviation': '49.7%', 'note': 'calm lebih cepat berganti dari baseline Paper 2025'}}
+Model is not converging.  Current: -553.1521548323735 is not greater than -472.3096968848074. Delta is -80.84245794756612
+[HMM] Transition matrix anomaly: {'bear_weak': {'baseline': 0.92, 'actual': 0.4009, 'deviation': '56.4%', 'note': 'bear_weak lebih cepat berganti dari baseline Paper 2025'}, 'bull_weak': {'baseline': 0.49, 'actual': 0.8667, 'deviation': '76.9%', 'note': 'bull_weak lebih persisten dari baseline Paper 2025'}, 'calm': {'baseline': 0.79, 'actual': 0.5321, 'deviation': '32.7%', 'note': 'calm lebih cepat berganti dari baseline Paper 2025'}}
+Model is not converging.  Current: -576.2518055032131 is not greater than -576.2511529038213. Delta is -0.0006525993917421147
+[HMM] Transition matrix anomaly: {'bear_weak': {'baseline': 0.92, 'actual': 0.6117, 'deviation': '33.5%', 'note': 'bear_weak lebih cepat berganti dari baseline Paper 2025'}, 'bull_weak': {'baseline': 0.49, 'actual': 0.3333, 'deviation': '32.0%', 'note': 'bull_weak lebih cepat berganti dari baseline Paper 2025'}, 'calm': {'baseline': 0.79, 'actual': 0.3285, 'deviation': '58.4%', 'note': 'calm lebih cepat berganti dari baseline Paper 2025'}}
+[HMM] Transition matrix anomaly: {'bear_weak': {'baseline': 0.92, 'actual': 0.6237, 'deviation': '32.2%', 'note': 'bear_weak lebih cepat berganti dari baseline Paper 2025'}, 'calm': {'baseline': 0.79, 'actual': 0.3333, 'deviation': '57.8%', 'note': 'calm lebih cepat berganti dari baseline Paper 2025'}}
+Model is not converging.  Current: -670.0950106346385 is not greater than -669.7361318892168. Delta is -0.35887874542163445
+[HMM] Transition matrix anomaly: {'bear_weak': {'baseline': 0.92, 'actual': 0.3601, 'deviation': '60.9%', 'note': 'bear_weak lebih cepat berganti dari baseline Paper 2025'}, 'bull_weak': {'baseline': 0.49, 'actual': 0.3333, 'deviation': '32.0%', 'note': 'bull_weak lebih cepat berganti dari baseline Paper 2025'}, 'calm': {'baseline': 0.79, 'actual': 0.3554, 'deviation': '55.0%', 'note': 'calm lebih cepat berganti dari baseline Paper 2025'}}
+Model is not converging.  Current: -753.4428274376556 is not greater than -750.7774097288927. Delta is -2.6654177087629023
+[HMM] Transition matrix anomaly: {'bear_weak': {'baseline': 0.92, 'actual': 0.2676, 'deviation': '70.9%', 'note': 'bear_weak lebih cepat berganti dari baseline Paper 2025'}, 'bull_weak': {'baseline': 0.49, 'actual': 0.2165, 'deviation': '55.8%', 'note': 'bull_weak lebih cepat berganti dari baseline Paper 2025'}, 'calm': {'baseline': 0.79, 'actual': 0.3331, 'deviation': '57.8%', 'note': 'calm lebih cepat berganti dari baseline Paper 2025'}}
+Model is not converging.  Current: -734.8650275399043 is not greater than -733.0474053113152. Delta is -1.81762222858913
+[HMM] Transition matrix anomaly: {'bear_weak': {'baseline': 0.92, 'actual': 0.2937, 'deviation': '68.1%', 'note': 'bear_weak lebih cepat berganti dari baseline Paper 2025'}, 'bull_weak': {'baseline': 0.49, 'actual': 0.1838, 'deviation': '62.5%', 'note': 'bull_weak lebih cepat berganti dari baseline Paper 2025'}, 'calm': {'baseline': 0.79, 'actual': 0.2061, 'deviation': '73.9%', 'note': 'calm lebih cepat berganti dari baseline Paper 2025'}}
+Model is not converging.  Current: -697.2945431546523 is not greater than -691.6502598551435. Delta is -5.644283299508743
+[HMM] Transition matrix anomaly: {'bear_weak': {'baseline': 0.92, 'actual': 0.4158, 'deviation': '54.8%', 'note': 'bear_weak lebih cepat berganti dari baseline Paper 2025'}, 'bull_weak': {'baseline': 0.49, 'actual': 0.2178, 'deviation': '55.6%', 'note': 'bull_weak lebih cepat berganti dari baseline Paper 2025'}, 'calm': {'baseline': 0.79, 'actual': 0.3332, 'deviation': '57.8%', 'note': 'calm lebih cepat berganti dari baseline Paper 2025'}}
+Model is not converging.  Current: -611.120608173739 is not greater than -611.0975717567198. Delta is -0.023036417019170585
+[HMM] Transition matrix anomaly: {'bear_weak': {'baseline': 0.92, 'actual': 0.5846, 'deviation': '36.5%', 'note': 'bear_weak lebih cepat berganti dari baseline Paper 2025'}, 'crash': {'baseline': 0.48, 'actual': 0.2793, 'deviation': '41.8%', 'note': 'crash lebih cepat berganti dari baseline Paper 2025'}, 'calm': {'baseline': 0.79, 'actual': 0.3873, 'deviation': '51.0%', 'note': 'calm lebih cepat berganti dari baseline Paper 2025'}}
+Model is not converging.  Current: -701.1560518378665 is not greater than -701.1196334297532. Delta is -0.03641840811326347
+[HMM] Transition matrix anomaly: {'bear_weak': {'baseline': 0.92, 'actual': 0.332, 'deviation': '63.9%', 'note': 'bear_weak lebih cepat berganti dari baseline Paper 2025'}, 'calm': {'baseline': 0.79, 'actual': 0.371, 'deviation': '53.0%', 'note': 'calm lebih cepat berganti dari baseline Paper 2025'}}
+[HMM] Transition matrix anomaly: {'bear_weak': {'baseline': 0.92, 'actual': 0.3023, 'deviation': '67.1%', 'note': 'bear_weak lebih cepat berganti dari baseline Paper 2025'}, 'calm': {'baseline': 0.79, 'actual': 0.3103, 'deviation': '60.7%', 'note': 'calm lebih cepat berganti dari baseline Paper 2025'}}
+[HMM] Transition matrix anomaly: {'bear_weak': {'baseline': 0.92, 'actual': 0.6135, 'deviation': '33.3%', 'note': 'bear_weak lebih cepat berganti dari baseline Paper 2025'}, 'crash': {'baseline': 0.48, 'actual': 0.3333, 'deviation': '30.6%', 'note': 'crash lebih cepat berganti dari baseline Paper 2025'}, 'calm': {'baseline': 0.79, 'actual': 0.421, 'deviation': '46.7%', 'note': 'calm lebih cepat berganti dari baseline Paper 2025'}}
+Model is not converging.  Current: -753.2501906404638 is not greater than -751.0084473170606. Delta is -2.2417433234031705
+[HMM] Transition matrix anomaly: {'bear_weak': {'baseline': 0.92, 'actual': 0.344, 'deviation': '62.6%', 'note': 'bear_weak lebih cepat berganti dari baseline Paper 2025'}, 'bull_weak': {'baseline': 0.49, 'actual': 0.3333, 'deviation': '32.0%', 'note': 'bull_weak lebih cepat berganti dari baseline Paper 2025'}, 'calm': {'baseline': 0.79, 'actual': 0.4036, 'deviation': '48.9%', 'note': 'calm lebih cepat berganti dari baseline Paper 2025'}}
+  Collected 39 valid predictions
+
+════════════════════════════════════════════════════════════════════════
+  DIRECTIONAL CALIBRATION — DB_LIVE
+  Predictions : 39 | Train split: 1000 candles
+  Date range  : 2026-02-20 → 2026-02-27
+════════════════════════════════════════════════════════════════════════
+
+  LABEL DISTRIBUTION
+────────────────────────────────────────────────────────────────────────
+  Label                              Count   % Total
+  -------------------------------- -------  --------
+  Neutral-ish (-0.1..0.1)               39    100.0% ⚠ DOMINANT
+
+  DIRECTIONAL HIT RATE  (tebak benar arah?)
+  Bullish/Bearish = % return sesuai arah | Sideways = % |ret| < 0.5%
+────────────────────────────────────────────────────────────────────────
+  Label                                 1c  (4H)       3c  (12H)      6c  (24H)      12c (48H)
+  --------------------------------  -------------  -------------  -------------  -------------
+  Neutral-ish (-0.1..0.1)             41.0% ❌      20.5% ❌      17.9% ❌       5.1% ❌  
+
+  MEAN FORWARD RETURN per label
+────────────────────────────────────────────────────────────────────────
+  Label                                 1c  (4H)       3c  (12H)      6c  (24H)      12c (48H)
+  --------------------------------  -------------  -------------  -------------  -------------
+  Neutral-ish (-0.1..0.1)           +  0.01%         -0.11%         -0.37%         -0.89%      
+
+────────────────────────────────────────────────────────────────────────
+  INTERPRETASI
+────────────────────────────────────────────────────────────────────────
+  Neutral-ish (-0.1..0.1)         : avg_hit=21.2%  avg_ret=-0.34%  🔴 NOT USEFUL
+
+  Threshold random chance = 50.0% (prediksi koin)
+
+════════════════════════════════════════════════════════════════════════
+  RINGKASAN AKHIR — KELAYAKAN HMM SEBAGAI DIRECTIONAL FILTER
+════════════════════════════════════════════════════════════════════════
+
+  [DB_LIVE]
+    Neutral-ish (-0.1..0.1)         : hit_rate=21.2%  (n=39, 100.0% of predictions)
+
+  KESIMPULAN:
+  ⚠ Tidak ada label yang konsisten di atas 55% hit rate.

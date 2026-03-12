@@ -1,0 +1,69 @@
+2026-03-04 05:39:12,628 [INFO] ========================================================================
+2026-03-04 05:39:12,628 [INFO]   BTC-QUANT TRUE WALK-FORWARD SIMULATION
+2026-03-04 05:39:12,629 [INFO]   Window  : 2025-01-01  →  2026-03-03
+2026-03-04 05:39:12,629 [INFO]   Capital : $10,000
+2026-03-04 05:39:12,629 [INFO] ========================================================================
+2026-03-04 05:39:12,629 [INFO] Loading full dataset from DuckDB with ASOF JOIN...
+2026-03-04 05:39:12,734 [INFO] Loaded 7206 candles | 2022-11-18 08:00:00+00:00 → 2026-03-03 04:00:00+00:00
+2026-03-04 05:39:12,753 [INFO]   Candles in window : 2,557
+2026-03-04 05:39:12,754 [INFO]   History available : 4,648 candles before window
+2026-03-04 05:39:12,754 [INFO] 
+2026-03-04 05:39:12,754 [INFO] Initializing services...
+2026-03-04 05:39:15,639 [WARNING] [MLP] Failed to load persisted model: 
+2026-03-04 05:39:15,640 [INFO] [RiskManager] Daily state reset for 2026-03-04
+2026-03-04 05:39:15,640 [INFO] [RiskManager] Singleton initialized.
+2026-03-04 05:39:15,642 [INFO] All services ready.
+
+2026-03-04 05:39:17,312 [INFO] [BCD global] Trained on 500 candles. Found 14 changepoints.
+2026-03-04 05:39:20,975 [INFO] [MLP] Retrained: len=500, hash=30c761c4f017
+2026-03-04 05:39:20,982 [INFO] [RiskManager] Daily state reset for 2026-03-04
+2026-03-04 05:40:17,394 [INFO]   ▶ [2025-01-10]   2.1%  │ Equity: $     8,377  │ PnL: $   -1,623  │ Trades:    9  │ ETA: 47.7 min
+2026-03-04 05:41:17,411 [INFO]   ▶ [2025-01-20]   4.7%  │ Equity: $     6,645  │ PnL: $   -3,355  │ Trades:   24  │ ETA: 41.6 min
+2026-03-04 05:42:18,079 [INFO]   ▶ [2025-02-04]   8.0%  │ Equity: $     6,293  │ PnL: $   -3,707  │ Trades:   37  │ ETA: 34.9 min
+2026-03-04 05:43:19,947 [INFO]   ▶ [2025-02-22]  12.4%  │ Equity: $     6,379  │ PnL: $   -3,621  │ Trades:   39  │ ETA: 28.8 min
+2026-03-04 05:44:22,631 [INFO]   ▶ [2025-02-28]  13.8%  │ Equity: $    10,134  │ PnL: $     +134  │ Trades:   51  │ ETA: 32.0 min
+2026-03-04 05:45:24,350 [INFO]   ▶ [2025-03-06]  15.0%  │ Equity: $    10,413  │ PnL: $     +413  │ Trades:   55  │ ETA: 34.8 min
+2026-03-04 05:46:24,462 [INFO]   ▶ [2025-03-11]  16.4%  │ Equity: $     9,212  │ PnL: $     -788  │ Trades:   58  │ ETA: 36.5 min
+2026-03-04 05:47:26,272 [INFO]   ▶ [2025-03-29]  20.5%  │ Equity: $     8,149  │ PnL: $   -1,851  │ Trades:   68  │ ETA: 31.6 min
+2026-03-04 05:48:26,279 [INFO]   ▶ [2025-04-07]  22.5%  │ Equity: $     9,103  │ PnL: $     -897  │ Trades:   72  │ ETA: 31.5 min
+2026-03-04 05:49:27,714 [INFO]   ▶ [2025-05-04]  29.1%  │ Equity: $    11,473  │ PnL: $   +1,473  │ Trades:   85  │ ETA: 24.9 min
+2026-03-04 05:50:28,300 [INFO]   ▶ [2025-05-19]  32.5%  │ Equity: $    15,691  │ PnL: $   +5,691  │ Trades:   96  │ ETA: 23.3 min
+2026-03-04 05:51:29,022 [INFO]   ▶ [2025-06-09]  37.5%  │ Equity: $    16,796  │ PnL: $   +6,796  │ Trades:  106  │ ETA: 20.4 min
+2026-03-04 05:52:29,623 [INFO]   ▶ [2025-06-22]  40.5%  │ Equity: $    17,025  │ PnL: $   +7,025  │ Trades:  115  │ ETA: 19.4 min
+2026-03-04 05:53:30,065 [INFO]   ▶ [2025-07-09]  44.5%  │ Equity: $    14,288  │ PnL: $   +4,288  │ Trades:  126  │ ETA: 17.8 min
+2026-03-04 05:54:30,145 [INFO]   ▶ [2025-07-29]  49.1%  │ Equity: $    15,744  │ PnL: $   +5,744  │ Trades:  142  │ ETA: 15.8 min
+2026-03-04 05:55:31,640 [INFO]   ▶ [2025-08-08]  51.6%  │ Equity: $    15,531  │ PnL: $   +5,531  │ Trades:  147  │ ETA: 15.3 min
+2026-03-04 05:56:32,040 [INFO]   ▶ [2025-08-25]  55.4%  │ Equity: $    15,319  │ PnL: $   +5,319  │ Trades:  166  │ ETA: 13.9 min
+2026-03-04 05:57:33,024 [INFO]   ▶ [2025-09-25]  62.8%  │ Equity: $    17,080  │ PnL: $   +7,080  │ Trades:  182  │ ETA: 10.8 min
+2026-03-04 05:58:33,681 [INFO]   ▶ [2025-10-21]  68.9%  │ Equity: $    17,854  │ PnL: $   +7,854  │ Trades:  206  │ ETA: 8.7 min
+2026-03-04 05:59:35,027 [INFO]   ▶ [2025-11-04]  72.2%  │ Equity: $    19,110  │ PnL: $   +9,110  │ Trades:  223  │ ETA: 7.8 min
+2026-03-04 06:00:36,101 [INFO]   ▶ [2025-12-01]  78.4%  │ Equity: $    28,359  │ PnL: $  +18,359  │ Trades:  246  │ ETA: 5.9 min
+2026-03-04 06:01:37,020 [INFO]   ▶ [2025-12-09]  80.4%  │ Equity: $    23,204  │ PnL: $  +13,204  │ Trades:  255  │ ETA: 5.5 min
+2026-03-04 06:02:38,056 [INFO]   ▶ [2025-12-20]  82.9%  │ Equity: $    18,158  │ PnL: $   +8,158  │ Trades:  268  │ ETA: 4.8 min
+2026-03-04 06:03:38,735 [INFO]   ▶ [2025-12-26]  84.4%  │ Equity: $    16,064  │ PnL: $   +6,064  │ Trades:  271  │ ETA: 4.5 min
+2026-03-04 06:04:39,799 [INFO]   ▶ [2025-12-30]  85.4%  │ Equity: $    14,803  │ PnL: $   +4,803  │ Trades:  273  │ ETA: 4.3 min
+2026-03-04 06:05:41,403 [INFO]   ▶ [2026-01-21]  90.5%  │ Equity: $    16,960  │ PnL: $   +6,960  │ Trades:  293  │ ETA: 2.8 min
+2026-03-04 06:06:42,497 [INFO]   ▶ [2026-02-06]  94.3%  │ Equity: $    26,315  │ PnL: $  +16,315  │ Trades:  312  │ ETA: 1.7 min
+2026-03-04 06:07:42,864 [INFO]   ▶ [2026-02-23]  98.2%  │ Equity: $    26,675  │ PnL: $  +16,675  │ Trades:  314  │ ETA: 0.5 min
+2026-03-04 06:08:31,747 [INFO] 
+════════════════════════════════════════════════════════════════════════
+2026-03-04 06:08:31,747 [INFO]   BACKTEST COMPLETE
+2026-03-04 06:08:31,747 [INFO] ════════════════════════════════════════════════════════════════════════
+2026-03-04 06:08:31,755 [INFO]   Window        : 2025-01-01  →  2026-03-03  (426 days)
+2026-03-04 06:08:31,756 [INFO]   Initial Cap   : $   10,000.00
+2026-03-04 06:08:31,756 [INFO]   Final Equity  : $   22,888.77
+2026-03-04 06:08:31,756 [INFO]   Net PnL       : $  +12,888.77  (+128.89%)
+2026-03-04 06:08:31,756 [INFO]   Daily Return  : +0.303%/day
+2026-03-04 06:08:31,756 [INFO]   Trades        : 325  (W:149  L:176)  WR: 45.8%
+2026-03-04 06:08:31,756 [INFO]   Profit Factor : 1.113
+2026-03-04 06:08:31,758 [INFO]   Max Drawdown  : 53.20%
+2026-03-04 06:08:31,758 [INFO]   Sharpe Ratio  : 1.010
+2026-03-04 06:08:31,758 [INFO]   Errors/Skipped: 0 / 440
+2026-03-04 06:08:31,759 [INFO]   Time taken    : 1756s
+2026-03-04 06:08:31,759 [INFO] ════════════════════════════════════════════════════════════════════════
+2026-03-04 06:08:31,778 [INFO] 
+  [✓] Trades  → C:\Users\ThinkPad\Documents\Windsurf\btc-scalping-quant\backtest\results\v2\walkforward_trades_202501_202603_20260304_053912.csv
+2026-03-04 06:08:31,778 [INFO]   [✓] Equity  → C:\Users\ThinkPad\Documents\Windsurf\btc-scalping-quant\backtest\results\v2\walkforward_equity_202501_202603_20260304_053912.csv
+2026-03-04 06:08:31,779 [INFO]   [✓] Daily   → C:\Users\ThinkPad\Documents\Windsurf\btc-scalping-quant\backtest\results\v2\walkforward_daily_202501_202603_20260304_053912.csv
+2026-03-04 06:08:31,779 [INFO]   [✓] Summary → C:\Users\ThinkPad\Documents\Windsurf\btc-scalping-quant\backtest\results\v2\walkforward_summary_202501_202603_20260304_053912.json
+2026-03-04 06:08:31,780 [INFO]   [✓] Full log → C:\Users\ThinkPad\Documents\Windsurf\btc-scalping-quant\backtest\logs\v2\walkforward_20260304_053912.log

@@ -1,0 +1,59 @@
+{
+  "run_timestamp": "20260304_221505",
+  "engine": "v3_fixed15x",
+  "window_start": "2026-01-01",
+  "window_end": "2026-03-04",
+  "initial_capital": 10000.0,
+  "final_equity": 12506.45,
+  "net_pnl_usd": 2506.45,
+  "net_pnl_pct": 25.0645,
+  "daily_return_pct": 0.4043,
+  "n_days": 62,
+  "n_trades": 241,
+  "n_wins": 126,
+  "n_losses": 115,
+  "win_rate_pct": 52.28,
+  "avg_winner_usd": 101.3,
+  "avg_loser_usd": 89.19,
+  "rr_ratio": 1.136,
+  "profit_factor": 1.244,
+  "max_drawdown_pct": 15.36,
+  "sharpe_ratio": 3.318,
+  "exit_distribution": {
+    "TIME_EXIT": 151,
+    "TP": 38,
+    "TRAIL_TP": 33,
+    "SL": 19
+  },
+  "n_sl": 19,
+  "n_tp": 38,
+  "n_trail_tp": 33,
+  "n_time_exits": 151,
+  "regime_summary": {
+    "bear": {
+      "trades": 107,
+      "win_rate": 55.1,
+      "total_pnl": 2046.1
+    },
+    "bull": {
+      "trades": 108,
+      "win_rate": 48.1,
+      "total_pnl": -676.99
+    },
+    "neutral": {
+      "trades": 26,
+      "win_rate": 57.7,
+      "total_pnl": 1137.34
+    }
+  },
+  "avg_actual_move_pct": 0.1493,
+  "position_usd": 1000.0,
+  "leverage": 15.0,
+  "notional_usd": 15000.0,
+  "sl_pct": 0.01333,
+  "tp_min_pct": 0.0071,
+  "fee_usd_per_trade": 12.0,
+  "n_skipped": 126,
+  "n_errors": 0,
+  "elapsed_seconds": 471.8
+}

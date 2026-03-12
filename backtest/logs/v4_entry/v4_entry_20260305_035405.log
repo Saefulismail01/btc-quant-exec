@@ -1,0 +1,13 @@
+2026-03-05 03:54:05,205 [INFO] ========================================================================
+2026-03-05 03:54:05,205 [INFO]   BTC-QUANT v4.3 — SPRINT 2: ENTRY OPTIMIZATION
+2026-03-05 03:54:05,205 [INFO]   Window  : 2023-01-01  →  2026-03-04
+2026-03-05 03:54:05,205 [INFO]   Capital : $10,000
+2026-03-05 03:54:05,205 [INFO]   Threshold: MLP 65%, Score 5
+2026-03-05 03:54:05,205 [INFO] ========================================================================
+2026-03-05 03:54:05,205 [INFO] Loading full dataset from DuckDB with ASOF JOIN...
+2026-03-05 03:54:05,256 [INFO] Loaded 7206 candles | 2022-11-18 08:00:00+00:00 → 2026-03-03 04:00:00+00:00
+2026-03-05 03:54:05,275 [WARNING] Adjusting start to 2023-06-06.
+2026-03-05 03:54:06,534 [WARNING] [MLP] Failed to load persisted model: 
+2026-03-05 03:54:06,534 [INFO] [RiskManager] Daily state reset for 2026-03-05
+2026-03-05 03:54:06,534 [INFO] [RiskManager] Init: MAX_LEVERAGE=5, RISK_PER_TRADE=2.0%, SAFE_MODE=True
+2026-03-05 03:54:06,534 [INFO] [RiskManager] Singleton initialized.

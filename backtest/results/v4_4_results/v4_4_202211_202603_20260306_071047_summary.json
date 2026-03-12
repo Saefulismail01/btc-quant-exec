@@ -1,0 +1,69 @@
+{
+  "run_timestamp": "20260306_071047",
+  "engine": "v4_4_breakeven_lock",
+  "window_start": "2022-11-01",
+  "window_end": "2026-03-04",
+  "initial_capital": 10000.0,
+  "final_equity": 37426.93,
+  "net_pnl_usd": 27426.93,
+  "net_pnl_pct": 274.2693,
+  "daily_return_pct": 0.225,
+  "n_days": 1219,
+  "n_trades": 1851,
+  "n_wins": 1068,
+  "n_losses": 783,
+  "win_rate_pct": 57.7,
+  "avg_winner_usd": 163.93,
+  "avg_loser_usd": 188.57,
+  "rr_ratio": 0.869,
+  "profit_factor": 1.186,
+  "max_drawdown_pct": 26.32,
+  "sharpe_ratio": 1.81,
+  "exit_distribution": {
+    "SL": 653,
+    "TRAIL_TP": 549,
+    "TP": 486,
+    "TIME_EXIT": 163
+  },
+  "n_sl": 653,
+  "n_tp": 486,
+  "n_trail_tp": 549,
+  "n_time_exits": 163,
+  "n_breakeven_sl": 0,
+  "avg_hold_candles": 2.98,
+  "max_hold_candles": 6,
+  "regime_summary": {
+    "bear": {
+      "trades": 615,
+      "win_rate": 54.0,
+      "total_pnl": 3981.05
+    },
+    "bull": {
+      "trades": 860,
+      "win_rate": 59.1,
+      "total_pnl": 15862.52
+    },
+    "neutral": {
+      "trades": 376,
+      "win_rate": 60.6,
+      "total_pnl": 7583.36
+    }
+  },
+  "position_usd": 1000.0,
+  "leverage": 15.0,
+  "notional_usd": 15000.0,
+  "sl_pct": 0.01333,
+  "tp_min_pct": 0.0071,
+  "fee_usd_per_trade": 12.0,
+  "max_hold_candles_cfg": 6,
+  "n_skipped": 1288,
+  "n_errors": 0,
+  "elapsed_seconds": 8703.2,
+  "v3_baseline": {
+    "win_rate_pct": 48.14,
+    "rr_ratio": 1.149,
+    "profit_factor": 1.067,
+    "max_drawdown_pct": 22.48,
+    "daily_return_pct": 0.1383
+  }
+}

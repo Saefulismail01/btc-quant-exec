@@ -1,0 +1,65 @@
+2026-03-04 21:47:21,610 [INFO] ========================================================================
+2026-03-04 21:47:21,611 [INFO]   BTC-QUANT v4.1 — SPRINT 1: EXIT MANAGEMENT
+2026-03-04 21:47:21,612 [INFO]   Window  : 2026-01-01  →  2026-03-04
+2026-03-04 21:47:21,612 [INFO]   Capital : $10,000
+2026-03-04 21:47:21,612 [INFO] ========================================================================
+2026-03-04 21:47:21,612 [INFO] Loading full dataset from DuckDB with ASOF JOIN...
+2026-03-04 21:47:21,732 [INFO] Loaded 7206 candles | 2022-11-18 08:00:00+00:00 → 2026-03-03 04:00:00+00:00
+2026-03-04 21:47:21,749 [INFO]   Candles in window : 368
+2026-03-04 21:47:21,749 [INFO]   History available : 6,838 candles before window
+2026-03-04 21:47:21,750 [INFO] 
+Initializing services...
+2026-03-04 21:47:32,317 [WARNING] [MLP] Failed to load persisted model: 
+2026-03-04 21:47:32,317 [INFO] [RiskManager] Daily state reset for 2026-03-04
+2026-03-04 21:47:32,318 [INFO] [RiskManager] Init: MAX_LEVERAGE=5, RISK_PER_TRADE=2.0%, SAFE_MODE=True
+2026-03-04 21:47:32,318 [INFO] [RiskManager] Singleton initialized.
+2026-03-04 21:47:32,319 [INFO] All services ready.
+
+2026-03-04 21:47:34,072 [INFO] [BCD global] Trained on 500 candles. Found 9 changepoints.
+2026-03-04 21:47:35,971 [INFO] [MLP] Retrained: len=500, hash=760d68c91051
+2026-03-04 21:48:32,462 [INFO]   ▶ [2026-02-01]  51.8%  │ Equity: $    11,396  │ PnL: $   +1,396  │ Trades:   31  │ ETA: 0.9 min
+2026-03-04 21:49:34,406 [INFO]   ▶ [2026-02-07]  61.0%  │ Equity: $    11,396  │ PnL: $   +1,396  │ Trades:   31  │ ETA: 1.3 min
+2026-03-04 21:50:36,070 [INFO]   ▶ [2026-02-13]  71.4%  │ Equity: $    11,396  │ PnL: $   +1,396  │ Trades:   31  │ ETA: 1.2 min
+2026-03-04 21:51:26,694 [INFO] 
+════════════════════════════════════════════════════════════════════════
+2026-03-04 21:51:26,695 [INFO]   BACKTEST COMPLETE — v4.1 Sprint 1: Exit Management
+2026-03-04 21:51:26,695 [INFO] ════════════════════════════════════════════════════════════════════════
+2026-03-04 21:51:26,709 [INFO]   Window        : 2026-01-01  →  2026-03-04  (62 days)
+2026-03-04 21:51:26,709 [INFO]   Initial Cap   : $   10,000.00
+2026-03-04 21:51:26,709 [INFO]   Final Equity  : $   11,260.32
+2026-03-04 21:51:26,710 [INFO]   Net PnL       : $   +1,260.32  (+12.60%)
+2026-03-04 21:51:26,710 [INFO]   Daily Return  : +0.203%/day  (baseline: +0.394%)  Δ=-0.191%
+2026-03-04 21:51:26,710 [INFO]   Trades        : 41  (W:13  L:28)  WR: 31.7%  (baseline: 46.7%)
+2026-03-04 21:51:26,711 [INFO]   R:R Ratio     : 1 : 2.77  (avg_win: $436  avg_loss: $157)
+2026-03-04 21:51:26,711 [INFO]   Profit Factor : 1.286
+2026-03-04 21:51:26,712 [INFO]   Max Drawdown  : 14.23%  (baseline: 43.04%)
+2026-03-04 21:51:26,712 [INFO]   Sharpe Ratio  : 2.348
+2026-03-04 21:51:26,712 [INFO]   ── Exit Distribution ──
+2026-03-04 21:51:26,712 [INFO]      SL          :   21 (51.2%)
+2026-03-04 21:51:26,712 [INFO]      TIME_EXIT   :    1 ( 2.4%)
+2026-03-04 21:51:26,714 [INFO]      TP          :   10 (24.4%)
+2026-03-04 21:51:26,714 [INFO]      TRAIL_SL    :    9 (22.0%)
+2026-03-04 21:51:26,714 [INFO]   ── Sprint 1 Stats ──
+2026-03-04 21:51:26,715 [INFO]      Avg Trail Count     : 0.66 per trade
+2026-03-04 21:51:26,715 [INFO]      Trailed Trades      : 19 / 41 (46.3%)
+2026-03-04 21:51:26,715 [INFO]      TP Extension dist   : {2.0: 41}
+2026-03-04 21:51:26,715 [INFO]      Avg Holding Duration: 6.6 candles
+2026-03-04 21:51:26,715 [INFO]   Errors/Skipped: 0 / 96
+2026-03-04 21:51:26,717 [INFO]   Time taken    : 234s
+2026-03-04 21:51:26,717 [INFO] ════════════════════════════════════════════════════════════════════════
+2026-03-04 21:51:26,717 [INFO] 
+  ── Sprint 1 DOD Acceptance Criteria ──
+2026-03-04 21:51:26,718 [INFO]      [MUST  ] ✅ PASS  R:R Ratio ≥ 2.0  (actual=2.77)
+2026-03-04 21:51:26,718 [INFO]      [MUST  ] ❌ FAIL  Avg Winner > $900  (actual=$436)
+2026-03-04 21:51:26,718 [INFO]      [MUST  ] ✅ PASS  Avg Loser  < $400  (actual=$157)
+2026-03-04 21:51:26,719 [INFO]      [MUST  ] ❌ FAIL  Win Rate   ≥ 46%  (actual=31.7%)
+2026-03-04 21:51:26,719 [INFO]      [SHOULD] ❌ FAIL  Profit Factor > 1.3  (actual=1.286)
+2026-03-04 21:51:26,720 [INFO]      [SHOULD] ❌ FAIL  Daily Return > 0.7%  (actual=0.203%/day)
+2026-03-04 21:51:26,720 [INFO] 
+  🔴 SPRINT 1 FAILED — Review and iterate
+2026-03-04 21:51:26,770 [INFO] 
+  [✓] Trades  → v4_exit_202601_202603_20260304_214721_trades.csv
+2026-03-04 21:51:26,818 [INFO]   [✓] Equity  → v4_exit_202601_202603_20260304_214721_equity.csv
+2026-03-04 21:51:26,853 [INFO]   [✓] Daily   → v4_exit_202601_202603_20260304_214721_daily.csv
+2026-03-04 21:51:26,853 [INFO]   [✓] Summary → v4_exit_202601_202603_20260304_214721_summary.json
+2026-03-04 21:51:26,853 [INFO]   [✓] Full log → v4_exit_20260304_214721.log

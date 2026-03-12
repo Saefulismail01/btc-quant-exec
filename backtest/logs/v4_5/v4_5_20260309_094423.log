@@ -1,0 +1,24 @@
+2026-03-09 09:44:23,694 [INFO] ========================================================================
+2026-03-09 09:44:23,695 [INFO]   BTC-QUANT v4.5 — GOLDEN vs HESTON COMPARISON
+2026-03-09 09:44:23,695 [INFO]   Window   : 2019-01-01  →  2026-03-04
+2026-03-09 09:44:23,696 [INFO]   Capital  : $10,000 (each model)
+2026-03-09 09:44:23,696 [INFO] ────────────────────────────────────────────────────────────────────────
+2026-03-09 09:44:23,697 [INFO]   MODEL A (Golden)  : SL fixed 1.333% | TP fixed 0.71% | $1k×15x
+2026-03-09 09:44:23,697 [INFO]   MODEL B (Heston)  : SL/TP adaptive ATR×mult | Dynamic sizing | 5x cap
+2026-03-09 09:44:23,698 [INFO] ========================================================================
+2026-03-09 09:44:23,698 [INFO] Loading full dataset from DuckDB...
+2026-03-09 09:44:23,875 [INFO] Loaded 7237 candles | 2022-11-18 08:00:00+00:00 → 2026-03-08 08:00:00+00:00
+2026-03-09 09:44:23,893 [WARNING] Auto-adjusting start → 2023-01-24
+2026-03-09 09:44:23,895 [INFO]   Candles in window : 6,811 | History: 400 candles
+
+2026-03-09 09:44:23,895 [INFO] Initializing services...
+2026-03-09 09:44:29,303 [WARNING] [MLP] Failed to load persisted model: EOFError()
+2026-03-09 09:44:29,305 [INFO] All services ready.
+
+2026-03-09 09:44:29,306 [INFO] Starting candle loop...
+
+2026-03-09 09:44:32,397 [INFO] [BCD global] Trained on 401 candles. Found 8 changepoints.
+2026-03-09 09:44:35,897 [INFO] [MLP] Retrained: len=401, hash=06d9c7b3f065
+2026-03-09 09:44:35,905 [INFO]   [G] OPEN LONG  @ 23,078 | SL=22,771 (1.333%) | TP=23,242 (0.710%) | regime=bull gate=ADVISORY
+2026-03-09 09:44:35,906 [INFO]   [H] OPEN LONG  @ 23,078 | SL=22,513 (2.450%, ×1.5) | TP=23,832 (3.266%, ×2.0) | size=$8164×2x | vol=Normal regime=bull
+2026-03-09 09:44:40,289 [INFO]   [G] OPEN LONG  @ 23,052 | SL=22,745 (1.333%) | TP=23,216 (0.710%) | regime=bull gate=ADVISORY

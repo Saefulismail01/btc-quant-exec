@@ -1,0 +1,31 @@
+2026-03-09 22:26:13,828 [INFO] ========================================================================
+2026-03-09 22:26:13,837 [INFO]   BTC-QUANT EVOLUTION ENGINE — v0.1-style  | L1 BCD only + Compounding 2%
+2026-03-09 22:26:13,843 [INFO]   Window  : 2024-01-01  →  2026-03-04
+2026-03-09 22:26:13,854 [INFO]   Capital : $10,000
+2026-03-09 22:26:13,861 [INFO]   Layers  : l1_only  |  Sizing: compound
+2026-03-09 22:26:13,869 [INFO] ========================================================================
+2026-03-09 22:26:14,585 [INFO] Loaded 7237 candles | 2022-11-18 08:00:00+00:00 → 2026-03-08 08:00:00+00:00
+2026-03-09 22:26:14,618 [INFO]   Candles in window : 4,759
+
+2026-03-09 22:26:14,622 [INFO] Initializing services...
+2026-03-09 22:27:13,769 [INFO] All services ready.
+
+2026-03-09 22:27:24,685 [INFO]   🟢 OPEN  SHORT @ 42,370 | SL=42,935 TP=42,069 | notional=$15,004 (1.5x) | regime=bear gate=ACTIVE
+2026-03-09 22:27:24,686 [INFO]   ▶ [2024-01-01]   0.0%  │ Eq: $    10,000  │ T:    0  │ ETA: 1818.8m
+2026-03-09 22:27:24,706 [INFO]   ❌ CLOSE SHORT | SL           | held=4c | PnL: -212.00 | Eq: 9,788.00
+2026-03-09 22:27:29,718 [INFO]   🟢 OPEN  SHORT @ 43,556 | SL=44,137 TP=43,247 | notional=$14,686 (1.5x) | regime=neutral gate=ACTIVE
+2026-03-09 22:27:29,725 [INFO]   ❌ CLOSE SHORT | SL           | held=2c | PnL: -207.51 | Eq: 9,580.49
+2026-03-09 22:27:34,269 [INFO]   🟢 OPEN  LONG  @ 45,435 | SL=44,829 TP=45,758 | notional=$14,374 (1.5x) | regime=bull gate=ACTIVE
+2026-03-09 22:27:34,278 [INFO]   ✅ CLOSE LONG  | TP           | held=2c | PnL: +90.56 | Eq: 9,671.05
+2026-03-09 22:27:38,698 [INFO]   🟢 OPEN  LONG  @ 45,487 | SL=44,880 TP=45,810 | notional=$14,510 (1.5x) | regime=bull gate=ACTIVE
+2026-03-09 22:27:38,699 [INFO]   ▶ [2024-01-02]   0.2%  │ Eq: $     9,671  │ T:    3  │ ETA: 246.7m
+2026-03-09 22:27:38,705 [INFO]   ❌ CLOSE LONG  | SL           | held=2c | PnL: -205.03 | Eq: 9,466.02
+2026-03-09 22:27:43,318 [INFO]   🟢 OPEN  LONG  @ 45,073 | SL=44,472 TP=45,393 | notional=$14,203 (1.5x) | regime=bull gate=ACTIVE
+2026-03-09 22:27:43,325 [INFO]   ✅ CLOSE LONG  | TP           | held=2c | PnL: +89.48 | Eq: 9,555.50
+2026-03-09 22:27:48,088 [INFO]   🟢 OPEN  LONG  @ 45,298 | SL=44,694 TP=45,619 | notional=$14,337 (1.5x) | regime=bull gate=ACTIVE
+2026-03-09 22:27:48,096 [INFO]   ❌ CLOSE LONG  | SL           | held=2c | PnL: -202.58 | Eq: 9,352.92
+2026-03-09 22:29:07,512 [INFO]   🟢 OPEN  SHORT @ 44,054 | SL=44,641 TP=43,741 | notional=$14,033 (1.5x) | regime=neutral gate=ACTIVE
+2026-03-09 22:29:07,513 [INFO]   ▶ [2024-01-07]   0.8%  │ Eq: $     9,353  │ T:    6  │ ETA: 235.5m
+2026-03-09 22:29:07,516 [INFO]   ✅ CLOSE SHORT | TP           | held=2c | PnL: +88.41 | Eq: 9,441.33
+2026-03-09 22:29:09,939 [INFO]   🟢 OPEN  LONG  @ 44,239 | SL=43,649 TP=44,553 | notional=$14,166 (1.5x) | regime=bull gate=ACTIVE
+2026-03-09 22:29:09,942 [INFO]   ❌ CLOSE LONG  | SL           | held=2c | PnL: -200.16 | Eq: 9,241.17

@@ -1,0 +1,33 @@
+2026-03-05 16:29:32,283 [INFO] ========================================================================
+2026-03-05 16:29:32,283 [INFO]   BTC-QUANT v4.1 — SPRINT 1: EXIT MANAGEMENT
+2026-03-05 16:29:32,284 [INFO]   Window  : 2024-01-01  →  2026-03-04
+2026-03-05 16:29:32,284 [INFO]   Capital : $10,000
+2026-03-05 16:29:32,284 [INFO] ========================================================================
+2026-03-05 16:29:32,285 [INFO] Loading full dataset from DuckDB with ASOF JOIN...
+2026-03-05 16:29:32,406 [INFO] Loaded 7206 candles | 2022-11-18 08:00:00+00:00 → 2026-03-03 04:00:00+00:00
+2026-03-05 16:29:32,425 [INFO]   Candles in window : 4,754
+2026-03-05 16:29:32,427 [INFO]   History available : 2,452 candles before window
+2026-03-05 16:29:32,427 [INFO] 
+Initializing services...
+2026-03-05 16:29:36,105 [WARNING] [MLP] Failed to load persisted model: 
+2026-03-05 16:29:36,105 [INFO] [RiskManager] Daily state reset for 2026-03-05
+2026-03-05 16:29:36,106 [INFO] [RiskManager] Init: MAX_LEVERAGE=5, RISK_PER_TRADE=2.0%, SAFE_MODE=True
+2026-03-05 16:29:36,107 [INFO] [RiskManager] Singleton initialized.
+2026-03-05 16:29:36,107 [INFO] All services ready.
+
+2026-03-05 16:29:38,469 [INFO] [BCD global] Trained on 500 candles. Found 11 changepoints.
+2026-03-05 16:29:41,212 [INFO] [MLP] Retrained: len=500, hash=e8ab241f9e19
+2026-03-05 16:29:41,215 [INFO]   🟢 OPEN  SHORT @ 42,369.80 | SL=43150.83 TP=40893.65 | TPext=1.5× | Gate=ACTIVE | regime=bear bcd=1.00
+2026-03-05 16:29:41,223 [INFO]   ❌ CLOSE SHORT | SL       | trail=0 | entry=42,370 exit=43,151 | PnL: -200.16 USD | Equity: 9,799.84
+2026-03-05 16:29:44,299 [INFO]   🟢 OPEN  SHORT @ 42,818.00 | SL=43533.80 TP=41916.09 | TPext=1.0× | Gate=ACTIVE | regime=neutral bcd=1.00
+2026-03-05 16:29:44,345 [INFO]   ❌ CLOSE SHORT | SL       | trail=0 | entry=42,818 exit=43,534 | PnL: -196.15 USD | Equity: 9,603.69
+2026-03-05 16:29:48,365 [INFO]   🟢 OPEN  SHORT @ 43,556.20 | SL=44317.31 TP=42597.20 | TPext=1.0× | Gate=ACTIVE | regime=neutral bcd=1.00
+2026-03-05 16:29:48,370 [WARNING] [RiskManager] 3 consecutive losses — COOLDOWN 2 candles (8h)
+2026-03-05 16:29:48,371 [INFO]   ❌ CLOSE SHORT | SL       | trail=0 | entry=43,556 exit=44,317 | PnL: -192.23 USD | Equity: 9,411.46
+2026-03-05 16:29:57,218 [WARNING] [RiskManager] De-leveraged: 3 consec losses → leverage 1×
+2026-03-05 16:29:57,219 [INFO]   🟢 OPEN  LONG  @ 45,495.50 | SL=44599.96 TP=47188.07 | TPext=1.5× | Gate=ACTIVE | regime=bull bcd=1.00
+2026-03-05 16:29:57,225 [INFO]   ❌ CLOSE LONG  | SL       | trail=0 | entry=45,496 exit=44,600 | PnL: -188.38 USD | Equity: 9,223.08
+2026-03-05 16:29:59,869 [WARNING] [RiskManager] De-leveraged: 4 consec losses → leverage 1×
+2026-03-05 16:29:59,869 [INFO]   🟢 OPEN  LONG  @ 45,073.20 | SL=44123.22 TP=46868.67 | TPext=1.5× | Gate=ACTIVE | regime=bull bcd=1.00
+2026-03-05 16:29:59,878 [WARNING] [RiskManager] 5 consecutive losses — COOLDOWN 6 candles (24h)
+2026-03-05 16:29:59,878 [INFO]   ❌ CLOSE LONG  | SL       | trail=0 | entry=45,073 exit=44,123 | PnL: -184.61 USD | Equity: 9,038.47

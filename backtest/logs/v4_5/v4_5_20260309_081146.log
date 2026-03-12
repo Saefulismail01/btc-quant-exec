@@ -1,0 +1,286 @@
+2026-03-09 08:11:46,677 [INFO]   [QUICK MODE] Running 2026-01 → 2026-03 only
+2026-03-09 08:11:46,679 [INFO] ========================================================================
+2026-03-09 08:11:46,680 [INFO]   BTC-QUANT v4.5 — GOLDEN vs HESTON COMPARISON
+2026-03-09 08:11:46,680 [INFO]   Window   : 2026-01-01  →  2026-03-04
+2026-03-09 08:11:46,681 [INFO]   Capital  : $10,000 (each model)
+2026-03-09 08:11:46,682 [INFO] ────────────────────────────────────────────────────────────────────────
+2026-03-09 08:11:46,683 [INFO]   MODEL A (Golden)  : SL fixed 1.333% | TP fixed 0.71% | $1k×15x
+2026-03-09 08:11:46,683 [INFO]   MODEL B (Heston)  : SL/TP adaptive ATR×mult | Dynamic sizing | 5x cap
+2026-03-09 08:11:46,684 [INFO] ========================================================================
+2026-03-09 08:11:46,684 [INFO] Loading full dataset from DuckDB...
+2026-03-09 08:11:47,175 [INFO] Loaded 7237 candles | 2022-11-18 08:00:00+00:00 → 2026-03-08 08:00:00+00:00
+2026-03-09 08:11:47,228 [INFO]   Candles in window : 373 | History: 6,838 candles
+
+2026-03-09 08:11:47,229 [INFO] Initializing services...
+2026-03-09 08:12:12,216 [INFO] All services ready.
+
+2026-03-09 08:12:12,216 [INFO] Starting candle loop...
+
+2026-03-09 08:12:15,541 [INFO] [BCD global] Trained on 500 candles. Found 9 changepoints.
+2026-03-09 08:12:32,382 [INFO] [MLP] Retrained: len=500, hash=ff8d2696679d
+2026-03-09 08:12:32,399 [INFO]   [G] OPEN LONG  @ 88,800 | SL=87,616 (1.333%) | TP=89,430 (0.710%) | regime=bull gate=ACTIVE
+2026-03-09 08:12:32,400 [INFO]   [H] OPEN LONG  @ 88,800 | SL=87,734 (1.200%, ×1.5) | TP=90,079 (1.440%, ×1.8) | size=$10000×3x | vol=Low regime=bull
+2026-03-09 08:12:32,401 [INFO]   ▶ [2026-01-01]   1.3%  │ [G] Eq=$   10,000 T=   0  │ [H] Eq=$   10,000 T=   0  │ ETA: 24.7m
+2026-03-09 08:12:35,761 [INFO]   [G] OPEN LONG  @ 88,829 | SL=87,645 (1.333%) | TP=89,460 (0.710%) | regime=bull gate=ACTIVE
+2026-03-09 08:12:38,255 [INFO]   [G] OPEN LONG  @ 89,458 | SL=88,266 (1.333%) | TP=90,093 (0.710%) | regime=bull gate=ACTIVE
+2026-03-09 08:12:38,255 [INFO]   [H] OPEN LONG  @ 89,458 | SL=88,363 (1.225%, ×1.5) | TP=90,773 (1.470%, ×1.8) | size=$10408×3x | vol=Low regime=bull
+2026-03-09 08:12:41,049 [INFO]   [G] OPEN LONG  @ 89,373 | SL=88,182 (1.333%) | TP=90,008 (0.710%) | regime=bull gate=ACTIVE
+2026-03-09 08:12:41,050 [INFO]   [H] OPEN LONG  @ 89,373 | SL=88,171 (1.345%, ×1.5) | TP=90,816 (1.614%, ×1.8) | size=$10842×3x | vol=Low regime=bull
+2026-03-09 08:12:43,586 [INFO]   [G] OPEN LONG  @ 89,865 | SL=88,667 (1.333%) | TP=90,503 (0.710%) | regime=bull gate=ACTIVE
+2026-03-09 08:12:45,935 [INFO]   [H] OPEN LONG  @ 89,706 | SL=88,445 (1.406%, ×1.5) | TP=91,220 (1.687%, ×1.8) | size=$11019×3x | vol=Low regime=bull
+2026-03-09 08:12:48,303 [INFO]   [G] OPEN LONG  @ 89,932 | SL=88,733 (1.333%) | TP=90,570 (0.710%) | regime=bull gate=ACTIVE
+2026-03-09 08:12:48,305 [INFO]   ▶ [2026-01-03]   4.0%  │ [G] Eq=$   10,409 T=   5  │ [H] Eq=$   11,019 T=   3  │ ETA: 14.3m
+2026-03-09 08:12:50,526 [INFO]   [G] OPEN LONG  @ 90,092 | SL=88,891 (1.333%) | TP=90,731 (0.710%) | regime=bull gate=ACTIVE
+2026-03-09 08:12:52,916 [INFO]   [G] OPEN LONG  @ 90,596 | SL=89,388 (1.333%) | TP=91,239 (0.710%) | regime=bull gate=ACTIVE
+2026-03-09 08:12:52,917 [INFO]   [H] OPEN LONG  @ 90,596 | SL=89,421 (1.297%, ×1.5) | TP=92,006 (1.557%, ×1.8) | size=$11551×3x | vol=Low regime=bull
+2026-03-09 08:12:55,420 [INFO]   [G] OPEN LONG  @ 91,193 | SL=89,977 (1.333%) | TP=91,840 (0.710%) | regime=bull gate=ACTIVE
+2026-03-09 08:12:57,961 [INFO]   [H] OPEN LONG  @ 91,103 | SL=90,004 (1.206%, ×1.5) | TP=92,421 (1.447%, ×1.8) | size=$11868×3x | vol=Low regime=bull
+2026-03-09 08:13:00,420 [INFO]   [G] OPEN LONG  @ 91,497 | SL=90,277 (1.333%) | TP=92,147 (0.710%) | regime=bull gate=ACTIVE
+2026-03-09 08:13:00,421 [INFO]   [H] OPEN LONG  @ 91,497 | SL=90,425 (1.171%, ×1.5) | TP=92,783 (1.405%, ×1.8) | size=$12516×3x | vol=Low regime=bull
+2026-03-09 08:13:02,734 [INFO]   [G] OPEN LONG  @ 92,835 | SL=91,598 (1.333%) | TP=93,494 (0.710%) | regime=bull gate=ACTIVE
+2026-03-09 08:13:02,734 [INFO]   [H] OPEN LONG  @ 92,835 | SL=91,636 (1.292%, ×1.5) | TP=94,274 (1.550%, ×1.8) | size=$13014×3x | vol=Low regime=bull
+2026-03-09 08:13:04,998 [INFO]   [G] OPEN LONG  @ 93,093 | SL=91,852 (1.333%) | TP=93,754 (0.710%) | regime=bull gate=ACTIVE
+2026-03-09 08:13:04,999 [INFO]   ▶ [2026-01-05]   7.0%  │ [G] Eq=$   11,382 T=  11  │ [H] Eq=$   13,014 T=   7  │ ETA: 11.7m
+2026-03-09 08:13:07,535 [INFO]   [G] OPEN LONG  @ 93,900 | SL=92,648 (1.333%) | TP=94,567 (0.710%) | regime=bull gate=ACTIVE
+2026-03-09 08:13:07,536 [INFO]   [H] OPEN LONG  @ 93,900 | SL=92,606 (1.378%, ×1.5) | TP=95,452 (1.653%, ×1.8) | size=$13588×3x | vol=Low regime=bull
+2026-03-09 08:13:10,080 [INFO]   [G] OPEN LONG  @ 94,249 | SL=92,992 (1.333%) | TP=94,918 (0.710%) | regime=bull gate=ACTIVE
+2026-03-09 08:13:12,652 [INFO]   [H] OPEN LONG  @ 93,800 | SL=92,492 (1.394%, ×1.5) | TP=95,369 (1.673%, ×1.8) | size=$13429×3x | vol=Low regime=bull
+2026-03-09 08:13:15,540 [INFO]   [G] OPEN LONG  @ 93,608 | SL=92,360 (1.333%) | TP=94,273 (0.710%) | regime=bull gate=ACTIVE
+2026-03-09 08:13:15,540 [INFO]   [H] OPEN LONG  @ 93,608 | SL=92,274 (1.426%, ×1.5) | TP=95,210 (1.711%, ×1.8) | size=$12835×3x | vol=Low regime=bull
+2026-03-09 08:13:18,380 [INFO]   [G] OPEN LONG  @ 92,062 | SL=90,835 (1.333%) | TP=92,716 (0.710%) | regime=bull gate=ACTIVE
+2026-03-09 08:13:18,380 [INFO]   [H] OPEN LONG  @ 92,062 | SL=90,553 (1.639%, ×1.5) | TP=93,873 (1.967%, ×1.8) | size=$12255×1x | vol=Low regime=bull
+2026-03-09 08:13:20,991 [INFO]   [G] OPEN LONG  @ 93,708 | SL=92,459 (1.333%) | TP=94,373 (0.710%) | regime=bull gate=ACTIVE
+2026-03-09 08:13:20,991 [INFO]   ▶ [2026-01-06]   9.4%  │ [G] Eq=$   11,331 T=  16  │ [H] Eq=$   12,255 T=  11  │ ETA: 11.0m
+2026-03-09 08:13:23,424 [INFO]   [G] OPEN LONG  @ 92,778 | SL=91,541 (1.333%) | TP=93,437 (0.710%) | regime=bull gate=ACTIVE
+2026-03-09 08:13:26,332 [INFO]   [G] OPEN LONG  @ 92,042 | SL=90,815 (1.333%) | TP=92,695 (0.710%) | regime=bull gate=ACTIVE
+2026-03-09 08:13:28,854 [INFO]   [G] OPEN LONG  @ 91,303 | SL=90,086 (1.333%) | TP=91,951 (0.710%) | regime=bull gate=ACTIVE
+2026-03-09 08:13:28,854 [INFO]   [H] OPEN LONG  @ 91,303 | SL=89,679 (1.779%, ×1.5) | TP=93,252 (2.134%, ×1.8) | size=$12123×1x | vol=Low regime=bull
+2026-03-09 08:13:31,349 [INFO]   [G] OPEN LONG  @ 90,780 | SL=89,570 (1.333%) | TP=91,425 (0.710%) | regime=bull gate=ACTIVE
+2026-03-09 08:13:31,351 [INFO]   [H] OPEN LONG  @ 90,780 | SL=89,186 (1.756%, ×1.5) | TP=92,693 (2.107%, ×1.8) | size=$11898×1x | vol=Low regime=bull
+2026-03-09 08:13:33,561 [INFO]   [G] OPEN LONG  @ 90,192 | SL=88,990 (1.333%) | TP=90,833 (0.710%) | regime=bull gate=ACTIVE
+2026-03-09 08:13:36,097 [INFO]   [G] OPEN LONG  @ 90,730 | SL=89,521 (1.333%) | TP=91,374 (0.710%) | regime=bull gate=ADVISORY
+2026-03-09 08:13:36,097 [INFO]   ▶ [2026-01-08]  12.1%  │ [G] Eq=$   10,376 T=  22  │ [H] Eq=$   11,898 T=  13  │ ETA: 10.2m
+2026-03-09 08:13:38,518 [INFO]   [G] OPEN LONG  @ 90,891 | SL=89,679 (1.333%) | TP=91,536 (0.710%) | regime=bull gate=ACTIVE
+2026-03-09 08:13:40,988 [INFO]   [G] OPEN LONG  @ 91,060 | SL=89,846 (1.333%) | TP=91,706 (0.710%) | regime=bull gate=ACTIVE
+2026-03-09 08:13:40,989 [INFO]   [H] OPEN LONG  @ 91,060 | SL=89,388 (1.836%, ×1.5) | TP=93,066 (2.204%, ×1.8) | size=$11942×1x | vol=Low regime=bull
+2026-03-09 08:13:43,366 [INFO]   [G] OPEN LONG  @ 90,712 | SL=89,503 (1.333%) | TP=91,356 (0.710%) | regime=bull gate=ACTIVE
+2026-03-09 08:13:45,795 [INFO]   [G] OPEN LONG  @ 90,398 | SL=89,193 (1.333%) | TP=91,040 (0.710%) | regime=bull gate=ACTIVE
+2026-03-09 08:13:48,268 [INFO]   [G] OPEN LONG  @ 91,138 | SL=89,923 (1.333%) | TP=91,785 (0.710%) | regime=bull gate=ACTIVE
+2026-03-09 08:13:50,810 [INFO]   [H] OPEN LONG  @ 90,291 | SL=88,530 (1.950%, ×1.5) | TP=92,403 (2.340%, ×1.8) | size=$11872×1x | vol=Low regime=bull
+2026-03-09 08:13:53,723 [INFO]   [G] OPEN LONG  @ 90,693 | SL=89,484 (1.333%) | TP=91,337 (0.710%) | regime=bull gate=ACTIVE
+2026-03-09 08:13:53,723 [INFO]   ▶ [2026-01-10]  15.1%  │ [G] Eq=$   10,445 T=  28  │ [H] Eq=$   11,872 T=  15  │ ETA: 9.5m
+2026-03-09 08:13:56,272 [INFO]   [H] OPEN LONG  @ 90,623 | SL=89,256 (1.508%, ×1.5) | TP=92,262 (1.809%, ×1.8) | size=$11902×1x | vol=Low regime=bull
+2026-03-09 08:13:58,813 [INFO]   [G] OPEN LONG  @ 90,664 | SL=89,455 (1.333%) | TP=91,308 (0.710%) | regime=bull gate=ACTIVE
+2026-03-09 08:14:01,384 [INFO]   [H] OPEN LONG  @ 90,707 | SL=89,640 (1.176%, ×1.5) | TP=91,988 (1.412%, ×1.8) | size=$11921×3x | vol=Low regime=bull
+2026-03-09 08:14:03,802 [INFO]   [G] OPEN LONG  @ 90,964 | SL=89,752 (1.333%) | TP=91,610 (0.710%) | regime=bull gate=ACTIVE
+2026-03-09 08:14:03,803 [INFO]   [H] OPEN LONG  @ 90,964 | SL=89,912 (1.157%, ×1.5) | TP=92,227 (1.388%, ×1.8) | size=$12397×3x | vol=Low regime=bull
+2026-03-09 08:14:06,701 [INFO]   [G] OPEN LONG  @ 91,766 | SL=90,543 (1.333%) | TP=92,418 (0.710%) | regime=bull gate=ACTIVE
+2026-03-09 08:14:06,702 [INFO]   [H] OPEN LONG  @ 91,766 | SL=90,591 (1.280%, ×1.5) | TP=93,176 (1.536%, ×1.8) | size=$12883×3x | vol=Low regime=bull
+2026-03-09 08:14:09,618 [INFO]   [G] OPEN LONG  @ 91,369 | SL=90,151 (1.333%) | TP=92,018 (0.710%) | regime=bull gate=ACTIVE
+2026-03-09 08:14:09,620 [INFO]   [H] OPEN LONG  @ 91,369 | SL=90,181 (1.300%, ×1.5) | TP=92,795 (1.560%, ×1.8) | size=$12358×3x | vol=Low regime=bull
+2026-03-09 08:14:09,621 [INFO]   ▶ [2026-01-12]  18.0%  │ [G] Eq=$   10,488 T=  32  │ [H] Eq=$   12,358 T=  20  │ ETA: 8.9m
+2026-03-09 08:14:12,436 [INFO]   [G] OPEN LONG  @ 90,574 | SL=89,367 (1.333%) | TP=91,217 (0.710%) | regime=bull gate=ACTIVE
+2026-03-09 08:14:12,437 [INFO]   [H] OPEN LONG  @ 90,574 | SL=89,335 (1.368%, ×1.5) | TP=92,060 (1.641%, ×1.8) | size=$11846×3x | vol=Low regime=bull
+2026-03-09 08:14:15,007 [INFO]   [G] OPEN LONG  @ 91,619 | SL=90,397 (1.333%) | TP=92,269 (0.710%) | regime=bull gate=ACTIVE
+2026-03-09 08:14:15,007 [INFO]   [H] OPEN LONG  @ 91,619 | SL=90,300 (1.439%, ×1.5) | TP=93,201 (1.727%, ×1.8) | size=$12401×3x | vol=Low regime=bull
+2026-03-09 08:14:17,543 [INFO]   [G] OPEN LONG  @ 91,908 | SL=90,683 (1.333%) | TP=92,561 (0.710%) | regime=bull gate=ACTIVE
+2026-03-09 08:14:19,829 [INFO]   [G] OPEN LONG  @ 91,962 | SL=90,736 (1.333%) | TP=92,615 (0.710%) | regime=bull gate=ACTIVE
+2026-03-09 08:14:19,829 [INFO]   [H] OPEN LONG  @ 91,962 | SL=90,618 (1.462%, ×1.5) | TP=93,576 (1.754%, ×1.8) | size=$13098×3x | vol=Low regime=bull
+2026-03-09 08:14:22,100 [INFO]   [G] OPEN LONG  @ 93,408 | SL=92,163 (1.333%) | TP=94,071 (0.710%) | regime=bull gate=ACTIVE
+2026-03-09 08:14:22,100 [INFO]   [H] OPEN LONG  @ 93,408 | SL=91,976 (1.532%, ×1.5) | TP=95,126 (1.839%, ×1.8) | size=$14014×3x | vol=Low regime=bull
+2026-03-09 08:14:24,636 [INFO]   [G] OPEN LONG  @ 94,180 | SL=92,924 (1.333%) | TP=94,848 (0.710%) | regime=bull gate=ACTIVE
+2026-03-09 08:14:24,637 [INFO]   [H] OPEN LONG  @ 94,180 | SL=92,724 (1.545%, ×1.5) | TP=95,926 (1.855%, ×1.8) | size=$14865×3x | vol=Low regime=bull
+2026-03-09 08:14:24,637 [INFO]   ▶ [2026-01-13]  20.4%  │ [G] Eq=$   11,452 T=  38  │ [H] Eq=$   14,865 T=  25  │ ETA: 8.6m
+2026-03-09 08:14:27,056 [INFO]   [G] OPEN LONG  @ 95,375 | SL=94,104 (1.333%) | TP=96,052 (0.710%) | regime=bull gate=ACTIVE
+2026-03-09 08:14:31,896 [INFO]   [G] OPEN LONG  @ 96,692 | SL=95,403 (1.333%) | TP=97,378 (0.710%) | regime=bull gate=ACTIVE
+2026-03-09 08:14:31,896 [INFO]   [H] OPEN LONG  @ 96,692 | SL=94,964 (1.787%, ×1.5) | TP=98,766 (2.145%, ×1.8) | size=$16019×2x | vol=Low regime=bull
+2026-03-09 08:14:34,258 [INFO]   [G] OPEN LONG  @ 97,222 | SL=95,926 (1.333%) | TP=97,912 (0.710%) | regime=bull gate=ACTIVE
+2026-03-09 08:14:36,630 [INFO]   [G] OPEN LONG  @ 96,908 | SL=95,616 (1.333%) | TP=97,596 (0.710%) | regime=bull gate=ACTIVE
+2026-03-09 08:14:40,221 [INFO]   [G] OPEN LONG  @ 96,549 | SL=95,262 (1.333%) | TP=97,234 (0.710%) | regime=bull gate=ACTIVE
+2026-03-09 08:14:40,222 [INFO]   [H] OPEN LONG  @ 96,549 | SL=94,829 (1.781%, ×1.5) | TP=98,612 (2.137%, ×1.8) | size=$16002×2x | vol=Low regime=bull
+2026-03-09 08:14:40,222 [INFO]   ▶ [2026-01-15]  23.1%  │ [G] Eq=$   11,542 T=  43  │ [H] Eq=$   16,002 T=  27  │ ETA: 8.2m
+2026-03-09 08:14:44,539 [INFO]   [G] OPEN LONG  @ 96,717 | SL=95,428 (1.333%) | TP=97,404 (0.710%) | regime=bull gate=ACTIVE
+2026-03-09 08:14:49,317 [INFO]   [G] OPEN LONG  @ 95,469 | SL=94,197 (1.333%) | TP=96,147 (0.710%) | regime=bull gate=ACTIVE
+2026-03-09 08:14:53,744 [INFO]   [H] OPEN LONG  @ 95,608 | SL=93,921 (1.765%, ×1.5) | TP=97,633 (2.118%, ×1.8) | size=$15590×2x | vol=Low regime=bull
+2026-03-09 08:14:57,321 [INFO]   [G] OPEN LONG  @ 94,538 | SL=93,277 (1.333%) | TP=95,209 (0.710%) | regime=bull gate=ACTIVE
+2026-03-09 08:14:57,321 [INFO]   ▶ [2026-01-16]  25.0%  │ [G] Eq=$   11,027 T=  46  │ [H] Eq=$   15,590 T=  28  │ ETA: 8.3m
+2026-03-09 08:15:00,871 [INFO]   [G] OPEN LONG  @ 94,961 | SL=93,695 (1.333%) | TP=95,635 (0.710%) | regime=bull gate=ACTIVE
+2026-03-09 08:15:05,820 [INFO]   [H] OPEN LONG  @ 95,324 | SL=93,778 (1.622%, ×1.5) | TP=97,179 (1.946%, ×1.8) | size=$15387×1x | vol=Low regime=bull
+2026-03-09 08:15:11,673 [INFO]   [G] OPEN LONG  @ 95,529 | SL=94,256 (1.333%) | TP=96,207 (0.710%) | regime=bull gate=ACTIVE
+2026-03-09 08:15:17,009 [INFO]   [H] OPEN LONG  @ 95,108 | SL=93,867 (1.305%, ×1.5) | TP=96,597 (1.566%, ×1.8) | size=$15347×1x | vol=Low regime=bull
+2026-03-09 08:15:17,010 [INFO]   ▶ [2026-01-17]  27.2%  │ [G] Eq=$   11,203 T=  48  │ [H] Eq=$   15,347 T=  30  │ ETA: 8.3m
+2026-03-09 08:15:22,294 [INFO]   [G] OPEN LONG  @ 95,133 | SL=93,865 (1.333%) | TP=95,809 (0.710%) | regime=bull gate=ACTIVE
+2026-03-09 08:15:26,745 [INFO]   [G] OPEN LONG  @ 95,336 | SL=94,065 (1.333%) | TP=96,012 (0.710%) | regime=bull gate=ACTIVE
+2026-03-09 08:15:26,746 [INFO]   [H] OPEN LONG  @ 95,336 | SL=94,304 (1.082%, ×1.5) | TP=96,573 (1.298%, ×1.8) | size=$15135×2x | vol=Low regime=bull
+2026-03-09 08:15:29,715 [INFO]   [G] OPEN LONG  @ 93,614 | SL=92,366 (1.333%) | TP=94,279 (0.710%) | regime=bull gate=ACTIVE
+2026-03-09 08:15:29,715 [INFO]   [H] OPEN LONG  @ 93,614 | SL=92,448 (1.245%, ×1.5) | TP=95,013 (1.494%, ×1.8) | size=$14783×1x | vol=Low regime=bull
+2026-03-09 08:15:32,728 [INFO]   [G] OPEN LONG  @ 92,657 | SL=91,421 (1.333%) | TP=93,314 (0.710%) | regime=bull gate=ACTIVE
+2026-03-09 08:15:32,728 [INFO]   [H] OPEN LONG  @ 92,657 | SL=91,380 (1.378%, ×1.5) | TP=94,189 (1.653%, ×1.8) | size=$14587×1x | vol=Low regime=bull
+2026-03-09 08:15:32,729 [INFO]   ▶ [2026-01-19]  29.0%  │ [G] Eq=$   10,483 T=  52  │ [H] Eq=$   14,587 T=  33  │ ETA: 8.2m
+2026-03-09 08:15:35,201 [INFO]   [G] OPEN LONG  @ 93,014 | SL=91,774 (1.333%) | TP=93,674 (0.710%) | regime=bull gate=ACTIVE
+2026-03-09 08:15:37,519 [INFO]   [H] OPEN LONG  @ 92,590 | SL=91,387 (1.299%, ×1.5) | TP=94,032 (1.558%, ×1.8) | size=$14534×1x | vol=Low regime=bull
+2026-03-09 08:15:40,768 [INFO]   [G] OPEN LONG  @ 92,397 | SL=91,165 (1.333%) | TP=93,053 (0.710%) | regime=bull gate=ACTIVE
+2026-03-09 08:15:40,769 [INFO]   [H] OPEN LONG  @ 92,397 | SL=91,211 (1.283%, ×1.5) | TP=93,820 (1.540%, ×1.8) | size=$14334×1x | vol=Low regime=bull
+2026-03-09 08:15:53,880 [INFO]   [G] OPEN SHORT @ 88,391 | SL=89,569 (1.333%) | TP=87,763 (0.710%) | regime=bear gate=ACTIVE
+2026-03-09 08:15:53,881 [INFO]   [H] OPEN SHORT @ 88,391 | SL=89,942 (1.755%, ×1.5) | TP=86,529 (2.106%, ×1.8) | size=$14139×1x | vol=Low regime=bear
+2026-03-09 08:15:53,881 [INFO]   ▶ [2026-01-20]  32.0%  │ [G] Eq=$   10,153 T=  55  │ [H] Eq=$   14,139 T=  36  │ ETA: 7.9m
+2026-03-09 08:16:09,619 [INFO]   [G] OPEN SHORT @ 89,411 | SL=90,603 (1.333%) | TP=88,777 (0.710%) | regime=bear gate=ACTIVE
+2026-03-09 08:16:09,620 [INFO]   [H] OPEN SHORT @ 89,411 | SL=91,321 (2.136%, ×1.5) | TP=87,119 (2.563%, ×1.8) | size=$12995×1x | vol=Low regime=bear
+2026-03-09 08:16:09,620 [INFO]   ▶ [2026-01-21]  33.6%  │ [G] Eq=$    9,941 T=  56  │ [H] Eq=$   13,879 T=  37  │ ETA: 7.8m
+2026-03-09 08:16:12,094 [INFO]   [G] OPEN SHORT @ 89,910 | SL=91,108 (1.333%) | TP=89,271 (0.710%) | regime=bear gate=ACTIVE
+2026-03-09 08:16:14,486 [INFO]   [G] OPEN SHORT @ 88,954 | SL=90,139 (1.333%) | TP=88,322 (0.710%) | regime=bear gate=ACTIVE
+2026-03-09 08:16:17,080 [INFO]   [H] OPEN SHORT @ 89,733 | SL=91,517 (1.988%, ×1.5) | TP=87,592 (2.386%, ×1.8) | size=$13853×1x | vol=Low regime=bear
+2026-03-09 08:16:19,525 [INFO]   [G] OPEN SHORT @ 89,171 | SL=90,360 (1.333%) | TP=88,538 (0.710%) | regime=bear gate=ACTIVE
+2026-03-09 08:16:22,667 [INFO]   [G] OPEN SHORT @ 89,711 | SL=90,907 (1.333%) | TP=89,074 (0.710%) | regime=bear gate=ACTIVE
+2026-03-09 08:16:22,669 [INFO]   [H] OPEN SHORT @ 89,711 | SL=91,336 (1.811%, ×1.5) | TP=87,761 (2.174%, ×1.8) | size=$13810×1x | vol=Low regime=bear
+2026-03-09 08:16:25,228 [INFO]   [G] OPEN SHORT @ 89,548 | SL=90,742 (1.333%) | TP=88,913 (0.710%) | regime=bear gate=ACTIVE
+2026-03-09 08:16:25,228 [INFO]   [H] OPEN SHORT @ 89,548 | SL=90,981 (1.600%, ×1.5) | TP=87,829 (1.920%, ×1.8) | size=$13873×1x | vol=Low regime=bear
+2026-03-09 08:16:25,229 [INFO]   ▶ [2026-01-24]  37.6%  │ [G] Eq=$    9,846 T=  61  │ [H] Eq=$   13,873 T=  40  │ ETA: 7.0m
+2026-03-09 08:16:27,822 [INFO]   [G] OPEN SHORT @ 89,181 | SL=90,369 (1.333%) | TP=88,548 (0.710%) | regime=bear gate=ACTIVE
+2026-03-09 08:16:30,250 [INFO]   [G] OPEN SHORT @ 88,630 | SL=89,812 (1.333%) | TP=88,001 (0.710%) | regime=bear gate=ACTIVE
+2026-03-09 08:16:30,250 [INFO]   [H] OPEN SHORT @ 88,630 | SL=89,803 (1.324%, ×1.5) | TP=87,223 (1.588%, ×1.8) | size=$14019×3x | vol=Low regime=bear
+2026-03-09 08:16:32,704 [INFO]   [G] OPEN SHORT @ 88,406 | SL=89,584 (1.333%) | TP=87,778 (0.710%) | regime=bear gate=ACTIVE
+2026-03-09 08:16:32,704 [INFO]   [H] OPEN SHORT @ 88,406 | SL=89,550 (1.294%, ×1.5) | TP=87,033 (1.553%, ×1.8) | size=$15016×3x | vol=Low regime=bear
+2026-03-09 08:16:34,986 [INFO]   [G] OPEN SHORT @ 86,459 | SL=87,612 (1.333%) | TP=85,846 (0.710%) | regime=bear gate=ACTIVE
+2026-03-09 08:16:34,987 [INFO]   [H] OPEN SHORT @ 86,459 | SL=87,769 (1.515%, ×1.5) | TP=84,888 (1.818%, ×1.8) | size=$15885×3x | vol=Low regime=bear
+2026-03-09 08:16:37,227 [INFO]   [G] OPEN SHORT @ 86,629 | SL=87,784 (1.333%) | TP=86,014 (0.710%) | regime=bear gate=ACTIVE
+2026-03-09 08:16:37,228 [INFO]   [H] OPEN SHORT @ 86,629 | SL=87,946 (1.521%, ×1.5) | TP=85,048 (1.825%, ×1.8) | size=$15125×3x | vol=Low regime=bear
+2026-03-09 08:16:39,491 [INFO]   [G] OPEN SHORT @ 87,233 | SL=88,396 (1.333%) | TP=86,614 (0.710%) | regime=bear gate=ACTIVE
+2026-03-09 08:16:39,491 [INFO]   [H] OPEN SHORT @ 87,233 | SL=88,613 (1.582%, ×1.5) | TP=85,577 (1.898%, ×1.8) | size=$14399×3x | vol=Low regime=bear
+2026-03-09 08:16:42,059 [INFO]   [G] OPEN SHORT @ 87,810 | SL=88,981 (1.333%) | TP=87,187 (0.710%) | regime=bear gate=ACTIVE
+2026-03-09 08:16:42,059 [INFO]   [H] OPEN SHORT @ 87,810 | SL=89,173 (1.552%, ×1.5) | TP=86,174 (1.863%, ×1.8) | size=$13681×1x | vol=Low regime=bear
+2026-03-09 08:16:42,060 [INFO]   ▶ [2026-01-26]  40.9%  │ [G] Eq=$   10,047 T=  68  │ [H] Eq=$   13,681 T=  46  │ ETA: 6.5m
+2026-03-09 08:16:44,416 [INFO]   [G] OPEN SHORT @ 87,610 | SL=88,777 (1.333%) | TP=86,987 (0.710%) | regime=bear gate=ACTIVE
+2026-03-09 08:16:46,986 [INFO]   [G] OPEN SHORT @ 88,301 | SL=89,478 (1.333%) | TP=87,674 (0.710%) | regime=bear gate=ACTIVE
+2026-03-09 08:16:49,205 [INFO]   [H] OPEN SHORT @ 88,288 | SL=89,741 (1.646%, ×1.5) | TP=86,544 (1.975%, ×1.8) | size=$13648×1x | vol=Low regime=bear
+2026-03-09 08:16:51,662 [INFO]   [G] OPEN SHORT @ 87,948 | SL=89,120 (1.333%) | TP=87,323 (0.710%) | regime=bear gate=ACTIVE
+2026-03-09 08:16:54,035 [INFO]   [G] OPEN SHORT @ 88,000 | SL=89,173 (1.333%) | TP=87,375 (0.710%) | regime=bear gate=ACTIVE
+2026-03-09 08:16:56,551 [INFO]   [G] OPEN SHORT @ 88,378 | SL=89,556 (1.333%) | TP=87,751 (0.710%) | regime=bear gate=ACTIVE
+2026-03-09 08:16:59,084 [INFO]   [H] OPEN SHORT @ 89,080 | SL=90,528 (1.626%, ×1.5) | TP=87,342 (1.951%, ×1.8) | size=$13511×1x | vol=Low regime=bear
+2026-03-09 08:16:59,085 [INFO]   ▶ [2026-01-28]  43.5%  │ [G] Eq=$    9,907 T=  73  │ [H] Eq=$   13,511 T=  48  │ ETA: 6.2m
+2026-03-09 08:17:01,729 [INFO]   [G] OPEN SHORT @ 89,107 | SL=90,295 (1.333%) | TP=88,474 (0.710%) | regime=bear gate=ACTIVE
+2026-03-09 08:17:04,205 [INFO]   [G] OPEN SHORT @ 90,037 | SL=91,237 (1.333%) | TP=89,398 (0.710%) | regime=bear gate=ACTIVE
+2026-03-09 08:17:06,916 [INFO]   [G] OPEN SHORT @ 89,444 | SL=90,637 (1.333%) | TP=88,809 (0.710%) | regime=bear gate=ACTIVE
+2026-03-09 08:17:06,916 [INFO]   [H] OPEN SHORT @ 89,444 | SL=90,957 (1.691%, ×1.5) | TP=87,630 (2.029%, ×1.8) | size=$13280×1x | vol=Low regime=bear
+2026-03-09 08:17:09,730 [INFO]   [G] OPEN SHORT @ 89,262 | SL=90,452 (1.333%) | TP=88,628 (0.710%) | regime=bear gate=ACTIVE
+2026-03-09 08:17:12,267 [INFO]   [G] OPEN SHORT @ 88,003 | SL=89,176 (1.333%) | TP=87,378 (0.710%) | regime=bear gate=ACTIVE
+2026-03-09 08:17:14,904 [INFO]   [G] OPEN SHORT @ 87,795 | SL=88,966 (1.333%) | TP=87,172 (0.710%) | regime=bear gate=ACTIVE
+2026-03-09 08:17:14,906 [INFO]   [H] OPEN SHORT @ 87,795 | SL=89,346 (1.766%, ×1.5) | TP=85,935 (2.119%, ×1.8) | size=$13945×1x | vol=Low regime=bear
+2026-03-09 08:17:14,906 [INFO]   ▶ [2026-01-29]  45.7%  │ [G] Eq=$   10,478 T=  79  │ [H] Eq=$   13,945 T=  50  │ ETA: 6.0m
+2026-03-09 08:17:17,433 [INFO]   [G] OPEN SHORT @ 84,898 | SL=86,030 (1.333%) | TP=84,295 (0.710%) | regime=bear gate=ACTIVE
+2026-03-09 08:17:17,434 [INFO]   [H] OPEN SHORT @ 84,898 | SL=86,745 (2.175%, ×1.5) | TP=82,682 (2.610%, ×1.8) | size=$13370×2x | vol=Low regime=bear
+2026-03-09 08:17:20,262 [INFO]   [G] OPEN SHORT @ 83,979 | SL=85,099 (1.333%) | TP=83,383 (0.710%) | regime=bear gate=ADVISORY
+2026-03-09 08:17:22,680 [INFO]   [G] OPEN SHORT @ 84,605 | SL=85,732 (1.333%) | TP=84,004 (0.710%) | regime=bear gate=ADVISORY
+2026-03-09 08:17:22,680 [INFO]   [H] OPEN SHORT @ 84,605 | SL=86,519 (2.263%, ×1.5) | TP=82,307 (2.716%, ×1.8) | size=$13459×2x | vol=Low regime=bear
+2026-03-09 08:17:25,206 [INFO]   [G] OPEN SHORT @ 82,641 | SL=83,743 (1.333%) | TP=82,054 (0.710%) | regime=bear gate=ADVISORY
+2026-03-09 08:17:25,206 [INFO]   [H] OPEN SHORT @ 82,641 | SL=84,815 (2.631%, ×1.5) | TP=80,032 (3.157%, ×1.8) | size=$12117×2x | vol=Low regime=bear
+2026-03-09 08:17:27,584 [INFO]   [G] OPEN SHORT @ 83,105 | SL=84,213 (1.333%) | TP=82,515 (0.710%) | regime=bear gate=ADVISORY
+2026-03-09 08:17:29,949 [INFO]   [G] OPEN SHORT @ 82,850 | SL=83,955 (1.333%) | TP=82,262 (0.710%) | regime=bear gate=ADVISORY
+2026-03-09 08:17:29,949 [INFO]   ▶ [2026-01-30]  47.6%  │ [G] Eq=$   11,329 T=  85  │ [H] Eq=$   15,939 T=  53  │ ETA: 5.8m
+2026-03-09 08:17:32,287 [INFO]   [G] OPEN SHORT @ 84,200 | SL=85,322 (1.333%) | TP=83,602 (0.710%) | regime=bear gate=ADVISORY
+2026-03-09 08:17:34,623 [INFO]   [H] OPEN SHORT @ 84,211 | SL=86,430 (2.634%, ×1.5) | TP=81,549 (3.161%, ×1.8) | size=$11787×2x | vol=Low regime=bear
+2026-03-09 08:17:37,085 [INFO]   [G] OPEN SHORT @ 83,988 | SL=85,107 (1.333%) | TP=83,391 (0.710%) | regime=bear gate=ADVISORY
+2026-03-09 08:17:39,361 [INFO]   [G] OPEN SHORT @ 83,514 | SL=84,628 (1.333%) | TP=82,921 (0.710%) | regime=bear gate=ADVISORY
+2026-03-09 08:17:41,848 [INFO]   [G] OPEN SHORT @ 82,983 | SL=84,089 (1.333%) | TP=82,394 (0.710%) | regime=bear gate=ADVISORY
+2026-03-09 08:17:41,848 [INFO]   [H] OPEN SHORT @ 82,983 | SL=84,990 (2.419%, ×1.5) | TP=80,575 (2.903%, ×1.8) | size=$13502×2x | vol=Low regime=bear
+2026-03-09 08:17:44,260 [INFO]   [G] OPEN SHORT @ 81,269 | SL=82,352 (1.333%) | TP=80,692 (0.710%) | regime=bear gate=ADVISORY
+2026-03-09 08:17:44,260 [INFO]   [H] OPEN SHORT @ 81,269 | SL=83,385 (2.605%, ×1.5) | TP=78,728 (3.126%, ×1.8) | size=$13840×2x | vol=Low regime=bear
+2026-03-09 08:22:52,282 [INFO]   [G] OPEN SHORT @ 68,948 | SL=69,867 (1.333%) | TP=68,458 (0.710%) | regime=bear gate=ADVISORY
+2026-03-09 08:22:52,282 [INFO]   [H] OPEN SHORT @ 68,948 | SL=70,939 (2.887%, ×1.5) | TP=66,559 (3.465%, ×1.8) | size=$13074×1x | vol=Low regime=bear
+2026-03-09 08:22:52,284 [INFO]   ▶ [2026-02-14]  71.0%  │ [G] Eq=$   13,188 T=  91  │ [H] Eq=$   18,875 T=  57  │ ETA: 4.4m
+2026-03-09 08:23:31,330 [INFO]   [G] OPEN SHORT @ 68,264 | SL=69,174 (1.333%) | TP=67,779 (0.710%) | regime=bear gate=ADVISORY
+2026-03-09 08:23:31,330 [INFO]   [H] OPEN SHORT @ 68,264 | SL=70,002 (2.546%, ×1.5) | TP=66,178 (3.055%, ×1.8) | size=$14674×2x | vol=Low regime=bear
+2026-03-09 08:23:31,331 [INFO]   ▶ [2026-02-15]  73.7%  │ [G] Eq=$   12,976 T=  92  │ [H] Eq=$   18,679 T=  58  │ ETA: 4.0m
+2026-03-09 08:23:34,470 [INFO]   [G] OPEN SHORT @ 68,769 | SL=69,686 (1.333%) | TP=68,281 (0.710%) | regime=bear gate=ADVISORY
+2026-03-09 08:23:34,470 [INFO]   [H] OPEN SHORT @ 68,769 | SL=70,375 (2.334%, ×1.5) | TP=66,843 (2.801%, ×1.8) | size=$15345×2x | vol=Low regime=bear
+2026-03-09 08:23:37,062 [INFO]   [G] OPEN SHORT @ 67,506 | SL=68,405 (1.333%) | TP=67,026 (0.710%) | regime=bear gate=ADVISORY
+2026-03-09 08:23:40,224 [INFO]   [G] OPEN SHORT @ 67,884 | SL=68,788 (1.333%) | TP=67,402 (0.710%) | regime=bear gate=ADVISORY
+2026-03-09 08:24:24,880 [INFO]   [G] OPEN SHORT @ 67,345 | SL=68,243 (1.333%) | TP=66,867 (0.710%) | regime=bear gate=ADVISORY
+2026-03-09 08:24:24,881 [INFO]   [H] OPEN SHORT @ 67,345 | SL=68,991 (2.443%, ×1.5) | TP=65,371 (2.931%, ×1.8) | size=$14987×2x | vol=Low regime=bear
+2026-03-09 08:24:24,883 [INFO]   ▶ [2026-02-18]  78.0%  │ [G] Eq=$   12,521 T=  96  │ [H] Eq=$   18,305 T=  60  │ ETA: 3.5m
+2026-03-09 08:24:29,092 [INFO]   [G] OPEN SHORT @ 67,671 | SL=68,573 (1.333%) | TP=67,191 (0.710%) | regime=bear gate=ADVISORY
+2026-03-09 08:24:32,129 [INFO]   [G] OPEN SHORT @ 66,138 | SL=67,020 (1.333%) | TP=65,669 (0.710%) | regime=bear gate=ADVISORY
+2026-03-09 08:24:34,825 [INFO]   [G] OPEN SHORT @ 66,950 | SL=67,843 (1.333%) | TP=66,475 (0.710%) | regime=bear gate=ADVISORY
+2026-03-09 08:24:37,742 [INFO]   [G] OPEN SHORT @ 67,180 | SL=68,076 (1.333%) | TP=66,703 (0.710%) | regime=bear gate=ADVISORY
+2026-03-09 08:24:37,743 [INFO]   [H] OPEN SHORT @ 67,180 | SL=68,794 (2.403%, ×1.5) | TP=65,244 (2.883%, ×1.8) | size=$15543×2x | vol=Low regime=bear
+2026-03-09 08:24:40,559 [INFO]   [G] OPEN SHORT @ 66,469 | SL=67,355 (1.333%) | TP=65,997 (0.710%) | regime=bear gate=ADVISORY
+2026-03-09 08:24:40,559 [INFO]   ▶ [2026-02-19]  79.6%  │ [G] Eq=$   13,097 T= 101  │ [H] Eq=$   18,672 T=  61  │ ETA: 3.2m
+2026-03-09 08:24:43,377 [INFO]   [G] OPEN SHORT @ 66,363 | SL=67,247 (1.333%) | TP=65,892 (0.710%) | regime=bear gate=ADVISORY
+2026-03-09 08:24:46,332 [INFO]   [G] OPEN SHORT @ 66,974 | SL=67,867 (1.333%) | TP=66,498 (0.710%) | regime=bear gate=ADVISORY
+2026-03-09 08:24:49,189 [INFO]   [G] OPEN SHORT @ 67,327 | SL=68,225 (1.333%) | TP=66,849 (0.710%) | regime=bear gate=ACTIVE
+2026-03-09 08:24:49,189 [INFO]   [H] OPEN SHORT @ 67,327 | SL=68,833 (2.237%, ×1.5) | TP=65,520 (2.685%, ×1.8) | size=$16415×2x | vol=Low regime=bear
+2026-03-09 08:24:52,916 [INFO]   [G] OPEN SHORT @ 67,795 | SL=68,698 (1.333%) | TP=67,313 (0.710%) | regime=bear gate=ACTIVE
+2026-03-09 08:24:57,667 [INFO]   [G] OPEN SHORT @ 67,290 | SL=68,187 (1.333%) | TP=66,813 (0.710%) | regime=bear gate=ACTIVE
+2026-03-09 08:24:57,667 [INFO]   ▶ [2026-02-20]  81.2%  │ [G] Eq=$   12,650 T= 106  │ [H] Eq=$   18,362 T=  62  │ ETA: 3.0m
+2026-03-09 08:25:06,634 [INFO]   [G] OPEN SHORT @ 67,979 | SL=68,885 (1.333%) | TP=67,497 (0.710%) | regime=bear gate=ADVISORY
+2026-03-09 08:25:06,634 [INFO]   [H] OPEN SHORT @ 67,979 | SL=69,524 (2.272%, ×1.5) | TP=66,126 (2.727%, ×1.8) | size=$16007×2x | vol=Low regime=bear
+2026-03-09 08:25:10,860 [INFO]   [G] OPEN SHORT @ 68,516 | SL=69,430 (1.333%) | TP=68,030 (0.710%) | regime=bear gate=ACTIVE
+2026-03-09 08:25:10,861 [INFO]   [H] OPEN SHORT @ 68,516 | SL=69,846 (1.941%, ×1.5) | TP=66,920 (2.329%, ×1.8) | size=$18181×1x | vol=Low regime=bear
+2026-03-09 08:25:16,220 [INFO]   [G] OPEN SHORT @ 67,933 | SL=68,839 (1.333%) | TP=67,451 (0.710%) | regime=bear gate=ACTIVE
+2026-03-09 08:25:16,222 [INFO]   ▶ [2026-02-21]  83.6%  │ [G] Eq=$   12,535 T= 109  │ [H] Eq=$   18,181 T=  64  │ ETA: 2.6m
+2026-03-09 08:25:40,261 [INFO]   [G] OPEN SHORT @ 64,894 | SL=65,759 (1.333%) | TP=64,433 (0.710%) | regime=bear gate=ACTIVE
+2026-03-09 08:25:40,264 [INFO]   [H] OPEN SHORT @ 64,894 | SL=66,296 (2.161%, ×1.5) | TP=63,211 (2.593%, ×1.8) | size=$17087×1x | vol=Low regime=bear
+2026-03-09 08:25:40,264 [INFO]   ▶ [2026-02-23]  85.5%  │ [G] Eq=$   12,630 T= 110  │ [H] Eq=$   18,462 T=  65  │ ETA: 2.3m
+2026-03-09 08:25:48,118 [INFO]   [G] OPEN SHORT @ 65,916 | SL=66,794 (1.333%) | TP=65,448 (0.710%) | regime=bear gate=ACTIVE
+2026-03-09 08:25:48,118 [INFO]   [H] OPEN SHORT @ 65,916 | SL=67,363 (2.195%, ×1.5) | TP=64,179 (2.634%, ×1.8) | size=$16472×1x | vol=Low regime=bear
+2026-03-09 08:25:52,620 [INFO]   [G] OPEN SHORT @ 65,633 | SL=66,508 (1.333%) | TP=65,167 (0.710%) | regime=bear gate=ACTIVE
+2026-03-09 08:25:52,621 [INFO]   [H] OPEN SHORT @ 65,633 | SL=67,090 (2.220%, ×1.5) | TP=63,884 (2.664%, ×1.8) | size=$16665×1x | vol=Low regime=bear
+2026-03-09 08:25:56,747 [INFO]   [G] OPEN SHORT @ 64,274 | SL=65,131 (1.333%) | TP=63,818 (0.710%) | regime=bear gate=ADVISORY
+2026-03-09 08:25:56,749 [INFO]   [H] OPEN SHORT @ 64,274 | SL=65,804 (2.380%, ×1.5) | TP=62,438 (2.857%, ×1.8) | size=$15905×2x | vol=Low regime=bear
+2026-03-09 08:25:56,749 [INFO]   ▶ [2026-02-23]  86.6%  │ [G] Eq=$   12,998 T= 113  │ [H] Eq=$   18,931 T=  68  │ ETA: 2.1m
+2026-03-09 08:26:00,793 [INFO]   [G] OPEN SHORT @ 64,626 | SL=65,487 (1.333%) | TP=64,167 (0.710%) | regime=bear gate=ADVISORY
+2026-03-09 08:26:04,591 [INFO]   [G] OPEN SHORT @ 63,570 | SL=64,418 (1.333%) | TP=63,119 (0.710%) | regime=bear gate=ADVISORY
+2026-03-09 08:26:08,745 [INFO]   [G] OPEN SHORT @ 63,155 | SL=63,997 (1.333%) | TP=62,707 (0.710%) | regime=bear gate=ADVISORY
+2026-03-09 08:26:12,726 [INFO]   [G] OPEN SHORT @ 63,192 | SL=64,035 (1.333%) | TP=62,744 (0.710%) | regime=bear gate=ADVISORY
+2026-03-09 08:26:12,728 [INFO]   [H] OPEN SHORT @ 63,192 | SL=64,733 (2.438%, ×1.5) | TP=61,343 (2.926%, ×1.8) | size=$16252×2x | vol=Low regime=bear
+2026-03-09 08:26:12,728 [INFO]   ▶ [2026-02-24]  87.6%  │ [G] Eq=$   13,668 T= 117  │ [H] Eq=$   19,814 T=  69  │ ETA: 2.0m
+2026-03-09 08:26:17,062 [INFO]   [G] OPEN SHORT @ 63,933 | SL=64,786 (1.333%) | TP=63,479 (0.710%) | regime=bear gate=ADVISORY
+2026-03-09 08:26:23,322 [INFO]   [G] OPEN SHORT @ 64,031 | SL=64,885 (1.333%) | TP=63,577 (0.710%) | regime=bear gate=ADVISORY
+2026-03-09 08:26:23,322 [INFO]   [H] OPEN SHORT @ 64,031 | SL=65,602 (2.454%, ×1.5) | TP=62,146 (2.944%, ×1.8) | size=$15484×2x | vol=Low regime=bear
+2026-03-09 08:26:27,853 [INFO]   [G] OPEN SHORT @ 65,362 | SL=66,233 (1.333%) | TP=64,898 (0.710%) | regime=bear gate=ADVISORY
+2026-03-09 08:26:27,854 [INFO]   [H] OPEN SHORT @ 65,362 | SL=67,078 (2.627%, ×1.5) | TP=63,302 (3.152%, ×1.8) | size=$13867×2x | vol=Low regime=bear
+2026-03-09 08:26:27,855 [INFO]   ▶ [2026-02-25]  88.7%  │ [G] Eq=$   13,032 T= 120  │ [H] Eq=$   18,211 T=  71  │ ETA: 1.8m
+2026-03-09 08:27:17,264 [INFO]   [G] OPEN SHORT @ 66,094 | SL=66,975 (1.333%) | TP=65,625 (0.710%) | regime=bear gate=ADVISORY
+2026-03-09 08:27:17,265 [INFO]   [H] OPEN SHORT @ 66,094 | SL=67,991 (2.870%, ×1.5) | TP=63,818 (3.444%, ×1.8) | size=$12168×1x | vol=Low regime=bear
+2026-03-09 08:27:17,265 [INFO]   ▶ [2026-02-27]  92.5%  │ [G] Eq=$   12,821 T= 121  │ [H] Eq=$   17,460 T=  72  │ ETA: 1.2m
+2026-03-09 08:27:20,261 [INFO]   [G] OPEN SHORT @ 66,073 | SL=66,953 (1.333%) | TP=65,603 (0.710%) | regime=bear gate=ADVISORY
+2026-03-09 08:27:22,859 [INFO]   [G] OPEN SHORT @ 65,365 | SL=66,237 (1.333%) | TP=64,901 (0.710%) | regime=bear gate=ADVISORY
+2026-03-09 08:27:25,993 [INFO]   [G] OPEN SHORT @ 65,764 | SL=66,640 (1.333%) | TP=65,297 (0.710%) | regime=bear gate=ADVISORY
+2026-03-09 08:27:25,994 [INFO]   [H] OPEN SHORT @ 65,764 | SL=67,465 (2.587%, ×1.5) | TP=63,722 (3.104%, ×1.8) | size=$13821×1x | vol=Low regime=bear
+2026-03-09 08:27:30,209 [INFO]   [G] OPEN SHORT @ 63,788 | SL=64,639 (1.333%) | TP=63,336 (0.710%) | regime=bear gate=ADVISORY
+2026-03-09 08:27:30,210 [INFO]   [H] OPEN SHORT @ 63,788 | SL=65,669 (2.948%, ×1.5) | TP=61,532 (3.537%, ×1.8) | size=$12411×1x | vol=Low regime=bear
+2026-03-09 08:27:34,371 [INFO]   [G] OPEN SHORT @ 63,810 | SL=64,661 (1.333%) | TP=63,357 (0.710%) | regime=bear gate=ADVISORY
+2026-03-09 08:27:34,373 [INFO]   ▶ [2026-02-28]  94.1%  │ [G] Eq=$   13,640 T= 126  │ [H] Eq=$   18,293 T=  74  │ ETA: 1.0m
+2026-03-09 08:27:37,579 [INFO]   [G] OPEN SHORT @ 64,800 | SL=65,664 (1.333%) | TP=64,340 (0.710%) | regime=bear gate=ADVISORY
+2026-03-09 08:27:37,579 [INFO]   [H] OPEN SHORT @ 64,800 | SL=66,683 (2.905%, ×1.5) | TP=62,541 (3.486%, ×1.8) | size=$12334×1x | vol=Low regime=bear
+2026-03-09 08:27:40,756 [INFO]   [G] OPEN SHORT @ 66,318 | SL=67,202 (1.333%) | TP=65,847 (0.710%) | regime=bear gate=ADVISORY
+2026-03-09 08:27:40,757 [INFO]   [H] OPEN SHORT @ 66,318 | SL=68,281 (2.960%, ×1.5) | TP=63,962 (3.553%, ×1.8) | size=$11855×1x | vol=Low regime=bear
+2026-03-09 08:28:33,582 [INFO] 
+════════════════════════════════════════════════════════════════════════
+2026-03-09 08:28:33,582 [INFO]   BACKTEST COMPLETE — v4.5 Comparison
+2026-03-09 08:28:33,582 [INFO] ════════════════════════════════════════════════════════════════════════
+2026-03-09 08:28:33,643 [INFO] 
+  Metric                       GOLDEN       HESTON          Δ Winner    
+2026-03-09 08:28:33,643 [INFO]   ────────────────────────────────────────────────────────────────────
+2026-03-09 08:28:33,644 [INFO]   net_pnl_pct                  30.041       76.096    +46.056 ▶ HESTON    
+2026-03-09 08:28:33,644 [INFO]   win_rate_pct                 57.360       49.350     -8.010 ◀ GOLDEN    
+2026-03-09 08:28:33,645 [INFO]   profit_factor                 1.278        1.587     +0.309 ▶ HESTON    
+2026-03-09 08:28:33,646 [INFO]   max_drawdown_pct             20.750       17.100     -3.650 ▶ HESTON    
+2026-03-09 08:28:33,646 [INFO]   sharpe_ratio                  2.299        3.409     +1.110 ▶ HESTON    
+2026-03-09 08:28:33,646 [INFO]   rr_ratio                      0.950        1.629     +0.679 ▶ HESTON    
+2026-03-09 08:28:33,646 [INFO]   daily_return_pct              0.484        1.227     +0.743 ▶ HESTON    
+2026-03-09 08:28:33,647 [INFO]   n_trades                    129.000       77.000    -52.000 ◀ GOLDEN    
+2026-03-09 08:28:33,647 [INFO]   avg_winner_usd              186.670      541.380   +354.710 ▶ HESTON    
+2026-03-09 08:28:33,648 [INFO]   avg_loser_usd               196.540      332.380   +135.840 ◀ GOLDEN    
+2026-03-09 08:28:33,648 [INFO] 
+  🟢 HESTON WINS (7/10 metrics)
+2026-03-09 08:28:33,648 [INFO]   GOLDEN : 3 wins | HESTON : 7 wins | TIE: 0
+2026-03-09 08:28:33,650 [INFO] ════════════════════════════════════════════════════════════════════════
+2026-03-09 08:28:33,703 [INFO] 
+  [✓] Golden Summary  → v4_5_202601_202603_20260309_081146_golden_summary.json
+2026-03-09 08:28:33,706 [INFO]   [✓] Heston Summary  → v4_5_202601_202603_20260309_081146_heston_summary.json
+2026-03-09 08:28:33,706 [INFO]   [✓] Comparison      → v4_5_202601_202603_20260309_081146_comparison_report.json
+2026-03-09 08:28:33,707 [INFO]   [✓] All Trades      → v4_5_202601_202603_20260309_081146_all_trades.csv
+2026-03-09 08:28:33,709 [INFO]   [✓] Log             → v4_5_20260309_081146.log
+2026-03-09 08:28:33,709 [INFO]   [✓] Time taken      : 981s
+

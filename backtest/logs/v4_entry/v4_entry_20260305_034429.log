@@ -1,0 +1,22 @@
+2026-03-05 03:44:29,300 [INFO] ========================================================================
+2026-03-05 03:44:29,302 [INFO]   BTC-QUANT v4.3 — SPRINT 2: ENTRY OPTIMIZATION
+2026-03-05 03:44:29,303 [INFO]   Window  : 2023-01-01  →  2026-03-04
+2026-03-05 03:44:29,303 [INFO]   Capital : $10,000
+2026-03-05 03:44:29,303 [INFO]   Threshold: MLP 65%, Score 5
+2026-03-05 03:44:29,303 [INFO] ========================================================================
+2026-03-05 03:44:29,304 [INFO] Loading full dataset from DuckDB with ASOF JOIN...
+2026-03-05 03:44:29,423 [INFO] Loaded 7206 candles | 2022-11-18 08:00:00+00:00 → 2026-03-03 04:00:00+00:00
+2026-03-05 03:44:29,464 [WARNING] Adjusting start to 2023-06-06.
+2026-03-05 03:44:32,894 [WARNING] [MLP] Failed to load persisted model: 
+2026-03-05 03:44:32,894 [INFO] [RiskManager] Daily state reset for 2026-03-05
+2026-03-05 03:44:32,896 [INFO] [RiskManager] Init: MAX_LEVERAGE=5, RISK_PER_TRADE=2.0%, SAFE_MODE=True
+2026-03-05 03:44:32,897 [INFO] [RiskManager] Singleton initialized.
+2026-03-05 03:44:34,573 [INFO] [BCD global] Trained on 500 candles. Found 8 changepoints.
+2026-03-05 03:44:35,956 [INFO] [MLP] Retrained: len=500, hash=2b09d56b9ec8
+2026-03-05 03:44:40,249 [INFO] [RiskManager] Daily state reset for 2026-03-05
+2026-03-05 03:45:33,086 [INFO]   ▶ [2023-06-14]   0.8% │ Equity: $10,267 │ Trades: 1
+2026-03-05 03:46:33,691 [INFO]   ▶ [2023-06-24]   1.8% │ Equity: $10,267 │ Trades: 1
+2026-03-05 03:47:34,837 [INFO]   ▶ [2023-07-02]   2.6% │ Equity: $10,267 │ Trades: 1
+2026-03-05 03:48:34,873 [INFO]   ▶ [2023-07-11]   3.5% │ Equity: $10,267 │ Trades: 1
+2026-03-05 03:49:35,326 [INFO]   ▶ [2023-07-21]   4.5% │ Equity: $10,267 │ Trades: 1
+2026-03-05 03:50:35,969 [INFO]   ▶ [2023-08-01]   5.6% │ Equity: $10,677 │ Trades: 2

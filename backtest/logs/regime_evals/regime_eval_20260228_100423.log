@@ -1,0 +1,89 @@
+════════════════════════════════════════════════════════════════════════
+  DIRECTIONAL CALIBRATION — 2023
+  Predictions : 265 | Train split: 1000 candles
+  Date range  : 2023-06-17 → 2023-12-29
+════════════════════════════════════════════════════════════════════════
+
+  LABEL DISTRIBUTION
+────────────────────────────────────────────────────────────────────────
+  Label                              Count   % Total
+  -------------------------------- -------  --------
+  High Volatility Sideways             265    100.0% ⚠ DOMINANT
+
+  DIRECTIONAL HIT RATE  (tebak benar arah?)
+  Bullish/Bearish = % return sesuai arah | Sideways = % |ret| < 0.5%
+────────────────────────────────────────────────────────────────────────
+  Label                                 1c  (4H)       3c  (12H)      6c  (24H)      12c (48H)
+  --------------------------------  -------------  -------------  -------------  -------------
+  High Volatility Sideways            72.5% ✅      49.1% ⚠      42.3% ❌      31.7% ❌  
+
+  MEAN FORWARD RETURN per label
+────────────────────────────────────────────────────────────────────────
+  Label                                 1c  (4H)       3c  (12H)      6c  (24H)      12c (48H)
+  --------------------------------  -------------  -------------  -------------  -------------
+  High Volatility Sideways          +  0.02%        +  0.11%        +  0.21%        +  0.66%      
+
+────────────────────────────────────────────────────────────────────────
+  INTERPRETASI
+────────────────────────────────────────────────────────────────────────
+  High Volatility Sideways        : avg_hit=48.9%  avg_ret=+0.25%  🟡 MARGINAL
+
+  Threshold random chance = 50.0% (prediksi koin)
+
+════════════════════════════════════════════════════════════════════════
+  DIRECTIONAL CALIBRATION — 2025
+  Predictions : 335 | Train split: 1000 candles
+  Date range  : 2025-06-16 → 2025-12-27
+════════════════════════════════════════════════════════════════════════
+
+  LABEL DISTRIBUTION
+────────────────────────────────────────────────────────────────────────
+  Label                              Count   % Total
+  -------------------------------- -------  --------
+  High Volatility Sideways             335    100.0% ⚠ DOMINANT
+
+  DIRECTIONAL HIT RATE  (tebak benar arah?)
+  Bullish/Bearish = % return sesuai arah | Sideways = % |ret| < 0.5%
+────────────────────────────────────────────────────────────────────────
+  Label                                 1c  (4H)       3c  (12H)      6c  (24H)      12c (48H)
+  --------------------------------  -------------  -------------  -------------  -------------
+  High Volatility Sideways            62.1% ✅      45.4% ⚠      29.6% ❌      18.5% ❌  
+
+  MEAN FORWARD RETURN per label
+────────────────────────────────────────────────────────────────────────
+  Label                                 1c  (4H)       3c  (12H)      6c  (24H)      12c (48H)
+  --------------------------------  -------------  -------------  -------------  -------------
+  High Volatility Sideways          +  0.07%        +  0.07%        +  0.02%         -0.06%      
+
+────────────────────────────────────────────────────────────────────────
+  INTERPRETASI
+────────────────────────────────────────────────────────────────────────
+  High Volatility Sideways        : avg_hit=38.9%  avg_ret=+0.03%  🔴 NOT USEFUL
+
+  Threshold random chance = 50.0% (prediksi koin)
+
+════════════════════════════════════════════════════════════════════════
+  RINGKASAN AKHIR — KELAYAKAN HMM SEBAGAI DIRECTIONAL FILTER
+════════════════════════════════════════════════════════════════════════
+
+  [2023]
+    High Volatility Sideways        : hit_rate=48.9%  (n=265, 100.0% of predictions)
+
+  [2025]
+    High Volatility Sideways        : hit_rate=38.9%  (n=335, 100.0% of predictions)
+
+  KESIMPULAN:
+  ⚠ Tidak ada label yang konsisten di atas 55% hit rate.
+  Best: 'High Volatility Sideways' = 48.9% (hampir random)
+
+  IMPLIKASI:
+  HMM dengan fitur OHLCV murni tidak cukup untuk prediksi arah 4H.
+  Fungsi yang lebih realistis untuk HMM di LAZARUS:
+  → Volatility regime detection (HV vs LV) untuk sizing posisi
+  → Bukan directional prediction, tapi risk filter
+  → Gunakan EMA/trend sebagai directional signal utama
+  → HMM sebagai confidence modifier, bukan gate utama
+
+════════════════════════════════════════════════════════════════════════
+  Report generated: 2026-02-28 10:05:26
+════════════════════════════════════════════════════════════════════════

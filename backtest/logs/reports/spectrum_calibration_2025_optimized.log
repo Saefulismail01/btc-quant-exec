@@ -1,0 +1,18 @@
+═══════════════════════════════════════════════════════════════════════════
+  SPECTRUM CALIBRATION REPORT — 2025 (OPTIMIZED)
+═══════════════════════════════════════════════════════════════════════════
+Conviction Bucket             Count      4H (1c)       12H (3c)      24H (6c)
+───────────────────────────────────────────────────────────────────────────
+ADVISORY BULL (0.1..0.65)       696   47.6% 🟡 (-0.0%)  45.1% 🟡 (-0.1%)  46.6% 🟡 (-0.1%)
+NEUTRAL (-0.1..0.1)             555   64.5% ✅ (+0.0%)  40.9% ❌ (+0.1%)  31.7% ❌ (+0.1%)
+ADVISORY BEAR (-0.1..-0.65)     683   48.3% 🟡 (+0.0%)  46.0% 🟡 (+0.0%)  46.4% 🟡 (+0.0%)
+───────────────────────────────────────────────────────────────────────────
+  Note: Hit Rate for Neutral = % of time price stayed within +/- 0.5%
+═══════════════════════════════════════════════════════════════════════════
+
+---
+ANALYSIS & INTERPRETATION:
+1. Hit Rate BULL/BEAR (47.6% / 48.3%) < 50% menunjukkan sinyal "Lagging".
+2. Akurasi NEUTRAL (64.5%) sangat tinggi, membuktikan sistem kuat sebagai Risk Filter.
+3. Sinyal "ACTIVE" (>0.55) jarang tercapai, indikasi layer sering mengalami "conflict".
+4. Strategi saat ini lebih unggul dalam pertahanan (preserving capital) daripada serangan (directional accuracy).

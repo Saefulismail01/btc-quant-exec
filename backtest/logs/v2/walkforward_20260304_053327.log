@@ -1,0 +1,23 @@
+2026-03-04 05:33:27,573 [INFO] ========================================================================
+2026-03-04 05:33:27,574 [INFO]   BTC-QUANT TRUE WALK-FORWARD SIMULATION
+2026-03-04 05:33:27,574 [INFO]   Window  : 2023-01-01  →  2026-03-03
+2026-03-04 05:33:27,574 [INFO]   Capital : $10,000
+2026-03-04 05:33:27,575 [INFO] ========================================================================
+2026-03-04 05:33:27,575 [INFO] Loading full dataset from DuckDB with ASOF JOIN...
+2026-03-04 05:33:27,716 [INFO] Loaded 7206 candles | 2022-11-18 08:00:00+00:00 → 2026-03-03 04:00:00+00:00
+2026-03-04 05:33:27,728 [WARNING] Requested start 2023-01-01 is too early — DB requires 400 warmup candles. Auto-adjusting start to 2023-01-24.
+2026-03-04 05:33:27,729 [INFO]   Candles in window : 6,805
+2026-03-04 05:33:27,729 [INFO]   History available : 400 candles before window
+2026-03-04 05:33:27,729 [INFO] 
+2026-03-04 05:33:27,730 [INFO] Initializing services...
+2026-03-04 05:33:38,560 [WARNING] [MLP] Failed to load persisted model: 
+2026-03-04 05:33:38,560 [INFO] [RiskManager] Daily state reset for 2026-03-04
+2026-03-04 05:33:38,561 [INFO] [RiskManager] Singleton initialized.
+2026-03-04 05:33:38,561 [INFO] All services ready.
+
+2026-03-04 05:33:39,771 [INFO] [BCD global] Trained on 401 candles. Found 8 changepoints.
+2026-03-04 05:33:42,174 [INFO] [MLP] Retrained: len=401, hash=06d9c7b3f065
+2026-03-04 05:33:42,181 [INFO] [RiskManager] Daily state reset for 2026-03-04
+2026-03-04 05:34:15,891 [INFO] [MLP] Retrained: len=453, hash=b33bdb454e32
+2026-03-04 05:34:40,384 [INFO]   ▶ [2023-02-14]   1.9%  │ Equity: $    10,136  │ PnL: $     +136  │ Trades:   16  │ ETA: 53.3 min
+2026-03-04 05:35:41,689 [INFO]   ▶ [2023-02-19]   2.3%  │ Equity: $     7,947  │ PnL: $   -2,053  │ Trades:   24  │ ETA: 85.8 min

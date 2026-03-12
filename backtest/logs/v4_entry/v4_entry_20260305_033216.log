@@ -1,0 +1,27 @@
+2026-03-05 03:32:16,464 [INFO] ========================================================================
+2026-03-05 03:32:16,464 [INFO]   BTC-QUANT v4.3 — SPRINT 2: ENTRY OPTIMIZATION
+2026-03-05 03:32:16,465 [INFO]   Window  : 2026-01-01  →  2026-03-04
+2026-03-05 03:32:16,465 [INFO]   Capital : $10,000
+2026-03-05 03:32:16,465 [INFO]   Threshold: MLP 65%, Score 6
+2026-03-05 03:32:16,466 [INFO] ========================================================================
+2026-03-05 03:32:16,466 [INFO] Loading full dataset from DuckDB with ASOF JOIN...
+2026-03-05 03:32:16,517 [INFO] Loaded 7206 candles | 2022-11-18 08:00:00+00:00 → 2026-03-03 04:00:00+00:00
+2026-03-05 03:32:17,883 [WARNING] [MLP] Failed to load persisted model: 
+2026-03-05 03:32:17,883 [INFO] [RiskManager] Daily state reset for 2026-03-05
+2026-03-05 03:32:17,884 [INFO] [RiskManager] Init: MAX_LEVERAGE=5, RISK_PER_TRADE=2.0%, SAFE_MODE=True
+2026-03-05 03:32:17,884 [INFO] [RiskManager] Singleton initialized.
+2026-03-05 03:32:18,773 [INFO] [BCD global] Trained on 500 candles. Found 9 changepoints.
+2026-03-05 03:32:19,667 [INFO] [MLP] Retrained: len=500, hash=760d68c91051
+2026-03-05 03:32:20,457 [INFO] [RiskManager] Daily state reset for 2026-03-05
+2026-03-05 03:33:18,044 [INFO]   ▶ [2026-01-10]  15.5% │ Equity: $9,800 │ Trades: 1
+2026-03-05 03:34:19,256 [INFO]   ▶ [2026-01-19]  30.5% │ Equity: $9,800 │ Trades: 1
+2026-03-05 03:35:19,554 [INFO]   ▶ [2026-02-16]  76.3% │ Equity: $12,384 │ Trades: 31
+2026-03-05 03:35:49,842 [INFO] 
+════════════════════════════════════════════════════════════════════════
+  BACKTEST COMPLETE
+════════════════════════════════════════════════════════════════════════
+2026-03-05 03:35:49,844 [INFO]   Net PnL   : $   +1,617.00 (+16.17%)
+2026-03-05 03:35:49,844 [INFO]   Win Rate  : 39.1%
+2026-03-05 03:35:49,844 [INFO]   R:R Ratio : 1 : 2.05
+2026-03-05 03:35:49,846 [INFO]   Trades    : 46
+2026-03-05 03:35:49,846 [INFO]   Max Score Seen: 8

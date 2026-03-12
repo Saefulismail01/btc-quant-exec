@@ -1,0 +1,170 @@
+\section{Evolusi Strategi: Dari v0.1 Menuju Golden Model v4.4}
+\label{sec:evolution}
+
+Pengembangan BTC-QUANT bukanlah sebuah proses linear, melainkan serangkaian iterasi \textit{trial-and-error} yang sistematis. Bab ini mendokumentasikan pelajaran empiris yang dipetik dari setiap fase pengujian --- mulai dari validasi fondasi algoritma hingga penemuan parameter perdagangan yang optimal. Seluruh pengujian pada fase evolusi ini dijalankan pada periode yang seragam (Januari 2024 -- Maret 2026) untuk memastikan perbandingan yang \textit{apples-to-apples} dan bebas dari bias pemilihan periode (\textit{period selection bias}).
+
+% =========================================================
+\subsection{v0.1 PoC: Validasi Awal Layer 1 BCD}
+
+Titik awal pengembangan adalah \textit{Proof of Concept} (PoC) yang menggunakan hanya \textbf{Layer 1 BCD} sebagai satu-satunya filter sinyal, tanpa konfirmasi dari layer tambahan (L2--L4). Tujuannya adalah memvalidasi secara terisolasi apakah algoritma \textit{Bayesian Changepoint Detection} memiliki \textit{predictive power} yang memadai sebagai fondasi sistem sebelum kompleksitas ditambahkan.
+
+Hasil pengujian menunjukkan bahwa fondasi BCD terbukti valid: \textit{Win Rate} mencapai 58.98\%, \textit{Net PnL} +312\%, dan \textit{Max Drawdown} terjaga pada 23.1\%. Namun terdapat satu kelemahan struktural yang jelas --- sistem melewatkan 1.855 candle (\textit{skip rate} tinggi) karena absennya mekanisme konfirmasi \textit{entry}. Peluang yang terlewatkan ini sangat terkonsentrasi pada kondisi \textit{bear market}, di mana \textit{Win Rate} hanya mencapai 56.1\%.
+
+\textbf{Kesimpulan v0.1:} BCD terbukti sebagai fondasi sinyal yang kuat dan layak secara statistik, namun memerlukan layer konfirmasi tambahan untuk mengoptimalkan seleksi \textit{entry} dan mengurangi \textit{skip rate}.
+
+% =========================================================
+\subsection{Krisis v1: Jebakan \textit{Compounding} dan Risiko Ekor}
+
+Merespons kelemahan v0.1, seluruh \textit{stack} L1--L4 diaktifkan pada v1 dengan tetap mempertahankan mekanisme \textit{compounding position sizing}. Hasilnya, jumlah \textit{trade} meningkat dari 958 menjadi 1.257 (\textit{skip rate} turun ke 1.113 candle) dan \textit{Net PnL} melonjak menjadi +676\%. Secara nominal, ini tampak sebagai kemajuan yang signifikan.
+
+Namun di balik angka tersebut tersimpan profil risiko yang jauh lebih berbahaya:
+\begin{itemize}
+    \item \textbf{MDD Melonjak 56\%:} \textit{Max Drawdown} meningkat dari 23.1\% menjadi 35.95\% --- melampaui ambang batas operasional yang dapat diterima.
+    \item \textbf{Risk Spiral:} Mekanisme \textit{compounding} memperbesar ukuran posisi seiring akumulasi profit, sehingga saat \textit{losing streak} terjadi, kerugian nominal per \textit{trade} ikut membesar secara proporsional, menciptakan spiral degradasi modal yang akseleratif.
+    \item \textbf{Bear Regime Memburuk:} \textit{Win Rate} pada kondisi \textit{bear market} justru turun dari 56.1\% menjadi 53.9\% meskipun layer konfirmasi tambahan diaktifkan, mengindikasikan bahwa L2--L4 tidak memberikan nilai tambah yang signifikan pada regime ini.
+\end{itemize}
+
+\begin{table}[h!]
+\centering
+\caption{Perbandingan v0.1 vs v1: \textit{Trade-off} \textit{Return} vs Risiko (Periode 2024--2026)}
+\label{table:v0_vs_v1}
+\begin{tabular}{@{}lllllll@{}}
+\toprule
+\textbf{Versi} & \textbf{Net PnL} & \textbf{WR} & \textbf{PF} & \textbf{MDD} & \textbf{Sharpe} & \textbf{Sizing} \\ \midrule
+v0.1 (L1 Only)  & +312\%  & 58.98\% & 1.139 & 23.10\%  & 1.396 & \textit{Compound} \\
+v1 (Full Stack) & +676\%  & 58.07\% & 1.154 & 35.95\%  & 1.437 & \textit{Compound} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Tabel~\ref{table:v0_vs_v1} memperlihatkan bahwa aktivasi penuh L2--L4 hanya meningkatkan \textit{Profit Factor} sebesar 0.015 dan \textit{Sharpe Ratio} sebesar 0.041, sementara MDD meningkat lebih dari 12 poin persentase. Ini adalah \textit{trade-off} yang secara kuantitatif tidak proporsional.
+
+\textbf{Pelajaran v1:} Di pasar aset kripto yang bercirikan volatilitas tinggi dan distribusi \textit{fat-tail}, perlindungan modal melalui pengendalian \textit{drawdown} jauh lebih bernilai daripada potensi keuntungan nominal yang eksponensial namun tidak stabil.
+
+% =========================================================
+\subsection{v3 Baseline: Penyelamatan Melalui \textit{Fixed Position Sizing}}
+
+Revisi fundamental dilakukan pada versi 3 dengan mengganti mekanisme \textit{compounding} menjadi \textbf{\textit{Fixed Position Sizing}} (margin tetap \$1.000 per \textit{trade}). Hasilnya sangat signifikan: MDD terpangkas hampir separuhnya menjadi 22.5\% --- hanya dengan mengubah aturan manajemen risiko tanpa menyentuh logika sinyal sama sekali. Temuan ini menegaskan bahwa \textit{position sizing} adalah variabel risiko yang lebih dominan dibandingkan kompleksitas sinyal itu sendiri.
+
+% =========================================================
+\subsection{Pelajaran \textit{Alpha Decay}: v4.2 dan v4.3}
+
+Dengan fondasi \textit{fixed sizing} yang lebih aman, upaya berikutnya adalah meningkatkan kualitas sinyal melalui penambahan filter teknikal yang ketat, seperti konfirmasi \textit{Daily EMA 200} dan ambang batas \textit{Z-Score}. Alih-alih menghasilkan perbaikan, eksperimen ini justru mengungkap fenomena yang dikenal sebagai \textbf{\textit{Alpha Decay}}:
+\begin{itemize}
+    \item Filter yang terlalu restriktif memblokir sebagian besar sinyal masuk, termasuk sinyal yang secara historis menguntungkan.
+    \item Frekuensi \textit{trade} yang menurun drastis mengakibatkan penurunan total \textit{return} meskipun \textit{win rate} per \textit{trade} secara individual tetap tinggi.
+\end{itemize}
+
+Temuan ini membuktikan bahwa pada sistem perdagangan berbasis momentum seperti BTC-QUANT, \textit{alpha} sejati berasal dari kualitas sinyal berlapis (L1--L4), bukan dari penambahan filter tambahan yang bersifat \textit{post-hoc}. Semakin banyak filter yang ditumpuk, semakin banyak \textit{alpha} yang terkikis.
+
+% =========================================================
+\subsection{v4.4 Golden Model: Konvergensi Menuju \textit{Baseline} Murni}
+
+Puncak dari evolusi ini adalah \textbf{v4.4 Golden Model}. Berdasarkan evidens empiris dari fase-fase sebelumnya, diambil keputusan untuk mengeliminasi seluruh fitur manajemen posisi eksperimental seperti \textit{Breakeven Lock} dan \textit{Early Loss Exit}, dan kembali ke eksekusi yang murni berbasis sinyal.
+
+Filosofi desain v4.4 bertumpu pada dua prinsip:
+\begin{enumerate}
+    \item \textbf{Kepercayaan pada Akurasi Sinyal:} Sistem mengandalkan akurasi \textit{entry} dari \textit{signal stack} L1--L4 yang secara empiris telah terbukti menghasilkan \textit{Win Rate} $>$58\%.
+    \item \textbf{\textit{Natural Resolution}:} Setiap \textit{trade} dibiarkan berakhir secara alami melalui target \textit{Stop Loss} (1.333\%) atau \textit{Take Profit} (0.71\%), dengan batas waktu keamanan (\textit{safety timeout}) 24 jam (6 candle) untuk mencegah eksposur berlebih.
+\end{enumerate}
+
+Filosofi minimalis ini terbukti memberikan profil stabilitas tertinggi dalam seluruh sejarah pengujian, menghasilkan sistem yang tidak hanya menguntungkan secara konsisten tetapi juga memiliki perilaku yang dapat diprediksi (\textit{predictable stability}).
+
+% =========================================================
+\subsection{v4.5 Heston Adaptive: Eksperimen Volatilitas Dinamis}
+\label{subsec:v45_heston}
+
+Setelah v4.4 menetapkan \textit{baseline} yang stabil, dilakukan eksperimen lanjutan untuk menguji hipotesis berikut: \textit{apakah penggantian parameter SL/TP statis dengan nilai adaptif berbasis model volatilitas dapat meningkatkan kualitas eksekusi tanpa mengorbankan stabilitas?} Lahirlah \textbf{v4.5 Heston Adaptive} --- varian eksperimental yang mengintegrasikan model volatilitas stokastik \textit{mean-reverting} Heston untuk kalibrasi SL/TP secara dinamis, serta menerapkan \textit{dynamic position sizing} berbasis Kriteria Kelly (2\% ekuitas per \textit{trade}).
+
+Perbedaan arsitektur antara kedua model dirangkum sebagai berikut:
+\begin{itemize}
+    \item \textbf{Golden v4.4:} SL tetap 1.333\%, TP tetap 0.71\%, \textit{leverage} 15$\times$, margin \$1.000/\textit{trade}.
+    \item \textbf{Heston v4.5:} SL/TP adaptif berbasis ATR $\times$ \textit{multiplier} Heston, \textit{dynamic sizing} 2\% ekuitas/\textit{trade}, \textit{leverage} maksimum 5$\times$.
+\end{itemize}
+
+\subsubsection{Pengujian Jangka Pendek: 62 Hari (Januari--Maret 2026)}
+
+Pengujian pertama dilakukan pada jendela waktu pendek (62 hari) untuk mengisolasi kualitas sinyal tanpa distorsi efek \textit{compounding} jangka panjang.
+
+\begin{table}[h!]
+\centering
+\caption{Perbandingan Performa: Golden v4.4 vs Heston v4.5 (62 Hari, Jan--Mar 2026)}
+\label{table:evo_62d}
+\begin{tabular}{@{}llll@{}}
+\toprule
+\textbf{Metrik}         & \textbf{Golden v4.4} & \textbf{Heston v4.5}  & \textbf{Unggul} \\ \midrule
+Net PnL (\%)            & +30.04\%             & \textbf{+76.10\%}     & Heston \\
+\textit{Final Equity} (USD) & \$13.004         & \textbf{\$17.610}     & Heston \\
+\textit{Win Rate}       & \textbf{57.36\%}     & 49.35\%               & Golden \\
+\textit{Profit Factor}  & 1.278                & \textbf{1.587}        & Heston \\
+\textit{Max Drawdown}   & 20.75\%              & \textbf{17.10\%}      & Heston \\
+\textit{Sharpe Ratio}   & 2.299                & \textbf{3.409}        & Heston \\
+R:R \textit{Ratio}      & 0.950                & \textbf{1.629}        & Heston \\
+Jumlah \textit{Trade}   & \textbf{129}         & 77                    & Golden \\
+\textit{TIME\_EXIT Rate}& \textbf{7.0\%}       & 36.4\%                & Golden \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Heston unggul pada 7 dari 9 metrik.} Keunggulan utama bersumber dari R:R yang secara struktural lebih baik (1.629 vs 0.950) dan mekanisme \textit{dynamic sizing} yang membatasi kerugian maksimal per \textit{trade} terhadap ekuitas berjalan. Namun terdapat satu peringatan kritis yang perlu dicermati: \textbf{36.4\% \textit{trade} Heston berakhir melalui TIME\_EXIT} (dibandingkan hanya 7.0\% pada Golden). Ini mengindikasikan bahwa target TP Heston terlalu ambisius untuk kondisi \textit{Low Volatility} yang mendominasi periode Januari--Maret 2026 --- seluruh 77 \textit{trade} Heston pada periode ini masuk dalam kategori \textit{regime} \textit{Low Vol}.
+
+\subsubsection{Validasi Longitudinal: 7 Tahun (2019--2026)}
+
+Untuk menguji ketahanan kedua model lintas siklus penuh Bitcoin --- mencakup \textit{bear market} 2019, \textit{bull run} 2020--2021, fase koreksi 2022, dan pemulihan 2023--2026 --- dilakukan pengujian pada 7 tahun data historis (2.619 hari, 13.783 candle 4H).
+
+\begin{table}[h!]
+\centering
+\caption{Perbandingan Longitudinal: Golden v4.4 vs Heston v4.5 (2019--2026)}
+\label{table:evo_7y}
+\begin{tabular}{@{}llll@{}}
+\toprule
+\textbf{Metrik}              & \textbf{Golden v4.4} & \textbf{Heston v4.5}   & \textbf{Unggul} \\ \midrule
+\textit{Final Equity} (USD)  & \$128.321            & \textbf{\$16.928.244}  & Heston \\
+Net PnL (\%)                 & +1.183\%             & \textbf{+169.182\%}    & Heston \\
+\textit{Win Rate}            & \textbf{58.43\%}     & 46.67\%                & Golden \\
+\textit{Profit Factor}       & \textbf{1.372}       & 1.302                  & Golden \\
+\textit{Max Drawdown}        & \textbf{12.40\%}     & 71.94\%                & Golden \\
+\textit{Sharpe Ratio}        & \textbf{3.087}       & 1.007                  & Golden \\
+R:R \textit{Ratio}           & 0.976                & \textbf{1.488}         & Heston \\
+Jumlah \textit{Trade}        & 3.866                & 2.100                  & -- \\
+\textit{TIME\_EXIT Rate}     & \textbf{5.4\%}       & 39.5\%                 & Golden \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Hasil ini menghadirkan paradoks yang menarik secara akademis: Heston menghasilkan ekuitas akhir \textbf{131$\times$ lebih besar} (\$16,9 juta vs \$128 ribu), namun kalah pada 6 dari 9 metrik kualitas. Penjelasannya terletak pada efek \textit{compounding} agresif selama 7 tahun --- setiap kemenangan Heston memperbesar basis modal untuk \textit{trade} berikutnya, menghasilkan pertumbuhan eksponensial yang secara inheren juga memperbesar eksposur risiko secara proporsional.
+
+Keunggulan nominal tersebut datang dengan tiga konsekuensi yang tidak dapat diabaikan dalam konteks manajemen risiko:
+\begin{itemize}
+    \item \textbf{\textit{Max Drawdown} 71.94\%:} Pada titik terburuk, ekuitas dapat menyusut hingga 72\% dari nilai puncaknya. Kondisi ini secara psikologis dan operasional hampir mustahil dipertahankan tanpa intervensi, dan jauh melampaui toleransi risiko institusional manapun.
+    \item \textbf{\textit{Sharpe Ratio} 1.007:} Berada di ambang batas minimum yang dianggap layak ($>$1.0). Volatilitas ekstrem mengikis nilai \textit{risk-adjusted return} hingga mendekati batas kelayakan.
+    \item \textbf{\textit{High Vol Regime} Tidak Teruji:} Seluruh 2.100 \textit{trade} Heston dalam periode 7 tahun dikategorikan sebagai regime \textit{Normal} atau \textit{Low Vol}. \textit{Multiplier} SL/TP untuk kondisi \textit{High Volatility} ($\times$2.0/$\times$1.5) sama sekali belum divalidasi secara empiris, sehingga perilaku model pada kondisi pasar yang paling kritis justru merupakan \textit{blind spot} yang signifikan.
+\end{itemize}
+
+Sebaliknya, \textbf{Golden v4.4 mempertahankan \textit{Sharpe Ratio} $>$3.0 dan MDD $<$12.5\% konsisten selama 7 tahun} --- bukti empiris bahwa arsitekturnya tidak terdegradasi lintas siklus pasar dan layak untuk konteks produksi jangka panjang.
+
+% =========================================================
+\subsection{Ringkasan Evolusi: Pola Berulang dalam Pengembangan Sistem}
+\label{subsec:evolution_summary}
+
+\begin{table}[h!]
+\centering
+\caption{Ringkasan Evolusi Semua Versi BTC-QUANT (Periode Pengujian 2024--2026 kecuali dinyatakan lain)}
+\label{table:evolution_all}
+\begin{tabular}{@{}llllllp{3.2cm}@{}}
+\toprule
+\textbf{Versi} & \textbf{Periode} & \textbf{Net PnL} & \textbf{MDD} & \textbf{Sharpe} & \textbf{Sizing} & \textbf{Alasan Transisi} \\ \midrule
+v0.1 (L1 Only)  & 2024--26 & +312\%   & 23.1\%  & 1.396 & \textit{Compound} & \textit{Skip rate} tinggi, perlu konfirmasi layer \\
+v1 (Full Stack) & 2024--26 & +676\%   & 35.95\% & 1.437 & \textit{Compound} & MDD tidak \textit{acceptable}, \textit{risk spiral} \\
+v3 Baseline     & 2024--26 & +109.6\% & 22.5\%  & 1.036 & \textit{Fixed}    & Perlu optimasi filter sinyal \\
+v4.2/v4.3       & 2024--26 & $<$v3    & --      & --    & \textit{Fixed}    & \textit{Alpha decay} akibat \textit{over-filtering} \\
+v4.4 Golden $\star$ & 2024--26 & +231.6\% & 12.5\% & 2.248 & \textit{Fixed} & \textit{Baseline} produksi terpilih \\
+v4.5 Heston     & 2019--26$^\dagger$ & +169.182\% & 71.94\% & 1.007 & \textit{Dynamic} & \textit{High Vol regime} belum tervalidasi \\
+\bottomrule
+\multicolumn{7}{l}{\small $^\dagger$ Pengujian longitudinal 7 tahun; tidak sebanding langsung dengan baris lain.}
+\end{tabular}
+\end{table}
+
+Sepanjang perjalanan ini, satu pola berulang dengan konsisten: \textbf{setiap penambahan kompleksitas yang tidak didukung oleh evidens statistik yang kuat justru memperburuk profil risiko sistem secara keseluruhan}. HMM digantikan BCD bukan karena BCD lebih sederhana, melainkan karena BCD adalah satu-satunya model yang lulus uji \textit{walk-forward validation} secara empiris. \textit{Compounding} digantikan \textit{fixed sizing} bukan karena lebih konservatif, melainkan karena terbukti mengeliminasi \textit{risk spiral} tanpa mengorbankan kualitas sinyal. Filter teknikal pada v4.2/v4.3 dieliminasi bukan karena tidak sophistikated, melainkan karena data menunjukkan bahwa filter tersebut mengikis \textit{alpha} lebih banyak daripada yang disumbangkannya.
+
+\textbf{Kesimpulan praktis dari seluruh evolusi ini:} Untuk \textit{deployment} produksi dengan batasan risiko institusional (MDD $<$20\%), \textbf{Golden v4.4} merupakan pilihan yang telah tervalidasi secara empiris lintas berbagai kondisi pasar. Untuk konteks eksplorasi dengan toleransi risiko tinggi dan horison investasi yang sangat panjang, \textbf{Heston v4.5} menawarkan potensi pertumbuhan eksponensial yang belum tertandingi --- dengan prasyarat bahwa \textit{High Volatility regime} harus divalidasi secara empiris sebelum \textit{deployment} penuh dilakukan.

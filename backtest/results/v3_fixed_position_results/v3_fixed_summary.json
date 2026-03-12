@@ -1,0 +1,30 @@
+{
+  "run_timestamp": "20260304_072957",
+  "window_start": "2023-01-01",
+  "window_end": "2026-03-03",
+  "trade_plan": {
+    "margin_usd": 1000.0,
+    "leverage": 15.0,
+    "notional_usd": 15000.0,
+    "sl_pct": 0.01333,
+    "tp_min_pct": 0.0071,
+    "fee_rt_pct": 0.0008,
+    "max_loss_usd": 211.95
+  },
+  "initial_capital": 10000.0,
+  "final_equity": 58415.81,
+  "net_pnl_usd": 48415.81,
+  "net_pnl_pct": 484.1581,
+  "n_trades": 5261,
+  "n_wins": 2506,
+  "n_losses": 2755,
+  "win_rate_pct": 47.63,
+  "profit_factor": 1.154,
+  "max_drawdown_pct": -55.85,
+  "n_sl": 921,
+  "n_tp": 1910,
+  "n_close": 2430,
+  "n_skipped": 1543,
+  "n_errors": 0,
+  "elapsed_seconds": 3704.1
+}

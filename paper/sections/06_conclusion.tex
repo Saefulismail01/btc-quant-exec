@@ -1,0 +1,26 @@
+\section{Kesimpulan dan Roadmap Selanjutnya}
+\label{sec:conclusion}
+
+Dokumentasi teknis ini merangkum seluruh perjalanan inovasi dan transformasi arsitektur BTC-QUANT. Kami telah membuktikan bahwa keberhasilan dalam perdagangan algoritmik di pasar Bitcoin tidak bergantung pada indikator teknikal yang kompleks, melainkan pada pemahaman mendalam terhadap struktur fisik pasar dan manajemen risiko yang stabil.
+
+\subsection{Intisari Pembelajaran}
+Berikut adalah poin-poin kesimpulan strategis dari pengembangan ini:
+\begin{enumerate}
+    \item \textbf{Ekonofisika > Machine Learning Klasik:} Pengenalan BCD dan distribusi Student-T terbukti lebih efektif dalam menangani fenomena \textit{non-stationary} pasar kripto dibandingkan model Markovian konvensional.
+    \item \textbf{Stability is the New High Return:} Dengan menekan \textit{Max Drawdown} ke angka 12.53\%, sistem ini menawarkan profil risiko-pengembalian (\textit{Sharpe Ratio} 2.24) yang unggul di atas model mana pun yang lebih agresif.
+    \item \textbf{Simplisitas di Atas Kompleksitas:} Versi 4.4 Golden Model yang murni tanpa mekanisme \textit{lock-in} tambahan terbukti paling stabil, memberikan pelajaran bahwa strategi terbaik sering kali adalah strategi yang menyisakan ruang bagi dinamika alami pasar.
+\end{enumerate}
+
+\subsection{Roadmap Pengembangan}
+
+Meskipun \textit{Golden Model} v4.4 telah mencapai standar produksi, pengembangan sistem terus berlanjut. Fase R\&D saat ini telah menghasilkan \textbf{v4.5 Heston Adaptive} --- varian eksperimental yang mengintegrasikan model volatilitas stokastik Heston untuk kalibrasi SL/TP adaptif dan \textit{dynamic position sizing} berbasis Kriteria Kelly. Hasil pengujian awal menunjukkan potensi yang signifikan, namun terdapat satu prasyarat kritis yang harus dipenuhi sebelum \textit{deployment} penuh.
+
+Prioritas pengembangan ke depan adalah sebagai berikut:
+\begin{itemize}
+    \item \textbf{Validasi \textit{High Volatility Regime} (Prioritas Utama):} Seluruh 2.100 \textit{trade} v4.5 dalam pengujian 7 tahun dikategorikan sebagai regime \textit{Normal} atau \textit{Low Vol}. \textit{Multiplier} SL/TP untuk kondisi \textit{High Volatility} ($\times$2.0/$\times$1.5) belum pernah diuji secara empiris dan merupakan \textit{blind spot} yang harus diselesaikan sebelum v4.5 layak untuk produksi.
+    \item \textbf{Kalibrasi Parameter Heston per Siklus Pasar:} Parameter $\gamma$, $\eta$, dan $\kappa$ pada model Heston saat ini dikalibrasi secara global. Kalibrasi adaptif per regime (bull/bear/sideways) berpotensi meningkatkan akurasi estimasi volatilitas secara signifikan.
+    \item \textbf{Sentiment Aggregation (Layer 5):} Mengintegrasikan data sentimen pasar (\textit{Fear \& Greed Index}, \textit{funding rate}, \textit{open interest}) sebagai lapisan konfirmasi tambahan untuk memitigasi risiko peristiwa \textit{Black Swan} yang bersifat fundamental.
+    \item \textbf{Eksekusi \textit{Real-Time}:} Migrasi dari simulasi \textit{backtest} ke modul eksekusi \textit{live} dengan koneksi API Binance WebSocket yang teroptimasi untuk latensi rendah.
+\end{itemize}
+
+Dengan landasan ekonofisika yang telah tervalidasi secara empiris dan arsitektur yang terbukti stabil lintas siklus pasar, BTC-QUANT v4.4 siap menjadi basis sistem perdagangan algoritmik institusional, sementara v4.5 terus dikembangkan sebagai generasi berikutnya dengan potensi pertumbuhan eksponensial yang terkontrol.

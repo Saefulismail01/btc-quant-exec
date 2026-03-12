@@ -1,0 +1,30 @@
+# ══════════════════════════════════════════════════════════════
+# ANALISIS AKURASI DETEKSI REGIME (HMM LAYER 1)
+# Laporan Evaluasi Strategi LAZARUS-BTC - 27 Feb 2026
+# ══════════════════════════════════════════════════════════════
+
+[RINGKASAN TEMUAN]
+Ditemukan bias teknis pada model HMM yang secara signifikan mempengaruhi akurasi eksekusi sinyal pada periode backtest 2023 dan 2025.
+
+1. EVALUASI TAHUN 2023 (Trending Bullish)
+   - Status: GAGAL (False Bearish Bias)
+   - Observasi: Bitcoin naik +155%, namun model mendeteksi 100% pergerakan sebagai "Bearish Trend".
+   - Dampak: Sinyal "Long" tidak terekseskusi maksimal karena tidak mendapat validasi dari Layer 1 HMM.
+   - PnL Result: -0.50% (Underperformance berat dibanding Buy & Hold).
+
+2. EVALUASI TAHUN 2025 (Choppy/Koreksi)
+   - Status: BERHASIL (Secara Kebetulan)
+   - Observasi: Pasar awal 2025 memang cenderung terkoreksi. Bias "Bearish" pada model secara tidak sengaja sejalan dengan arah pasar.
+   - Dampak: Model berhasil menghindari drawdown besar dan mengambil profit kecil dari volatilitas negatif.
+   - PnL Result: +2.07% (Outperformed Buy & Hold yang rugi -6.61%).
+
+[ANALISA PENYEBAB TEKNIS]
+- Isu Konvergensi: Window data 100 candle (4H) seringkali terlalu "homogen" bagi model HMM untuk membedakan dua kondisi (Bull/Bear) secara statistik.
+- Fallback Logic: Pada file 'layer1_hmm.py', terdapat mekanisme redundansi yang secara otomatis melabeli status sebagai "Bearish Trend" jika clustering gagal berkonvergensi atau menghasilkan deviasi standar nol.
+
+[REKOMENDASI PERBAIKAN]
+- Perpanjang window data inspirasi untuk HMM (Training set) dari 100 candle menjadi minimal 300-500 candle.
+- Implementasikan logika "Trend Continuity" pada Layer 2 EMA sebagai pemberat utama jika HMM gagal konvergensi.
+- Tambahkan filter volatilitas (ATR) yang lebih longgar untuk fase pasar trending cepat agar tidak memicu 'Soft Exit' prematur.
+
+# ═════════════════════════ END OF REPORT ═════════════════════════

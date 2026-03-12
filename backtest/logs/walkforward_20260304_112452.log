@@ -1,0 +1,44 @@
+2026-03-04 11:24:52,013 [INFO] ========================================================================
+2026-03-04 11:24:52,013 [INFO]   BTC-QUANT TRUE WALK-FORWARD SIMULATION
+2026-03-04 11:24:52,014 [INFO]   Window  : 2022-11-01  →  2026-03-03
+2026-03-04 11:24:52,014 [INFO]   Capital : $10,000
+2026-03-04 11:24:52,014 [INFO] ========================================================================
+2026-03-04 11:24:52,014 [INFO] Loading full dataset from DuckDB with ASOF JOIN...
+2026-03-04 11:24:52,071 [INFO] Loaded 7206 candles | 2022-11-18 08:00:00+00:00 → 2026-03-03 04:00:00+00:00
+2026-03-04 11:24:52,083 [WARNING] Requested start 2022-11-01 is too early — DB requires 400 warmup candles. Auto-adjusting start to 2023-01-24.
+2026-03-04 11:24:52,084 [INFO]   Candles in window : 6,805
+2026-03-04 11:24:52,084 [INFO]   History available : 400 candles before window
+2026-03-04 11:24:52,084 [INFO] 
+2026-03-04 11:24:52,085 [INFO] Initializing services...
+2026-03-04 11:24:54,121 [WARNING] [MLP] Failed to load persisted model: 
+2026-03-04 11:24:54,121 [INFO] [RiskManager] Daily state reset for 2026-03-04
+2026-03-04 11:24:54,122 [INFO] [RiskManager] Init: MAX_LEVERAGE=5, RISK_PER_TRADE=2.0%, SAFE_MODE=True
+2026-03-04 11:24:54,122 [INFO] [RiskManager] Singleton initialized.
+2026-03-04 11:24:54,123 [INFO] All services ready.
+
+2026-03-04 11:24:55,864 [INFO] [BCD global] Trained on 401 candles. Found 8 changepoints.
+2026-03-04 11:24:57,465 [INFO] [MLP] Retrained: len=401, hash=06d9c7b3f065
+2026-03-04 11:25:48,547 [INFO] [MLP] Retrained: len=449, hash=a32ab4470141
+2026-03-04 11:25:54,997 [INFO]   ▶ [2023-02-02]   0.8%  │ Equity: $    10,000  │ PnL: $       +0  │ Trades:    0  │ ETA: 126.8 min
+2026-03-04 11:26:38,029 [INFO] [MLP] Retrained: len=497, hash=f3fb946b9c77
+2026-03-04 11:26:55,809 [INFO]   ▶ [2023-02-11]   1.6%  │ Equity: $     9,800  │ PnL: $     -200  │ Trades:    1  │ ETA: 122.3 min
+2026-03-04 11:27:56,782 [INFO]   ▶ [2023-02-19]   2.4%  │ Equity: $     9,800  │ PnL: $     -200  │ Trades:    1  │ ETA: 126.4 min
+2026-03-04 11:28:58,003 [INFO]   ▶ [2023-02-28]   3.1%  │ Equity: $     9,800  │ PnL: $     -200  │ Trades:    1  │ ETA: 126.4 min
+2026-03-04 11:29:58,874 [INFO]   ▶ [2023-03-08]   3.8%  │ Equity: $     9,800  │ PnL: $     -200  │ Trades:    1  │ ETA: 127.8 min
+2026-03-04 11:31:00,006 [INFO]   ▶ [2023-03-16]   4.6%  │ Equity: $     9,800  │ PnL: $     -200  │ Trades:    1  │ ETA: 127.3 min
+2026-03-04 11:32:00,951 [INFO]   ▶ [2023-03-25]   5.3%  │ Equity: $     9,800  │ PnL: $     -200  │ Trades:    1  │ ETA: 127.3 min
+2026-03-04 11:33:01,329 [INFO]   ▶ [2023-04-02]   6.0%  │ Equity: $     9,800  │ PnL: $     -200  │ Trades:    1  │ ETA: 126.6 min
+2026-03-04 11:34:02,614 [INFO]   ▶ [2023-04-09]   6.7%  │ Equity: $     9,604  │ PnL: $     -396  │ Trades:    2  │ ETA: 128.2 min
+2026-03-04 11:35:03,273 [INFO]   ▶ [2023-04-16]   7.3%  │ Equity: $     9,604  │ PnL: $     -396  │ Trades:    2  │ ETA: 128.8 min
+2026-03-04 11:36:03,300 [INFO]   ▶ [2023-04-23]   7.9%  │ Equity: $     9,604  │ PnL: $     -396  │ Trades:    2  │ ETA: 130.7 min
+2026-03-04 11:37:03,614 [INFO]   ▶ [2023-04-30]   8.5%  │ Equity: $     9,604  │ PnL: $     -396  │ Trades:    2  │ ETA: 131.0 min
+2026-03-04 11:38:03,715 [INFO]   ▶ [2023-05-07]   9.1%  │ Equity: $     9,604  │ PnL: $     -396  │ Trades:    2  │ ETA: 131.0 min
+2026-03-04 11:39:05,206 [INFO]   ▶ [2023-05-13]   9.6%  │ Equity: $     9,604  │ PnL: $     -396  │ Trades:    2  │ ETA: 132.9 min
+2026-03-04 11:40:05,757 [INFO]   ▶ [2023-05-20]  10.3%  │ Equity: $     9,604  │ PnL: $     -396  │ Trades:    2  │ ETA: 132.7 min
+2026-03-04 11:41:06,518 [INFO]   ▶ [2023-06-01]  11.3%  │ Equity: $     9,481  │ PnL: $     -519  │ Trades:    5  │ ETA: 127.4 min
+2026-03-04 11:42:06,607 [INFO]   ▶ [2023-06-09]  12.0%  │ Equity: $     9,819  │ PnL: $     -181  │ Trades:    8  │ ETA: 126.1 min
+2026-03-04 11:43:06,705 [INFO]   ▶ [2023-06-17]  12.7%  │ Equity: $     9,819  │ PnL: $     -181  │ Trades:    8  │ ETA: 125.0 min
+2026-03-04 11:44:06,961 [INFO]   ▶ [2023-06-24]  13.4%  │ Equity: $     9,819  │ PnL: $     -181  │ Trades:    8  │ ETA: 124.4 min
+2026-03-04 11:45:08,289 [INFO]   ▶ [2023-07-02]  14.1%  │ Equity: $     9,819  │ PnL: $     -181  │ Trades:    8  │ ETA: 123.5 min
+2026-03-04 11:46:09,470 [INFO]   ▶ [2023-07-08]  14.6%  │ Equity: $     9,819  │ PnL: $     -181  │ Trades:    8  │ ETA: 124.5 min
+2026-03-04 11:47:11,028 [INFO]   ▶ [2023-07-15]  15.2%  │ Equity: $     9,819  │ PnL: $     -181  │ Trades:    8  │ ETA: 124.1 min

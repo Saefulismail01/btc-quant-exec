@@ -1,0 +1,51 @@
+{
+  "run_timestamp": "20260310_092833",
+  "mode_label": "v0.1-style  | L1 BCD only + Compounding 2%",
+  "layer_mode": "l1_only",
+  "sizing_mode": "compound",
+  "window_start": "2024-01-01",
+  "window_end": "2026-03-04",
+  "initial_capital": 10000.0,
+  "final_equity": 41202.52,
+  "net_pnl_usd": 31202.52,
+  "net_pnl_pct": 312.0252,
+  "daily_return_pct": 0.3935,
+  "n_days": 793,
+  "n_trades": 958,
+  "n_wins": 565,
+  "n_losses": 393,
+  "win_rate_pct": 58.98,
+  "avg_winner_usd": 451.48,
+  "avg_loser_usd": 569.68,
+  "rr_ratio": 0.793,
+  "profit_factor": 1.139,
+  "max_drawdown_pct": 23.13,
+  "sharpe_ratio": 1.396,
+  "avg_hold_candles": 3.03,
+  "exit_distribution": {
+    "SL": 329,
+    "TRAIL_TP": 312,
+    "TP": 238,
+    "TIME_EXIT": 79
+  },
+  "regime_summary": {
+    "bear": {
+      "trades": 244,
+      "win_rate": 56.1,
+      "total_pnl": 6773.92
+    },
+    "bull": {
+      "trades": 483,
+      "win_rate": 60.9,
+      "total_pnl": 20073.71
+    },
+    "neutral": {
+      "trades": 231,
+      "win_rate": 58.0,
+      "total_pnl": 4354.89
+    }
+  },
+  "n_skipped": 1855,
+  "n_errors": 0,
+  "elapsed_seconds": 6049.3
+}

@@ -1,0 +1,20 @@
+
+════════════════════════════════════════════════════════════════════════
+  LAZARUS-BTC · HMM DIRECTIONAL CALIBRATION EVALUATOR
+  Run at: 2026-03-01 09:29:33
+  Log file: C:\Users\ThinkPad\Documents\Windsurf\btc-scalping-quant\backtest\logs\regime_eval_20260301_092933.log
+════════════════════════════════════════════════════════════════════════
+
+========================================================================
+  EVALUATING DB_LIVE
+========================================================================
+  Data: (168, 10) | 2026-02-01 → 2026-03-01 | $62,868–$78,801
+[HMM global] Insufficient data: 117 rows (need 250)
+  Collected 0 valid predictions
+
+  ⚠ No predictions for DB_LIVE — skipping
+════════════════════════════════════════════════════════════════════════
+  RINGKASAN AKHIR — KELAYAKAN HMM SEBAGAI DIRECTIONAL FILTER
+════════════════════════════════════════════════════════════════════════
+
+  KESIMPULAN:
