@@ -173,10 +173,13 @@ class PositionManager:
 
                 return True
 
-            logger.info(
-                f"[PositionManager] ✅ Position still open at exchange | "
-                f"Entry: ${exchange_pos.entry_price:,.2f} | PnL: ${exchange_pos.unrealized_pnl:+.2f}"
-            )
+            if exchange_pos:
+                logger.info(
+                    f"[PositionManager] ✅ Position still open at exchange | "
+                    f"Entry: ${exchange_pos.entry_price:,.2f} | PnL: ${exchange_pos.unrealized_pnl:+.2f}"
+                )
+            else:
+                logger.warning("[PositionManager] Position disappeared just before logging status")
             return True
 
         except Exception as e:

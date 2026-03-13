@@ -111,7 +111,7 @@ class PaperTradeService:
         size_quote = risk_amount * leverage
         size_base = size_quote / price
         
-        trade_id = f"virtual_{uuid.uuid4().hex[:8]}"
+        trade_id = f"virtual_{str(uuid.uuid4().hex)[:8]}"
         ts = int(time.time() * 1000)
         
         with duckdb.connect(self.db_path) as con:
@@ -209,10 +209,8 @@ class PaperTradeService:
         closed_count: int = 0
         for _, trade in open_trades.iterrows():
             entry: float = float(trade["entry_price"])
-            if current_price is not None:
-                exit_price: float = float(current_price)
-            else:
-                exit_price = entry
+            exit_px = current_price if current_price is not None else entry
+            exit_price: float = float(exit_px)
             exit_type: str = "MANUAL_SHUTDOWN"
 
             try:
@@ -226,7 +224,7 @@ class PaperTradeService:
                     exit_price=exit_price,
                     exit_type=exit_type
                 )
-                closed_count = closed_count + 1
+                closed_count += 1
             except Exception as e:
                 logger.error(f"[PAPER] Failed to close position {trade['id']}: {e}")
 
