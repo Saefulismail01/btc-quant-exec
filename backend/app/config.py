@@ -36,9 +36,23 @@ class Settings(BaseSettings):
     execution_mode: str = "testnet"  # testnet | live
     trading_enabled: bool = False    # CRITICAL: safety flag
 
+    # ========== LIGHTER EXECUTION LAYER CONFIG (NEW) ==========
+    lighter_execution_mode: str = "testnet"  # testnet | mainnet
+    lighter_trading_enabled: bool = False    # CRITICAL: safety flag
+    lighter_testnet_api_key: str = ""
+    lighter_testnet_api_secret: str = ""
+    lighter_mainnet_api_key: str = ""
+    lighter_mainnet_api_secret: str = ""
+    lighter_api_key_index: int = 2           # Index of API key (avoid 0-1 reserved)
+    lighter_testnet_base_url: str = "https://testnet.zklighter.elliot.ai"
+    lighter_testnet_ws_url: str = "wss://testnet.zklighter.elliot.ai/stream"
+    lighter_mainnet_base_url: str = "https://mainnet.zklighter.elliot.ai"
+    lighter_mainnet_ws_url: str = "wss://mainnet.zklighter.elliot.ai/stream"
+
     class Config:
         env_file = ".env"
         env_file_encoding = "utf-8"
+        extra = "ignore"
 
 
 settings = Settings()

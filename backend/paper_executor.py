@@ -14,8 +14,8 @@ if str(BACKEND_DIR) not in sys.path:
     sys.path.insert(0, str(BACKEND_DIR))
 
 # Setup dummy environment if needed
-from app.services.signal_service import get_signal_service
-from app.services.paper_trade_service import get_paper_trade_service
+from app.use_cases.signal_service import get_signal_service
+from app.use_cases.paper_trade_service import get_paper_trade_service
 
 # Logging Setup
 logging.basicConfig(

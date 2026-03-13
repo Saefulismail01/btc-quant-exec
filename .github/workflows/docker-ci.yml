@@ -1,0 +1,65 @@
+name: Docker Deployment (Self-Hosted Runner)
+
+on:
+  push:
+    branches: [ "main", "master" ]
+
+jobs:
+  deploy:
+    # Menggunakan 'self-hosted' karena GitHub Runner sudah terpasang di laptop Ubuntu Anda
+    runs-on: self-hosted
+    
+    steps:
+      - name: Fix permissions before checkout
+        run: sudo chown -R $USER:$USER ${{ github.workspace }} || true
+
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Create .env if not exists (Backend)
+        run: |
+          if [ ! -f ./backend/.env ]; then
+            echo "TELEGRAM_BOT_TOKEN=${{ secrets.TELEGRAM_BOT_TOKEN }}" > ./backend/.env
+            echo "TELEGRAM_CHAT_ID=${{ secrets.TELEGRAM_CHAT_ID }}" >> ./backend/.env
+          fi
+
+      - name: Detect changed services
+        id: changes
+        run: |
+          # Compare against the previous state of main on the remote (before this push)
+          # ${{ github.event.before }} is the SHA before the push — works for merge commits too
+          BEFORE="${{ github.event.before }}"
+          CHANGED_FILES=$(git diff --name-only "$BEFORE" HEAD 2>/dev/null || echo "")
+          echo "Files changed:"
+          echo "$CHANGED_FILES"
+
+          if echo "$CHANGED_FILES" | grep -q '^backend/'; then
+            echo "backend_changed=true" >> $GITHUB_OUTPUT
+          else
+            echo "backend_changed=false" >> $GITHUB_OUTPUT
+          fi
+
+          if echo "$CHANGED_FILES" | grep -q '^frontend/'; then
+            echo "frontend_changed=true" >> $GITHUB_OUTPUT
+          else
+            echo "frontend_changed=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Rebuild Backend (only if backend changed)
+        if: steps.changes.outputs.backend_changed == 'true'
+        run: |
+          docker compose up -d --no-deps --build backend
+
+      - name: Rebuild Frontend (forced or if frontend changed)
+        if: steps.changes.outputs.frontend_changed == 'true'
+        run: |
+          docker compose build --no-cache frontend
+          docker compose up -d --no-deps frontend
+
+      - name: Start services if not running
+        run: docker compose up -d
+
+      - name: Cleanup old images
+        run: docker image prune -f

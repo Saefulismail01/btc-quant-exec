@@ -283,9 +283,9 @@ TELEGRAM_CHAT_ID=...
 ✅ Daily loss cap + consecutive loss cooldown
 
 ### **Dokumentasi Lengkap**
-- `execution_layer/TESTNET_GUIDE.md` — Step-by-step testing guide
-- `execution_layer/IMPLEMENTATION_PLAN.md` — Technical deep-dive
-- `execution_layer/PHASE3_SUMMARY.md` — Complete API reference
+- `execution_layer/binance/TESTNET_GUIDE.md` — Step-by-step testing guide (Binance)
+- `execution_layer/binance/IMPLEMENTATION_PLAN.md` — Technical deep-dive (Binance)
+- `execution_layer/lighter/LIGHTER_SETUP_GUIDE.md` — Setup guide for Lighter.xyz integration
 
 ---
 
