@@ -1,0 +1,82 @@
+TESTNET vs MAINNET API KEY - QUICK SUMMARY
+===========================================
+
+TESTNET:
+--------
+• Purpose: Learning & Testing (SAFE - Fake Money)
+• Dashboard: https://lighter.elliot.ai
+• Endpoint: testnet.zklighter.elliot.ai
+• Money: Fake USDC (simulation)
+• Duration: 48 hours minimum
+
+.env:
+  LIGHTER_EXECUTION_MODE=testnet
+  LIGHTER_TESTNET_API_KEY=<your_key>
+  LIGHTER_TESTNET_API_SECRET=<your_secret>
+  LIGHTER_API_KEY_INDEX=2
+
+
+MAINNET:
+--------
+• Purpose: Live Trading (REAL Money - Real Risk!)
+• Dashboard: https://lighter.xyz
+• Endpoint: api.lighter.xyz
+• Money: Real USDC
+• Minimum: $1,200 USDC required
+
+.env:
+  LIGHTER_EXECUTION_MODE=mainnet
+  LIGHTER_MAINNET_API_KEY=<your_key>
+  LIGHTER_MAINNET_API_SECRET=<your_secret>
+  LIGHTER_API_KEY_INDEX=3 (DIFFERENT from testnet!)
+
+
+HOW CODE CHOOSES:
+-----------------
+
+Read LIGHTER_EXECUTION_MODE from .env
+  |
+  ├─ If "testnet" → Use LIGHTER_TESTNET_API_KEY
+  |                  Use testnet endpoint
+  |
+  └─ If "mainnet" → Use LIGHTER_MAINNET_API_KEY
+                     Use mainnet endpoint
+
+AUTOMATIC! You only change ONE variable!
+
+
+SWITCHING PROCESS:
+------------------
+
+1. Run 48 hours testnet successfully
+2. Get mainnet credentials (different API key index!)
+3. Deposit $1,200+ USDC to mainnet
+4. Change .env: LIGHTER_EXECUTION_MODE=mainnet
+5. Add mainnet credentials to .env
+6. Start bot with LIGHTER_TRADING_ENABLED=false
+7. Verify balance matches deposit
+8. Watch 1 clean cycle
+9. Enable: LIGHTER_TRADING_ENABLED=true
+10. LIVE TRADING STARTS!
+
+
+NONCE MANAGEMENT:
+-----------------
+
+Testnet nonce:  Separate counter (0, 1, 2, ... for testnet only)
+Mainnet nonce:  Separate counter (0, 1, 2, ... for mainnet only)
+Independent:    Switching networks resets nonce automatically
+
+No manual nonce reset needed!
+
+
+KEY INSIGHT:
+------------
+
+Testnet = Learning environment (fake money, safe)
+Mainnet = Real trading (real money, careful!)
+
+Just change LIGHTER_EXECUTION_MODE in .env
+Everything else switches automatically!
+
+For detailed guide: LIGHTER_TESTNET_VS_MAINNET.md
