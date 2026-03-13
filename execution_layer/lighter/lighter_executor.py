@@ -61,9 +61,9 @@ class LighterExecutor:
         self.trading_enabled = (
             os.getenv("LIGHTER_TRADING_ENABLED", "false").lower() == "true"
         )
-        self.running = False
-        self.last_balance_check = 0
-        self.last_metadata_sync = 0
+        self.running_event: asyncio.Event = None  # type: ignore
+        self.last_balance_check = 0.0
+        self.last_metadata_sync = 0.0
 
     async def startup_checks(self) -> bool:
         """Perform startup safety checks for Lighter execution."""
@@ -73,11 +73,12 @@ class LighterExecutor:
 
         logger.info(f"[LIGHTER] Mode: {self.execution_mode.upper()}")
         logger.info(
-            f"[LIGHTER] Trading: {'🟢 ENABLED' if self.trading_enabled else '🔴 DISABLED'}"
+            f"[LIGHTER] Trading: {'[OK]' if self.trading_enabled else '[DISABLED]'}"
         )
         logger.info("[LIGHTER] Parameters: Margin=$1,000 | Leverage=15x | SL=1.333% | TP=0.71%")
-        logger.info("[LIGHTER] TIME_EXIT: 24 hours (6 × 4h candles)")
+        logger.info("[LIGHTER] TIME_EXIT: 24 hours (6 x 4h candles)")
 
+        gateway = None
         try:
             # Initialize gateway
             gateway = LighterExecutionGateway()
@@ -92,35 +93,39 @@ class LighterExecutor:
 
             if self.execution_mode == "mainnet" and balance < self.MIN_BALANCE_MAINNET:
                 logger.error(
-                    f"[LIGHTER] ❌ Insufficient balance for mainnet! "
+                    f"[LIGHTER] [ERR] Insufficient balance for mainnet! "
                     f"Need ${self.MIN_BALANCE_MAINNET:,.2f}, have ${balance:,.2f}"
                 )
-                await gateway.close()
                 return False
 
             # CRITICAL: Resync nonce from server on startup
             logger.info("[LIGHTER] Resyncing nonce from server...")
             try:
-                # In production, fetch nonce from Lighter API
-                # For now, assume it starts at 0 on testnet
+                # TODO: Implement fetch_account_nonce() in LighterExecutionGateway
+                # For now, fetch from nonce manager's persistent state (testnet = 0)
                 server_nonce = 0
+                # In production, should be:
+                # server_nonce = await gateway.fetch_account_nonce()
                 await gateway.nonce_manager.resync_from_server(server_nonce)
                 logger.info(
-                    f"[LIGHTER] ✅ Nonce resynced. Next nonce: {server_nonce}"
+                    f"[LIGHTER] Nonce resynced. Next nonce: {server_nonce}"
                 )
             except Exception as e:
-                logger.error(f"[LIGHTER] ⚠️  Failed to resync nonce: {e}")
+                logger.error(f"[LIGHTER] Failed to resync nonce: {e}")
+                logger.warning("[LIGHTER] Continuing with local nonce state (may cause order failures)")
                 # Don't abort — try to continue with local state
 
             # Sync market metadata
             logger.info("[LIGHTER] Syncing market metadata...")
             try:
-                await gateway._sync_market_metadata()
+                await asyncio.wait_for(gateway._sync_market_metadata(), timeout=10.0)
                 logger.info(
-                    f"[LIGHTER] ✅ Market metadata synced. "
+                    f"[LIGHTER] Market metadata synced. "
                     f"Price decimals: {gateway._price_decimals}, "
                     f"Size decimals: {gateway._size_decimals}"
                 )
+            except asyncio.TimeoutError:
+                logger.warning("[LIGHTER] Market metadata sync timeout. Using defaults.")
             except Exception as e:
                 logger.warning(f"[LIGHTER] Failed to sync metadata: {e}. Using defaults.")
 
@@ -128,18 +133,26 @@ class LighterExecutor:
             position = await gateway.get_open_position()
             if position:
                 logger.warning(
-                    f"[LIGHTER] ⚠️  Existing position detected at startup! "
+                    f"[LIGHTER] Existing position detected at startup! "
                     f"{position.side} {position.quantity:.8f} BTC @ ${position.entry_price:,.2f}"
                 )
             else:
                 logger.info("[LIGHTER] No existing positions (clean state)")
 
-            await gateway.close()
             return True
 
         except Exception as e:
             logger.error(f"[LIGHTER] Startup check failed: {e}", exc_info=True)
             return False
+        finally:
+            # Ensure gateway is always closed, even on exception
+            if gateway:
+                try:
+                    await gateway.close()
+                except Exception as e:
+                    logger.warning(f"[LIGHTER] Error closing gateway during startup: {e}")
+
+        return False
 
     async def run(self):
         """Main execution loop."""
@@ -155,13 +168,15 @@ class LighterExecutor:
             risk_manager = RiskManager()
             position_manager = PositionManager(gateway, repo, risk_manager)
 
-            self.running = True
+            # Initialize running event for thread-safe shutdown
+            self.running_event = asyncio.Event()
+            self.running_event.set()
             cycle_count = 0
 
             logger.info("[LIGHTER] Starting main execution loop...")
             logger.info("=" * 70)
 
-            while self.running:
+            while self.running_event.is_set():
                 cycle_count += 1
                 cycle_start = datetime.utcnow()
 
@@ -226,7 +241,8 @@ class LighterExecutor:
 
         except KeyboardInterrupt:
             logger.info("[LIGHTER] Received interrupt signal")
-            self.running = False
+            if self.running_event:
+                self.running_event.clear()
         except Exception as e:
             logger.error(f"[LIGHTER] Fatal error: {e}", exc_info=True)
         finally:
@@ -262,9 +278,10 @@ class LighterExecutor:
 
 def handle_signal(signum, frame):
     """Handle system signals."""
-    if signum == signal.SIGINT:
-        logger.info("[LIGHTER] Received SIGINT, initiating graceful shutdown...")
-        executor.running = False
+    if signum in (signal.SIGINT, signal.SIGTERM):
+        logger.info("[LIGHTER] Received shutdown signal, initiating graceful shutdown...")
+        if executor.running_event:
+            executor.running_event.clear()
 
 
 if __name__ == "__main__":

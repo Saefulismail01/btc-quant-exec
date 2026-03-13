@@ -9,6 +9,7 @@ import logging
 import time
 from datetime import datetime, timedelta
 from typing import Optional
+from types import SimpleNamespace
 
 from app.schemas.signal import SignalResponse
 from app.adapters.gateways.base_execution_gateway import (
@@ -80,26 +81,40 @@ class PositionManager:
             if exchange_pos is None:
                 # Position closed (SL or TP hit)
                 logger.warning(
-                    f"[PositionManager] ⚠️  Position closed at exchange (SL/TP hit). "
+                    f"[PositionManager] Position closed at exchange (SL/TP hit). "
                     f"DB still shows OPEN."
                 )
 
-                # Fetch current market price to estimate exit
-                # For now, use a best-guess based on SL/TP
-                # TODO: fetch_last_closed_order() from exchange for exact exit price
-                exit_price = db_trade.entry_price  # Fallback
-                if db_trade.entry_price > 0:
-                    # Check if price moved toward SL or TP
-                    if abs(db_trade.entry_price - db_trade.sl_price) < abs(
-                        db_trade.entry_price - db_trade.tp_price
-                    ):
-                        exit_price = db_trade.sl_price
-                        exit_type = "SL"
+                # Try to get actual order fills from gateway
+                exit_price = None
+                exit_type = "UNKNOWN"
+                try:
+                    # TODO: Implement fetch_last_closed_order() in gateway
+                    # last_order = await self.gateway.fetch_last_closed_order()
+                    # if last_order:
+                    #     exit_price = last_order.filled_price
+                    #     exit_type = determine_exit_type_from_order(last_order)
+
+                    # Fallback: Use heuristic (distance to SL vs TP)
+                    if db_trade.entry_price > 0:
+                        sl_dist = abs(db_trade.entry_price - db_trade.sl_price)
+                        tp_dist = abs(db_trade.entry_price - db_trade.tp_price)
+                        if sl_dist < tp_dist:
+                            exit_price = db_trade.sl_price
+                            exit_type = "SL"
+                            logger.info(f"[PositionManager] Detected SL hit (distance: {sl_dist:.2f} vs {tp_dist:.2f})")
+                        else:
+                            exit_price = db_trade.tp_price
+                            exit_type = "TP"
+                            logger.info(f"[PositionManager] Detected TP hit (distance: {tp_dist:.2f} vs {sl_dist:.2f})")
                     else:
-                        exit_price = db_trade.tp_price
-                        exit_type = "TP"
-                else:
-                    exit_type = "MANUAL"
+                        exit_price = db_trade.entry_price
+                        exit_type = "MANUAL"
+                        logger.warning("[PositionManager] Could not determine exit type, using entry price as fallback")
+                except Exception as e:
+                    logger.error(f"[PositionManager] Error determining exit type: {e}")
+                    exit_price = db_trade.entry_price
+                    exit_type = "ERROR"
 
                 # Calculate PnL
                 pnl_usdt = self._calculate_pnl(db_trade, exit_price)
@@ -307,11 +322,20 @@ class PositionManager:
                 )
                 return True
 
-            # Check RiskManager
+            # Check RiskManager (with actual account balance for proper position sizing)
             if self.risk_manager:
-                risk_result = self.risk_manager.evaluate(portfolio_value=MARGIN_USDT)
-                if not risk_result.allowed:
-                    logger.warning(f"[PositionManager] RiskManager blocked: {risk_result.reason}")
+                try:
+                    account_balance = await self.gateway.get_account_balance()
+                    risk_result = self.risk_manager.evaluate(portfolio_value=account_balance)
+                    if not risk_result.allowed:
+                        logger.warning(
+                            f"[PositionManager] RiskManager blocked: {risk_result.reason} "
+                            f"(balance: ${account_balance:,.2f})"
+                        )
+                        return True
+                except Exception as e:
+                    logger.error(f"[PositionManager] Failed to check risk: {e}")
+                    # Fail-safe: don't trade if we can't check risk
                     return True
 
             # Calculate trade parameters
@@ -359,16 +383,56 @@ class PositionManager:
 
             if not sl_result.success:
                 logger.error(
-                    f"[PositionManager] ❌ CRITICAL: SL order failed! "
+                    f"[PositionManager] CRITICAL: SL order failed! "
                     f"Immediately closing position. Error: {sl_result.error_message}"
                 )
                 # Close position immediately — cannot have position without SL
                 close_result = await self.gateway.close_position_market()
                 if close_result.success:
                     logger.info(
-                        f"[PositionManager] Position closed for safety | "
+                        f"[PositionManager] Emergency position close successful | "
                         f"Exit: ${close_result.filled_price:,.2f}"
                     )
+                    # Record this emergency close to DB
+                    trade_mock = SimpleNamespace(
+                        side=side,
+                        entry_price=entry_price,
+                        size_usdt=MARGIN_USDT,
+                        leverage=LEVERAGE
+                    )
+                    pnl_usdt = self._calculate_pnl(trade_mock, close_result.filled_price)
+                    pnl_pct = (pnl_usdt / MARGIN_USDT * 100)
+                    self.repo.insert_trade(
+                        trade_id=market_result.order_id,
+                        symbol="BTC/USDT",
+                        side=side,
+                        entry_price=entry_price,
+                        size_usdt=MARGIN_USDT,
+                        size_base=quantity,
+                        leverage=LEVERAGE,
+                        sl_price=sl_price,
+                        tp_price=tp_price,
+                        status="CLOSED",
+                        exit_price=close_result.filled_price,
+                        exit_type="EMERGENCY_SL_FAIL",
+                        pnl_usdt=pnl_usdt,
+                        pnl_pct=pnl_pct,
+                    )
+                    try:
+                        await self.notifier.notify_trade_closed(
+                            trade_id=market_result.order_id,
+                            symbol="BTC/USDT",
+                            side=side,
+                            entry=entry_price,
+                            exit=close_result.filled_price,
+                            pnl_usdt=pnl_usdt,
+                            pnl_pct=pnl_pct,
+                            exit_type="EMERGENCY_SL_FAIL"
+                        )
+                    except Exception as e:
+                        logger.warning(f"Failed to send emergency close notification: {e}")
+                else:
+                    logger.error(f"Emergency position close FAILED: {close_result.error_message}")
                 return False
 
             logger.info(f"[PositionManager] ✅ SL order placed | ID: {sl_result.order_id}")
@@ -471,12 +535,35 @@ class PositionManager:
         return elapsed_ms / (3600 * 1000)
 
     def _calculate_pnl(self, db_trade, exit_price: float) -> float:
-        """Calculate PnL in USDT."""
+        """
+        Calculate PnL in USDT, deducting exchange fees.
+
+        Formula:
+        - Raw PnL = (price_diff / entry_price) × margin × leverage
+        - Trading fees = 2 × (margin × leverage) × taker_fee_rate (entry + exit)
+        - Net PnL = Raw PnL - Trading fees
+        """
+        # Exchange taker fee (typical: 0.02%)
+        TAKER_FEE_RATE = 0.0002
+
         if db_trade.side == "LONG":
             price_diff = exit_price - db_trade.entry_price
         else:  # SHORT
             price_diff = db_trade.entry_price - exit_price
 
-        # PnL = (price_diff / entry_price) × size_usdt × leverage
-        pnl = (price_diff / db_trade.entry_price) * db_trade.size_usdt * db_trade.leverage
-        return pnl
+        # Raw PnL = (% change) × (margin × leverage)
+        nominal_position = db_trade.size_usdt * db_trade.leverage
+        price_change_pct = price_diff / db_trade.entry_price
+        raw_pnl = price_change_pct * nominal_position
+
+        # Deduct trading fees (entry + exit)
+        trading_fees = 2 * nominal_position * TAKER_FEE_RATE
+
+        # Net PnL after fees
+        net_pnl = raw_pnl - trading_fees
+
+        logger.debug(
+            f"[PositionManager] PnL calc: raw={raw_pnl:.2f} - fees={trading_fees:.2f} = net={net_pnl:.2f}"
+        )
+
+        return net_pnl
