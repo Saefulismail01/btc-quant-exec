@@ -185,6 +185,55 @@ class PaperTradeService:
             
         logger.info(f" [PAPER] CLOSE {side} @ {exit_price} | Exit: {exit_type} | PnL: {pnl:.2f} USDT ({pnl_pct:.2f}%)")
 
+    def close_all_positions(self, current_price: Optional[float] = None) -> int:
+        """
+        Close all open positions at market price.
+
+        Used for graceful shutdown to ensure no positions are left open.
+
+        Args:
+            current_price: Current market price. If None, uses last entry price as reference.
+
+        Returns:
+            Number of positions closed
+        """
+        with duckdb.connect(self.db_path) as con:
+            open_trades = con.execute(
+                "SELECT * FROM paper_trades WHERE status = 'OPEN'"
+            ).fetchdf()
+
+        if open_trades.empty:
+            logger.info("[PAPER] No open positions to close")
+            return 0
+
+        closed_count: int = 0
+        for _, trade in open_trades.iterrows():
+            entry: float = float(trade["entry_price"])
+            if current_price is not None:
+                exit_price: float = float(current_price)
+            else:
+                exit_price = entry
+            exit_type: str = "MANUAL_SHUTDOWN"
+
+            try:
+                self._close_position(
+                    {
+                        "id": str(trade["id"]),
+                        "side": str(trade["side"]),
+                        "entry_price": entry,
+                        "size_quote": float(trade["size_quote"]),
+                    },
+                    exit_price=exit_price,
+                    exit_type=exit_type
+                )
+                closed_count = closed_count + 1
+            except Exception as e:
+                logger.error(f"[PAPER] Failed to close position {trade['id']}: {e}")
+
+        if closed_count > 0:
+            logger.info(f"[PAPER] Closed {closed_count} position(s) during shutdown")
+        return closed_count
+
     def reset_account(self, initial_balance: float = 10000.0):
         """Reset virtual account."""
         ts = int(time.time() * 1000)
@@ -192,7 +241,7 @@ class PaperTradeService:
             con.execute("DELETE FROM paper_trades")
             con.execute("UPDATE paper_account SET balance = ?, equity = ?, last_update = ? WHERE id = 1",
                         [initial_balance, initial_balance, ts])
-        logger.info(f" [PAPER] Account reset to {initial_balance} USDT")
+        logger.info(f"[PAPER] Account reset to {initial_balance} USDT")
 
 _paper_svc = None
 

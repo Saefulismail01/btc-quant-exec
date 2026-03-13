@@ -89,32 +89,47 @@ class PositionManager:
                 exit_price = None
                 exit_type = "UNKNOWN"
                 try:
-                    # TODO: Implement fetch_last_closed_order() in gateway
-                    # last_order = await self.gateway.fetch_last_closed_order()
-                    # if last_order:
-                    #     exit_price = last_order.filled_price
-                    #     exit_type = determine_exit_type_from_order(last_order)
-
-                    # Fallback: Use heuristic (distance to SL vs TP)
+                    # First, try to fetch actual filled order from exchange
+                    last_order = await self.gateway.fetch_last_closed_order()
+                    if last_order:
+                        exit_price = last_order.get("filled_price", db_trade.entry_price)
+                        # Determine exit type by comparing exit price to SL/TP
+                        if abs(exit_price - db_trade.sl_price) < abs(exit_price - db_trade.tp_price):
+                            exit_type = "SL"
+                        else:
+                            exit_type = "TP"
+                        logger.info(
+                            f"[PositionManager] Detected exit from order history: "
+                            f"{exit_type} @ ${exit_price:,.2f}"
+                        )
+                    else:
+                        # Fallback: Use heuristic (distance to SL vs TP)
+                        if db_trade.entry_price > 0:
+                            sl_dist = abs(db_trade.entry_price - db_trade.sl_price)
+                            tp_dist = abs(db_trade.entry_price - db_trade.tp_price)
+                            if sl_dist < tp_dist:
+                                exit_price = db_trade.sl_price
+                                exit_type = "SL"
+                                logger.info(f"[PositionManager] Heuristic: SL hit (distance: {sl_dist:.2f} vs {tp_dist:.2f})")
+                            else:
+                                exit_price = db_trade.tp_price
+                                exit_type = "TP"
+                                logger.info(f"[PositionManager] Heuristic: TP hit (distance: {tp_dist:.2f} vs {sl_dist:.2f})")
+                        else:
+                            exit_price = db_trade.entry_price
+                            exit_type = "MANUAL"
+                            logger.warning("[PositionManager] Using entry price as fallback")
+                except Exception as e:
+                    logger.error(f"[PositionManager] Error determining exit: {e}")
+                    # Fallback to heuristic on error
                     if db_trade.entry_price > 0:
                         sl_dist = abs(db_trade.entry_price - db_trade.sl_price)
                         tp_dist = abs(db_trade.entry_price - db_trade.tp_price)
-                        if sl_dist < tp_dist:
-                            exit_price = db_trade.sl_price
-                            exit_type = "SL"
-                            logger.info(f"[PositionManager] Detected SL hit (distance: {sl_dist:.2f} vs {tp_dist:.2f})")
-                        else:
-                            exit_price = db_trade.tp_price
-                            exit_type = "TP"
-                            logger.info(f"[PositionManager] Detected TP hit (distance: {tp_dist:.2f} vs {sl_dist:.2f})")
+                        exit_price = db_trade.sl_price if sl_dist < tp_dist else db_trade.tp_price
+                        exit_type = "SL" if sl_dist < tp_dist else "TP"
                     else:
                         exit_price = db_trade.entry_price
-                        exit_type = "MANUAL"
-                        logger.warning("[PositionManager] Could not determine exit type, using entry price as fallback")
-                except Exception as e:
-                    logger.error(f"[PositionManager] Error determining exit type: {e}")
-                    exit_price = db_trade.entry_price
-                    exit_type = "ERROR"
+                        exit_type = "ERROR"
 
                 # Calculate PnL
                 pnl_usdt = self._calculate_pnl(db_trade, exit_price)

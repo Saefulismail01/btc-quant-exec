@@ -550,12 +550,56 @@ class LighterExecutionGateway(BaseExchangeExecutionGateway):
             await asyncio.sleep(0.1)
 
             await self.nonce_manager.mark_used(nonce)
-            logger.info(f"[LIGHTER] ✅ Order cancelled: {order_id}")
+            logger.info(f"[LIGHTER] Order cancelled: {order_id}")
             return True
 
         except Exception as e:
             logger.warning(f"[LIGHTER] Failed to cancel order {order_id}: {e}")
             return False
+
+    async def fetch_last_closed_order(self) -> Optional[Dict[str, Any]]:
+        """
+        Fetch the last closed order for the BTC/USDC market.
+
+        Used to determine actual exit price when position closes via SL/TP.
+        Queries order history and returns the most recent closed order.
+
+        Returns:
+            Dictionary with order details (filled_price, order_id, etc.) or None
+
+        Raises:
+            Exception if API call fails
+        """
+        try:
+            # Fetch order history from API
+            orders = await self._make_request(
+                "GET",
+                "/orders",
+                params={"market_id": str(self.MARKET_ID), "limit": "10", "status": "closed"}
+            )
+
+            # Get the most recent closed order
+            closed_orders = orders.get("orders", [])
+            if not closed_orders:
+                logger.debug("[LIGHTER] No closed orders found")
+                return None
+
+            # Return the first (most recent) closed order
+            last_order = closed_orders[0]
+            filled_price = float(last_order.get("filled_price", 0))
+            order_id = last_order.get("order_id", "unknown")
+
+            logger.info(f"[LIGHTER] Last closed order: {order_id} @ ${filled_price:,.2f}")
+            return {
+                "order_id": order_id,
+                "filled_price": filled_price,
+                "status": "closed",
+                "timestamp": last_order.get("timestamp", 0)
+            }
+
+        except Exception as e:
+            logger.warning(f"[LIGHTER] Failed to fetch last closed order: {e}")
+            return None
 
     async def get_open_position(self) -> Optional[PositionInfo]:
         """
@@ -675,6 +719,34 @@ class LighterExecutionGateway(BaseExchangeExecutionGateway):
         except Exception as e:
             logger.error(f"[LIGHTER] Failed to fetch balance: {e}")
             return 0.0
+
+    async def fetch_account_nonce(self) -> int:
+        """
+        Fetch current account nonce from Lighter API.
+
+        The nonce is a sequence number required for all transactions.
+        This method queries the server for the current nonce state.
+
+        Returns:
+            Current account nonce (integer)
+
+        Raises:
+            Exception if API call fails
+        """
+        try:
+            account = await self._make_request("GET", "/account")
+
+            # Extract nonce from account response
+            # Format depends on Lighter API — adjust field name if needed
+            nonce = int(account.get("nonce", 0))
+
+            logger.info(f"[LIGHTER] Fetched account nonce: {nonce}")
+            return nonce
+
+        except Exception as e:
+            logger.error(f"[LIGHTER] Failed to fetch account nonce: {e}")
+            # Fallback: return 0 and let nonce manager handle it
+            return 0
 
     async def close(self) -> None:
         """Close HTTP session and WebSocket connection."""

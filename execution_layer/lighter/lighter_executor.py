@@ -101,19 +101,16 @@ class LighterExecutor:
             # CRITICAL: Resync nonce from server on startup
             logger.info("[LIGHTER] Resyncing nonce from server...")
             try:
-                # TODO: Implement fetch_account_nonce() in LighterExecutionGateway
-                # For now, fetch from nonce manager's persistent state (testnet = 0)
-                server_nonce = 0
-                # In production, should be:
-                # server_nonce = await gateway.fetch_account_nonce()
+                # Fetch actual nonce from Lighter API
+                server_nonce = await gateway.fetch_account_nonce()
                 await gateway.nonce_manager.resync_from_server(server_nonce)
                 logger.info(
-                    f"[LIGHTER] Nonce resynced. Next nonce: {server_nonce}"
+                    f"[LIGHTER] Nonce resynced from server. Next nonce: {server_nonce}"
                 )
             except Exception as e:
-                logger.error(f"[LIGHTER] Failed to resync nonce: {e}")
-                logger.warning("[LIGHTER] Continuing with local nonce state (may cause order failures)")
-                # Don't abort — try to continue with local state
+                logger.error(f"[LIGHTER] Failed to resync nonce from server: {e}")
+                logger.warning("[LIGHTER] Continuing with persistent local nonce state")
+                # Don't abort — nonce manager will use persistent state from previous session
 
             # Sync market metadata
             logger.info("[LIGHTER] Syncing market metadata...")
