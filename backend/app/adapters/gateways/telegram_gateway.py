@@ -68,7 +68,8 @@ class TelegramGateway:
     async def send_message(self, text: str, parse_mode: str = "MarkdownV2") -> bool:
         """Sends a text message to the configured channel."""
         if not self.token or not self.chat_id:
-            self.logger.warning("Telegram Bot Token or Chat ID not configured. Skipping notification.")
+            # Only log debug (not warning) - caller should handle gracefully
+            self.logger.debug("Telegram Bot Token or Chat ID not configured. Skipping notification.")
             return False
 
         payload = {
