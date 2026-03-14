@@ -1,6 +1,13 @@
 from pydantic_settings import BaseSettings
 from pathlib import Path
+from dotenv import load_dotenv
 import json
+
+# Load .env early, before Settings instantiation
+# This ensures environment variables are available for BaseSettings
+env_path = Path(__file__).resolve().parent.parent.parent / ".env"
+if env_path.exists():
+    load_dotenv(env_path)
 
 
 class Settings(BaseSettings):
