@@ -7,19 +7,24 @@ Run with: python run.py
 import os
 import socket
 import sys
+import logging
 from pathlib import Path
 from dotenv import load_dotenv
+
+# Configure logging early
+logging.basicConfig(level=logging.INFO, format='[BOOT] %(message)s')
+logger = logging.getLogger(__name__)
 
 # Load .env early, before any imports that use os.getenv()
 env_path = Path(__file__).resolve().parent.parent / ".env"
 if env_path.exists():
     load_dotenv(env_path)
-    print(f"[BOOT] Loaded .env from {env_path}")
+    logger.info(f"Loaded .env from {env_path}")
     # Verify telegram token loaded
     test_token = os.getenv("EXECUTION_TELEGRAM_BOT_TOKEN", "")
-    print(f"[BOOT] EXECUTION_TELEGRAM_BOT_TOKEN: {'✅ Loaded' if test_token else '❌ Not set'}")
+    logger.info(f"EXECUTION_TELEGRAM_BOT_TOKEN: {'✅ Loaded' if test_token else '❌ Not set'}")
 else:
-    print(f"[BOOT] WARNING: .env not found at {env_path}")
+    logger.warning(f".env not found at {env_path}")
 
 # Add backend/ to path
 _BACKEND = str(Path(__file__).resolve().parent)
