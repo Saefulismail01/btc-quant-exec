@@ -18,14 +18,29 @@ from app.api.routers import health, signal, metrics, trading, execution
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    """Warm-up: instantiate model singletons once at startup."""
+    """Warm-up: instantiate model singletons once at startup, start data daemon."""
+    import asyncio
     from app.use_cases.bcd_service import get_bcd_service
     from app.use_cases.ai_service import get_ai_service
     from app.use_cases.signal_service import get_signal_service
+    from app.use_cases.data_ingestion_use_case import start_data_daemon
+
     get_bcd_service()
     get_ai_service()
     get_signal_service()
+
+    # Start data daemon in the same event loop as the server
+    data_task = asyncio.create_task(start_data_daemon(interval=60))
+    print("[API] Data ingestion daemon started")
+
     yield
+
+    # Graceful shutdown: cancel the data daemon task
+    data_task.cancel()
+    try:
+        await data_task
+    except asyncio.CancelledError:
+        print("[API] Data ingestion daemon stopped")
 
 
 app = FastAPI(

@@ -1,0 +1,58 @@
+# Git
+.git
+.gitignore
+.github
+
+# Python
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+pip-log.txt
+pip-delete-this-directory.txt
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Testing
+.pytest_cache
+htmlcov/
+
+# Database (will be mounted as volume)
+backend/app/infrastructure/database/*.db
+backend/app/infrastructure/database/*.wal
+backend/app/infrastructure/database/.duckdb.lock
+
+# Temporary
+tmp/
+temp/
+.tmp
+*.log
+
+# Documentation
+docs/
+README.md
+
+# CI/CD
+.github/
+.gitlab-ci.yml
+.circleci/
+
+# Other
+LICENSE
+*.md

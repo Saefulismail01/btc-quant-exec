@@ -1,27 +1,46 @@
-version: "3.9"
+version: '3.8'
 
 services:
-  backend:
-    build: ./backend
-    container_name: btc-quant-backend
-    network_mode: host
-    volumes:
-      - ./backend/app/infrastructure/database:/app/app/infrastructure/database
-    env_file: ./backend/.env
-    environment:
-      - DB_PATH=/app/app/infrastructure/database/btc-quant.db
-      - PYTHONUNBUFFERED=1
-      - LOG_LEVEL=DEBUG
-    restart: unless-stopped
-
-  frontend:
+  # FastAPI Backend + Data Ingestion
+  btc-quant-api:
     build:
-      context: ./frontend
-      args:
-        - VITE_API_URL=http://localhost:8000
-    container_name: btc-quant-frontend
+      context: .
+      dockerfile: Dockerfile
+    container_name: btc-quant-api
     ports:
-      - "5173:80"
-    depends_on:
-      - backend
+      - "8000:8000"
+    environment:
+      # Mode & Safety
+      - LIGHTER_EXECUTION_MODE=testnet
+      - LIGHTER_TRADING_ENABLED=false
+      - EXECUTION_GATEWAY=lighter
+
+      # Load from .env file (override with your own values)
+      - LIGHTER_TESTNET_API_KEY=${LIGHTER_TESTNET_API_KEY}
+      - LIGHTER_TESTNET_API_SECRET=${LIGHTER_TESTNET_API_SECRET}
+      - LIGHTER_API_KEY_INDEX=${LIGHTER_API_KEY_INDEX:-3}
+
+      # Telegram (optional)
+      - EXECUTION_TELEGRAM_BOT_TOKEN=${EXECUTION_TELEGRAM_BOT_TOKEN}
+      - EXECUTION_TELEGRAM_CHAT_ID=${EXECUTION_TELEGRAM_CHAT_ID}
+
+      # Logging
+      - LOG_LEVEL=INFO
+
+    volumes:
+      # Persist database
+      - ./backend/app/infrastructure/database:/app/backend/app/infrastructure/database
+      # Persist nonce state
+      - ./backend/app/infrastructure:/app/backend/app/infrastructure
+
     restart: unless-stopped
+    networks:
+      - btc-quant-network
+
+networks:
+  btc-quant-network:
+    driver: bridge
+
+volumes:
+  database:
+    driver: local

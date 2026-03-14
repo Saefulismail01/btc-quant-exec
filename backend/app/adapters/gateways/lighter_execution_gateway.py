@@ -17,6 +17,7 @@ import asyncio
 import os
 import logging
 import time
+import secrets
 from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Optional, Dict, Any
@@ -38,8 +39,10 @@ from ...utils.lighter_math import (
     calculate_btc_quantity,
 )
 
-# Load .env
-load_dotenv(Path(__file__).resolve().parent.parent.parent.parent / ".env")
+# Load .env (defensive: check if file exists)
+env_path = Path(__file__).resolve().parent.parent.parent.parent / ".env"
+if env_path.exists():
+    load_dotenv(env_path)
 
 logger = logging.getLogger(__name__)
 
@@ -91,20 +94,22 @@ class LighterExecutionGateway(BaseExchangeExecutionGateway):
         if self.execution_mode == "testnet":
             self.api_key = os.getenv("LIGHTER_TESTNET_API_KEY", "").strip()
             self.api_secret = os.getenv("LIGHTER_TESTNET_API_SECRET", "").strip()
+            # Note: Lighter doesn't have a separate testnet endpoint.
+            # Use mainnet endpoint with testnet account for testing.
             self.base_url = os.getenv(
                 "LIGHTER_TESTNET_BASE_URL",
-                "https://testnet.zklighter.elliot.ai"
+                "https://mainnet.zklighter.elliot.ai/api/v1"
             )
             self.ws_url = os.getenv(
                 "LIGHTER_TESTNET_WS_URL",
-                "wss://testnet.zklighter.elliot.ai/stream"
+                "wss://mainnet.zklighter.elliot.ai/stream"
             )
         else:
             self.api_key = os.getenv("LIGHTER_MAINNET_API_KEY", "").strip()
             self.api_secret = os.getenv("LIGHTER_MAINNET_API_SECRET", "").strip()
             self.base_url = os.getenv(
                 "LIGHTER_MAINNET_BASE_URL",
-                "https://mainnet.zklighter.elliot.ai"
+                "https://mainnet.zklighter.elliot.ai/api/v1"
             )
             self.ws_url = os.getenv(
                 "LIGHTER_MAINNET_WS_URL",
@@ -142,18 +147,36 @@ class LighterExecutionGateway(BaseExchangeExecutionGateway):
             f"Trading: {'🟢 ENABLED' if self.trading_enabled else '🔴 DISABLED'}"
         )
 
+    def _generate_auth_token(self) -> str:
+        """
+        Generate Lighter API auth token.
+
+        Format: {expiry_unix}:{account_index}:{api_key_index}:{random_hex}
+
+        Note: account_index defaults to 0 (primary account). If you have sub-accounts,
+        this should be set to the correct account index from Lighter dashboard.
+        """
+        account_index = 0  # Primary account (change if using sub-accounts)
+        expiry_unix = int((datetime.utcnow() + timedelta(hours=8)).timestamp())
+        random_hex = secrets.token_hex(16)  # 32 hex chars
+
+        auth_token = f"{expiry_unix}:{account_index}:{self.api_key_index}:{random_hex}"
+        return auth_token
+
     async def _init_session(self) -> aiohttp.ClientSession:
         """Initialize or return existing aiohttp session."""
         if self.session is None:
             connector = aiohttp.TCPConnector(resolver=aiohttp.ThreadedResolver(), ssl=False)
+            auth_token = self._generate_auth_token()
             self.session = aiohttp.ClientSession(
                 connector=connector,
                 trust_env=True,
                 headers={
                     "User-Agent": "BTC-QUANT/4.4-Lighter",
-                    "X-API-Key": self.api_key,
+                    "Authorization": auth_token,
                 },
             )
+            logger.debug(f"[LIGHTER] Generated auth token (expires in 8h)")
         return self.session
 
     async def _make_request(

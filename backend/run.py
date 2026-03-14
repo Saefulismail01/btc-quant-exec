@@ -1,11 +1,9 @@
-﻿"""
+"""
 Bootstrap launcher:
-- Starts data_engine pipeline process
 - Starts FastAPI server
+- Data ingestion daemon runs within FastAPI lifespan (same event loop, no threading issues)
 Run with: python run.py
 """
-import asyncio
-import multiprocessing as mp
 import os
 import socket
 import sys
@@ -17,19 +15,6 @@ if _BACKEND not in sys.path:
     sys.path.insert(0, _BACKEND)
 
 import uvicorn  # noqa: E402  (must come after sys.path patch)
-
-
-def _run_data_engine():
-    """Run data pipeline in its own process."""
-    # Prevent Windows cp1252 console crashes from unicode banner/log output.
-    if hasattr(sys.stdout, "reconfigure"):
-        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
-    if hasattr(sys.stderr, "reconfigure"):
-        sys.stderr.reconfigure(encoding="utf-8", errors="replace")
-
-    from data_engine import run_data_pipeline
-
-    run_data_pipeline()
 
 
 def _pick_port(preferred: int, max_tries: int = 10) -> int:
@@ -56,27 +41,9 @@ def main():
             f"using {api_port} instead."
         )
 
-    engine_proc = mp.Process(
-        target=_run_data_engine,
-        name="btc-quant-data-engine",
-        daemon=True,
-    )
-    engine_proc.start()
-    print(f"[BOOT] Data engine started (pid={engine_proc.pid})")
-
-    try:
-        uvicorn.run("app.main:app", host="0.0.0.0", port=api_port, reload=False)
-    finally:
-        if engine_proc.is_alive():
-            print("[BOOT] Stopping data engine...")
-            engine_proc.terminate()
-            engine_proc.join(timeout=5)
-            if engine_proc.is_alive():
-                print("[BOOT] Data engine did not exit cleanly.")
-            else:
-                print("[BOOT] Data engine stopped.")
+    # Run uvicorn server with FastAPI lifespan handling data daemon
+    uvicorn.run("app.main:app", host="0.0.0.0", port=api_port, reload=False)
 
 
 if __name__ == "__main__":
-    mp.freeze_support()
     main()

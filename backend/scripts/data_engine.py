@@ -16,9 +16,6 @@ from app.adapters.repositories.market_repository import MarketRepository as Duck
 from app.adapters.gateways.binance_gateway import BinanceGateway as CryptoDataFetcher
 from app.use_cases.data_ingestion_use_case import start_data_daemon as _run_data_pipeline
 
-# Path global bisa disesuaikan, atau dilewatkan saat init
-DB_PATH = DuckDBManager().db_path
-
 def run_data_pipeline():
     """Facade for Clean Data Ingestion Daemon."""
     asyncio.run(_run_data_pipeline(interval=60))

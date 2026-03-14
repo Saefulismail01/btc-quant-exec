@@ -36,8 +36,9 @@ from app.use_cases.position_manager import PositionManager
 from app.use_cases.risk_manager import RiskManager
 from app.use_cases.signal_service import get_cached_signal as _get_cached_signal
 
-# Load .env from backend directory
-load_dotenv(backend_path / ".env")
+# Load .env from root directory (where credentials are stored)
+root_path = Path(__file__).resolve().parent.parent.parent
+load_dotenv(root_path / ".env")
 
 # Configure logging
 logging.basicConfig(
