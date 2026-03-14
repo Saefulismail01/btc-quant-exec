@@ -13,3 +13,7 @@ ccxt>=4.3.0
 httpx>=0.27.0
 openai>=1.0.0
 python-telegram-bot>=20.8
+git+https://github.com/elliottech/lighter-python.git
+websockets>=12.0
+eth_account>=0.11.0
+aiohttp>=3.9.0
