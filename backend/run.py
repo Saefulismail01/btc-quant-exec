@@ -8,6 +8,12 @@ import os
 import socket
 import sys
 from pathlib import Path
+from dotenv import load_dotenv
+
+# Load .env early, before any imports that use os.getenv()
+env_path = Path(__file__).resolve().parent.parent / ".env"
+if env_path.exists():
+    load_dotenv(env_path)
 
 # Add backend/ to path
 _BACKEND = str(Path(__file__).resolve().parent)
