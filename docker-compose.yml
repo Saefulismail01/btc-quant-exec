@@ -9,23 +9,16 @@ services:
     container_name: btc-quant-api
     ports:
       - "8000:8000"
+    env_file:
+      - .env
     environment:
-      # Mode & Safety
-      - LIGHTER_EXECUTION_MODE=testnet
-      - LIGHTER_TRADING_ENABLED=false
-      - EXECUTION_GATEWAY=lighter
-
-      # Load from .env file (override with your own values)
-      - LIGHTER_TESTNET_API_KEY=${LIGHTER_TESTNET_API_KEY}
-      - LIGHTER_TESTNET_API_SECRET=${LIGHTER_TESTNET_API_SECRET}
-      - LIGHTER_API_KEY_INDEX=${LIGHTER_API_KEY_INDEX:-3}
-
-      # Telegram (optional)
-      - EXECUTION_TELEGRAM_BOT_TOKEN=${EXECUTION_TELEGRAM_BOT_TOKEN}
-      - EXECUTION_TELEGRAM_CHAT_ID=${EXECUTION_TELEGRAM_CHAT_ID}
+      # Mode & Safety (override .env values)
+      - LIGHTER_EXECUTION_MODE=${LIGHTER_EXECUTION_MODE:-testnet}
+      - LIGHTER_TRADING_ENABLED=${LIGHTER_TRADING_ENABLED:-false}
+      - EXECUTION_GATEWAY=${EXECUTION_GATEWAY:-lighter}
 
       # Logging
-      - LOG_LEVEL=INFO
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
 
     volumes:
       # Persist database
