@@ -2,10 +2,17 @@ import logging
 import os
 import re
 from datetime import datetime
+from pathlib import Path
 from typing import Dict, Any
+from dotenv import load_dotenv
 
 from app.config import settings
 from app.adapters.gateways.telegram_gateway import TelegramGateway
+
+# Ensure .env is loaded (defensive)
+_env_path = Path(__file__).resolve().parent.parent.parent / ".env"
+if _env_path.exists():
+    load_dotenv(_env_path)
 
 class TelegramNotifierUseCase:
     """

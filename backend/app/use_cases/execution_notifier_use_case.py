@@ -10,12 +10,19 @@ Handles:
 import logging
 import os
 from datetime import datetime
+from pathlib import Path
 from typing import Optional
+from dotenv import load_dotenv
 
 from app.adapters.gateways.telegram_gateway import TelegramGateway
 from app.adapters.repositories.live_trade_repository import LiveTradeRecord
 
 logger = logging.getLogger(__name__)
+
+# Ensure .env is loaded (defensive, in case called before config.py)
+_env_path = Path(__file__).resolve().parent.parent.parent / ".env"
+if _env_path.exists():
+    load_dotenv(_env_path)
 
 
 class ExecutionNotifier:
