@@ -14,6 +14,12 @@ from dotenv import load_dotenv
 env_path = Path(__file__).resolve().parent.parent / ".env"
 if env_path.exists():
     load_dotenv(env_path)
+    print(f"[BOOT] Loaded .env from {env_path}")
+    # Verify telegram token loaded
+    test_token = os.getenv("EXECUTION_TELEGRAM_BOT_TOKEN", "")
+    print(f"[BOOT] EXECUTION_TELEGRAM_BOT_TOKEN: {'✅ Loaded' if test_token else '❌ Not set'}")
+else:
+    print(f"[BOOT] WARNING: .env not found at {env_path}")
 
 # Add backend/ to path
 _BACKEND = str(Path(__file__).resolve().parent)
