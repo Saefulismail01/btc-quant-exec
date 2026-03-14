@@ -21,10 +21,21 @@ class TelegramNotifierUseCase:
     """
     
     def __init__(self):
-        token = settings.telegram_bot_token
-        chat_id = settings.telegram_chat_id
-        self.gateway = TelegramGateway(token, chat_id)
         self.logger = logging.getLogger("telegram_notifier")
+
+        # Get token/chat_id directly from env (not settings cache)
+        token = os.getenv("TELEGRAM_BOT_TOKEN", "").strip()
+        chat_id = os.getenv("TELEGRAM_CHAT_ID", "").strip()
+
+        self.logger.info(f"[TelegramNotifier] Token: {'✅ Loaded' if token else '❌ Not set'}, Chat ID: {'✅ Loaded' if chat_id else '❌ Not set'}")
+
+        # Fallback to settings if env not available
+        if not token:
+            token = settings.telegram_bot_token
+        if not chat_id:
+            chat_id = settings.telegram_chat_id
+
+        self.gateway = TelegramGateway(token, chat_id)
         
         # v4.4 Constants for reference in messages
         self.v44_leverage = 15
