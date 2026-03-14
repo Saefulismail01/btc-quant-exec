@@ -23,14 +23,24 @@ class ExecutionNotifier:
 
     def __init__(self):
         """Initialize with Telegram credentials (execution layer specific)."""
+        logger.info("[ExecutionNotifier] Initializing...")
+
         # First try: use dedicated execution telegram (NEW)
-        token = os.getenv("EXECUTION_TELEGRAM_BOT_TOKEN", "").strip()
-        chat_id = os.getenv("EXECUTION_TELEGRAM_CHAT_ID", "").strip()
+        exec_token = os.getenv("EXECUTION_TELEGRAM_BOT_TOKEN", "").strip()
+        exec_chat_id = os.getenv("EXECUTION_TELEGRAM_CHAT_ID", "").strip()
+        logger.debug(f"[ExecutionNotifier] EXECUTION_TELEGRAM_BOT_TOKEN: {'SET' if exec_token else 'NOT SET'}")
+        logger.debug(f"[ExecutionNotifier] EXECUTION_TELEGRAM_CHAT_ID: {'SET' if exec_chat_id else 'NOT SET'}")
+
+        token = exec_token
+        chat_id = exec_chat_id
 
         # Fallback: use existing signal telegram (OLD)
         if not token or not chat_id:
+            logger.info("[ExecutionNotifier] Execution telegram not configured, trying signal telegram fallback...")
             token = os.getenv("TELEGRAM_BOT_TOKEN", "").strip()
             chat_id = os.getenv("TELEGRAM_CHAT_ID", "").strip()
+            logger.debug(f"[ExecutionNotifier] TELEGRAM_BOT_TOKEN: {'SET' if token else 'NOT SET'}")
+            logger.debug(f"[ExecutionNotifier] TELEGRAM_CHAT_ID: {'SET' if chat_id else 'NOT SET'}")
 
         if not token or not chat_id:
             logger.warning("[ExecutionNotifier] Telegram not configured. Notifications disabled.")
