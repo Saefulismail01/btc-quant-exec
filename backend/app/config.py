@@ -3,11 +3,19 @@ from pathlib import Path
 from dotenv import load_dotenv
 import json
 
-# Load .env early, before Settings instantiation
-# This ensures environment variables are available for BaseSettings
-env_path = Path(__file__).resolve().parent.parent.parent / ".env"
-if env_path.exists():
-    load_dotenv(env_path)
+# Load .env — try multiple paths to handle local vs Docker environments
+# Local: project_root/.env (3 levels up from backend/app/config.py)
+# Docker: /app/.env (2 levels up from /app/backend/app/config.py)
+_here = Path(__file__).resolve()
+for _candidate in [
+    _here.parent.parent.parent / ".env",   # local: project_root/.env
+    _here.parent.parent / ".env",          # docker: /app/backend/.env
+    _here.parent.parent.parent.parent / ".env",  # docker: /app/.env
+    Path("/app/.env"),                     # docker absolute path
+]:
+    if _candidate.exists():
+        load_dotenv(_candidate)
+        break
 
 
 class Settings(BaseSettings):
@@ -57,7 +65,8 @@ class Settings(BaseSettings):
     lighter_mainnet_ws_url: str = "wss://mainnet.zklighter.elliot.ai/stream"
 
     class Config:
-        env_file = ".env"
+        # Search multiple paths for .env (local vs Docker)
+        env_file = [".env", "/app/.env"]
         env_file_encoding = "utf-8"
         extra = "ignore"
 
