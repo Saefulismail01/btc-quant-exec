@@ -10,9 +10,10 @@ class DataIngestionUseCase:
     Mengatur alur kerja penarikan data dari Gateway dan menyimpannya ke Repository.
     """
 
-    def __init__(self, gateway: BinanceGateway, repository: MarketRepository):
+    def __init__(self, gateway: BinanceGateway, repository: MarketRepository, position_manager=None):
         self.gateway = gateway
         self.repository = repository
+        self.position_manager = position_manager  # Injected at startup
         # Track state to avoid duplicate processing per closed candle
         self.last_notified_ts = 0
         self.last_regime = None
@@ -103,7 +104,16 @@ class DataIngestionUseCase:
         except Exception as e:
             print(f"  [Paper] Execution failed: {str(e)}")
 
-        # 2) Telegram signal alert from the same signal
+        # 2) Live execution via PositionManager (Lighter)
+        if self.position_manager:
+            try:
+                await self.position_manager.sync_position_status()
+                await self.position_manager.process_signal(signal)
+                print("  [Execution] PositionManager signal processed.")
+            except Exception as e:
+                print(f"  [Execution] PositionManager failed: {str(e)}")
+
+        # 4) Telegram signal alert from the same signal
         notifier = get_telegram_notifier()
         try:
             sent = await notifier.notify_signal(signal.dict())
@@ -112,7 +122,7 @@ class DataIngestionUseCase:
         except Exception as e:
             print(f"  [Telegram] Signal alert failed: {str(e)}")
 
-        # 3) Telegram regime shift alert
+        # 5) Telegram regime shift alert
         try:
             current_regime = signal.confluence.layers.l1_hmm.label
             if self.last_regime and current_regime != self.last_regime:
@@ -127,7 +137,22 @@ class DataIngestionUseCase:
 async def start_data_daemon(interval=60):
     gateway = BinanceGateway()
     repository = MarketRepository()
-    use_case = DataIngestionUseCase(gateway, repository)
+
+    # Instantiate PositionManager with LighterExecutionGateway
+    position_manager = None
+    try:
+        from app.adapters.gateways.lighter_execution_gateway import LighterExecutionGateway
+        from app.adapters.repositories.live_trade_repository import LiveTradeRepository
+        from app.use_cases.position_manager import PositionManager
+
+        lighter_gateway = LighterExecutionGateway()
+        live_repo = LiveTradeRepository()
+        position_manager = PositionManager(gateway=lighter_gateway, repo=live_repo)
+        print("  [Ingestion Daemon] PositionManager initialized with LighterExecutionGateway")
+    except Exception as e:
+        print(f"  [Ingestion Daemon] PositionManager init failed (execution disabled): {e}")
+
+    use_case = DataIngestionUseCase(gateway, repository, position_manager=position_manager)
 
     print("\n  [Ingestion Daemon] STARTING CLEAN PIPELINE...")
     cycle = 0

@@ -201,7 +201,24 @@ class PositionManager:
 
             # Check trading enabled flag
             if not self._is_trading_enabled():
-                logger.info("[PositionManager] Trading disabled (TRADING_ENABLED=false)")
+                entry = signal.price.now
+                side = signal.trade_plan.action
+                status = signal.trade_plan.status
+                verdict = signal.confluence.verdict
+                conviction = signal.confluence.conviction_pct
+                if status == "ACTIVE":
+                    is_long = side == "LONG"
+                    sl = entry * (1 - SL_PERCENT / 100) if is_long else entry * (1 + SL_PERCENT / 100)
+                    tp = entry * (1 + TP_PERCENT / 100) if is_long else entry * (1 - TP_PERCENT / 100)
+                    logger.info(
+                        f"[PositionManager] [DRY-RUN] Would open {side} | "
+                        f"Entry: ${entry:,.2f} | SL: ${sl:,.2f} | TP: ${tp:,.2f} | "
+                        f"Verdict: {verdict} | Conviction: {conviction:.1f}%"
+                    )
+                else:
+                    logger.info(
+                        f"[PositionManager] [DRY-RUN] No entry (status={status}, verdict={verdict}, conviction={conviction:.1f}%)"
+                    )
                 return True
 
             # Get or manage existing position
@@ -519,10 +536,10 @@ class PositionManager:
     # ─ Helper methods ─────────────────────────────────────────────────────────
 
     def _is_trading_enabled(self) -> bool:
-        """Check if trading is enabled."""
+        """Check if trading is enabled (Lighter-specific flag)."""
         import os
 
-        return os.getenv("TRADING_ENABLED", "false").lower() == "true"
+        return os.getenv("LIGHTER_TRADING_ENABLED", "false").lower() == "true"
 
     def _should_time_exit(self, db_trade) -> bool:
         """Check if TIME_EXIT should trigger (6 candles / 24h)."""
