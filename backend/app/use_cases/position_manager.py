@@ -20,14 +20,15 @@ from app.adapters.gateways.base_execution_gateway import (
 from app.adapters.repositories.live_trade_repository import LiveTradeRepository
 from app.use_cases.risk_manager import RiskManager
 from app.use_cases.execution_notifier_use_case import get_execution_notifier
+from app.use_cases.strategies.base_strategy import BaseTradePlanStrategy
+from app.use_cases.strategies.fixed_strategy import FixedStrategy
 
 logger = logging.getLogger(__name__)
 
-# Golden v4.4 Parameters (FIXED — do not change without backtest validation)
-MARGIN_USDT = 1000.0  # Fixed margin per trade
-LEVERAGE = 15  # Fixed leverage
-SL_PERCENT = 1.333  # Stop loss percentage
-TP_PERCENT = 0.71  # Take profit percentage
+# Fallback constants — hanya dipakai oleh dry-run log dan legacy code
+# Nilai actual SL/TP/Leverage sekarang dikontrol oleh strategy
+SL_PERCENT = 1.333
+TP_PERCENT = 0.71
 TIME_EXIT_CANDLES = 6  # 6 × 4h = 24 hours
 CANDLE_DURATION_MS = 4 * 60 * 60 * 1000  # 4 hours in ms
 
@@ -41,6 +42,10 @@ class PositionManager:
     2. Sync position status (detect SL/TP fills)
     3. If open position exists: manage existing
     4. If no position: try to open new one
+
+    Strategy Pattern: SL/TP/leverage dikontrol oleh TradePlanStrategy.
+    Default: FixedStrategy (Golden v4.4).
+    Swap ke HestonStrategy via constructor argument.
     """
 
     def __init__(
@@ -48,11 +53,14 @@ class PositionManager:
         gateway: BaseExchangeExecutionGateway,
         repo: LiveTradeRepository,
         risk_manager: Optional[RiskManager] = None,
+        strategy: Optional[BaseTradePlanStrategy] = None,
     ):
         self.gateway = gateway
         self.repo = repo
         self.risk_manager = risk_manager or RiskManager()
+        self.strategy = strategy or FixedStrategy()
         self.notifier = get_execution_notifier()
+        logger.info(f"[PositionManager] Strategy: {self.strategy.__class__.__name__}")
 
     async def sync_position_status(self) -> bool:
         """
@@ -207,12 +215,12 @@ class PositionManager:
                 verdict = signal.confluence.verdict
                 conviction = signal.confluence.conviction_pct
                 if status == "ACTIVE":
-                    is_long = side == "LONG"
-                    sl = entry * (1 - SL_PERCENT / 100) if is_long else entry * (1 + SL_PERCENT / 100)
-                    tp = entry * (1 + TP_PERCENT / 100) if is_long else entry * (1 - TP_PERCENT / 100)
+                    params = self.strategy.calculate(entry, side, signal.dict())
                     logger.info(
                         f"[PositionManager] [DRY-RUN] Would open {side} | "
-                        f"Entry: ${entry:,.2f} | SL: ${sl:,.2f} | TP: ${tp:,.2f} | "
+                        f"Entry: ${entry:,.2f} | SL: ${params.sl_price:,.2f} ({params.sl_pct:.3f}%) | "
+                        f"TP: ${params.tp_price:,.2f} ({params.tp_pct:.3f}%) | "
+                        f"Strategy: {params.strategy_name} | "
                         f"Verdict: {verdict} | Conviction: {conviction:.1f}%"
                     )
                 else:
@@ -361,10 +369,16 @@ class PositionManager:
             if self.risk_manager:
                 try:
                     account_balance = await self.gateway.get_account_balance()
-                    risk_result = self.risk_manager.evaluate(portfolio_value=account_balance)
-                    if not risk_result.allowed:
+                    risk_result = self.risk_manager.evaluate(
+                        portfolio_value=account_balance,
+                        atr=signal.price.atr14,
+                        sl_multiplier=1.333 / 100 * signal.price.now / max(signal.price.atr14, 1),
+                        requested_leverage=15,
+                        current_price=signal.price.now,
+                    )
+                    if not risk_result.can_trade:
                         logger.warning(
-                            f"[PositionManager] RiskManager blocked: {risk_result.reason} "
+                            f"[PositionManager] RiskManager blocked: {risk_result.rejection_reason} "
                             f"(balance: ${account_balance:,.2f})"
                         )
                         return True
@@ -373,28 +387,32 @@ class PositionManager:
                     # Fail-safe: don't trade if we can't check risk
                     return True
 
-            # Calculate trade parameters
+            # Calculate trade parameters via strategy
             entry_price = signal.price.now
             side = signal.trade_plan.action  # "LONG" or "SHORT"
 
-            # Calculate SL and TP
-            if side == "LONG":
-                sl_price = entry_price * (1 - SL_PERCENT / 100)
-                tp_price = entry_price * (1 + TP_PERCENT / 100)
-            else:  # SHORT
-                sl_price = entry_price * (1 + SL_PERCENT / 100)
-                tp_price = entry_price * (1 - TP_PERCENT / 100)
+            params = self.strategy.calculate(
+                entry_price=entry_price,
+                action=side,
+                signal_data=signal.dict(),
+            )
+            sl_price   = params.sl_price
+            tp_price   = params.tp_price
+            margin_usd = params.margin_usd
+            leverage   = params.leverage
 
             logger.info(
                 f"[PositionManager] 🔓 Opening {side} | "
-                f"Entry: ${entry_price:,.2f} | SL: ${sl_price:,.2f} | TP: ${tp_price:,.2f}"
+                f"Entry: ${entry_price:,.2f} | SL: ${sl_price:,.2f} ({params.sl_pct:.3f}%) | "
+                f"TP: ${tp_price:,.2f} ({params.tp_pct:.3f}%) | "
+                f"Strategy: {params.strategy_name}"
             )
 
             # Place market order
             market_result = await self.gateway.place_market_order(
                 side=side,
-                size_usdt=MARGIN_USDT,
-                leverage=LEVERAGE,
+                size_usdt=margin_usd,
+                leverage=leverage,
             )
 
             if not market_result.success:
@@ -432,19 +450,19 @@ class PositionManager:
                     trade_mock = SimpleNamespace(
                         side=side,
                         entry_price=entry_price,
-                        size_usdt=MARGIN_USDT,
-                        leverage=LEVERAGE
+                        size_usdt=margin_usd,
+                        leverage=leverage
                     )
                     pnl_usdt = self._calculate_pnl(trade_mock, close_result.filled_price)
-                    pnl_pct = (pnl_usdt / MARGIN_USDT * 100)
+                    pnl_pct = (pnl_usdt / margin_usd * 100)
                     self.repo.insert_trade(
                         trade_id=market_result.order_id,
                         symbol="BTC/USDT",
                         side=side,
                         entry_price=entry_price,
-                        size_usdt=MARGIN_USDT,
+                        size_usdt=margin_usd,
                         size_base=quantity,
-                        leverage=LEVERAGE,
+                        leverage=leverage,
                         sl_price=sl_price,
                         tp_price=tp_price,
                         status="CLOSED",
@@ -494,9 +512,9 @@ class PositionManager:
                 symbol="BTC/USDT",
                 side=side,
                 entry_price=entry_price,
-                size_usdt=MARGIN_USDT,
+                size_usdt=margin_usd,
                 size_base=quantity,
-                leverage=LEVERAGE,
+                leverage=leverage,
                 sl_price=sl_price,
                 tp_price=tp_price,
                 sl_order_id=sl_result.order_id,
@@ -517,8 +535,8 @@ class PositionManager:
                     trade_id=trade_id,
                     side=side,
                     entry_price=entry_price,
-                    size_usdt=MARGIN_USDT,
-                    leverage=LEVERAGE,
+                    size_usdt=margin_usd,
+                    leverage=leverage,
                     sl_price=sl_price,
                     tp_price=tp_price,
                     conviction_pct=signal.confluence.conviction_pct,
