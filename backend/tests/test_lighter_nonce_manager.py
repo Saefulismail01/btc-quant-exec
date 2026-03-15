@@ -33,13 +33,13 @@ def temp_state_file():
 
 @pytest.fixture
 def mock_state_dir(monkeypatch, temp_state_file):
-    """Mock the state file directory."""
-    state_dir = temp_state_file.parent
+    """Mock the state file path used by LighterNonceManager."""
     monkeypatch.setattr(
         'app.use_cases.lighter_nonce_manager.LighterNonceManager.STATE_FILE',
         temp_state_file
     )
-    return state_dir
+    # Return the temp file path so tests can read/write it directly
+    return temp_state_file
 
 
 class TestNonceManagerInitialization:
@@ -60,7 +60,7 @@ class TestNonceManagerInitialization:
 
     def test_init_loads_existing_state(self, mock_state_dir):
         """Test that init loads state from JSON if it exists."""
-        state_file = Path(mock_state_dir) / "lighter_nonce_state.json"
+        state_file = mock_state_dir
         state = {
             "api_key_index": 2,
             "next_nonce": 42,
@@ -75,7 +75,7 @@ class TestNonceManagerInitialization:
 
     def test_init_resets_state_for_different_api_key(self, mock_state_dir):
         """Test that init resets state if JSON is for different API key."""
-        state_file = Path(mock_state_dir) / "lighter_nonce_state.json"
+        state_file = mock_state_dir
         state = {
             "api_key_index": 1,  # Different key
             "next_nonce": 42,
@@ -144,7 +144,7 @@ class TestMarkUsed:
         await manager.mark_used(10)
 
         # Load state from file
-        state_file = Path(mock_state_dir) / "lighter_nonce_state.json"
+        state_file = mock_state_dir
         with open(state_file, "r") as f:
             state = json.load(f)
 
@@ -218,7 +218,7 @@ class TestResyncFromServer:
         await manager.resync_from_server(server_nonce=50)
 
         # Load state from file
-        state_file = Path(mock_state_dir) / "lighter_nonce_state.json"
+        state_file = mock_state_dir
         with open(state_file, "r") as f:
             state = json.load(f)
 

@@ -66,7 +66,7 @@ class LighterExecutionGateway(BaseExchangeExecutionGateway):
     """
 
     SYMBOL = "BTC/USDC"
-    MARKET_ID = 0  # BTC market ID in Lighter
+    MARKET_ID = 1  # BTC/USDC market ID in Lighter (0=ETH, 1=BTC)
     RETRY_ATTEMPTS = 3
     RETRY_DELAY = 1.0  # seconds
     METADATA_TTL = 86400  # 24 hours in seconds
@@ -82,6 +82,7 @@ class LighterExecutionGateway(BaseExchangeExecutionGateway):
             os.getenv("LIGHTER_TRADING_ENABLED", "false").lower() == "true"
         )
         self.api_key_index = int(os.getenv("LIGHTER_API_KEY_INDEX", "2"))
+        self.account_index = int(os.getenv("LIGHTER_ACCOUNT_INDEX", "0"))
 
         # Validate execution mode
         if self.execution_mode not in ["testnet", "mainnet"]:
@@ -141,9 +142,12 @@ class LighterExecutionGateway(BaseExchangeExecutionGateway):
         # Open positions cache (updated from account events)
         self._open_positions: Dict[str, PositionInfo] = {}
 
+        # Lighter SDK signer client (initialized lazily on first order)
+        self._signer_client = None
+
         logger.info(
             f"[LIGHTER] Initialized in {self.execution_mode} mode. "
-            f"API Key Index: {self.api_key_index}. "
+            f"Account: {self.account_index}, API Key Index: {self.api_key_index}. "
             f"Trading: {'🟢 ENABLED' if self.trading_enabled else '🔴 DISABLED'}"
         )
 
@@ -406,22 +410,119 @@ class LighterExecutionGateway(BaseExchangeExecutionGateway):
                 error_message=str(e)
             )
 
+    def _get_signer_client(self):
+        """
+        Lazily initialize and return Lighter SDK SignerClient.
+
+        Uses account_index and api_key_index from env.
+        """
+        if self._signer_client is None:
+            try:
+                import lighter as lighter_sdk  # type: ignore[import]
+                self._signer_client = lighter_sdk.SignerClient(
+                    url=self.base_url,
+                    private_key=self.api_secret,
+                    account_index=self.account_index,
+                    api_key_index=self.api_key_index,
+                )
+                logger.info(
+                    f"[LIGHTER] SDK SignerClient initialized "
+                    f"(account={self.account_index}, key_index={self.api_key_index})"
+                )
+            except ImportError:
+                raise RuntimeError(
+                    "lighter-sdk not installed. Run: pip install lighter-python"
+                )
+        return self._signer_client
+
     async def _submit_order(self, payload: Dict[str, Any]) -> OrderResult:
         """
-        Submit order to Lighter (stub — actual implementation uses Lighter SDK).
+        Submit order to Lighter via SDK SignerClient.
 
-        In production, this would use the Lighter Python SDK to sign and submit.
+        Supports MARKET, STOP_LIMIT, and TAKE_PROFIT_LIMIT order types.
         """
-        # Simulate API call
-        await asyncio.sleep(0.1)
+        try:
+            import lighter as lighter_sdk  # type: ignore[import]
+            client = self._get_signer_client()
 
-        # Mock successful response
-        return OrderResult(
-            success=True,
-            order_id=f"order_{int(time.time() * 1000)}",
-            filled_price=payload.get("price", 0) / (10 ** self._price_decimals),
-            filled_quantity=payload.get("size", 0) / (10 ** self._size_decimals),
-        )
+            order_type = payload.get("order_type", "MARKET")
+            market_index = payload.get("market_id", self.MARKET_ID)
+            base_amount = payload.get("size", 0)
+            price_scaled = payload.get("price", 0)
+            is_ask = payload.get("side") == "SELL"
+            client_order_index = payload.get("client_order_index", 0)  # 0 = auto
+
+            if order_type == "MARKET":
+                # avg_execution_price = slippage limit (2% buffer)
+                slippage = 0.02
+                if is_ask:
+                    avg_price = int(price_scaled * (1 - slippage))
+                else:
+                    avg_price = int(price_scaled * (1 + slippage))
+
+                tx = await client.create_market_order(
+                    market_index=market_index,
+                    client_order_index=client_order_index,
+                    base_amount=base_amount,
+                    avg_execution_price=avg_price,
+                    is_ask=is_ask,
+                )
+
+                filled_price = unscale_price(price_scaled, self._price_decimals)
+                filled_qty = unscale_size(base_amount, self._size_decimals)
+
+                logger.info(f"[LIGHTER] SDK market order tx: {tx}")
+                return OrderResult(
+                    success=True,
+                    order_id=str(tx) if tx else f"tx_{int(time.time() * 1000)}",
+                    filled_price=filled_price,
+                    filled_quantity=filled_qty,
+                )
+
+            else:
+                # Limit / stop / TP order
+                stop_price = payload.get("stop_price", 0)
+                reduce_only = payload.get("reduce_only", False)
+
+                if order_type == "STOP_LIMIT":
+                    sdk_order_type = lighter_sdk.SignerClient.ORDER_TYPE_LIMIT
+                    tif = lighter_sdk.SignerClient.ORDER_TIME_IN_FORCE_GOOD_TILL_TIME
+                elif order_type == "TAKE_PROFIT_LIMIT":
+                    sdk_order_type = lighter_sdk.SignerClient.ORDER_TYPE_LIMIT
+                    tif = lighter_sdk.SignerClient.ORDER_TIME_IN_FORCE_GOOD_TILL_TIME
+                else:
+                    sdk_order_type = lighter_sdk.SignerClient.ORDER_TYPE_LIMIT
+                    tif = lighter_sdk.SignerClient.ORDER_TIME_IN_FORCE_GOOD_TILL_TIME
+
+                tx, tx_hash, err = await client.create_order(
+                    market_index=market_index,
+                    client_order_index=client_order_index,
+                    base_amount=base_amount,
+                    price=price_scaled,
+                    is_ask=is_ask,
+                    order_type=sdk_order_type,
+                    time_in_force=tif,
+                    reduce_only=1 if reduce_only else 0,
+                    trigger_price=stop_price,
+                )
+
+                if err:
+                    return OrderResult(success=False, error_message=str(err))
+
+                filled_price = unscale_price(price_scaled, self._price_decimals)
+                filled_qty = unscale_size(base_amount, self._size_decimals)
+
+                logger.info(f"[LIGHTER] SDK limit order tx_hash: {tx_hash}")
+                return OrderResult(
+                    success=True,
+                    order_id=str(tx_hash) if tx_hash else f"tx_{int(time.time() * 1000)}",
+                    filled_price=filled_price,
+                    filled_quantity=filled_qty,
+                )
+
+        except Exception as e:
+            logger.error(f"[LIGHTER] _submit_order SDK error: {e}", exc_info=True)
+            return OrderResult(success=False, error_message=str(e))
 
     async def place_sl_order(
         self,

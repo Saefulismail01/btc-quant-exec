@@ -1,0 +1,11 @@
+{
+  "include": ["backend", "execution_layer"],
+  "extraPaths": ["backend"],
+  "pythonVersion": "3.11",
+  "typeCheckingMode": "basic",
+  "reportMissingModuleSource": "none",
+  "reportMissingImports": "none",
+  "reportMissingModuleAttribute": "none",
+  "reportArgumentType": "none",
+  "reportCallIssue": "none"
+}
