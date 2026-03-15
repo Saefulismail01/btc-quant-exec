@@ -1,0 +1,18 @@
+[Unit]
+Description=BTC-QUANT HFT Bot (Lighter mainnet)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=saeful
+WorkingDirectory=/home/saeful/vps/projects/btc-quant-lighter
+Environment="PATH=/tmp/hft_venv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin"
+ExecStart=/tmp/hft_venv/bin/python -u backend/scripts/hft_bot.py
+Restart=always
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
