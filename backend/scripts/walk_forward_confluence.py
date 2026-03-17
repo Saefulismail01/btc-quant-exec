@@ -323,7 +323,7 @@ def main():
     print("═" * 70)
 
     db = DuckDBManager(DB_PATH)
-    full_df = db.get_latest_ohlcv(limit=8000)
+    full_df = db.get_ohlcv_with_metrics(limit=8000)
     print(f"\n  Data: {len(full_df)} candles")
     print(f"  Range: {full_df.index[0]} to {full_df.index[-1]}")
 

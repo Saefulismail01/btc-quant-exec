@@ -12,7 +12,7 @@ from pathlib import Path
 from dotenv import load_dotenv
 
 # NEW IMPORTS (Clean Architecture)
-from app.adapters.repositories.market_repository import MarketRepository as DuckDBManager
+from app.adapters.repositories.market_repository import MarketRepository as DuckDBManager, DEFAULT_DB_PATH as DB_PATH
 from app.adapters.gateways.binance_gateway import BinanceGateway as CryptoDataFetcher
 from app.use_cases.data_ingestion_use_case import start_data_daemon as _run_data_pipeline
 
