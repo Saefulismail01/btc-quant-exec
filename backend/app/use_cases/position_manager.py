@@ -358,9 +358,9 @@ class PositionManager:
         """
         try:
             # Check signal status
-            if signal.trade_plan.status != "ACTIVE":
+            if signal.trade_plan.status not in ("ACTIVE", "ADVISORY"):
                 logger.info(
-                    f"[PositionManager] Signal not ACTIVE (status={signal.trade_plan.status}). "
+                    f"[PositionManager] Signal not ACTIVE/ADVISORY (status={signal.trade_plan.status}). "
                     f"Skipping open."
                 )
                 return True
