@@ -420,8 +420,10 @@ class LighterExecutionGateway(BaseExchangeExecutionGateway):
         if self._signer_client is None:
             try:
                 import lighter as lighter_sdk  # type: ignore[import]
+                # SDK appends /api/v1/... internally — pass root URL without /api/v1
+                sdk_url = self.base_url.replace("/api/v1", "").rstrip("/")
                 self._signer_client = lighter_sdk.SignerClient(
-                    url=self.base_url,
+                    url=sdk_url,
                     account_index=self.account_index,
                     api_private_keys={self.api_key_index: self.api_secret},
                 )
