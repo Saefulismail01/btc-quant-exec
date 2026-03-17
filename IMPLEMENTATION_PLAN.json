@@ -1,0 +1,550 @@
+{
+  "plan_id": "FIX-SIGNAL-2026-03-17",
+  "title": "Fix Critical Signal Direction Bias & Entry Timing",
+  "version": "1.0",
+  "created_at": "2026-03-17",
+  "author": "Claude Opus 4.6",
+  "status": "READY_FOR_IMPLEMENTATION",
+
+  "executive_summary": {
+    "problem": "Bot tidak pernah menghasilkan signal SHORT. Semua trade selalu LONG meskipun market bearish. SL sering kena duluan sebelum TP, terutama di high-vol regime.",
+    "root_causes": [
+      "action_side ditentukan oleh EMA trend detection (baris 234-251) dan dipakai langsung di TradePlan tanpa mempertimbangkan output Spectrum",
+      "EMA fallback else block selalu default ke LONG saat EMA20 ≈ EMA50",
+      "Spectrum.action (yang sudah validated walk-forward) TIDAK digunakan untuk menentukan arah trade",
+      "BCD posterior confidence selalu 1.0 (fake), membuat L1 vote selalu extreme",
+      "High-vol SL/TP preset punya R:R < 1 (TP lebih dekat dari SL)"
+    ],
+    "impact": "Bot bias LONG-only, tidak bisa profit di downtrend, SL hit rate tinggi di high-vol"
+  },
+
+  "affected_files": {
+    "primary": [
+      {
+        "path": "backend/app/use_cases/signal_service.py",
+        "changes": "Fix action_side usage, EMA fallback, trend_short dependency chain",
+        "risk": "HIGH — ini file inti signal generation"
+      },
+      {
+        "path": "backend/app/core/engines/layer1_volatility.py",
+        "changes": "Fix HV preset R:R ratio",
+        "risk": "MEDIUM — SL/TP multiplier"
+      },
+      {
+        "path": "backend/app/core/engines/layer1_bcd.py",
+        "changes": "Improve posterior confidence (tidak lagi fake 1.0)",
+        "risk": "MEDIUM — L1 vote magnitude"
+      }
+    ],
+    "secondary": [
+      {
+        "path": "backend/utils/spectrum.py",
+        "changes": "Tidak ada perubahan — Spectrum logic sudah benar",
+        "risk": "NONE"
+      },
+      {
+        "path": "backend/app/core/engines/layer2_ema.py",
+        "changes": "Tidak ada perubahan — EMA engine sudah benar",
+        "risk": "NONE"
+      },
+      {
+        "path": "execution_layer/lighter/signal_executor.py",
+        "changes": "Tidak ada perubahan — executor membaca action dari signal API",
+        "risk": "NONE"
+      }
+    ],
+    "test_files": [
+      {
+        "path": "backend/tests/test_signal_direction_fix.py",
+        "changes": "NEW — test bahwa SHORT signal bisa dihasilkan",
+        "risk": "NONE"
+      }
+    ]
+  },
+
+  "tasks": [
+    {
+      "id": "TASK-1",
+      "title": "Refactor: Pisahkan trend detection dari action direction",
+      "priority": "CRITICAL",
+      "severity": "P0",
+      "file": "backend/app/use_cases/signal_service.py",
+      "description": "Saat ini action_side ditentukan di baris 234-251 bersamaan dengan trend detection, lalu dipakai langsung di TradePlan (baris 583). Ini mengabaikan output Spectrum yang sudah ter-validated walk-forward. Perlu dipisahkan: EMA menentukan trend context, Spectrum menentukan action direction.",
+
+      "current_behavior": {
+        "explanation": "action_side = 'LONG' atau 'SHORT' ditentukan oleh EMA di baris 234-251. Nilai ini langsung masuk ke TradePlan.action (baris 583) tanpa mempertimbangkan Spectrum.action",
+        "code_locations": [
+          {"line": "234-251", "description": "EMA trend detection → action_side"},
+          {"line": "256-265", "description": "SL/TP calculation menggunakan action_side"},
+          {"line": "377-384", "description": "Heston SL/TP override menggunakan action_side"},
+          {"line": "583", "description": "TradePlan(action=action_side) — BUG: harusnya dari Spectrum"}
+        ]
+      },
+
+      "required_changes": [
+        {
+          "step": "1a",
+          "action": "RENAME",
+          "description": "Rename action_side → ema_direction di baris 234-251 untuk kejelasan bahwa ini hanya EMA-derived context, bukan final action",
+          "location": "signal_service.py:234-251",
+          "old_code": "trend_bias, trend_short, ema_struct, action_side = (\n    \"Bearish\", \"BEAR\", \"EMA20 below EMA50 → Bearish\", \"SHORT\")",
+          "new_code": "trend_bias, trend_short, ema_struct, ema_direction = (\n    \"Bearish\", \"BEAR\", \"EMA20 below EMA50 → Bearish\", \"SHORT\")",
+          "note": "Lakukan rename ini untuk SEMUA 4 assignment block (baris 235, 239, 243, 248). Ganti semua referensi action_side → ema_direction KECUALI di TradePlan.action"
+        },
+        {
+          "step": "1b",
+          "action": "MODIFY",
+          "description": "Pindahkan SL/TP calculation ke SETELAH Spectrum, gunakan spectrum.action sebagai arah final",
+          "location": "signal_service.py:256-265 dan 377-384",
+          "detail": "SL/TP calculation saat ini ada di 2 tempat (base di 256-265, Heston override di 377-384). Kedua tempat pakai action_side. Setelah Spectrum dihitung (baris ~458-464), tambahkan re-calculation SL/TP berdasarkan spectrum.action",
+          "new_logic": [
+            "1. Biarkan SL/TP calculation di 256-265 dan 377-384 tetap pakai ema_direction (sebagai initial estimate)",
+            "2. Setelah Spectrum dihitung (setelah baris 464), tambahkan blok baru:",
+            "   final_action = spectrum.action",
+            "   if final_action != ema_direction:",
+            "       # Spectrum mendeteksi arah berbeda dari EMA — recalculate SL/TP",
+            "       if final_action == 'SHORT':",
+            "           sl  = price_now + atr14_now * _sl_m",
+            "           tp1 = price_now - atr14_now * _tp1_m",
+            "           tp2 = price_now - atr14_now * _tp2_m",
+            "           entry_start, entry_end = price_now, price_now + atr14_now * 0.2",
+            "       else:",
+            "           sl  = price_now - atr14_now * _sl_m",
+            "           tp1 = price_now + atr14_now * _tp1_m",
+            "           tp2 = price_now + atr14_now * _tp2_m",
+            "           entry_start, entry_end = price_now - atr14_now * 0.2, price_now"
+          ]
+        },
+        {
+          "step": "1c",
+          "action": "MODIFY",
+          "description": "Gunakan final_action (dari Spectrum) di TradePlan, bukan ema_direction",
+          "location": "signal_service.py:583",
+          "old_code": "action=action_side,",
+          "new_code": "action=final_action,",
+          "note": "final_action = spectrum.action (didefinisikan di step 1b)"
+        }
+      ],
+
+      "dependencies": [],
+      "risks": [
+        "Spectrum bisa menghasilkan SHORT saat EMA masih BULL — ini DIINGINKAN (Spectrum lebih cepat bereaksi)",
+        "SL/TP perlu dihitung ulang jika arah berubah — sudah di-handle di step 1b",
+        "Truth Enforcer (_enforce_verdict) masih pakai trend_short — ini TETAP BENAR karena verdict (STRONG BUY/SELL) harus konsisten dengan EMA trend, tapi action bisa berbeda"
+      ],
+      "validation": [
+        "Test: Saat BCD=bear, MLP=bear, EMA=ambiguous → final_action harus SHORT",
+        "Test: Saat BCD=bull, MLP=bull, EMA=bull → final_action harus LONG (tidak berubah)",
+        "Test: SL/TP harus benar untuk arah SHORT (SL di atas entry, TP di bawah)"
+      ]
+    },
+
+    {
+      "id": "TASK-2",
+      "title": "Fix EMA fallback: suspend saat ambiguous, bukan default LONG",
+      "priority": "HIGH",
+      "severity": "P1",
+      "file": "backend/app/use_cases/signal_service.py",
+      "description": "Block else di baris 247-251 menangkap semua kasus ambiguous dan default ke LONG. Ini harus diubah agar: (a) menggunakan price vs EMA50 sebagai tie-breaker, atau (b) suspend saat benar-benar ambiguous.",
+
+      "current_behavior": {
+        "explanation": "4 kondisi EMA:\n1. EMA20 < EMA50 AND price < EMA20 → SHORT ✅\n2. EMA20 > EMA50 AND price > EMA20 → LONG ✅\n3. price < EMA50 → SHORT ✅\n4. else → LONG ❌ (catch-all)",
+        "code_location": "signal_service.py:234-251",
+        "problem": "Kondisi 4 (else) menangkap kasus: price > EMA50 tapi price < EMA20. Ini terjadi saat EMA20 baru cross down EMA50 (awal downtrend). Seharusnya ini BEARISH, bukan BULLISH."
+      },
+
+      "required_changes": [
+        {
+          "step": "2a",
+          "action": "REPLACE",
+          "description": "Ganti 4 kondisi EMA menjadi 5 kondisi yang lebih presisi",
+          "location": "signal_service.py:234-251",
+          "new_logic": [
+            "# Kondisi 1: Strong Bearish — EMA20 < EMA50 AND price < EMA20",
+            "if ema20_now < ema50_now and price_now < ema20_now:",
+            "    trend_bias, trend_short, ema_struct, ema_direction = (",
+            "        'Bearish', 'BEAR', 'EMA20 below EMA50 → Bearish', 'SHORT')",
+            "    momentum_label = 'Strong — Price below EMA20'",
+            "",
+            "# Kondisi 2: Strong Bullish — EMA20 > EMA50 AND price > EMA20",
+            "elif ema20_now > ema50_now and price_now > ema20_now:",
+            "    trend_bias, trend_short, ema_struct, ema_direction = (",
+            "        'Bullish', 'BULL', 'EMA20 above EMA50 → Bullish', 'LONG')",
+            "    momentum_label = 'Strong — Price above EMA20'",
+            "",
+            "# Kondisi 3: Price di bawah EMA50 — bearish bias",
+            "elif price_now < ema50_now:",
+            "    trend_bias, trend_short, ema_struct, ema_direction = (",
+            "        'Bearish', 'BEAR', 'Price below EMA50 → Bearish bias', 'SHORT')",
+            "    momentum_label = ('Strong — Price below EMA20'",
+            "                      if price_now < ema20_now else 'Weak — Price above EMA20 but below EMA50')",
+            "",
+            "# Kondisi 4 (NEW): Price di bawah EMA20 tapi di atas EMA50 — early bearish",
+            "elif price_now < ema20_now:",
+            "    trend_bias, trend_short, ema_struct, ema_direction = (",
+            "        'Bearish', 'BEAR', 'Price below EMA20, above EMA50 → Early bearish', 'SHORT')",
+            "    momentum_label = 'Transitioning — Price lost EMA20 support'",
+            "",
+            "# Kondisi 5: Price di atas kedua EMA tapi EMA belum cross — bullish tapi lemah",
+            "else:",
+            "    trend_bias, trend_short, ema_struct, ema_direction = (",
+            "        'Bullish', 'BULL', 'Price above both EMAs → Bullish', 'LONG')",
+            "    momentum_label = 'Weak — EMA structure not confirmed'"
+          ],
+          "rationale": "Kondisi 4 baru menangkap kasus kritis: harga sudah turun di bawah EMA20 (kehilangan support cepat) tapi masih di atas EMA50. Ini adalah early bearish signal yang sebelumnya salah dikategorikan sebagai LONG."
+        }
+      ],
+
+      "dependencies": ["TASK-1 — karena action_side sudah di-rename jadi ema_direction"],
+      "risks": [
+        "Lebih banyak signal SHORT akan muncul — ini DIINGINKAN",
+        "Beberapa kasus yang sebelumnya LONG akan jadi SHORT — perlu validasi backtest"
+      ],
+      "validation": [
+        "Test: price=74126, ema20=74500, ema50=74000 → ema_direction harus SHORT (kondisi 4)",
+        "Test: price=76000, ema20=75500, ema50=75000 → ema_direction harus LONG (kondisi 2)",
+        "Test: price=73500, ema20=74000, ema50=74500 → ema_direction harus SHORT (kondisi 1)"
+      ]
+    },
+
+    {
+      "id": "TASK-3",
+      "title": "Fix High-Vol SL/TP preset: R:R ratio harus >= 1.0",
+      "priority": "HIGH",
+      "severity": "P1",
+      "file": "backend/app/core/engines/layer1_volatility.py",
+      "description": "Preset HV-Fast-Revert dan HV-Slow-Persist punya SL=2.0×ATR tapi TP1=1.5×ATR, menghasilkan R:R = 0.75:1. Ini berarti profit per trade lebih kecil dari loss per trade. Perlu diperbaiki agar R:R >= 1.0.",
+
+      "current_behavior": {
+        "code_location": "layer1_volatility.py:261-273",
+        "presets": {
+          "HV-Fast-Revert": {"sl": 2.0, "tp1": 1.5, "tp2": 2.0, "rr_ratio": 0.75},
+          "HV-Slow-Persist": {"sl": 2.0, "tp1": 1.5, "tp2": 2.5, "rr_ratio": 0.75},
+          "LV-Trend": {"sl": 1.5, "tp1": 1.8, "tp2": 2.5, "rr_ratio": 1.2},
+          "Normal": {"sl": 1.5, "tp1": 2.0, "tp2": 3.0, "rr_ratio": 1.33}
+        },
+        "problem": "HV presets punya R:R < 1.0. Di high-vol regime, noise tinggi → SL kena lebih sering. Dikombinasikan dengan R:R < 1, ini menjamin net loss."
+      },
+
+      "required_changes": [
+        {
+          "step": "3a",
+          "action": "MODIFY",
+          "description": "Adjust HV-Fast-Revert preset: turunkan SL, naikkan TP1",
+          "location": "layer1_volatility.py:261-266",
+          "old_values": {"sl_base": 2.0, "tp1_base": 1.5, "tp2_base": 2.0},
+          "new_values": {"sl_base": 1.8, "tp1_base": 2.0, "tp2_base": 2.5},
+          "new_rr_ratio": 1.11,
+          "rationale": "SL dari 2.0 ke 1.8 (sedikit lebih ketat, masih cukup untuk noise filtering). TP1 dari 1.5 ke 2.0 (reward harus > risk). R:R = 2.0/1.8 = 1.11:1."
+        },
+        {
+          "step": "3b",
+          "action": "MODIFY",
+          "description": "Adjust HV-Slow-Persist preset: turunkan SL, naikkan TP1",
+          "location": "layer1_volatility.py:268-273",
+          "old_values": {"sl_base": 2.0, "tp1_base": 1.5, "tp2_base": 2.5},
+          "new_values": {"sl_base": 1.8, "tp1_base": 2.2, "tp2_base": 3.0},
+          "new_rr_ratio": 1.22,
+          "rationale": "Persistent high-vol = potensi move besar. TP1 dinaikkan ke 2.2 karena vol stabil tinggi mendukung continuation. SL turun ke 1.8. R:R = 2.2/1.8 = 1.22:1."
+        },
+        {
+          "step": "3c",
+          "action": "UPDATE_RATIONALE",
+          "description": "Update rationale string untuk kedua preset",
+          "location": "layer1_volatility.py:266,273",
+          "detail": "Ganti rationale string agar mencerminkan R:R ratio baru"
+        }
+      ],
+
+      "dependencies": [],
+      "risks": [
+        "SL lebih ketat (1.8 vs 2.0) berarti lebih sering kena SL di extreme noise — tapi net expectancy tetap lebih baik karena R:R > 1",
+        "Perlu backtest validasi: apakah WR turun signifikan dengan SL 1.8 vs 2.0?"
+      ],
+      "validation": [
+        "Test: vol_regime='High', halflife=10, bias_score=0.5 → sl=1.8, tp1=2.0",
+        "Test: vol_regime='High', halflife=20, bias_score=0.5 → sl=1.8, tp1=2.2",
+        "Test: Semua preset punya tp1/sl >= 1.0 (R:R >= 1)"
+      ]
+    },
+
+    {
+      "id": "TASK-4",
+      "title": "Improve BCD posterior confidence (dari fake 1.0 ke realistic)",
+      "priority": "MEDIUM",
+      "severity": "P2",
+      "file": "backend/app/core/engines/layer1_bcd.py",
+      "description": "BCD get_current_regime_posterior() selalu return posterior[sid] = 1.0. Ini membuat L1 vote di Spectrum selalu extreme (±1.0 × 0.30 weight = ±0.30). Perlu confidence yang lebih realistis berdasarkan run-length probability.",
+
+      "current_behavior": {
+        "code_location": "layer1_bcd.py:572-587",
+        "explanation": "posterior = np.zeros(n_max); posterior[sid] = 1.0 → selalu 1.0 untuk current state. Ini 'fake' karena BCD sebenarnya punya run-length probability matrix R[t,r] yang bisa diekstrak.",
+        "impact": "L1 vote = ±1.0 selalu → L1 kontribusi = 0.30 × 1.0 = 0.30 selalu penuh. Padahal kalau regime baru saja berubah, confidence seharusnya rendah."
+      },
+
+      "required_changes": [
+        {
+          "step": "4a",
+          "action": "MODIFY",
+          "description": "Gunakan run-length probability untuk menghitung confidence yang lebih realistis",
+          "location": "layer1_bcd.py:572-587",
+          "new_logic": [
+            "def get_current_regime_posterior(self, df, funding_rate=0.0):",
+            "    label, sid = self.get_current_regime(df, funding_rate)",
+            "    ",
+            "    # Hitung confidence dari run-length probability",
+            "    # R[T, r] = probability of run-length r at time T",
+            "    # Confidence = probability bahwa kita sudah dalam regime ini cukup lama",
+            "    if self._R is not None:",
+            "        T = self._R.shape[0] - 1",
+            "        if T > 0:",
+            "            # MAP run length",
+            "            map_rl = int(np.argmax(self._R[T, :]))",
+            "            # Confidence = P(run_length >= 3) — regime sudah stabil minimal 3 candle",
+            "            confidence = float(np.sum(self._R[T, 3:]))",
+            "            confidence = max(0.25, min(1.0, confidence))  # clamp [0.25, 1.0]",
+            "        else:",
+            "            confidence = 0.25",
+            "    else:",
+            "        confidence = 0.25",
+            "    ",
+            "    n_max = max(10, len(self.state_map))",
+            "    posterior = np.zeros(n_max)",
+            "    if 0 <= sid < n_max:",
+            "        posterior[sid] = confidence",
+            "    else:",
+            "        posterior[0] = 0.25",
+            "    ",
+            "    return label, sid, posterior"
+          ],
+          "rationale": "Jika regime baru berubah (run-length pendek), confidence rendah → L1 vote kecil → Spectrum lebih bergantung pada L2 dan L3. Jika regime sudah lama berjalan, confidence tinggi → L1 vote penuh."
+        }
+      ],
+
+      "dependencies": [],
+      "risks": [
+        "L1 vote menjadi lebih kecil untuk regime baru — ini DIINGINKAN",
+        "Spectrum score keseluruhan akan sedikit lebih rendah — beberapa signal yang sebelumnya ACTIVE mungkin jadi SUSPENDED",
+        "Perlu monitor apakah trade frequency turun terlalu drastis"
+      ],
+      "validation": [
+        "Test: Regime baru berubah (run_length < 3) → confidence harus < 0.5",
+        "Test: Regime stabil lama (run_length > 20) → confidence harus > 0.8",
+        "Test: L1 vote = confidence × sign → tidak lagi selalu ±1.0"
+      ]
+    },
+
+    {
+      "id": "TASK-5",
+      "title": "Fix downstream dependencies: trend_short vs final_action",
+      "priority": "HIGH",
+      "severity": "P1",
+      "file": "backend/app/use_cases/signal_service.py",
+      "description": "Setelah TASK-1, beberapa tempat di signal_service.py masih menggunakan trend_short untuk keperluan yang seharusnya menggunakan final_action. Perlu audit dan fix semua referensi.",
+
+      "current_behavior": {
+        "explanation": "trend_short dipakai untuk: (a) L1 alignment check, (b) L2 alignment, (c) L3 comparison, (d) RSI weakening, (e) L2 vote direction, (f) verdict enforcement, (g) sentiment adjustment. Setelah TASK-1, beberapa di antaranya seharusnya menggunakan final_action."
+      },
+
+      "required_changes": [
+        {
+          "step": "5a",
+          "action": "AUDIT",
+          "description": "Audit setiap penggunaan trend_short dan tentukan mana yang harus tetap trend_short vs final_action",
+          "detail": {
+            "TETAP_trend_short": [
+              {"line": 290, "reason": "Neutral regime guard — EMA context untuk fallback, benar"},
+              {"line": 398, "reason": "L2 EMA alignment — ini memang tentang EMA structure vs trend"},
+              {"line": 410, "reason": "RSI weakening — RSI overbought relative to EMA trend"},
+              {"line": 417, "reason": "L1 alignment — apakah BCD regime match dengan EMA trend"},
+              {"line": 448, "reason": "L2 vote direction — EMA-derived, benar"},
+              {"line": 523, "reason": "Verdict enforcement — verdict harus konsisten dengan trend context"},
+              {"line": 580, "reason": "TrendInfo object — ini informasi EMA, benar"}
+            ],
+            "GANTI_ke_final_action": [
+              {"line": 362, "reason": "Sentiment adjustment — FGI < 20 reduce LONG size. Harus pakai final_action karena ini tentang trade direction, bukan trend context", "old": "action_side == 'LONG'", "new": "final_action == 'LONG'"},
+              {"line": 419, "reason": "L3 comparison — ai_bias == trend_short. PERTIMBANGAN: ini sebenarnya OK tetap trend_short karena L3 dicompare terhadap trend context. KEEP."}
+            ]
+          }
+        },
+        {
+          "step": "5b",
+          "action": "MODIFY",
+          "description": "Fix sentiment adjustment line",
+          "location": "signal_service.py:362",
+          "old_code": "elif fgi_score < 20 and action_side == \"LONG\":",
+          "new_code": "elif fgi_score < 20 and final_action == \"LONG\":",
+          "note": "final_action belum ada di baris 362 (dihitung setelah Spectrum di ~baris 464). Solusi: pindahkan sentiment adjustment ke SETELAH Spectrum dihitung. Atau: tetap pakai ema_direction di sini karena sentiment adjustment adalah pre-Spectrum filter."
+        },
+        {
+          "step": "5c",
+          "action": "DECISION",
+          "description": "Keputusan arsitektur: sentiment adjustment sebelum atau sesudah Spectrum?",
+          "options": [
+            {
+              "option": "A",
+              "description": "Tetap sebelum Spectrum, pakai ema_direction",
+              "pro": "Sentiment adjustment mempengaruhi position size, yang di-compute sebelum Spectrum",
+              "con": "Jika final_action berbeda dari ema_direction, sentiment adjustment bisa salah arah"
+            },
+            {
+              "option": "B",
+              "description": "Pindahkan ke setelah Spectrum, pakai final_action",
+              "pro": "Lebih akurat — sentiment adjustment pakai arah trade yang benar",
+              "con": "Perlu reorder code — position size computation harus dipindahkan juga"
+            }
+          ],
+          "recommendation": "Option A — karena sentiment adjustment hanya mengurangi size (0.75x), bukan mengubah arah. Dampak kesalahan kecil."
+        }
+      ],
+
+      "dependencies": ["TASK-1"],
+      "risks": [
+        "Reorder code bisa introduce subtle bugs — hati-hati dengan variable dependencies"
+      ],
+      "validation": [
+        "Test: Semua variable references resolve correctly setelah rename",
+        "Test: Signal response schema tidak berubah"
+      ]
+    },
+
+    {
+      "id": "TASK-6",
+      "title": "Write unit tests untuk SHORT signal generation",
+      "priority": "HIGH",
+      "severity": "P1",
+      "file": "backend/tests/test_signal_direction_fix.py",
+      "description": "Buat test suite baru yang memverifikasi: (1) SHORT signal bisa dihasilkan, (2) SL/TP benar untuk SHORT, (3) R:R ratio >= 1.0 untuk semua preset, (4) BCD confidence bervariasi.",
+
+      "required_changes": [
+        {
+          "step": "6a",
+          "action": "CREATE",
+          "description": "Test file baru dengan test cases berikut",
+          "test_cases": [
+            {
+              "name": "test_short_signal_when_bearish_spectrum",
+              "description": "Jika Spectrum.action = SHORT, TradePlan.action harus SHORT",
+              "mock": "BCD=bear, MLP=bear(70%), EMA20<EMA50, price<EMA20",
+              "expected": "TradePlan.action == 'SHORT'"
+            },
+            {
+              "name": "test_short_signal_when_ema_ambiguous_but_spectrum_bearish",
+              "description": "Jika EMA ambiguous tapi Spectrum bearish, action harus SHORT",
+              "mock": "BCD=bear, MLP=bear(65%), price<EMA20 but price>EMA50",
+              "expected": "TradePlan.action == 'SHORT'"
+            },
+            {
+              "name": "test_sl_above_entry_for_short",
+              "description": "SL harus di ATAS entry price untuk SHORT position",
+              "mock": "final_action=SHORT, price=74000",
+              "expected": "trade_plan.sl > price_now AND trade_plan.tp1 < price_now"
+            },
+            {
+              "name": "test_hv_preset_rr_ratio_above_one",
+              "description": "Semua HV preset harus punya R:R >= 1.0",
+              "mock": "vol_regime='High', halflife=10",
+              "expected": "tp1_multiplier / sl_multiplier >= 1.0"
+            },
+            {
+              "name": "test_bcd_confidence_varies",
+              "description": "BCD confidence tidak selalu 1.0",
+              "mock": "Jalankan BCD pada data dengan changepoint baru",
+              "expected": "confidence < 1.0 untuk regime yang baru berubah"
+            },
+            {
+              "name": "test_ema_fallback_no_default_long",
+              "description": "Saat price < EMA20 dan price > EMA50, ema_direction harus SHORT",
+              "mock": "price=74126, ema20=74500, ema50=74000",
+              "expected": "ema_direction == 'SHORT'"
+            }
+          ]
+        }
+      ],
+
+      "dependencies": ["TASK-1", "TASK-2", "TASK-3", "TASK-4"],
+      "risks": [],
+      "validation": ["Semua tests harus pass"]
+    }
+  ],
+
+  "execution_order": [
+    {
+      "phase": 1,
+      "name": "Core Fix — Signal Direction",
+      "tasks": ["TASK-1", "TASK-2", "TASK-5"],
+      "description": "Fix arah signal agar SHORT bisa dihasilkan. Ini adalah perubahan paling kritis.",
+      "estimated_changes": "~50 lines modified in signal_service.py"
+    },
+    {
+      "phase": 2,
+      "name": "Risk/Reward Fix",
+      "tasks": ["TASK-3"],
+      "description": "Fix HV preset agar R:R >= 1.0. Perubahan kecil tapi berdampak besar pada profitability.",
+      "estimated_changes": "~10 lines modified in layer1_volatility.py"
+    },
+    {
+      "phase": 3,
+      "name": "Confidence Improvement",
+      "tasks": ["TASK-4"],
+      "description": "Improve BCD posterior confidence. Lower priority tapi meningkatkan kualitas L1 vote.",
+      "estimated_changes": "~20 lines modified in layer1_bcd.py"
+    },
+    {
+      "phase": 4,
+      "name": "Validation",
+      "tasks": ["TASK-6"],
+      "description": "Write dan run tests untuk memastikan semua fix bekerja.",
+      "estimated_changes": "~100 lines new test file"
+    }
+  ],
+
+  "backtest_requirements": {
+    "description": "Setelah implementasi, WAJIB backtest sebelum deploy ke mainnet",
+    "checks": [
+      "SHORT signal frequency: harus 30-50% dari total signals (sebelumnya ~0%)",
+      "Overall win rate: target >= 55% (backtest baseline 55%)",
+      "R:R ratio semua preset: harus >= 1.0",
+      "Net PnL over 30-day window: harus positif",
+      "Max drawdown: tidak boleh melebihi -15%",
+      "Trade frequency: 0.5-1.5 trades/day (baseline 0.87/day dari walk-forward)"
+    ]
+  },
+
+  "rollback_plan": {
+    "description": "Jika fix menyebabkan masalah di production",
+    "steps": [
+      "Git revert ke commit sebelum fix",
+      "Set LIGHTER_TRADING_ENABLED=false di .env",
+      "Restart container",
+      "Monitor 24h sebelum re-enable trading"
+    ]
+  },
+
+  "do_not_change": [
+    {
+      "file": "backend/utils/spectrum.py",
+      "reason": "Spectrum weights (0.30/0.25/0.45) dan threshold (0.20) sudah ter-validated walk-forward 989 trades / 3 tahun. JANGAN UBAH tanpa backtest ulang."
+    },
+    {
+      "file": "backend/app/core/engines/layer2_ema.py",
+      "reason": "EMA engine logic (get_ema_alignment, get_directional_vote) sudah benar. Masalah bukan di engine-nya tapi di cara signal_service.py menggunakan output-nya."
+    },
+    {
+      "file": "backend/app/use_cases/risk_manager.py",
+      "reason": "Risk manager logic (daily loss cap, consecutive loss cooldown, adaptive leverage) sudah benar dan well-tested."
+    },
+    {
+      "file": "execution_layer/lighter/signal_executor.py",
+      "reason": "Executor membaca action dari signal API response. Selama TradePlan.action benar, executor akan bekerja benar untuk LONG maupun SHORT."
+    }
+  ],
+
+  "critical_warnings": [
+    "JANGAN deploy ke mainnet tanpa backtest minimal 30 hari",
+    "JANGAN ubah Spectrum weights tanpa walk-forward validation ulang",
+    "JANGAN enable LIGHTER_TRADING_ENABLED=true sampai paper trade 1 minggu OK",
+    "Setelah fix, signal pertama yang dihasilkan HARUS di-review manual sebelum auto-execute",
+    "Monitor Telegram notifier — pastikan SHORT signals muncul dan formatnya benar"
+  ]
+}

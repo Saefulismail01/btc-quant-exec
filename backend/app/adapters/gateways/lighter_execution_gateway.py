@@ -71,9 +71,9 @@ class LighterExecutionGateway(BaseExchangeExecutionGateway):
     RETRY_DELAY = 1.0  # seconds
     METADATA_TTL = 86400  # 24 hours in seconds
 
-    # Default decimals (will be updated from API)
-    DEFAULT_PRICE_DECIMALS = 2
-    DEFAULT_SIZE_DECIMALS = 6
+    # Default decimals for BTC market (confirmed from API: supported_price_decimals=1, supported_size_decimals=5)
+    DEFAULT_PRICE_DECIMALS = 1
+    DEFAULT_SIZE_DECIMALS = 5
 
     def __init__(self):
         """Initialize Lighter execution gateway."""
@@ -281,15 +281,16 @@ class LighterExecutionGateway(BaseExchangeExecutionGateway):
         try:
             data = await self._make_request("GET", "/markets")
 
-            # Assuming response is a list of markets
+            # Find BTC perp market (symbol="BTC", market_id=1)
+            markets = data.get("markets", []) or data.get("order_books", []) or []
             btc_market = next(
-                (m for m in data.get("markets", []) if m.get("symbol") == "BTC/USDC"),
+                (m for m in markets if m.get("symbol") == "BTC" and m.get("market_type", "perp") == "perp"),
                 None
             )
 
             if btc_market:
-                self._price_decimals = btc_market.get("priceDecimals", self.DEFAULT_PRICE_DECIMALS)
-                self._size_decimals = btc_market.get("sizeDecimals", self.DEFAULT_SIZE_DECIMALS)
+                self._price_decimals = int(btc_market.get("supported_price_decimals", self.DEFAULT_PRICE_DECIMALS))
+                self._size_decimals = int(btc_market.get("supported_size_decimals", self.DEFAULT_SIZE_DECIMALS))
                 self._metadata_synced_at = time.time()
 
                 logger.info(
@@ -421,9 +422,8 @@ class LighterExecutionGateway(BaseExchangeExecutionGateway):
                 import lighter as lighter_sdk  # type: ignore[import]
                 self._signer_client = lighter_sdk.SignerClient(
                     url=self.base_url,
-                    private_key=self.api_secret,
                     account_index=self.account_index,
-                    api_key_index=self.api_key_index,
+                    api_private_keys={self.api_key_index: self.api_secret},
                 )
                 logger.info(
                     f"[LIGHTER] SDK SignerClient initialized "
@@ -460,7 +460,7 @@ class LighterExecutionGateway(BaseExchangeExecutionGateway):
                 else:
                     avg_price = int(price_scaled * (1 + slippage))
 
-                tx = await client.create_market_order(
+                created_order, resp, err = await client.create_market_order(
                     market_index=market_index,
                     client_order_index=client_order_index,
                     base_amount=base_amount,
@@ -468,13 +468,17 @@ class LighterExecutionGateway(BaseExchangeExecutionGateway):
                     is_ask=is_ask,
                 )
 
+                if err:
+                    return OrderResult(success=False, error_message=str(err))
+
                 filled_price = unscale_price(price_scaled, self._price_decimals)
                 filled_qty = unscale_size(base_amount, self._size_decimals)
+                tx_hash = resp.tx_hash if resp else f"tx_{int(time.time() * 1000)}"
 
-                logger.info(f"[LIGHTER] SDK market order tx: {tx}")
+                logger.info(f"[LIGHTER] SDK market order tx_hash: {tx_hash}")
                 return OrderResult(
                     success=True,
-                    order_id=str(tx) if tx else f"tx_{int(time.time() * 1000)}",
+                    order_id=tx_hash,
                     filled_price=filled_price,
                     filled_quantity=filled_qty,
                 )

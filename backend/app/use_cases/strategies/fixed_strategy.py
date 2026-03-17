@@ -13,7 +13,7 @@ from .base_strategy import BaseTradePlanStrategy, TradeParams
 SL_PCT      = 1.333   # %
 TP_PCT      = 0.71    # %
 LEVERAGE    = 15
-MARGIN_USD  = 1.0
+MARGIN_USD  = 5.0
 
 
 class FixedStrategy(BaseTradePlanStrategy):

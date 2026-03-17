@@ -55,7 +55,7 @@ class LighterExecutor:
     CYCLE_INTERVAL = 60  # seconds
     BALANCE_CHECK_INTERVAL = 3600  # seconds (1 hour)
     METADATA_SYNC_INTERVAL = 86400  # seconds (24 hours)
-    MIN_BALANCE_MAINNET = 1200.0  # $1,200 USDC ($1,000 margin + $200 buffer)
+    MIN_BALANCE_MAINNET = 10.0  # $10 USDC ($5 margin + $5 buffer)
 
     def __init__(self):
         self.execution_mode = os.getenv("LIGHTER_EXECUTION_MODE", "testnet").lower()
@@ -76,7 +76,7 @@ class LighterExecutor:
         logger.info(
             f"[LIGHTER] Trading: {'[OK]' if self.trading_enabled else '[DISABLED]'}"
         )
-        logger.info("[LIGHTER] Parameters: Margin=$1,000 | Leverage=15x | SL=1.333% | TP=0.71%")
+        logger.info("[LIGHTER] Parameters: Margin=$5 | Leverage=15x | SL=1.333% | TP=0.71%")
         logger.info("[LIGHTER] TIME_EXIT: 24 hours (6 x 4h candles)")
 
         gateway = None

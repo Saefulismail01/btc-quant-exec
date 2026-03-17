@@ -174,7 +174,10 @@ class TestSubmitOrder:
     async def test_submit_market_order_success(self):
         gw = self._make_enabled_gateway()
         mock_client = MagicMock()
-        mock_client.create_market_order = AsyncMock(return_value="tx_hash_abc123")
+        mock_resp = MagicMock()
+        mock_resp.tx_hash = "tx_hash_abc123"
+        mock_resp.code = 200
+        mock_client.create_market_order = AsyncMock(return_value=(MagicMock(), mock_resp, None))
         gw._signer_client = mock_client
         gw._price_decimals = 2
         gw._size_decimals = 6
@@ -198,7 +201,10 @@ class TestSubmitOrder:
     async def test_submit_market_order_sell(self):
         gw = self._make_enabled_gateway()
         mock_client = MagicMock()
-        mock_client.create_market_order = AsyncMock(return_value="tx_sell_456")
+        mock_resp = MagicMock()
+        mock_resp.tx_hash = "tx_sell_456"
+        mock_resp.code = 200
+        mock_client.create_market_order = AsyncMock(return_value=(MagicMock(), mock_resp, None))
         gw._signer_client = mock_client
         gw._price_decimals = 2
         gw._size_decimals = 6
@@ -223,7 +229,10 @@ class TestSubmitOrder:
     async def test_submit_market_order_buy_slippage_higher(self):
         gw = self._make_enabled_gateway()
         mock_client = MagicMock()
-        mock_client.create_market_order = AsyncMock(return_value="tx_buy_789")
+        mock_resp = MagicMock()
+        mock_resp.tx_hash = "tx_buy_789"
+        mock_resp.code = 200
+        mock_client.create_market_order = AsyncMock(return_value=(MagicMock(), mock_resp, None))
         gw._signer_client = mock_client
         gw._price_decimals = 2
         gw._size_decimals = 6
@@ -380,8 +389,7 @@ class TestGetSignerClient:
 
         call_kwargs = mock_sdk.SignerClient.call_args.kwargs
         assert call_kwargs["account_index"] == 3
-        assert call_kwargs["api_key_index"] == 3
-        assert call_kwargs["private_key"] == gw.api_secret
+        assert call_kwargs["api_private_keys"] == {3: gw.api_secret}
 
 
 # ─── close() ────────────────────────────────────────────────────────────────

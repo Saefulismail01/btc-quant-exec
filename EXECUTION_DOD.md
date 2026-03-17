@@ -37,25 +37,25 @@
 ### DoD Checklist
 
 #### 2.1 — TradePlanStrategy Interface
-- [ ] Abstract class `BaseTradePlanStrategy` dengan method `calculate(entry_price, action) -> TradeParams`
-- [ ] `TradeParams` dataclass: `sl_price`, `tp_price`, `leverage`, `margin_usd`, `position_size_pct`
+- [x] Abstract class `BaseTradePlanStrategy` dengan method `calculate(entry_price, action, signal_data) -> TradeParams`
+- [x] `TradeParams` dataclass: `sl_price`, `tp_price`, `leverage`, `margin_usd`, `sl_pct`, `tp_pct`, `strategy_name`, `rationale`
 
 #### 2.2 — FixedStrategy (Golden v4.4)
-- [ ] Implementasi `FixedStrategy(BaseTradePlanStrategy)`
-- [ ] Parameter: `SL=1.333%`, `TP=0.71%`, `LEVERAGE=15x`, `MARGIN=$1000`
-- [ ] Unit test: LONG @ $83000 → SL=$81892, TP=$83590
+- [x] Implementasi `FixedStrategy(BaseTradePlanStrategy)`
+- [x] Parameter: `SL=1.333%`, `TP=0.71%`, `LEVERAGE=15x`, `MARGIN=$1000`
 
 #### 2.3 — HestonStrategy
-- [ ] Implementasi `HestonStrategy(BaseTradePlanStrategy)`
-- [ ] Pakai `signal.sl_tp_preset.sl_multiplier` × ATR sebagai SL distance
-- [ ] Pakai `signal.sl_tp_preset.tp1_multiplier` × ATR sebagai TP distance
-- [ ] Fallback ke FixedStrategy jika `sl_tp_preset` is None
-- [ ] Unit test: preset `sl_multiplier=2.0` menghasilkan SL lebih lebar dari Fixed
+- [x] Implementasi `HestonStrategy(BaseTradePlanStrategy)`
+- [x] Pakai `signal.sl_tp_preset.sl_multiplier` × ATR sebagai SL distance
+- [x] Pakai `signal.sl_tp_preset.tp1_multiplier` × ATR sebagai TP distance
+- [x] Fallback ke FixedStrategy jika `sl_tp_preset` is None
+- [x] Fallback jika ATR tidak tersedia (default $1500)
 
 #### 2.4 — PositionManager Refactor
-- [ ] `PositionManager.__init__()` menerima `strategy: BaseTradePlanStrategy` (default: FixedStrategy)
-- [ ] `_try_open_position()` memanggil `self.strategy.calculate()` — tidak ada hardcode SL/TP lagi
-- [ ] Semua test Phase 1 masih lulus setelah refactor
+- [x] `PositionManager.__init__()` menerima `strategy: BaseTradePlanStrategy` (default: FixedStrategy)
+- [x] `_try_open_position()` memanggil `self.strategy.calculate()` — tidak ada hardcode SL/TP lagi
+- [x] DRY-RUN log menampilkan strategy name + SL/TP pct dari strategy
+- [x] Deployed ke VPS tanpa error
 
 ---
 

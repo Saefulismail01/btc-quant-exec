@@ -121,13 +121,13 @@ class TelegramNotifierUseCase:
             
             f"🧠 *EDGE ANALYSIS \\(6\\-LAYER STACK\\)*\n"
             f"──────────────────────────\n"
-            f"🌐 *REGIME \\(BCD\\)* : {self._esc(l1.get('label', 'N/A'))} \\(Persistence: {self._esc(f'{persistence:.0%}')}\\)\n"
-            f"🤖 *AI CONF*      : {self._esc(f'{ai_conf_pct:.1f}')}% \\(MLP \\+ BCD Cross Verified\\)\n"
-            f"📈 *EMA STRUCT*   : {self._esc(l2.get('label', 'N/A'))}\n"
-            f"🌀 *VOLATILITY*   : {self._esc(l4.get('label', 'N/A'))}\n"
-            f"🎯 *CONVICTION*   : {self._esc(f'{conviction:.1f}')}% \\(Directional Spectrum\\)\n\n"
+            f"🌐 *REGIME*    : {self._esc(l1.get('label', 'N/A'))} \\({self._esc(f'{persistence:.0%}')} persist\\)\n"
+            f"🤖 *AI CONF*   : {self._esc(f'{ai_conf_pct:.1f}')}% \\(MLP \\+ BCD Cross\\)\n"
+            f"📈 *TREND*     : {self._esc(l2.get('label', 'N/A'))}\n"
+            f"🌀 *VOL*       : {self._esc(l4.get('label', 'N/A'))}\n"
+            f"🎯 *SPECTRUM*  : {self._esc(f'{conviction:.1f}')}% Conviction\n\n"
             
-            f"📝 *RATIONALE*:\n"
+            f"📝 *STRATEGY RATIONALE*:\n"
             f"_{self._esc(conf.get('rationale', 'Market shows alignment for continuation.'))}_\n\n"
             
             f"━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
@@ -175,6 +175,7 @@ class TelegramNotifierUseCase:
         raw_reason = plan.get("status_reason", "")
 
         conf       = signal_data.get("confluence", {})
+        verdict    = conf.get("verdict", "NEUTRAL").upper()
         score      = int(conf.get("confluence_score", 0))
         conviction = float(conf.get("conviction_pct", 0))
         layers     = conf.get("layers", {})
@@ -223,32 +224,50 @@ class TelegramNotifierUseCase:
             trend_bias  = trend.get("bias", "N/A")
             ema_struct  = trend.get("ema_structure", "N/A")
 
-            # Determine gate status label
-            gate_label = {
-                "SUSPENDED": "SUSPENDED — Conviction terlalu rendah",
-                "ADVISORY":  "ADVISORY — Ukuran dikurangi, tunggu konfirmasi",
-            }.get(status, status)
-
-            # First line of rationale only (keep it brief)
+            # Determine more human-readable labels
             first_rationale = rationale.strip().split("\n")[0] if rationale else "Kondisi pasar tidak mendukung entry."
+            
+            action_label = "⏸ WAIT (No Entry)"
+            if status == "SUSPENDED":
+                reason_top = "Conviction Terlalu Rendah"
+            elif status == "ADVISORY" or verdict == "NEUTRAL":
+                reason_top = "Konfirmasi Layer Tidak Lengkap"
+            else:
+                reason_top = "Menunggu Area Harga Ideal"
+
+            # Clean up layer names for display
+            l1_label = l1.get('label', 'N/A')
+            l2_label = l2.get('label', 'N/A')
+            l3_label = l3.get('label', 'N/A')
+            l4_label = l4.get('label', 'N/A')
 
             msg = (
-                f"⏸ *BTC\\-QUANT \\| MONITORING \\(NO TRADE\\)*\n"
+                f"🔍 *BTC\\-QUANT \\| MARKET MONITORING*\n"
                 f"━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
-                f"🕒 *Candle* : {ts_display}\n"
-                f"📊 *BTC/USDT* : {self._esc(f'${price_now:,.0f}')} \\| {self._esc(trend_bias)}\n\n"
-                f"{gate_emoji} *STATUS* : {self._esc(gate_label)}\n"
-                f"🎯 *Conviction* : {self._esc(f'{conviction:.1f}')}% \\| Score: {self._esc(str(score))}/100\n\n"
-                f"🧠 *LAYER BREAKDOWN*\n"
+                f"🕒 *Candle*  : {ts_display}\n"
+                f"📊 *Price*   : {self._esc(f'${price_now:,.0f}')} \\| {self._esc(trend_bias)}\n\n"
+                
+                f"⚡ *ACTION*  : {self._esc(action_label)}\n"
+                f"🎯 *REASON*  : {self._esc(reason_top)}\n"
+                f"📡 *ENGINE*  : 🟢 SENTINEL MODE \\(Scanning\\)\n\n"
+
+                f"🧠 *EDGE LAYERS ANALYSIS*\n"
                 f"──────────────────────────\n"
-                f"{_check(l1)} *L1 BCD*  : {self._esc(l1.get('label', 'N/A'))}\n"
-                f"{_check(l2)} *L2 EMA*  : {self._esc(l2.get('label', 'N/A'))}\n"
-                f"{_check(l3)} *L3 MLP*  : {self._esc(l3.get('label', 'N/A'))}\n"
-                f"{_check(l4)} *L4 Vol*  : {self._esc(l4.get('label', 'N/A'))}\n\n"
-                f"📉 *EMA*  : {self._esc(ema_struct)}\n"
-                f"🌀 *Heston* : {self._esc(vol_regime)} \\| Regime persist: {self._esc(f'{persistence:.0%}')}\n\n"
-                f"📝 _{self._esc(first_rationale)}_\n\n"
-                f"⏳ _Menunggu candle 4H berikutnya\\.\\.\\._\n"
+                f"{_check(l1)} *L1 Macro* : {self._esc(l1_label)}\n"
+                f"{_check(l2)} *L2 Trend* : {self._esc(l2_label)}\n"
+                f"{_check(l3)} *L3 AI*    : {self._esc(l3_label)}\n"
+                f"{_check(l4)} *L4 Risk*  : {self._esc(l4_label)}\n\n"
+                
+                f"📊 *SPECTRUM DETAILS*\n"
+                f"• Conviction : {self._esc(f'{conviction:.1f}')}%\n"
+                f"• Conf Score : {self._esc(str(score))}/100\n"
+                f"• Structure  : {self._esc(ema_struct)}\n"
+                f"• Vol Regime : {self._esc(vol_regime)} \\({self._esc(f'{persistence:.0%}')} persist\\)\n\n"
+
+                f"📝 *NOTES*:\n"
+                f"_{self._esc(first_rationale)}_\n\n"
+                
+                f"⏳ _Standby untuk candle 4H berikutnya\\.\\._\n"
                 f"━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
                 f"🤖 *BTC\\-QUANT SYSTEM v4\\.4*"
             )

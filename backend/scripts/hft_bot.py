@@ -22,11 +22,15 @@ import lighter
 
 BASE_URL = os.getenv("LIGHTER_MAINNET_BASE_URL", "https://mainnet.zklighter.elliot.ai")
 API_SECRET = os.getenv("LIGHTER_MAINNET_API_SECRET", "")
-if API_SECRET.startswith("0x"):
-    API_SECRET = API_SECRET[2:]
+# Try with 0x prefix first (SDK may need it)
+if not API_SECRET.startswith("0x"):
+    API_SECRET = "0x" + API_SECRET
 API_KEY_INDEX = int(os.getenv("LIGHTER_API_KEY_INDEX", "3"))
 ACCOUNT_INDEX = int(os.getenv("LIGHTER_ACCOUNT_INDEX", "718591"))
 BTC_MARKET = 1
+
+# Debug
+print(f"[DEBUG] Account: {ACCOUNT_INDEX}, Key Index: {API_KEY_INDEX}, Secret: {API_SECRET[:20]}...", file=sys.stderr)
 
 # === CONFIGURATION ===
 TRADE_SIZE = 0.00021  # BTC
@@ -124,11 +128,15 @@ class HFTBot:
 
     async def place_trade(self, side: str, entry_price: float, nonce: int) -> bool:
         """Place entry + SL/TP orders."""
-        client = lighter.SignerClient(
-            url=BASE_URL,
-            account_index=ACCOUNT_INDEX,
-            api_private_keys={API_KEY_INDEX: API_SECRET},
-        )
+        try:
+            client = lighter.SignerClient(
+                url=BASE_URL,
+                account_index=ACCOUNT_INDEX,
+                api_private_keys={API_KEY_INDEX: API_SECRET},
+            )
+        except Exception as e:
+            print(f"  ❌ SignerClient init failed: {e}")
+            return False
 
         # Calculate TP/SL prices
         if side == "LONG":
@@ -146,15 +154,20 @@ class HFTBot:
         base_amount = int(TRADE_SIZE * 1e5)
         avg_price = int(entry_price * 10 * (1.02 if side == "SHORT" else 0.98))
 
-        created_order, resp, err = await client.create_market_order(
-            market_index=BTC_MARKET,
-            client_order_index=0,
-            base_amount=base_amount,
-            avg_execution_price=avg_price,
-            is_ask=(side == "SHORT"),
-            nonce=nonce,
-            api_key_index=API_KEY_INDEX,
-        )
+        try:
+            created_order, resp, err = await client.create_market_order(
+                market_index=BTC_MARKET,
+                client_order_index=0,
+                base_amount=base_amount,
+                avg_execution_price=avg_price,
+                is_ask=(side == "SHORT"),
+                nonce=nonce,
+                api_key_index=API_KEY_INDEX,
+            )
+        except Exception as e:
+            print(f"  ❌ Entry submission error: {e}")
+            await client.close()
+            return False
 
         if err:
             print(f"  ❌ Entry failed: {err}")

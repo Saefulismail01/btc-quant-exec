@@ -63,18 +63,13 @@ async def test_rest_api():
         order_books = await order_api.order_books()
         print(f"✅ Connected! Markets tersedia: {len(order_books.order_books)}")
         for book in order_books.order_books[:5]:
-            print(f"   Market {book.market_id}: {book.name}")
+            print(f"   Market {book.market_id}: {book}")
 
-        # Fetch BTC order book
+        # Fetch BTC order book detail
         btc_book = await order_api.order_book_details(market_id=BTC_MARKET_INDEX)
         details = btc_book.order_book_details[0]
-        best_bid = float(details.bids[0].price) if details.bids else 0
-        best_ask = float(details.asks[0].price) if details.asks else 0
-        mid_price = (best_bid + best_ask) / 2
-        print(f"\n✅ BTC/USDC Orderbook:")
-        print(f"   Best Bid: ${best_bid:,.2f}")
-        print(f"   Best Ask: ${best_ask:,.2f}")
-        print(f"   Mid Price: ${mid_price:,.2f}")
+        mid_price = float(details.last_trade_price)
+        print(f"\n✅ BTC/USDC Last Trade Price: ${mid_price:,.2f}")
         return mid_price
 
 
@@ -85,15 +80,8 @@ async def test_account(mid_price: float):
     async with lighter.ApiClient(config) as api_client:
         account_api = lighter.AccountApi(api_client)
 
-        account = await account_api.account_by_index(account_index=ACCOUNT_INDEX)
+        account = await account_api.account(by="index", value=str(ACCOUNT_INDEX))
         print(f"✅ Account index: {ACCOUNT_INDEX}")
-
-        # Print collateral/balance info
-        if hasattr(account, 'collateral'):
-            print(f"   Collateral: {account.collateral}")
-        if hasattr(account, 'free_collateral'):
-            print(f"   Free Collateral: {account.free_collateral}")
-
         print(f"\n   Raw account data: {account}")
         return account
 
@@ -117,16 +105,11 @@ async def test_place_order(mid_price: float, server_nonce: int):
     """Test 4: Place market order $1 (BUY LONG)."""
     sep("TEST 4: Place Market Order ($1 LONG)")
 
-    # Hitung base_amount: $1 / price, dalam 6 decimals
-    # Contoh: $1 / $84000 = 0.0000119 BTC = 12 (scaled)
-    # Lighter minimum order mungkin lebih tinggi, kita pakai $1 notional dulu
-    notional_usd = 1.0
-    quantity_btc = notional_usd / mid_price
-    base_amount = int(quantity_btc * 1_000_000)  # 6 decimals
-
-    if base_amount < 1:
-        print(f"⚠️  base_amount terlalu kecil ({base_amount}), minimum 1. Gunakan minimal $1.")
-        base_amount = 1
+    # BTC minimum: 0.00020 BTC, size_decimals=5 (scaled by 1e5)
+    # Pakai 0.00021 BTC (sedikit di atas minimum)
+    quantity_btc = 0.00021
+    base_amount = 21  # 0.00021 * 1e5
+    notional_usd = quantity_btc * mid_price
 
     print(f"   Entry price: ${mid_price:,.2f}")
     print(f"   Notional: ${notional_usd}")
@@ -134,17 +117,16 @@ async def test_place_order(mid_price: float, server_nonce: int):
     print(f"   base_amount (scaled): {base_amount}")
     print(f"   Nonce: {server_nonce}")
 
-    # Slippage 2% untuk market order
-    avg_exec_price = int(mid_price * 100 * 1.02)  # price_decimals=2, +2% slippage untuk BUY
+    # Slippage 2% untuk market order, price_decimals=1 untuk BTC
+    avg_exec_price = int(mid_price * 10 * 1.02)  # price_decimals=1, +2% slippage untuk BUY
 
     print(f"   avg_execution_price (scaled): {avg_exec_price}")
     print(f"\n⚡ Submitting order...")
 
     client = lighter.SignerClient(
         url=BASE_URL,
-        private_key=API_SECRET,
         account_index=ACCOUNT_INDEX,
-        api_key_index=API_KEY_INDEX,
+        api_private_keys={API_KEY_INDEX: API_SECRET},
     )
 
     tx = await client.create_market_order(
