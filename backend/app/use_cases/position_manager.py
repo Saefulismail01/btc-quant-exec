@@ -5,11 +5,14 @@ Receives SignalResponse and decides whether to open, hold, or close positions.
 Manages order placement, risk checks, and position state.
 """
 
+import json
 import logging
+import os
 import time
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Optional
 from types import SimpleNamespace
+from zoneinfo import ZoneInfo
 
 from app.schemas.signal import SignalResponse
 from app.adapters.gateways.base_execution_gateway import (
@@ -24,6 +27,11 @@ from app.use_cases.strategies.base_strategy import BaseTradePlanStrategy
 from app.use_cases.strategies.fixed_strategy import FixedStrategy
 
 logger = logging.getLogger(__name__)
+
+WIB = ZoneInfo("Asia/Jakarta")
+_FREEZE_STATE_FILE = os.path.join(
+    os.path.dirname(__file__), "..", "infrastructure", "sl_freeze_state.json"
+)
 
 # Fallback constants — hanya dipakai oleh dry-run log dan legacy code
 # Nilai actual SL/TP/Leverage sekarang dikontrol oleh strategy
@@ -60,7 +68,10 @@ class PositionManager:
         self.risk_manager = risk_manager or RiskManager()
         self.strategy = strategy or FixedStrategy()
         self.notifier = get_execution_notifier()
+        self._sl_freeze_until: Optional[datetime] = self._load_freeze_state()
         logger.info(f"[PositionManager] Strategy: {self.strategy.__class__.__name__}")
+        if self._sl_freeze_until:
+            logger.info(f"[PositionManager] SL freeze active until {self._sl_freeze_until.isoformat()}")
 
     async def sync_position_status(self) -> bool:
         """
@@ -155,6 +166,13 @@ class PositionManager:
                 # Record result for risk manager
                 if self.risk_manager:
                     self.risk_manager.record_trade_result(pnl_pct)
+
+                # PR-2: SL hit → freeze new entries until 07:00 WIB next day
+                # TP hit → clear any existing freeze (allow next entry)
+                if exit_type == "SL":
+                    self._set_sl_freeze()
+                elif exit_type == "TP":
+                    self._clear_sl_freeze()
 
                 logger.info(
                     f"[PositionManager] ✅ Position closed via {exit_type} | "
@@ -357,6 +375,15 @@ class PositionManager:
             True if processed (success or declined), False on error
         """
         try:
+            # PR-2: Block entry if SL freeze is active
+            if self._is_sl_frozen():
+                freeze_until: Optional[datetime] = self._sl_freeze_until
+                logger.info(
+                    f"[PositionManager] ⛔ Entry blocked — SL freeze until "
+                    f"{freeze_until.isoformat() if freeze_until else '?'} WIB"
+                )
+                return True
+
             # Check signal status
             if signal.trade_plan.status not in ("ACTIVE", "ADVISORY"):
                 logger.info(
@@ -550,6 +577,55 @@ class PositionManager:
         except Exception as e:
             logger.error(f"[PositionManager] Error opening position: {e}", exc_info=True)
             return False
+
+    # ─ SL freeze state helpers ────────────────────────────────────────────────
+
+    def _load_freeze_state(self) -> Optional[datetime]:
+        """Load SL freeze timestamp from disk (survives restarts)."""
+        try:
+            if os.path.exists(_FREEZE_STATE_FILE):
+                with open(_FREEZE_STATE_FILE, "r") as f:
+                    data = json.load(f)
+                ts = data.get("sl_freeze_until")
+                if ts:
+                    return datetime.fromisoformat(ts)
+        except Exception as e:
+            logger.warning(f"[PositionManager] Could not load freeze state: {e}")
+        return None
+
+    def _save_freeze_state(self, until: Optional[datetime]) -> None:
+        """Persist SL freeze timestamp to disk."""
+        try:
+            os.makedirs(os.path.dirname(_FREEZE_STATE_FILE), exist_ok=True)
+            with open(_FREEZE_STATE_FILE, "w") as f:
+                json.dump({"sl_freeze_until": until.isoformat() if until else None}, f)
+        except Exception as e:
+            logger.warning(f"[PositionManager] Could not save freeze state: {e}")
+
+    def _set_sl_freeze(self) -> None:
+        """Freeze entry until 07:00 WIB next day."""
+        now_wib = datetime.now(WIB)
+        next_day = (now_wib + timedelta(days=1)).replace(
+            hour=7, minute=0, second=0, microsecond=0
+        )
+        self._sl_freeze_until = next_day
+        self._save_freeze_state(next_day)
+        logger.info(f"[PositionManager] SL freeze set until {next_day.isoformat()}")
+
+    def _clear_sl_freeze(self) -> None:
+        self._sl_freeze_until = None
+        self._save_freeze_state(None)
+
+    def _is_sl_frozen(self) -> bool:
+        """Return True if new entries are blocked due to recent SL hit."""
+        freeze_until: Optional[datetime] = self._sl_freeze_until
+        if freeze_until is None:
+            return False
+        now = datetime.now(WIB)
+        if now >= freeze_until:
+            self._clear_sl_freeze()
+            return False
+        return True
 
     # ─ Helper methods ─────────────────────────────────────────────────────────
 
