@@ -36,6 +36,16 @@ class MarketMetrics(BaseModel):
     funding_label: str
     fgi_score: int = 50
     fgi_label: str = "Neutral"
+    # [TASK-7/8] Cross-exchange & L/S ratio fields
+    long_short_ratio: float = 0.5
+    long_short_label: str = "Balanced"
+    funding_consensus: str = "MIXED"
+    funding_spread: float = 0.0
+    # [TASK-9] On-chain netflow fields
+    exchange_netflow_btc: float = 0.0
+    exchange_netflow_label: str = "Neutral"
+    # [TASK-8] Crowded position adjustment applied
+    crowded_adjustment: float = 1.0
 
 
 # ─────────────────────────────────────────────
@@ -168,6 +178,7 @@ class SignalResponse(BaseModel):
     market_metrics: MarketMetrics
     validity_utc: str
     sentiment_adjustment: float = 1.0                    # Multiplier applied to position_size_pct
+    crowded_adjustment: Optional[float] = None           # [TASK-8] L/S ratio contrarian modifier
     # ECONOPHYSICS fields (optional — default empty jika fallback)
     regime_bias:   Optional[RegimeBiasInfo] = None
     heston_vol:    Optional[HestonVolInfo]  = None

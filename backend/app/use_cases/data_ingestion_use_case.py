@@ -2,6 +2,8 @@ import asyncio
 from datetime import datetime, timezone
 from app.adapters.gateways.binance_gateway import BinanceGateway
 from app.adapters.repositories.market_repository import MarketRepository
+from app.adapters.gateways.multi_exchange_gateway import MultiExchangeFundingGateway
+from app.adapters.gateways.onchain_gateway import OnChainGateway
 
 
 class DataIngestionUseCase:
@@ -17,6 +19,11 @@ class DataIngestionUseCase:
         # Track state to avoid duplicate processing per closed candle
         self.last_notified_ts = 0
         self.last_regime = None
+        # [TASK-7/9] Cross-exchange and on-chain gateways
+        self._multi_funding_gw = MultiExchangeFundingGateway()
+        self._onchain_gw = OnChainGateway()
+        # Track last 4H candle ts for rate-limited fetches
+        self._last_4h_ts_for_onchain = 0
 
     async def run_cycle(self, cycle_idx: int):
         print(f"  [{datetime.now().strftime('%H:%M:%S')}] [Ingestion] == Cycle #{cycle_idx} starting ==")
@@ -41,11 +48,44 @@ class DataIngestionUseCase:
         micro = await self.gateway.fetch_microstructure_data()
         fgi = await self.gateway.fetch_fgi()
 
+        # [TASK-7] Cross-exchange funding rate (parallel, cached 5 min)
+        cross_funding = {"avg_funding": 0.0, "funding_consensus": "MIXED", "max_spread": 0.0}
+        try:
+            cross_funding = await self._multi_funding_gw.fetch_cross_funding()
+        except Exception as e:
+            print(f"  - [TASK-7] Cross-funding fetch failed: {e}")
+
+        # [TASK-7b] Long/Short ratio (public Binance endpoint)
+        ls_data = {"long_ratio": 0.5, "short_ratio": 0.5, "ls_label": "Balanced"}
+        try:
+            ls_data = await self.gateway.fetch_long_short_ratio()
+        except Exception as e:
+            print(f"  - [TASK-7b] L/S ratio fetch failed: {e}")
+
+        # [TASK-9] On-chain netflow — only fetch on new 4H candle (rate limited: 10/day)
+        netflow_data = {"netflow_btc": 0.0, "exchange_netflow_label": "Neutral"}
+        if new_candle_detected and latest_ts != self._last_4h_ts_for_onchain:
+            try:
+                live_price = float(df_ohlcv['close'].iloc[-1]) if not df_ohlcv.empty else 0.0
+                raw_nf = await self._onchain_gw.fetch_exchange_netflow(current_price=live_price)
+                netflow_data = {
+                    "netflow_btc": raw_nf.get("netflow_btc", 0.0),
+                    "exchange_netflow_label": raw_nf.get("flow_label", "Neutral"),
+                }
+                self._last_4h_ts_for_onchain = latest_ts
+            except Exception as e:
+                print(f"  - [TASK-9] Netflow fetch failed: {e}")
+
         # 3. Assemble and store metrics
         now_ms = int(datetime.now(timezone.utc).timestamp() * 1000)
+        # [TASK-7] Average cross-exchange funding (override Binance-only with consensus avg)
+        avg_funding = cross_funding.get("avg_funding", 0.0)
+        base_funding = metrics.get("funding_rate", 0.0)
+        final_funding = avg_funding if avg_funding != 0.0 else base_funding
+
         metrics_row = {
             "timestamp": now_ms,
-            "funding_rate": metrics.get("funding_rate", 0.0),
+            "funding_rate": final_funding,
             "open_interest": metrics.get("open_interest", 0.0),
             "global_mcap_change": 0.0,
             "order_book_imbalance": obi,
@@ -53,9 +93,17 @@ class DataIngestionUseCase:
             "liquidations_buy": micro["liq_buy"],
             "liquidations_sell": micro["liq_sell"],
             "fgi_value": fgi,
+            # [TASK-7/8] Cross-exchange consensus fields
+            "funding_consensus": cross_funding.get("funding_consensus", "MIXED"),
+            "funding_spread": cross_funding.get("max_spread", 0.0),
+            "long_short_ratio": ls_data.get("long_ratio", 0.5),
+            "long_short_label": ls_data.get("ls_label", "Balanced"),
+            # [TASK-9] On-chain netflow
+            "exchange_netflow_btc": netflow_data.get("netflow_btc", 0.0),
+            "exchange_netflow_label": netflow_data.get("exchange_netflow_label", "Neutral"),
         }
         self.repository.insert_metrics(metrics_row)
-        print(f"  - Metrics: Funding {metrics_row['funding_rate']:+.8f} | FGI {fgi}")
+        print(f"  - Metrics: Funding {metrics_row['funding_rate']:+.8f} | FGI {fgi} | L/S {ls_data['ls_label']} | Consensus {metrics_row['funding_consensus']}")
 
         # 4. Process signal-driven actions (Triggered by new candle)
         if new_candle_detected:

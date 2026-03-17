@@ -378,6 +378,19 @@ class SignalService:
             leverage        = risk_verdict.approved_leverage
             pos_size_pct    = risk_verdict.position_size_pct * sentiment_adj
 
+            # [TASK-8] Long/Short ratio contrarian filter
+            ls_ratio = float(metrics.get('long_short_ratio', 0.5))
+            ls_label = str(metrics.get('long_short_label', 'Balanced'))
+            crowded_adj = 1.0
+            if ls_label == 'Extreme Long' and ema_direction == 'LONG':
+                crowded_adj = 0.7
+            elif ls_label == 'Extreme Short' and ema_direction == 'SHORT':
+                crowded_adj = 0.7
+            elif ls_label == 'Extreme Long' and ema_direction == 'SHORT':
+                crowded_adj = 1.15
+            elif ls_label == 'Extreme Short' and ema_direction == 'LONG':
+                crowded_adj = 1.15
+
             # [TASK-1] SL/TP multipliers stored — will be applied AFTER Spectrum
             # determines final_action. See step 6b below.
             _sl_m  = sl_tp_mults["sl_multiplier"]
@@ -467,6 +480,20 @@ class SignalService:
             # [TASK-1] final_action comes from Spectrum — the validated scoring engine.
             # ema_direction is structural context only; Spectrum is the authority on direction.
             final_action = spectrum.action  # "LONG" | "SHORT" from directional_bias sign
+
+            # [TASK-8] Apply crowded_adj after Spectrum determines final direction
+            pos_size_pct = pos_size_pct * crowded_adj
+
+            # [TASK-9] Exchange netflow filter (whale activity)
+            netflow_label = str(metrics.get('exchange_netflow_label', 'Neutral'))
+            if netflow_label == 'Large Inflow' and final_action == 'LONG':
+                pos_size_pct *= 0.6
+            elif netflow_label == 'Large Outflow' and final_action == 'SHORT':
+                pos_size_pct *= 0.6
+            elif netflow_label == 'Large Outflow' and final_action == 'LONG':
+                pos_size_pct *= 1.1
+            elif netflow_label == 'Large Inflow' and final_action == 'SHORT':
+                pos_size_pct *= 1.1
 
             # [TASK-1] Recompute SL/TP/entry using final_action (Spectrum-derived direction)
             if final_action == "SHORT":
@@ -630,10 +657,18 @@ class SignalService:
                     order_book_imbalance=round(obi, 6),
                     global_mcap_change_pct=round(mcap_change, 4),
                     obi_label=obi_label, funding_label=funding_label,
-                    fgi_score=int(fgi_score), fgi_label=fgi_label
+                    fgi_score=int(fgi_score), fgi_label=fgi_label,
+                    long_short_ratio=ls_ratio,
+                    long_short_label=ls_label,
+                    funding_consensus=str(metrics.get('funding_consensus', 'MIXED')),
+                    funding_spread=float(metrics.get('funding_spread', 0.0)),
+                    exchange_netflow_btc=float(metrics.get('exchange_netflow_btc', 0.0)),
+                    exchange_netflow_label=netflow_label,
+                    crowded_adjustment=crowded_adj,
                 ),
                 validity_utc=next_close.strftime("%Y-%m-%dT%H:%M:%SZ"),
                 sentiment_adjustment=sentiment_adj,
+                crowded_adjustment=crowded_adj,
                 # ── ECONOPHYSICS fields ─────────────────────────────────────────
                 # Modul A: Regime Bias dari Transition Matrix (Proses Markov)
                 regime_bias=RegimeBiasInfo(

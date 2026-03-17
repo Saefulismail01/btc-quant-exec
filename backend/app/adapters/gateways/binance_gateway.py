@@ -140,3 +140,37 @@ class BinanceGateway:
                     return float(resp.json()['data'][0]['value'])
         except: pass
         return 50.0
+
+    async def fetch_long_short_ratio(self) -> dict:
+        """
+        Fetch BTC Long/Short account ratio from Binance Futures.
+        TASK-7b: L/S ratio for contrarian conviction modifier.
+        Endpoint: GET /futures/data/globalLongShortAccountRatio
+        """
+        _default = {'long_ratio': 0.5, 'short_ratio': 0.5, 'ls_label': 'Balanced'}
+        try:
+            import httpx
+            async with httpx.AsyncClient(timeout=5.0) as client:
+                resp = await client.get(
+                    "https://fapi.binance.com/futures/data/globalLongShortAccountRatio",
+                    params={"symbol": "BTCUSDT", "period": "4h", "limit": 1}
+                )
+                if resp.status_code == 200:
+                    data = resp.json()
+                    if data and len(data) > 0:
+                        long_ratio  = float(data[0].get("longAccount",  0.5))
+                        short_ratio = float(data[0].get("shortAccount", 0.5))
+                        if long_ratio > 0.70:
+                            ls_label = 'Extreme Long'
+                        elif long_ratio > 0.55:
+                            ls_label = 'Long Dominant'
+                        elif short_ratio > 0.70:
+                            ls_label = 'Extreme Short'
+                        elif short_ratio > 0.55:
+                            ls_label = 'Short Dominant'
+                        else:
+                            ls_label = 'Balanced'
+                        return {'long_ratio': long_ratio, 'short_ratio': short_ratio, 'ls_label': ls_label}
+        except Exception as e:
+            print(f"  [Gateway] Long/Short Ratio Error: {type(e).__name__}: {str(e)}")
+        return _default
