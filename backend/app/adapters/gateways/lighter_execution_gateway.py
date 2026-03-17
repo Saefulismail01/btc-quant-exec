@@ -559,33 +559,30 @@ class LighterExecutionGateway(BaseExchangeExecutionGateway):
             # Convert to opposite side (SL closes position)
             sl_side = "SELL" if side == "LONG" else "BUY"
 
-            nonce = await self.nonce_manager.get_next_nonce()
+            import lighter as lighter_sdk
+            client = self._get_signer_client()
+
             price_scaled = scale_price(trigger_price, self._price_decimals)
             size_scaled = scale_size(quantity, self._size_decimals)
+            is_ask = (sl_side == "SELL")  # SELL to close LONG
 
-            payload = {
-                "market_id": self.MARKET_ID,
-                "side": sl_side,
-                "order_type": "STOP_LIMIT",
-                "size": size_scaled,
-                "price": price_scaled,
-                "stop_price": price_scaled,
-                "nonce": nonce,
-            }
-
-            order_result = await self._retry_call(
-                lambda: self._submit_order(payload),
-                f"Place SL order for {side}"
+            tx, tx_hash, err = await client.create_sl_order(
+                market_index=self.MARKET_ID,
+                client_order_index=0,
+                base_amount=size_scaled,
+                trigger_price=price_scaled,
+                price=price_scaled,
+                is_ask=is_ask,
+                reduce_only=True,
             )
 
-            if order_result.success:
-                await self.nonce_manager.mark_used(nonce)
-                logger.info(
-                    f"[LIGHTER] ✅ SL order placed: {order_result.order_id} | "
-                    f"{side} SL @ ${trigger_price:,.2f}"
-                )
+            if err:
+                logger.error(f"[LIGHTER] SL order error: {err}")
+                return OrderResult(success=False, error_message=str(err))
 
-            return order_result
+            order_id = str(tx_hash) if tx_hash else f"sl_{int(time.time() * 1000)}"
+            logger.info(f"[LIGHTER] ✅ SL order placed: {order_id} | {side} SL @ ${trigger_price:,.2f}")
+            return OrderResult(success=True, order_id=order_id, filled_price=trigger_price, filled_quantity=quantity)
 
         except Exception as e:
             logger.error(f"[LIGHTER] SL order placement failed: {e}", exc_info=True)
@@ -623,33 +620,30 @@ class LighterExecutionGateway(BaseExchangeExecutionGateway):
             # Convert to opposite side (TP closes position)
             tp_side = "SELL" if side == "LONG" else "BUY"
 
-            nonce = await self.nonce_manager.get_next_nonce()
+            import lighter as lighter_sdk
+            client = self._get_signer_client()
+
             price_scaled = scale_price(trigger_price, self._price_decimals)
             size_scaled = scale_size(quantity, self._size_decimals)
+            is_ask = (tp_side == "SELL")  # SELL to close LONG
 
-            payload = {
-                "market_id": self.MARKET_ID,
-                "side": tp_side,
-                "order_type": "TAKE_PROFIT_LIMIT",
-                "size": size_scaled,
-                "price": price_scaled,
-                "stop_price": price_scaled,
-                "nonce": nonce,
-            }
-
-            order_result = await self._retry_call(
-                lambda: self._submit_order(payload),
-                f"Place TP order for {side}"
+            tx, tx_hash, err = await client.create_tp_order(
+                market_index=self.MARKET_ID,
+                client_order_index=0,
+                base_amount=size_scaled,
+                trigger_price=price_scaled,
+                price=price_scaled,
+                is_ask=is_ask,
+                reduce_only=True,
             )
 
-            if order_result.success:
-                await self.nonce_manager.mark_used(nonce)
-                logger.info(
-                    f"[LIGHTER] ✅ TP order placed: {order_result.order_id} | "
-                    f"{side} TP @ ${trigger_price:,.2f}"
-                )
+            if err:
+                logger.error(f"[LIGHTER] TP order error: {err}")
+                return OrderResult(success=False, error_message=str(err))
 
-            return order_result
+            order_id = str(tx_hash) if tx_hash else f"tp_{int(time.time() * 1000)}"
+            logger.info(f"[LIGHTER] ✅ TP order placed: {order_id} | {side} TP @ ${trigger_price:,.2f}")
+            return OrderResult(success=True, order_id=order_id, filled_price=trigger_price, filled_quantity=quantity)
 
         except Exception as e:
             logger.error(f"[LIGHTER] TP order placement failed: {e}", exc_info=True)
