@@ -160,11 +160,10 @@ class LighterExecutionGateway(BaseExchangeExecutionGateway):
         Note: account_index defaults to 0 (primary account). If you have sub-accounts,
         this should be set to the correct account index from Lighter dashboard.
         """
-        account_index = 0  # Primary account (change if using sub-accounts)
         expiry_unix = int((datetime.utcnow() + timedelta(hours=8)).timestamp())
         random_hex = secrets.token_hex(16)  # 32 hex chars
 
-        auth_token = f"{expiry_unix}:{account_index}:{self.api_key_index}:{random_hex}"
+        auth_token = f"{expiry_unix}:{self.account_index}:{self.api_key_index}:{random_hex}"
         return auth_token
 
     async def _init_session(self) -> aiohttp.ClientSession:
@@ -279,10 +278,10 @@ class LighterExecutionGateway(BaseExchangeExecutionGateway):
         Called periodically to ensure precision params are up-to-date.
         """
         try:
-            data = await self._make_request("GET", "/markets")
+            data = await self._make_request("GET", "/orderBooks")
 
             # Find BTC perp market (symbol="BTC", market_id=1)
-            markets = data.get("markets", []) or data.get("order_books", []) or []
+            markets = data.get("order_books", []) or data.get("markets", []) or []
             btc_market = next(
                 (m for m in markets if m.get("symbol") == "BTC" and m.get("market_type", "perp") == "perp"),
                 None
@@ -344,8 +343,12 @@ class LighterExecutionGateway(BaseExchangeExecutionGateway):
 
             # 2. Fetch current price (simplified: use last trade or mid-price from orderbook)
             # In production, fetch from /ticker or orderbook
-            ticker = await self._make_request("GET", "/ticker", params={"symbol": "BTC/USDC"})
-            current_price = ticker.get("last_price", 0)
+            ticker = await self._make_request(
+                "GET", "/orderBookDetails", params={"market_id": str(self.MARKET_ID)}
+            )
+            # Response: {"order_book_details": [{"last_trade_price": 74155.8, ...}]}
+            details_list = ticker.get("order_book_details", [])
+            current_price = float(details_list[0].get("last_trade_price", 0)) if details_list else 0
 
             if current_price <= 0:
                 return OrderResult(
@@ -702,8 +705,8 @@ class LighterExecutionGateway(BaseExchangeExecutionGateway):
             # Fetch order history from API
             orders = await self._make_request(
                 "GET",
-                "/orders",
-                params={"market_id": str(self.MARKET_ID), "limit": "10", "status": "closed"}
+                "/accountInactiveOrders",
+                params={"account_index": str(self.account_index), "market_id": str(self.MARKET_ID), "limit": "10"}
             )
 
             # Get the most recent closed order
@@ -729,6 +732,15 @@ class LighterExecutionGateway(BaseExchangeExecutionGateway):
             logger.warning(f"[LIGHTER] Failed to fetch last closed order: {e}")
             return None
 
+    async def _fetch_account(self) -> Dict[str, Any]:
+        """Fetch account data from Lighter API."""
+        data = await self._make_request(
+            "GET", "/account",
+            params={"by": "index", "value": str(self.account_index)}
+        )
+        accounts = data.get("accounts", [])
+        return accounts[0] if accounts else {}
+
     async def get_open_position(self) -> Optional[PositionInfo]:
         """
         Get the current open BTC position.
@@ -738,7 +750,7 @@ class LighterExecutionGateway(BaseExchangeExecutionGateway):
         """
         try:
             # Fetch account info from API
-            account = await self._make_request("GET", "/account")
+            account = await self._fetch_account()
 
             positions = account.get("positions", [])
 
@@ -790,8 +802,11 @@ class LighterExecutionGateway(BaseExchangeExecutionGateway):
             close_side = "SHORT" if position.side == "LONG" else "LONG"
 
             # Fetch current price
-            ticker = await self._make_request("GET", "/ticker", params={"symbol": "BTC/USDC"})
-            current_price = ticker.get("last_price", 0)
+            ticker = await self._make_request(
+                "GET", "/orderBookDetails", params={"market_id": str(self.MARKET_ID)}
+            )
+            details_list = ticker.get("order_book_details", [])
+            current_price = float(details_list[0].get("last_trade_price", 0)) if details_list else 0
 
             nonce = await self.nonce_manager.get_next_nonce()
             price_scaled = scale_price(current_price, self._price_decimals)
@@ -835,11 +850,10 @@ class LighterExecutionGateway(BaseExchangeExecutionGateway):
             USDC balance as float
         """
         try:
-            account = await self._make_request("GET", "/account")
+            account = await self._fetch_account()
 
-            balances = account.get("balances", {})
-            usdc_balance = balances.get("USDC", {})
-            free = float(usdc_balance.get("free", 0))
+            # Lighter returns available_balance directly
+            free = float(account.get("available_balance", 0))
 
             logger.info(f"[LIGHTER] Account balance: ${free:,.2f} USDC")
             return free
@@ -862,11 +876,11 @@ class LighterExecutionGateway(BaseExchangeExecutionGateway):
             Exception if API call fails
         """
         try:
-            account = await self._make_request("GET", "/account")
-
-            # Extract nonce from account response
-            # Format depends on Lighter API — adjust field name if needed
-            nonce = int(account.get("nonce", 0))
+            data = await self._make_request(
+                "GET", "/nextNonce",
+                params={"account_index": str(self.account_index)}
+            )
+            nonce = int(data.get("next_nonce", 0))
 
             logger.info(f"[LIGHTER] Fetched account nonce: {nonce}")
             return nonce
