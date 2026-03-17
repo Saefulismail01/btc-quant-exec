@@ -1,9 +1,34 @@
 import asyncio
+import json
+import os
 from datetime import datetime, timezone
 from app.adapters.gateways.binance_gateway import BinanceGateway
 from app.adapters.repositories.market_repository import MarketRepository
 from app.adapters.gateways.multi_exchange_gateway import MultiExchangeFundingGateway
 from app.adapters.gateways.onchain_gateway import OnChainGateway
+
+_CANDLE_STATE_FILE = os.path.join(
+    os.path.dirname(__file__), "..", "infrastructure", "last_candle_ts.json"
+)
+
+
+def _load_last_candle_ts() -> int:
+    try:
+        if os.path.exists(_CANDLE_STATE_FILE):
+            with open(_CANDLE_STATE_FILE, "r") as f:
+                return int(json.load(f).get("last_notified_ts", 0))
+    except Exception:
+        pass
+    return 0
+
+
+def _save_last_candle_ts(ts: int) -> None:
+    try:
+        os.makedirs(os.path.dirname(_CANDLE_STATE_FILE), exist_ok=True)
+        with open(_CANDLE_STATE_FILE, "w") as f:
+            json.dump({"last_notified_ts": ts}, f)
+    except Exception:
+        pass
 
 
 class DataIngestionUseCase:
@@ -16,8 +41,8 @@ class DataIngestionUseCase:
         self.gateway = gateway
         self.repository = repository
         self.position_manager = position_manager  # Injected at startup
-        # Track state to avoid duplicate processing per closed candle
-        self.last_notified_ts = 0
+        # Track state to avoid duplicate processing per closed candle (persisted to disk)
+        self.last_notified_ts = _load_last_candle_ts()
         self.last_regime = None
         # [TASK-7/9] Cross-exchange and on-chain gateways
         self._multi_funding_gw = MultiExchangeFundingGateway()
@@ -134,6 +159,7 @@ class DataIngestionUseCase:
 
         # Mark this candle processed to prevent duplicate execution every minute.
         self.last_notified_ts = candle_ts
+        _save_last_candle_ts(candle_ts)
 
         if signal.is_fallback:
             print("  [Signal] Fallback signal. Skip paper trade. Sending no-signal Telegram.")
