@@ -167,19 +167,16 @@ class LighterExecutionGateway(BaseExchangeExecutionGateway):
         return auth_token
 
     async def _init_session(self) -> aiohttp.ClientSession:
-        """Initialize or return existing aiohttp session."""
+        """Initialize or return existing aiohttp session (no auth — public endpoints)."""
         if self.session is None:
             connector = aiohttp.TCPConnector(resolver=aiohttp.ThreadedResolver(), ssl=False)
-            auth_token = self._generate_auth_token()
             self.session = aiohttp.ClientSession(
                 connector=connector,
                 trust_env=True,
                 headers={
                     "User-Agent": "BTC-QUANT/4.4-Lighter",
-                    "Authorization": auth_token,
                 },
             )
-            logger.debug(f"[LIGHTER] Generated auth token (expires in 8h)")
         return self.session
 
     async def _make_request(
