@@ -571,19 +571,44 @@ class BayesianChangepointModel:
             
     def get_current_regime_posterior(self, df: pd.DataFrame, funding_rate: float = 0.0) -> tuple[str, int, np.ndarray]:
         """
-        Return fake posterior since Segment is absolute. We return 1.0 for the active state
-        and 0.0 for the rest, to ensure Layer 3 compatibility.
+        [TASK-4] Real posterior confidence from BOCPD run-length matrix.
+
+        Previously returned fake posterior (always 1.0 for active state).
+        Now uses self._R (run-length probability matrix from last BOCPD run)
+        to compute genuine confidence:
+          - R[-1] = run-length distribution at the last time step
+          - high P(long run) = market in stable regime = high confidence
+          - high P(short run / changepoint) = recent break = low confidence
+
+        Confidence = probability mass on run lengths >= 3 (regime has persisted
+        at least 3 candles = 12 hours). Short runs / changepoint prob = uncertainty.
         """
         label, sid = self.get_current_regime(df, funding_rate)
-        
-        # Max 10 segments as pseudo states
+
         n_max = max(10, len(self.state_map))
         posterior = np.zeros(n_max)
-        if 0 <= sid < n_max:
-            posterior[sid] = 1.0
+
+        # [TASK-4] Use run-length matrix if available
+        if hasattr(self, "_R") and self._R is not None:
+            R_last = self._R[-1]  # shape (T+1,) — P(run_length=r) at final timestep
+            T = len(R_last)
+
+            # Confidence = mass on run lengths >= 3 candles (stable regime)
+            run_confidence = float(np.sum(R_last[3:])) if T > 3 else float(np.sum(R_last))
+            # Clamp to [0.25, 0.95] — never fully certain, never worse than uniform
+            run_confidence = max(0.25, min(0.95, run_confidence))
+
+            if 0 <= sid < n_max:
+                posterior[sid] = run_confidence
+            else:
+                posterior[0] = run_confidence
         else:
-            posterior[0] = 1.0 # fallback
-            
+            # Fallback: uniform uncertainty
+            if 0 <= sid < n_max:
+                posterior[sid] = 0.5
+            else:
+                posterior[0] = 0.5
+
         return label, sid, posterior
 
 

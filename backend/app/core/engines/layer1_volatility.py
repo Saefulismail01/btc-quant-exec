@@ -260,17 +260,17 @@ class VolatilityRegimeEstimator:
         # Validasi walk-forward: SL 1.5× / TP 2.0× → WR 64.7%, PF 2.26
         if vol_regime == "High" and halflife < 15:
             preset_name  = "HV-Fast-Revert"
-            sl_base  = 2.0  # Wide SL (noise filtering)
-            tp1_base = 1.5  # was 0.8 → R:R was 0.36, now 0.75
-            tp2_base = 2.0  # was 1.2
-            rationale = "Scalper-HV-Fast: Vol tinggi + noisy. SL Lebar, TP dinaikkan agar R:R sehat."
+            sl_base  = 1.8  # [TASK-3] was 2.0 — tighter to improve R:R
+            tp1_base = 2.0  # [TASK-3] was 1.5 → R:R was 0.75, now 1.11 ✅
+            tp2_base = 2.8  # [TASK-3] was 2.0
+            rationale = "Scalper-HV-Fast: Vol tinggi + noisy. SL 1.8×, TP 2.0× → R:R=1.11."
 
         elif vol_regime == "High" and halflife >= 15:
             preset_name  = "HV-Slow-Persist"
-            sl_base  = 2.0
-            tp1_base = 1.5  # was 1.0 → R:R was 0.50, now 0.75
-            tp2_base = 2.5  # was 1.5, vol tinggi persistent = potensi move besar
-            rationale = "Scalper-HV-Persist: Vol tinggi stabil. TP lebih lebar karena move besar."
+            sl_base  = 1.8  # [TASK-3] was 2.0 — tighter SL
+            tp1_base = 2.2  # [TASK-3] was 1.5 → R:R was 0.75, now 1.22 ✅
+            tp2_base = 3.0  # [TASK-3] was 2.5 — persistent vol = bigger move potential
+            rationale = "Scalper-HV-Persist: Vol tinggi stabil. SL 1.8×, TP 2.2× → R:R=1.22."
 
         elif vol_regime == "Low":
             preset_name  = "LV-Trend"

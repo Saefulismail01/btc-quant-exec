@@ -230,30 +230,38 @@ class SignalService:
             ema20_prev = float(prev["EMA20"])
             ema50_prev = float(prev["EMA50"])
 
-            # ── 3. Trend direction ─────────────────────────────────────────────
+            # ── 3. EMA Trend direction — used for structural context only ─────
+            # [TASK-1] Renamed action_side → ema_direction to clarify it's EMA-derived.
+            # Trade direction (final_action) will be set by Spectrum AFTER scoring.
+            # [TASK-2] Fixed 5-condition logic — added explicit price<EMA20 bear case.
             if ema20_now < ema50_now and price_now < ema20_now:
-                trend_bias, trend_short, ema_struct, action_side = (
+                trend_bias, trend_short, ema_struct, ema_direction = (
                     "Bearish", "BEAR", "EMA20 below EMA50 → Bearish", "SHORT")
                 momentum_label = "Strong — Price below EMA20"
             elif ema20_now > ema50_now and price_now > ema20_now:
-                trend_bias, trend_short, ema_struct, action_side = (
+                trend_bias, trend_short, ema_struct, ema_direction = (
                     "Bullish", "BULL", "EMA20 above EMA50 → Bullish", "LONG")
                 momentum_label = "Strong — Price above EMA20"
             elif price_now < ema50_now:
-                trend_bias, trend_short, ema_struct, action_side = (
+                trend_bias, trend_short, ema_struct, ema_direction = (
                     "Bearish", "BEAR", "EMA20 near EMA50 → Bearish bias", "SHORT")
                 momentum_label = ("Strong — Price below EMA20"
                                   if price_now < ema20_now else "Weak — Price back above EMA20")
+            elif price_now < ema20_now:
+                # [TASK-2] Previously fell into the else (LONG) — correct: price below EMA20 → bearish
+                trend_bias, trend_short, ema_struct, ema_direction = (
+                    "Bearish", "BEAR", "Price below EMA20 (EMA20>EMA50) → Bearish", "SHORT")
+                momentum_label = "Weak — Price pulled back below EMA20"
             else:
-                trend_bias, trend_short, ema_struct, action_side = (
+                trend_bias, trend_short, ema_struct, ema_direction = (
                     "Bullish", "BULL", "EMA20 near EMA50 → Bullish bias", "LONG")
-                momentum_label = ("Strong — Price above EMA20"
-                                  if price_now > ema20_now else "Weak — Price back below EMA20")
+                momentum_label = "Weak — Price back below EMA20 but above EMA50"
 
             # ── 4. Risk parameters (Base values, overwritten by Heston) ─────────
-            # Base logic kept as fallback. Heston override happens below in 5a.
+            # [TASK-1] Use ema_direction as structural placeholder — will be overridden
+            # by final_action (from Spectrum) after scoring in step 6b.
             risk_atr = atr14_now * 1.5
-            if action_side == "SHORT":
+            if ema_direction == "SHORT":
                 sl, tp1, tp2 = (price_now + risk_atr,
                                 price_now - risk_atr * 1.5,
                                 price_now - risk_atr * 2.5)
@@ -359,7 +367,8 @@ class SignalService:
             if fgi_score > 80:
                 sentiment_adj = 0.75
             # Extreme Fear (< 20) -> Reduce LONG position size (contrarian caution)
-            elif fgi_score < 20 and action_side == "LONG":
+            # [TASK-5] Use ema_direction here — sentiment adj is structural, pre-Spectrum
+            elif fgi_score < 20 and ema_direction == "LONG":
                 sentiment_adj = 0.75
 
             # If daily loss cap triggered → suspend
@@ -369,19 +378,11 @@ class SignalService:
             leverage        = risk_verdict.approved_leverage
             pos_size_pct    = risk_verdict.position_size_pct * sentiment_adj
 
-            # Override SL/TP dengan multiplier dari Heston + Regime Bias
-            # Ini menggantikan flat 1.5x/1.5x/2.5x yang ada di step 4
+            # [TASK-1] SL/TP multipliers stored — will be applied AFTER Spectrum
+            # determines final_action. See step 6b below.
             _sl_m  = sl_tp_mults["sl_multiplier"]
             _tp1_m = sl_tp_mults["tp1_multiplier"]
             _tp2_m = sl_tp_mults["tp2_multiplier"]
-            if action_side == "SHORT":
-                sl  = price_now + atr14_now * _sl_m
-                tp1 = price_now - atr14_now * _tp1_m
-                tp2 = price_now - atr14_now * _tp2_m
-            else:
-                sl  = price_now - atr14_now * _sl_m
-                tp1 = price_now + atr14_now * _tp1_m
-                tp2 = price_now + atr14_now * _tp2_m
 
             # 5b. HMM state sequence for MLP cross-feature (PHASE 3)
             hmm_states_arr, hmm_states_idx = _safe_hmm_states(hmm_svc, df)
@@ -463,6 +464,22 @@ class SignalService:
                 base_size     = _BASE_SIZE,
             )
 
+            # [TASK-1] final_action comes from Spectrum — the validated scoring engine.
+            # ema_direction is structural context only; Spectrum is the authority on direction.
+            final_action = spectrum.action  # "LONG" | "SHORT" from directional_bias sign
+
+            # [TASK-1] Recompute SL/TP/entry using final_action (Spectrum-derived direction)
+            if final_action == "SHORT":
+                sl  = price_now + atr14_now * _sl_m
+                tp1 = price_now - atr14_now * _tp1_m
+                tp2 = price_now - atr14_now * _tp2_m
+                entry_start, entry_end = price_now, price_now + atr14_now * 0.2
+            else:
+                sl  = price_now - atr14_now * _sl_m
+                tp1 = price_now + atr14_now * _tp1_m
+                tp2 = price_now + atr14_now * _tp2_m
+                entry_start, entry_end = price_now - atr14_now * 0.2, price_now
+
             # ── 7. Market metrics ──────────────────────────────────────────────
             # labels already defined above
             
@@ -520,7 +537,9 @@ class SignalService:
             fng_status  = narrative.get("fng_info", "Neutral")
 
             # ── 9. Truth Enforcer ──────────────────────────────────────────────
-            verdict     = _enforce_verdict(score, trend_short, raw_verdict)
+            # [TASK-5] Use final_action (Spectrum) not trend_short (EMA) for verdict
+            _final_short = "BULL" if final_action == "LONG" else "BEAR"
+            verdict     = _enforce_verdict(score, _final_short, raw_verdict)
             probability = _compute_probability(score)
 
             # ── 10. Trade plan status from spectrum ────────────────────────────
@@ -580,7 +599,7 @@ class SignalService:
                 trend       = TrendInfo(bias=trend_bias, short=trend_short,
                                         ema_structure=ema_struct, momentum=momentum_label),
                 trade_plan  = TradePlan(
-                    action=action_side,
+                    action=final_action,  # [TASK-1] Spectrum-derived direction
                     entry_start=round(entry_start, 2), entry_end=round(entry_end, 2),
                     sl=round(sl, 2), tp1=round(tp1, 2), tp2=round(tp2, 2),
                     leverage=leverage,
