@@ -148,3 +148,21 @@ class BaseExchangeExecutionGateway(ABC):
             USDT balance as float
         """
         ...
+
+    async def get_current_price(self) -> Optional[float]:
+        """
+        Get current market price. Override in subclasses for efficiency.
+
+        Returns:
+            Current price as float, or None if unavailable
+        """
+        return None
+
+    async def fetch_last_closed_order(self):
+        """
+        Fetch last closed order. Override in subclasses.
+
+        Returns:
+            Dict with order details or None
+        """
+        return None

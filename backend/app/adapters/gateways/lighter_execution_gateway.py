@@ -204,12 +204,19 @@ class LighterExecutionGateway(BaseExchangeExecutionGateway):
         session = await self._init_session()
         url = f"{self.base_url}{endpoint}"
 
+        # Attach auth token for authenticated endpoints
+        _AUTH_ENDPOINTS = ("/accountInactiveOrders", "/accountOrders", "/account")
+        request_headers = {}
+        if any(endpoint.startswith(ep) for ep in _AUTH_ENDPOINTS):
+            request_headers["Authorization"] = self._generate_auth_token()
+
         try:
             async with session.request(
                 method,
                 url,
                 json=data,
                 params=params,
+                headers=request_headers if request_headers else None,
                 timeout=aiohttp.ClientTimeout(total=20),
             ) as resp:
                 if resp.status >= 400:
@@ -723,6 +730,19 @@ class LighterExecutionGateway(BaseExchangeExecutionGateway):
 
         except Exception as e:
             logger.warning(f"[LIGHTER] Failed to fetch last closed order: {e}")
+            return None
+
+    async def get_current_price(self) -> Optional[float]:
+        """Fetch current BTC market price from Lighter orderbook."""
+        try:
+            ticker = await self._make_request(
+                "GET", "/orderBookDetails", params={"market_id": str(self.MARKET_ID)}
+            )
+            details_list = ticker.get("order_book_details", [])
+            price = float(details_list[0].get("last_trade_price", 0)) if details_list else 0
+            return price if price > 0 else None
+        except Exception as e:
+            logger.warning(f"[LIGHTER] Failed to fetch current price: {e}")
             return None
 
     async def _fetch_account(self) -> Dict[str, Any]:

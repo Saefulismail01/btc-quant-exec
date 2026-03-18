@@ -94,8 +94,13 @@ class PositionManager:
                 f"@ ${db_trade.entry_price:,.2f}"
             )
 
-            # Get position from exchange
+            # Get position from exchange — retry once to avoid false None on transient errors
             exchange_pos = await self.gateway.get_open_position()
+            if exchange_pos is None:
+                import asyncio as _asyncio
+                logger.warning("[PositionManager] get_open_position() returned None — retrying in 3s...")
+                await _asyncio.sleep(3)
+                exchange_pos = await self.gateway.get_open_position()
 
             if exchange_pos is None:
                 # Position closed (SL or TP hit)
@@ -122,18 +127,34 @@ class PositionManager:
                             f"{exit_type} @ ${exit_price:,.2f}"
                         )
                     else:
-                        # Fallback: Use heuristic (distance to SL vs TP)
+                        # Fallback: Use heuristic (distance from SL vs TP to CURRENT price)
+                        # IMPORTANT: Must use current market price, NOT entry price.
+                        # Using entry price always picks TP (TP is closer to entry than SL by design).
                         if db_trade.entry_price > 0:
-                            sl_dist = abs(db_trade.entry_price - db_trade.sl_price)
-                            tp_dist = abs(db_trade.entry_price - db_trade.tp_price)
+                            try:
+                                current_price = await self.gateway.get_current_price()
+                            except Exception:
+                                current_price = None
+
+                            if current_price and current_price > 0:
+                                sl_dist = abs(current_price - db_trade.sl_price)
+                                tp_dist = abs(current_price - db_trade.tp_price)
+                                logger.info(f"[PositionManager] Heuristic using current price ${current_price:,.2f} | SL dist: {sl_dist:.2f} | TP dist: {tp_dist:.2f}")
+                            else:
+                                # Last resort: check if entry price moved toward SL or TP
+                                # Use SL as default (safer — avoids false TP detection)
+                                sl_dist = 1
+                                tp_dist = 2
+                                logger.warning("[PositionManager] Cannot get current price — defaulting to SL heuristic (safe)")
+
                             if sl_dist < tp_dist:
                                 exit_price = db_trade.sl_price
                                 exit_type = "SL"
-                                logger.info(f"[PositionManager] Heuristic: SL hit (distance: {sl_dist:.2f} vs {tp_dist:.2f})")
+                                logger.info(f"[PositionManager] Heuristic: SL hit")
                             else:
                                 exit_price = db_trade.tp_price
                                 exit_type = "TP"
-                                logger.info(f"[PositionManager] Heuristic: TP hit (distance: {tp_dist:.2f} vs {sl_dist:.2f})")
+                                logger.info(f"[PositionManager] Heuristic: TP hit")
                         else:
                             exit_price = db_trade.entry_price
                             exit_type = "MANUAL"
@@ -375,6 +396,16 @@ class PositionManager:
             True if processed (success or declined), False on error
         """
         try:
+            # SAFETY GUARD: Double-check exchange directly — never rely solely on DB
+            # This prevents opening a second position if DB was incorrectly marked closed
+            live_pos = await self.gateway.get_open_position()
+            if live_pos is not None:
+                logger.warning(
+                    f"[PositionManager] ⛔ Entry blocked — position still OPEN at exchange "
+                    f"(DB may be out of sync). Entry: ${live_pos.entry_price:,.2f}"
+                )
+                return True
+
             # PR-2: Block entry if SL freeze is active
             if self._is_sl_frozen():
                 freeze_until: Optional[datetime] = self._sl_freeze_until

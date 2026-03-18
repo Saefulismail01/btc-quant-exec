@@ -4,9 +4,9 @@ Dokumen ini berfungsi sebagai *single source of truth* untuk melacak progres, ke
 
 ---
 
-## 🚀 Status Saat Ini: v4.4 Golden Model + Code Review Fixes
-**Update Terakhir:** 13 Maret 2026 (Code Review & TODO Implementation)
-**Status Eksekusi:** Live (Binance Testnet/Mainnet) & Lighter L2 Ready
+## 🚀 Status Saat Ini: v4.4 + Lighter Mainnet Live
+**Update Terakhir:** 17 Maret 2026
+**Status Eksekusi:** Live di Lighter Mainnet ✅
 
 ### 🔝 Key Updates (v4.4)
 1.  **Fix #1: L3 Disagreement Logic** - MLP NEUTRAL sekarang menjadi counter-signal (-0.3) terhadap BCD BULL/BEAR.
@@ -45,6 +45,52 @@ Dokumen ini berfungsi sebagai *single source of truth* untuk melacak progres, ke
 ## 🛠️ Riwayat Implementasi (Timeline)
 
 ### Maret 2026 (Sekarang)
+
+- **[2026-03-17]** Session: Mainnet live trading + bug fixes + PR-2 + diskusi PR-1 & exit strategy.
+
+  **Walk-Forward Test (Confluence Spectrum v2)**
+  - Dijalankan ulang karena ada perubahan BCD, EMA direction fix, dan BOCPD posterior fix
+  - Data: 8000 candles (2022–2026), 3 window (2023 Full, 2024 H2, 2025–2026)
+  - Hasil rata-rata per variasi:
+    | Var | WR | Daily | DD | PF |
+    |-----|-----|-------|-----|-----|
+    | V0 (BCD only) | 66.7% | +0.619% | -16.8% | 2.29 |
+    | V1 (BCD+EMA, production) | 66.2% | +0.575% | -13.3% | 2.18 |
+    | V2 (BCD+EMA+MLP) | 65.2% | +0.467% | -15.0% | 2.12 |
+    | V3 (EMA+MLP) | 67.1% | +0.561% | -17.1% | 2.33 |
+    | V4 (All layers, ACTIVE gate) | 66.5% | +0.350% | -12.5% | 2.23 |
+  - **Best by PF**: V3. **Best DD**: V4. **Production (V1)**: balance antara DD dan return.
+
+  **Deployment Lighter Mainnet**
+  - Container di-deploy ulang dengan `LIGHTER_TRADING_ENABLED=true`
+  - CRLF issue pada `.env` di VPS menyebabkan API key kosong → fix: `sed -i 's/\r$//' .env`
+  - Order pertama berhasil live: LONG BTC, SL & TP placed via SDK native methods
+  - Beberapa fix gateway: endpoint `/orderBooks`, `/orderBookDetails`, auth header removal, SDK URL strip `/api/v1`
+
+  **PR-2: Entry Position Guard** ✅ DEPLOYED
+  - Commit: `492cf0b`
+  - Logika:
+    1. Posisi terbuka → skip entry baru
+    2. SL hit → freeze entry sampai 07:00 WIB keesokan harinya (persist ke disk `sl_freeze_state.json`)
+    3. TP hit → freeze di-clear, boleh entry berikutnya segera
+  - Sudah live di VPS
+
+  **Diskusi: Trailing Stop**
+  - Lighter SDK tidak punya native trailing stop
+  - Manual trailing (cancel+replace SL) berisiko: ada jeda tanpa proteksi
+  - **Keputusan: tidak implement** untuk sistem scalping ini
+
+  **Diskusi: TP terlalu cepat (harga lanjut naik setelah TP hit)**
+  - Root cause: TP fixed 0.71% terlalu konservatif saat momentum kuat
+  - Solusi yang diusulkan: **Partial TP** (TP1 50% @ 0.71%, TP2 50% @ ~1.5-2%, SL geser ke breakeven setelah TP1)
+  - **Status: belum diputuskan** — perlu analisis data historis dulu
+
+  **Diskusi: PR-1 (1H Confirmation)**
+  - Masalah: entry di close 4H = sering beli di pucuk
+  - Solusi: 4H signal = "permission window" (4 jam), entry baru saat 1H konfirmasi (pullback ke EMA20_1H + bullish close)
+  - Alasan valid secara trading: better RR, hindari FOMO entry, multi-TF confluence
+  - **Status: belum implement** — disarankan backtest simulasi dulu sebelum production
+
 - **[2026-03-13]** Code Review & Quality Hardening (COMPLETED).
     - Comprehensive code review: 39 issues identified
     - Fixed 10 critical/high priority issues in execution layer
@@ -65,6 +111,17 @@ Dokumen ini berfungsi sebagai *single source of truth* untuk melacak progres, ke
 ### Februari 2026
 - **[2026-02-27]** Re-training model MLP dengan input Cross-Feature HMM.
 - **[2026-02-25]** Migrasi dari HMM tradisional ke **Bayesian Changepoint Detection (BCD)** sebagai Layer 1.
+
+---
+
+## 📅 Next Steps (Per 2026-03-17)
+
+| Priority | Item | Status |
+|----------|------|--------|
+| 1 | Backtest PR-1: simulasi 1H confirmation filter pada sinyal historis | ⏳ PENDING |
+| 2 | Analisis Partial TP: berapa % trade lanjut >1.5% setelah TP1 hit | ⏳ PENDING |
+| 3 | Implement PR-1 jika backtest hasilnya positif | 📅 BACKLOG |
+| 4 | Implement Partial TP jika analisis mendukung | 📅 BACKLOG |
 
 ---
 

@@ -1,7 +1,7 @@
 {
   "plan_id": "FIX-SIGNAL-2026-03-17",
-  "title": "Fix Critical Signal Direction Bias & Entry Timing",
-  "version": "1.0",
+  "title": "Fix Critical Signal Direction Bias & Entry Timing + Data Enhancement",
+  "version": "2.0",
   "created_at": "2026-03-17",
   "author": "Claude Opus 4.6",
   "status": "READY_FOR_IMPLEMENTATION",
@@ -53,10 +53,42 @@
         "risk": "NONE"
       }
     ],
+    "data_enhancement": [
+      {
+        "path": "backend/app/adapters/gateways/multi_exchange_gateway.py",
+        "changes": "NEW — cross-exchange funding rate (Bybit + OKX)",
+        "risk": "LOW — additive, tidak mengubah existing code"
+      },
+      {
+        "path": "backend/app/adapters/gateways/onchain_gateway.py",
+        "changes": "NEW — CryptoQuant exchange net flow",
+        "risk": "LOW — additive, external API dependency"
+      },
+      {
+        "path": "backend/app/use_cases/data_ingestion_use_case.py",
+        "changes": "Tambah fetch calls untuk cross-funding, L/S ratio, netflow",
+        "risk": "MEDIUM — file kritis data pipeline"
+      },
+      {
+        "path": "backend/app/schemas/signal.py",
+        "changes": "Tambah fields: long_short_ratio, long_short_label, exchange_netflow_btc, exchange_netflow_label, crowded_adjustment",
+        "risk": "LOW — additive schema extension"
+      }
+    ],
     "test_files": [
       {
         "path": "backend/tests/test_signal_direction_fix.py",
         "changes": "NEW — test bahwa SHORT signal bisa dihasilkan",
+        "risk": "NONE"
+      },
+      {
+        "path": "backend/tests/test_multi_exchange_gateway.py",
+        "changes": "NEW — test cross-exchange funding fetch dan averaging",
+        "risk": "NONE"
+      },
+      {
+        "path": "backend/tests/test_onchain_gateway.py",
+        "changes": "NEW — test CryptoQuant API integration",
         "risk": "NONE"
       }
     ]
@@ -465,6 +497,400 @@
       "dependencies": ["TASK-1", "TASK-2", "TASK-3", "TASK-4"],
       "risks": [],
       "validation": ["Semua tests harus pass"]
+    },
+
+    {
+      "id": "TASK-7",
+      "title": "Tambah Cross-Exchange Funding Rate (Bybit + OKX)",
+      "priority": "HIGH",
+      "severity": "P1",
+      "file": "backend/app/adapters/gateways/binance_gateway.py",
+      "description": "Saat ini funding rate hanya dari Binance saja. Funding rate satu exchange bisa anomali (misal: Binance funding +0.05% tapi Bybit -0.01%). Cross-exchange funding yang di-average memberikan gambaran leverage sentiment yang lebih akurat. Ini langsung berdampak pada L1 BCD features (funding_rate input) dan signal_service (funding_label).",
+
+      "current_behavior": {
+        "code_location": "binance_gateway.py:92-103",
+        "explanation": "fetch_market_metrics() hanya call self.exchange.fetch_funding_rate(self.perp_symbol) dari Binance Futures. Hasilnya langsung masuk ke market_metrics.funding_rate tanpa cross-validation.",
+        "problem": "Single-exchange funding rate bisa misleading. Contoh: Binance menaikkan margin requirement → funding spike → bot salah baca sebagai 'crowded long' padahal hanya Binance-specific event."
+      },
+
+      "required_changes": [
+        {
+          "step": "7a",
+          "action": "CREATE",
+          "description": "Buat file baru: backend/app/adapters/gateways/multi_exchange_gateway.py",
+          "detail": [
+            "Class MultiExchangeFundingGateway yang fetch funding rate dari 3 exchange:",
+            "",
+            "1. Binance Futures (sudah ada via CCXT)",
+            "   - Endpoint: fetch_funding_rate('BTC/USDT:USDT')",
+            "",
+            "2. Bybit (CCXT public, no API key needed)",
+            "   - Exchange: ccxt.async_support.bybit()",
+            "   - Endpoint: fetch_funding_rate('BTC/USDT:USDT')",
+            "",
+            "3. OKX (CCXT public, no API key needed)",
+            "   - Exchange: ccxt.async_support.okx()",
+            "   - Endpoint: fetch_funding_rate('BTC/USDT:USDT')",
+            "",
+            "Method: async fetch_cross_funding() -> dict",
+            "Returns: {",
+            "  'binance_funding': float,",
+            "  'bybit_funding': float,",
+            "  'okx_funding': float,",
+            "  'avg_funding': float,  # simple average of available rates",
+            "  'funding_consensus': str,  # 'ALL_POSITIVE' | 'ALL_NEGATIVE' | 'MIXED'",
+            "  'max_spread': float  # max - min funding across exchanges",
+            "}",
+            "",
+            "Error handling: jika satu exchange gagal, average dari yang berhasil saja.",
+            "Timeout: 5 detik per exchange, parallel fetch dengan asyncio.gather()."
+          ]
+        },
+        {
+          "step": "7b",
+          "action": "MODIFY",
+          "description": "Update data_ingestion_use_case.py untuk call multi-exchange funding",
+          "location": "backend/app/use_cases/data_ingestion_use_case.py",
+          "detail": [
+            "1. Import MultiExchangeFundingGateway",
+            "2. Di dalam ingest cycle, setelah fetch_market_metrics():",
+            "   cross_funding = await multi_gw.fetch_cross_funding()",
+            "3. Override metrics_row['funding_rate'] dengan cross_funding['avg_funding']",
+            "4. Tambah kolom baru ke market_metrics:",
+            "   - funding_consensus: str",
+            "   - funding_spread: float"
+          ]
+        },
+        {
+          "step": "7c",
+          "action": "MODIFY",
+          "description": "Tambah funding_consensus sebagai signal filter di signal_service.py",
+          "location": "backend/app/use_cases/signal_service.py",
+          "detail": [
+            "Setelah funding_rate diambil dari metrics (baris 276):",
+            "",
+            "funding_consensus = metrics.get('funding_consensus', 'MIXED')",
+            "",
+            "Tambahkan sebagai contrarian filter:",
+            "# Jika SEMUA exchange funding positif tinggi (>0.03%) → crowded long",
+            "# Ini MENDUKUNG SHORT signal dan MELEMAHKAN LONG signal",
+            "if funding_consensus == 'ALL_POSITIVE' and funding_rate > 0.0003:",
+            "    # Boost L1 bearish vote sedikit (crowded long = contrarian sell)",
+            "    pass  # atau tambahkan sebagai modifier di L4 risk",
+            "",
+            "Catatan: JANGAN mengubah Spectrum weights. Cukup gunakan sebagai",
+            "additional filter atau L4 risk modifier."
+          ]
+        }
+      ],
+
+      "dependencies": [],
+      "risks": [
+        "Bybit/OKX API bisa rate-limit jika terlalu sering — mitigasi: cache 5 menit",
+        "Funding settle time berbeda antar exchange (8h vs 4h) — mitigasi: gunakan 'current rate' bukan 'next predicted'",
+        "Tambahan latency ~2-3 detik per cycle karena fetch 3 exchange — mitigasi: parallel fetch"
+      ],
+      "validation": [
+        "Test: Jika Binance=+0.05%, Bybit=+0.04%, OKX=+0.03% → avg=+0.04%, consensus=ALL_POSITIVE",
+        "Test: Jika Binance=+0.05%, Bybit=-0.01%, OKX=+0.02% → avg=+0.02%, consensus=MIXED",
+        "Test: Jika satu exchange timeout → average dari 2 yang berhasil",
+        "Test: Total fetch time < 8 detik (parallel)"
+      ]
+    },
+
+    {
+      "id": "TASK-8",
+      "title": "Tambah Binance Long/Short Ratio sebagai Contrarian Filter",
+      "priority": "HIGH",
+      "severity": "P1",
+      "file": "backend/app/adapters/gateways/binance_gateway.py",
+      "description": "Binance menyediakan Global Long/Short Account Ratio (gratis, public endpoint). Ini menunjukkan proporsi trader yang long vs short. Extreme ratio (>70% satu arah) adalah contrarian signal kuat — artinya posisi 'crowded' dan rawan liquidation cascade. Sangat relevan untuk 4H scalping karena update setiap 5 menit.",
+
+      "current_behavior": {
+        "explanation": "Data long/short ratio TIDAK dikumpulkan sama sekali. Bot tidak tahu apakah 80% trader sedang long (rawan short squeeze) atau 80% short (rawan long squeeze).",
+        "impact": "Bot bisa masuk LONG saat 80% market sudah long → jika ada liquidation cascade, bot ikut kena."
+      },
+
+      "required_changes": [
+        {
+          "step": "8a",
+          "action": "MODIFY",
+          "description": "Tambah method fetch_long_short_ratio() di BinanceGateway",
+          "location": "binance_gateway.py (tambah setelah fetch_fgi)",
+          "new_method": [
+            "async def fetch_long_short_ratio(self) -> dict:",
+            "    \"\"\"",
+            "    Fetch Global Long/Short Account Ratio dari Binance Futures.",
+            "    ",
+            "    Endpoint: GET /futures/data/globalLongShortAccountRatio",
+            "    Public, no API key needed.",
+            "    ",
+            "    Returns: {",
+            "      'long_ratio': float (0.0-1.0, e.g. 0.72 = 72% long),",
+            "      'short_ratio': float (0.0-1.0),",
+            "      'ls_label': str ('Extreme Long'|'Long Dominant'|'Balanced'|'Short Dominant'|'Extreme Short')",
+            "    }",
+            "    \"\"\"",
+            "    try:",
+            "        if hasattr(self.exchange, 'fapiDataGetGloballongshortratio'):",
+            "            data = await self.exchange.fapiDataGetGloballongshortratio({",
+            "                'symbol': self.symbol.replace('/', ''),",
+            "                'period': '4h',",
+            "                'limit': 1",
+            "            })",
+            "            if data:",
+            "                long_ratio = float(data[-1].get('longAccount', 0.5))",
+            "                short_ratio = float(data[-1].get('shortAccount', 0.5))",
+            "            else:",
+            "                long_ratio, short_ratio = 0.5, 0.5",
+            "        else:",
+            "            # Fallback: direct HTTP call",
+            "            import httpx",
+            "            async with httpx.AsyncClient(timeout=10.0) as client:",
+            "                resp = await client.get(",
+            "                    'https://fapi.binance.com/futures/data/globalLongShortAccountRatio',",
+            "                    params={'symbol': 'BTCUSDT', 'period': '4h', 'limit': 1}",
+            "                )",
+            "                if resp.status_code == 200:",
+            "                    d = resp.json()[-1]",
+            "                    long_ratio = float(d['longAccount'])",
+            "                    short_ratio = float(d['shortAccount'])",
+            "                else:",
+            "                    long_ratio, short_ratio = 0.5, 0.5",
+            "        ",
+            "        # Classify",
+            "        if long_ratio > 0.70:",
+            "            ls_label = 'Extreme Long'",
+            "        elif long_ratio > 0.55:",
+            "            ls_label = 'Long Dominant'",
+            "        elif short_ratio > 0.70:",
+            "            ls_label = 'Extreme Short'",
+            "        elif short_ratio > 0.55:",
+            "            ls_label = 'Short Dominant'",
+            "        else:",
+            "            ls_label = 'Balanced'",
+            "        ",
+            "        return {",
+            "            'long_ratio': round(long_ratio, 4),",
+            "            'short_ratio': round(short_ratio, 4),",
+            "            'ls_label': ls_label",
+            "        }",
+            "    except Exception as e:",
+            "        print(f'  [Gateway] L/S Ratio Error: {e}')",
+            "        return {'long_ratio': 0.5, 'short_ratio': 0.5, 'ls_label': 'Balanced'}"
+          ]
+        },
+        {
+          "step": "8b",
+          "action": "MODIFY",
+          "description": "Update data_ingestion_use_case.py untuk fetch dan store L/S ratio",
+          "location": "backend/app/use_cases/data_ingestion_use_case.py",
+          "detail": [
+            "1. Di ingest cycle, tambah call: ls_data = await self.gateway.fetch_long_short_ratio()",
+            "2. Tambah ke metrics_row:",
+            "   'long_short_ratio': ls_data['long_ratio'],",
+            "   'long_short_label': ls_data['ls_label']",
+            "3. Tambah kolom long_short_ratio (FLOAT) dan long_short_label (VARCHAR) di market_metrics table"
+          ]
+        },
+        {
+          "step": "8c",
+          "action": "MODIFY",
+          "description": "Gunakan L/S ratio sebagai contrarian filter di signal_service.py",
+          "location": "backend/app/use_cases/signal_service.py",
+          "detail": [
+            "Setelah funding_rate diambil dari metrics (sekitar baris 276-280), tambah:",
+            "",
+            "ls_ratio = float(metrics.get('long_short_ratio', 0.5))",
+            "ls_label = metrics.get('long_short_label', 'Balanced')",
+            "",
+            "Gunakan sebagai conviction modifier (BUKAN arah changer):",
+            "",
+            "# Crowded trade detection — contrarian signal",
+            "crowded_adj = 1.0",
+            "if ls_label == 'Extreme Long' and ema_direction == 'LONG':",
+            "    # 70%+ trader long, kita juga mau long → HATI-HATI, crowded",
+            "    crowded_adj = 0.7  # reduce conviction 30%",
+            "elif ls_label == 'Extreme Short' and ema_direction == 'SHORT':",
+            "    # 70%+ trader short, kita juga mau short → crowded",
+            "    crowded_adj = 0.7",
+            "elif ls_label == 'Extreme Long' and ema_direction == 'SHORT':",
+            "    # 70%+ trader long, kita mau short → CONTRARIAN EDGE",
+            "    crowded_adj = 1.15  # boost conviction 15%",
+            "elif ls_label == 'Extreme Short' and ema_direction == 'LONG':",
+            "    crowded_adj = 1.15",
+            "",
+            "# Apply SETELAH Spectrum, ke position_size_pct:",
+            "pos_size_pct = pos_size_pct * crowded_adj",
+            "",
+            "# Tambahkan ke SignalResponse output untuk monitoring:",
+            "# market_metrics.long_short_ratio, market_metrics.ls_label"
+          ],
+          "rationale": "Contrarian logic: jika posisi kita SAMA arah dengan crowd → reduce size (crowded = rawan reversal). Jika BERLAWANAN arah → boost size (contrarian edge). Adjustment kecil (0.7-1.15) agar tidak terlalu agresif."
+        },
+        {
+          "step": "8d",
+          "action": "MODIFY",
+          "description": "Tambah L/S ratio ke SignalResponse schema dan MarketMetrics",
+          "location": "backend/app/schemas/signal.py",
+          "detail": [
+            "Tambah field di MarketMetrics:",
+            "  long_short_ratio: float = 0.5",
+            "  long_short_label: str = 'Balanced'",
+            "",
+            "Tambah field di SignalResponse (optional):",
+            "  crowded_adjustment: float = 1.0"
+          ]
+        }
+      ],
+
+      "dependencies": [],
+      "risks": [
+        "Binance L/S ratio endpoint bisa rate-limited — mitigasi: fetch sekali per 4H cycle saja, bukan setiap 60 detik",
+        "Data bisa delayed 5-15 menit dari real-time — acceptable untuk 4H timeframe",
+        "Contrarian logic bisa salah di strong trend (70% long di bull run is normal) — mitigasi: adjustment kecil (0.7-1.15), bukan blocking"
+      ],
+      "validation": [
+        "Test: long_ratio=0.75 + ema_direction=LONG → crowded_adj=0.7",
+        "Test: long_ratio=0.75 + ema_direction=SHORT → crowded_adj=1.15 (contrarian edge)",
+        "Test: long_ratio=0.52 → crowded_adj=1.0 (balanced, no adjustment)",
+        "Test: API failure → fallback 0.5/0.5/Balanced, no crash"
+      ]
+    },
+
+    {
+      "id": "TASK-9",
+      "title": "Tambah Exchange Net Flow (On-Chain) sebagai BCD Feature",
+      "priority": "MEDIUM",
+      "severity": "P2",
+      "file": "backend/app/adapters/gateways/onchain_gateway.py",
+      "description": "Exchange net flow (BTC masuk vs keluar exchange) adalah leading indicator terkuat untuk pergerakan harga besar. BTC masuk exchange = niat jual = bearish. BTC keluar = hodl = bullish. Data ini sering mendahului price move 2-6 jam — sangat relevan untuk 4H candle. Sumber: CryptoQuant API (free tier: 10 req/day) atau alternatif gratis.",
+
+      "current_behavior": {
+        "explanation": "Tidak ada data on-chain apapun yang dikumpulkan. Semua data berasal dari Binance Futures saja (price action + microstructure). Bot buta terhadap whale activity dan exchange flow."
+      },
+
+      "required_changes": [
+        {
+          "step": "9a",
+          "action": "CREATE",
+          "description": "Buat file baru: backend/app/adapters/gateways/onchain_gateway.py",
+          "detail": [
+            "Class OnChainGateway untuk fetch exchange net flow data.",
+            "",
+            "Primary source: CryptoQuant API (free tier)",
+            "  - Endpoint: GET /v1/btc/exchange-flows/netflow",
+            "  - Requires: API key (free registration)",
+            "  - Rate limit: 10 requests/day (cukup untuk 6x 4H cycle)",
+            "  - Env var: CRYPTOQUANT_API_KEY",
+            "",
+            "Fallback source: Blockchain.com API (no key needed)",
+            "  - Tidak se-granular CryptoQuant tapi bisa estimasi dari",
+            "    exchange address balances",
+            "",
+            "Method: async fetch_exchange_netflow() -> dict",
+            "Returns: {",
+            "  'netflow_btc': float,       # positif = inflow (bearish), negatif = outflow (bullish)",
+            "  'netflow_usd': float,       # netflow × current price",
+            "  'flow_label': str,          # 'Large Inflow'|'Small Inflow'|'Neutral'|'Small Outflow'|'Large Outflow'",
+            "  'flow_magnitude': str,      # 'extreme'|'significant'|'normal'",
+            "  'source': str               # 'cryptoquant'|'blockchain_com'|'fallback'",
+            "}",
+            "",
+            "Thresholds (configurable):",
+            "  Large Inflow:  netflow > +1000 BTC  → strong bearish signal",
+            "  Small Inflow:  netflow > +200 BTC   → mild bearish",
+            "  Neutral:       -200 < netflow < +200 BTC",
+            "  Small Outflow: netflow < -200 BTC   → mild bullish",
+            "  Large Outflow: netflow < -1000 BTC  → strong bullish signal",
+            "",
+            "Cache: result di-cache 4 jam (1 candle period) karena rate limit."
+          ]
+        },
+        {
+          "step": "9b",
+          "action": "MODIFY",
+          "description": "Update data_ingestion_use_case.py untuk fetch exchange netflow",
+          "location": "backend/app/use_cases/data_ingestion_use_case.py",
+          "detail": [
+            "1. Import OnChainGateway",
+            "2. Hanya fetch saat new 4H candle (bukan setiap 60 detik) karena rate limit",
+            "3. Tambah ke metrics_row:",
+            "   'exchange_netflow_btc': flow_data['netflow_btc'],",
+            "   'exchange_netflow_label': flow_data['flow_label']",
+            "4. Tambah kolom di market_metrics table"
+          ]
+        },
+        {
+          "step": "9c",
+          "action": "MODIFY",
+          "description": "Integrasikan exchange netflow sebagai feature tambahan di BCD atau signal filter",
+          "location": "backend/app/use_cases/signal_service.py",
+          "detail": [
+            "Option A: Sebagai feature BCD (Layer 1)",
+            "  - Tambah 'exchange_netflow_zscore' sebagai feature ke-9 di BCD",
+            "  - Pro: BCD bisa mendeteksi regime change lebih cepat",
+            "  - Con: Perlu retrain BCD, bisa mengubah existing regime detection",
+            "",
+            "Option B (RECOMMENDED): Sebagai independent filter di signal_service",
+            "  - Tidak mengubah BCD/Spectrum weights",
+            "  - Digunakan sebagai conviction modifier:",
+            "",
+            "  netflow_btc = float(metrics.get('exchange_netflow_btc', 0.0))",
+            "  netflow_label = metrics.get('exchange_netflow_label', 'Neutral')",
+            "",
+            "  # Large exchange inflow = whale preparing to sell",
+            "  if netflow_label == 'Large Inflow' and final_action == 'LONG':",
+            "      # Kita mau long tapi whale sedang kirim BTC ke exchange (mau jual)",
+            "      pos_size_pct *= 0.6  # reduce size 40%",
+            "      # atau: return _build_fallback('Large exchange inflow detected — whale selling')",
+            "",
+            "  elif netflow_label == 'Large Outflow' and final_action == 'SHORT':",
+            "      # Kita mau short tapi whale sedang tarik BTC dari exchange (accumulation)",
+            "      pos_size_pct *= 0.6",
+            "",
+            "  # Confirming signals (whale agrees with us):",
+            "  elif netflow_label == 'Large Outflow' and final_action == 'LONG':",
+            "      pos_size_pct *= 1.1  # slight boost",
+            "  elif netflow_label == 'Large Inflow' and final_action == 'SHORT':",
+            "      pos_size_pct *= 1.1",
+            "",
+            "Tambahkan ke SignalResponse output untuk monitoring."
+          ],
+          "recommendation": "Option B — jangan ubah BCD/Spectrum, gunakan sebagai independent filter saja. Lebih safe dan mudah di-rollback."
+        },
+        {
+          "step": "9d",
+          "action": "MODIFY",
+          "description": "Tambah exchange netflow ke schema dan API response",
+          "location": "backend/app/schemas/signal.py",
+          "detail": [
+            "Tambah field di MarketMetrics:",
+            "  exchange_netflow_btc: float = 0.0",
+            "  exchange_netflow_label: str = 'Neutral'",
+            "",
+            "Opsional: buat OnChainInfo dataclass terpisah jika data on-chain bertambah nanti"
+          ]
+        }
+      ],
+
+      "dependencies": [],
+      "env_requirements": [
+        "CRYPTOQUANT_API_KEY=<free_api_key>  # Register di cryptoquant.com/pricing (free tier)"
+      ],
+      "risks": [
+        "CryptoQuant free tier hanya 10 req/day — cukup untuk 6 cycle/day tapi tidak ada margin error. Mitigasi: cache agresif + fallback",
+        "Data delay 10-30 menit dari real-time — acceptable untuk 4H timeframe",
+        "Exchange netflow bisa misleading saat internal wallet reshuffling (bukan real sell intent) — mitigasi: gunakan sebagai modifier, bukan blocker",
+        "Perlu registrasi CryptoQuant API key — gratis tapi perlu setup"
+      ],
+      "validation": [
+        "Test: CryptoQuant API returns valid data → netflow_btc populated",
+        "Test: API key missing → graceful fallback to 0.0/Neutral",
+        "Test: Rate limit exceeded → use cached value from last 4H",
+        "Test: Large inflow + LONG signal → pos_size reduced",
+        "Test: Large outflow + LONG signal → pos_size slightly boosted"
+      ]
     }
   ],
 
@@ -492,23 +918,53 @@
     },
     {
       "phase": 4,
-      "name": "Validation",
+      "name": "Validation Phase 1",
       "tasks": ["TASK-6"],
-      "description": "Write dan run tests untuk memastikan semua fix bekerja.",
+      "description": "Write dan run tests untuk memastikan semua fix TASK 1-5 bekerja.",
       "estimated_changes": "~100 lines new test file"
+    },
+    {
+      "phase": 5,
+      "name": "Data Enhancement — Cross-Exchange Funding + L/S Ratio",
+      "tasks": ["TASK-7", "TASK-8"],
+      "description": "Tambahkan data dari Bybit/OKX funding rate dan Binance Long/Short Ratio. Effort rendah (~1 hari), impact tinggi untuk mendeteksi crowded trades dan funding anomaly. Tidak mengubah Spectrum weights — hanya sebagai conviction modifier.",
+      "estimated_changes": "~200 lines new gateway + ~30 lines signal_service + ~10 lines schema",
+      "prerequisite": "Phase 1-4 sudah selesai dan stable. JANGAN implementasi bersamaan dengan signal direction fix."
+    },
+    {
+      "phase": 6,
+      "name": "Data Enhancement — On-Chain Exchange Net Flow",
+      "tasks": ["TASK-9"],
+      "description": "Integrasi data on-chain (exchange net flow) sebagai leading indicator. Membutuhkan CryptoQuant API key (free tier). Effort sedang (~2 hari), impact tinggi untuk mendeteksi whale selling/accumulation sebelum price move.",
+      "estimated_changes": "~150 lines new gateway + ~20 lines signal_service + ~10 lines schema",
+      "prerequisite": "Phase 5 sudah selesai dan stable. CryptoQuant API key sudah di-register."
     }
   ],
 
   "backtest_requirements": {
     "description": "Setelah implementasi, WAJIB backtest sebelum deploy ke mainnet",
-    "checks": [
-      "SHORT signal frequency: harus 30-50% dari total signals (sebelumnya ~0%)",
-      "Overall win rate: target >= 55% (backtest baseline 55%)",
-      "R:R ratio semua preset: harus >= 1.0",
-      "Net PnL over 30-day window: harus positif",
-      "Max drawdown: tidak boleh melebihi -15%",
-      "Trade frequency: 0.5-1.5 trades/day (baseline 0.87/day dari walk-forward)"
-    ]
+    "phase_1_to_4": {
+      "label": "Signal Direction Fix",
+      "checks": [
+        "SHORT signal frequency: harus 30-50% dari total signals (sebelumnya ~0%)",
+        "Overall win rate: target >= 55% (backtest baseline 55%)",
+        "R:R ratio semua preset: harus >= 1.0",
+        "Net PnL over 30-day window: harus positif",
+        "Max drawdown: tidak boleh melebihi -15%",
+        "Trade frequency: 0.5-1.5 trades/day (baseline 0.87/day dari walk-forward)"
+      ]
+    },
+    "phase_5_to_6": {
+      "label": "Data Enhancement",
+      "checks": [
+        "Cross-funding: avg funding rate harus dekat dengan Binance-only (±0.005% toleransi dalam kondisi normal)",
+        "L/S ratio: crowded_adj hanya aktif di ~10-20% signals (extreme ratio jarang terjadi)",
+        "Exchange netflow: pos_size modifier hanya aktif di ~5-10% signals (large flow jarang)",
+        "Total data fetch latency per cycle: < 15 detik (termasuk 3 exchange + CryptoQuant)",
+        "Fallback behavior: semua gateway graceful degrade saat API down (no crash, no blocking)",
+        "Paper trade 1 minggu: compare PnL with/without data enhancement — harus positif delta"
+      ]
+    }
   },
 
   "rollback_plan": {
@@ -545,6 +1001,11 @@
     "JANGAN ubah Spectrum weights tanpa walk-forward validation ulang",
     "JANGAN enable LIGHTER_TRADING_ENABLED=true sampai paper trade 1 minggu OK",
     "Setelah fix, signal pertama yang dihasilkan HARUS di-review manual sebelum auto-execute",
-    "Monitor Telegram notifier — pastikan SHORT signals muncul dan formatnya benar"
+    "Monitor Telegram notifier — pastikan SHORT signals muncul dan formatnya benar",
+    "Phase 5-6 (data enhancement) HARUS diimplementasi SETELAH Phase 1-4 stable — jangan bersamaan",
+    "Cross-exchange funding: JANGAN replace Binance funding, AVERAGE-kan saja. Binance tetap primary",
+    "L/S ratio dan netflow: gunakan HANYA sebagai conviction modifier (0.6-1.15x), BUKAN sebagai signal blocker",
+    "CryptoQuant free tier HANYA 10 req/day — cache agresif, jangan fetch setiap 60 detik",
+    "Semua gateway baru HARUS punya graceful fallback (return default values, never crash pipeline)"
   ]
 }
