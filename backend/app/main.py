@@ -24,6 +24,7 @@ async def lifespan(app: FastAPI):
     from app.use_cases.ai_service import get_ai_service
     from app.use_cases.signal_service import get_signal_service
     from app.use_cases.data_ingestion_use_case import start_data_daemon
+    from app.use_cases.telegram_command_handler import get_telegram_command_handler
 
     get_bcd_service()
     get_ai_service()
@@ -33,14 +34,26 @@ async def lifespan(app: FastAPI):
     data_task = asyncio.create_task(start_data_daemon(interval=60))
     print("[API] Data ingestion daemon started")
 
+    # Start Telegram command handler (polls /pnl, /status commands)
+    tg_handler = get_telegram_command_handler()
+    tg_task = asyncio.create_task(tg_handler.run())
+    print("[API] Telegram command handler started")
+
     yield
 
-    # Graceful shutdown: cancel the data daemon task
+    # Graceful shutdown
     data_task.cancel()
     try:
         await data_task
     except asyncio.CancelledError:
         print("[API] Data ingestion daemon stopped")
+
+    tg_handler.stop()
+    tg_task.cancel()
+    try:
+        await tg_task
+    except asyncio.CancelledError:
+        print("[API] Telegram command handler stopped")
 
 
 app = FastAPI(
