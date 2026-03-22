@@ -1,7 +1,7 @@
 """
 FixedStrategy: Golden v4.4 — parameter hardcoded.
 
-SL=1.333%, TP=0.71%, Leverage=15x, Margin=$1000.
+SL=1.333%, TP=0.71%, Leverage=15x, Margin=$10.
 Ini adalah baseline strategy yang terbukti dari backtest v4.4.
 
 Tidak boleh diubah tanpa validasi backtest ulang.
@@ -13,7 +13,7 @@ from .base_strategy import BaseTradePlanStrategy, TradeParams
 SL_PCT      = 1.333   # %
 TP_PCT      = 0.71    # %
 LEVERAGE    = 15
-MARGIN_USD  = 5.0
+MARGIN_USD  = 10.0
 
 
 class FixedStrategy(BaseTradePlanStrategy):
