@@ -417,15 +417,19 @@ class SignalService:
             ema_distance_ratio = abs(price_now - ema20_now) / atr14_now if atr14_now > 0 else 999.0
 
             # L2 weakening conditions:
-            # 1. RSI overbought (>70) saat trend BULL → potential reversal down
-            # 2. RSI oversold (<30) saat trend BEAR → potential reversal up
-            # 3. Price terlalu dekat EMA20 (< 0.3 ATR) → EMA confirmation tidak reliable
+            # 1. RSI overbought (>68) saat trend BULL → potential reversal down
+            # 2. RSI oversold (<32) saat trend BEAR → potential reversal up
+            # 3. Price terlalu dekat EMA20 (< 0.2 ATR) → EMA confirmation tidak reliable
+            # 4. EMA20 ≈ EMA50 (< 0.1% selisih) → transisi, tidak ada tren yang jelas
             _l2_weakened = False
-            if trend_short == "BULL" and rsi_now > 70:
+            ema_gap_ratio = abs(ema20_now - ema50_now) / ema50_now if ema50_now > 0 else 0
+            if trend_short == "BULL" and rsi_now > 68:
                 _l2_weakened = True
-            elif trend_short == "BEAR" and rsi_now < 30:
+            elif trend_short == "BEAR" and rsi_now < 32:
                 _l2_weakened = True
-            elif ema_distance_ratio < 0.3:
+            elif ema_distance_ratio < 0.2:
+                _l2_weakened = True
+            elif ema_gap_ratio < 0.001:  # EMA20 dan EMA50 hampir sama → ambiguous zone
                 _l2_weakened = True
 
             l1 = hmm_tag == ("bull" if trend_short == "BULL" else "bear")
@@ -457,9 +461,12 @@ class SignalService:
             l1_vote = _to_vote(hmm_tag == "bull", hmm_post_conf)
 
             # [FIX-SIGNAL #3] L2 vote dengan weakening modifier
+            # Jika L2 weakened: force l2=False (bukan sekadar reduce confidence)
+            # RSI extreme / EMA ambiguous = EMA confirmation tidak bisa dipercaya
+            if _l2_weakened:
+                l2 = False  # Override l2 — disable alignment
             l2_base_conf = 1.0 if l2 else 0.0
-            l2_conf = 0.3 if (_l2_weakened and l2) else l2_base_conf
-            l2_vote = _to_vote(trend_short == "BULL", l2_conf)
+            l2_vote = _to_vote(trend_short == "BULL", l2_base_conf)
 
             # [FIX-SIGNAL #1] L3 vote dengan disagreement handling
             if _l3_disagrees:
