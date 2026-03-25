@@ -117,14 +117,21 @@ class PositionManager:
                     last_order = await self.gateway.fetch_last_closed_order()
                     if last_order:
                         exit_price = last_order.get("filled_price", db_trade.entry_price)
-                        # Determine exit type by comparing exit price to SL/TP
-                        if abs(exit_price - db_trade.sl_price) < abs(exit_price - db_trade.tp_price):
+                        # Determine exit type from order_type field (reliable)
+                        order_type_str = last_order.get("order_type", "").lower()
+                        if "stop" in order_type_str:
                             exit_type = "SL"
-                        else:
+                        elif "take-profit" in order_type_str or "take_profit" in order_type_str:
                             exit_type = "TP"
+                        else:
+                            # Fallback: distance comparison
+                            if abs(exit_price - db_trade.sl_price) < abs(exit_price - db_trade.tp_price):
+                                exit_type = "SL"
+                            else:
+                                exit_type = "TP"
                         logger.info(
                             f"[PositionManager] Detected exit from order history: "
-                            f"{exit_type} @ ${exit_price:,.2f}"
+                            f"{exit_type} ({order_type_str}) @ ${exit_price:,.2f}"
                         )
                     else:
                         # Fallback: Use heuristic (distance from SL vs TP to CURRENT price)

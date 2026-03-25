@@ -228,6 +228,15 @@ async def start_data_daemon(interval=60):
 
     use_case = DataIngestionUseCase(gateway, repository, position_manager=position_manager)
 
+    # Startup sync: detect if position was closed while bot was offline
+    if position_manager:
+        try:
+            print("  [Ingestion Daemon] Startup sync: checking position status...")
+            await position_manager.sync_position_status()
+            print("  [Ingestion Daemon] Startup sync complete.")
+        except Exception as e:
+            print(f"  [Ingestion Daemon] Startup sync failed (non-fatal): {e}")
+
     print("\n  [Ingestion Daemon] STARTING CLEAN PIPELINE...")
     cycle = 0
     try:
