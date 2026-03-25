@@ -153,18 +153,30 @@ class LighterExecutionGateway(BaseExchangeExecutionGateway):
 
     def _generate_auth_token(self) -> str:
         """
-        Generate Lighter API auth token.
+        Generate Lighter API auth token using SDK SignerClient.
 
-        Format: {expiry_unix}:{account_index}:{api_key_index}:{random_hex}
+        Uses create_auth_token_with_expiry() from the official Lighter SDK,
+        which properly signs the token with the API private key.
 
-        Note: account_index defaults to 0 (primary account). If you have sub-accounts,
-        this should be set to the correct account index from Lighter dashboard.
+        Returns signed token string valid for 10 minutes.
         """
-        expiry_unix = int((datetime.utcnow() + timedelta(hours=8)).timestamp())
-        random_hex = secrets.token_hex(16)  # 32 hex chars
-
-        auth_token = f"{expiry_unix}:{self.account_index}:{self.api_key_index}:{random_hex}"
-        return auth_token
+        try:
+            import lighter as lighter_sdk  # type: ignore[import]
+            client = self._get_signer_client()
+            # DEFAULT_10_MIN_AUTH_EXPIRY = -1 means use SDK default (10 min from now)
+            token_result = client.create_auth_token_with_expiry(
+                deadline=lighter_sdk.SignerClient.DEFAULT_10_MIN_AUTH_EXPIRY,
+                api_key_index=self.api_key_index,
+            )
+            # SDK returns tuple (token_str, ...), extract string
+            token = token_result[0] if isinstance(token_result, tuple) else token_result
+            return token
+        except Exception as e:
+            # Fallback: manual format (invalid, but log clearly)
+            logger.error(f"[LIGHTER] SDK auth token generation failed: {e}. Auth will fail.")
+            expiry_unix = int((datetime.utcnow() + timedelta(hours=8)).timestamp())
+            random_hex = secrets.token_hex(16)
+            return f"{expiry_unix}:{self.account_index}:{self.api_key_index}:{random_hex}"
 
     async def _init_session(self) -> aiohttp.ClientSession:
         """Initialize or return existing aiohttp session (no auth — public endpoints)."""
@@ -693,40 +705,60 @@ class LighterExecutionGateway(BaseExchangeExecutionGateway):
         Fetch the last closed order for the BTC/USDC market.
 
         Used to determine actual exit price when position closes via SL/TP.
-        Queries order history and returns the most recent closed order.
+
+        Lighter SL/TP orders use 'trigger_price' as the execution price.
+        'filled_base_amount' may be 0 for reduce-only trigger orders.
+        We fall back to 'trigger_price' or 'price' when fill amount is zero.
 
         Returns:
             Dictionary with order details (filled_price, order_id, etc.) or None
-
-        Raises:
-            Exception if API call fails
         """
         try:
-            # Fetch order history from API
             orders = await self._make_request(
                 "GET",
                 "/accountInactiveOrders",
                 params={"account_index": str(self.account_index), "market_id": str(self.MARKET_ID), "limit": "10"}
             )
 
-            # Get the most recent closed order
             closed_orders = orders.get("orders", [])
             if not closed_orders:
                 logger.debug("[LIGHTER] No closed orders found")
                 return None
 
-            # Return the first (most recent) closed order
-            last_order = closed_orders[0]
-            filled_price = float(last_order.get("filled_price", 0))
-            order_id = last_order.get("order_id", "unknown")
+            # Find most recent relevant closed order (SL, TP, or filled market order)
+            for last_order in closed_orders:
+                order_type = last_order.get("type", "")
+                status = last_order.get("status", "")
+                order_id = last_order.get("order_id", "unknown")
 
-            logger.info(f"[LIGHTER] Last closed order: {order_id} @ ${filled_price:,.2f}")
-            return {
-                "order_id": order_id,
-                "filled_price": filled_price,
-                "status": "closed",
-                "timestamp": last_order.get("timestamp", 0)
-            }
+                # Try filled_quote_amount / filled_base_amount for actual fill price
+                filled_base = float(last_order.get("filled_base_amount", 0) or 0)
+                filled_quote = float(last_order.get("filled_quote_amount", 0) or 0)
+
+                if filled_base > 0 and filled_quote > 0:
+                    # Actual fill: compute avg fill price
+                    filled_price = filled_quote / filled_base
+                else:
+                    # SL/TP trigger orders: use trigger_price or price
+                    trigger_price = float(last_order.get("trigger_price", 0) or 0)
+                    order_price = float(last_order.get("price", 0) or 0)
+                    filled_price = trigger_price if trigger_price > 0 else order_price
+
+                if filled_price > 0:
+                    logger.info(
+                        f"[LIGHTER] Last closed order: {order_id} ({order_type}/{status}) "
+                        f"@ ${filled_price:,.2f}"
+                    )
+                    return {
+                        "order_id": order_id,
+                        "filled_price": filled_price,
+                        "order_type": order_type,
+                        "status": status,
+                        "timestamp": last_order.get("timestamp", 0)
+                    }
+
+            logger.debug("[LIGHTER] No closed orders with valid price found")
+            return None
 
         except Exception as e:
             logger.warning(f"[LIGHTER] Failed to fetch last closed order: {e}")
