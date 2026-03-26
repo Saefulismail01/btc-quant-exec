@@ -4,9 +4,32 @@ Dokumen ini berfungsi sebagai *single source of truth* untuk melacak progres, ke
 
 ---
 
-## 🚀 Status Saat Ini: v4.4 + Lighter Mainnet Live
-**Update Terakhir:** 17 Maret 2026
+## 🚀 Status Saat Ini: v4.5 + Lighter Mainnet Live + HestonStrategy
+**Update Terakhir:** 26 Maret 2026
 **Status Eksekusi:** Live di Lighter Mainnet ✅
+**Strategy Aktif:** HestonStrategy ($5 margin, 15x leverage, ATR-adaptive SL/TP)
+
+### 🔝 Key Updates (v4.5 — 25-26 Maret 2026)
+
+**Execution Layer Fixes (semua di commit 2026-03-25):**
+1. **Lighter Auth Token** — Fix 401 error: ganti manual token format ke SDK `create_auth_token_with_expiry()`. Balance/position query sekarang berfungsi.
+2. **Exit Price Fix** — `filled_price` selalu 0.0 karena SL/TP Lighter adalah reduce-only trigger order. Fix: gunakan `trigger_price` sebagai fallback.
+3. **Startup Position Sync** — Bot restart tidak lagi stuck dengan DB OPEN saat posisi sudah closed di exchange.
+4. **Exit Type Detection** — Ganti distance comparison ke `order_type` field langsung (stop-loss/take-profit). SL freeze logic sekarang akurat.
+
+**Signal Quality Fix:**
+5. **L2 EMA Weakening Diperkuat** — Force `l2 = False` (bukan sekadar reduce confidence) saat:
+   - RSI > 68 (BULL) atau RSI < 32 (BEAR)
+   - EMA distance < 0.2 ATR
+   - EMA20 ≈ EMA50 (gap < 0.1%) → ambiguous zone
+
+**Strategy Upgrade:**
+6. **Switch ke HestonStrategy** — FixedStrategy (SL 1.333% / TP 0.71% fixed, R:R ~1:0.5) diganti HestonStrategy (ATR-adaptive SL/TP, R:R Normal 1:1.33). Margin $5, leverage 15x untuk live testing.
+
+**Dokumentasi baru:**
+- `docs/research/SIGNAL_FIX_LOG.md` — log lengkap semua fix dengan before/after
+
+---
 
 ### 🔝 Key Updates (v4.4)
 1.  **Fix #1: L3 Disagreement Logic** - MLP NEUTRAL sekarang menjadi counter-signal (-0.3) terhadap BCD BULL/BEAR.
@@ -158,15 +181,31 @@ Dokumen ini berfungsi sebagai *single source of truth* untuk melacak progres, ke
 
 ---
 
-## 🎯 Fokus Saat Ini: Integrasi Lighter.xyz
-Membangun Layer Eksekusi untuk DEX L2 Lighter agar bot dapat beroperasi secara desentralisasi.
+## 🎯 Fokus Saat Ini: Stabilisasi Live + Sprint 2-4
 
+### Status Lighter Execution
 | Task | Status | Note |
 |---|---|---|
-| Riset Dokumentasi API Lighter | ✅ DONE | https://apidocs.lighter.xyz |
-| PRD & DoD Lighter Execution | ✅ DONE | Fokus pada Nonce & Integer Scaling |
-| **Phase 1: API Client & Connectivity** | ⏳ PLANNED | Setup REST/WSS Wrapper |
-| **Phase 2: Order & Nonce Engine** | 📅 BACKLOG | Implementasi offline signing |
+| Riset Dokumentasi API Lighter | ✅ DONE | |
+| Phase 1-4: API Client, Nonce, Execution | ✅ DONE | Live di mainnet sejak 17 Mar |
+| Auth Token Fix | ✅ DONE | 25 Mar — SDK signed token |
+| Exit Price Fix | ✅ DONE | 25 Mar — trigger_price fallback |
+| Startup Sync | ✅ DONE | 25 Mar |
+| HestonStrategy Live | ✅ DONE | 26 Mar — $5 margin, ATR-adaptive |
+
+### Roadmap Sprint (dari DOD v4)
+| Sprint | Target | Status | Blocking? |
+|--------|--------|--------|-----------|
+| Sprint 1: Exit Management | R:R ≥ 1.8, DD ≤ 15% | ✅ DONE (backtest) | — |
+| Sprint 2: DD Adaptive Sizing | DD ≤ 20%, Sharpe ≥ 1.8 | ⏳ PENDING | Butuh equity tracking live |
+| Sprint 3: Signal Quality | WR ≥ 52%, Bear WR ≥ 52% | ⏳ PENDING | Setelah Sprint 2 |
+| Sprint 4: Frequency | ≥ 1 trade/hari | ⏳ PENDING | Setelah Sprint 3 |
+
+### Next Action (Priority)
+1. **Monitor HestonStrategy** — validasi 5-10 trade live ($5 margin)
+2. **Naikkan margin** ke $10-20 kalau 5 trade pertama profitable
+3. **Implement Sprint 2** — DD adaptive sizing (graduated risk reduction)
+4. **Leverage 3-5x** — setelah Sprint 2 deployed dan DD terkontrol
 
 ---
 
