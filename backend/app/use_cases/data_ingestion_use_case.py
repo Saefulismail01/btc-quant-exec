@@ -221,8 +221,9 @@ async def start_data_daemon(interval=60):
 
         lighter_gateway = LighterExecutionGateway()
         live_repo = LiveTradeRepository()
-        position_manager = PositionManager(gateway=lighter_gateway, repo=live_repo)
-        print("  [Ingestion Daemon] PositionManager initialized with LighterExecutionGateway")
+        from app.use_cases.strategies.heston_strategy import HestonStrategy
+        position_manager = PositionManager(gateway=lighter_gateway, repo=live_repo, strategy=HestonStrategy())
+        print("  [Ingestion Daemon] PositionManager initialized with LighterExecutionGateway + HestonStrategy ($20 margin)")
     except Exception as e:
         print(f"  [Ingestion Daemon] PositionManager init failed (execution disabled): {e}")
 
