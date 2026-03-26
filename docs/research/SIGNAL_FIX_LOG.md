@@ -14,6 +14,7 @@ execution layer, dan infrastruktur bot setelah forward test 15-25 Mar 2026.
 | Startup position sync | data_ingestion_use_case.py | ✅ DONE | 2026-03-25 |
 | Exit type dari order_type field | position_manager.py | ✅ DONE | 2026-03-25 |
 | L2 weakening diperkuat | signal_service.py | ✅ DONE | 2026-03-25 |
+| Switch ke HestonStrategy ($20 margin) | heston_strategy.py, data_ingestion_use_case.py | ✅ DONE | 2026-03-26 |
 | PR-1: 1H confirmation filter | - | ⏳ PENDING backtest | - |
 | PR-2: Partial TP strategy | - | ⏳ PENDING backtest | - |
 | Sprint 2: DD adaptive sizing | - | ⏳ PENDING | - |
@@ -190,7 +191,21 @@ if _l2_weakened:
 **Priority:** High
 **Masalah:** TP fixed 0.71% terlalu konservatif, sering exit sebelum trend lanjut
 **Plan:** 50% close @ TP1 (0.71%), 50% let run dengan trailing SL
-**Status:** Butuh backtest 6 bulan dulu
+**Status:** ✅ Backtest selesai (2026-03-26)
+
+**Hasil Backtest (2024-01 to 2026-03, EMA-only signal):**
+
+| Metric | Fixed TP | Partial TP | Delta |
+|--------|----------|------------|-------|
+| Trades | 1937 | 1406 | -27% |
+| Win Rate | 63.7% | 63.5% | -0.2% |
+| Total PnL | -$219 | -$177 | **+19% better** |
+| Max DD | -2.36% | -1.92% | **+19% better** |
+
+**Catatan:** Kedua mode losing karena backtest pakai EMA-only signal (tanpa BCD filter). Relative improvement valid.
+
+**Keputusan: Implement PR-2.** Reduce loss 19% + DD lebih kecil = worth it.
+**Cara implement:** Update `FixedStrategy` di `backend/app/use_cases/strategies/fixed_strategy.py`
 
 ### [PENDING-3] Sprint 2: DD Adaptive Sizing
 **Priority:** Medium
