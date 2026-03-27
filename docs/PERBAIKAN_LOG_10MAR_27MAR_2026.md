@@ -335,6 +335,7 @@ print(f"... HestonStrategy (${MARGIN_USD:.0f} margin × {LEVERAGE}x = ${MARGIN_U
 | Uji Coba (15 Mar) | 1 | — | -$0.04 |
 | Otomatis (16–27 Mar, excl. SL Bug) | 15 | 80.0% | +$5.23 |
 | **Total (excl. SL Bug & uji coba)** | **26** | **73.1%** | **+$5.99** |
+| **Total (incl. SL Bug, excl. uji coba)** | **27** | **70.4%** | **-$0.31** |
 
 > ⚠️ Trade 15 Mar (-$0.04) adalah uji coba otomasi bot — tidak dihitung dalam statistik performa.
 > ⚠️ Trade 18 Mar (-$6.30) adalah anomali akibat bug SL order auth yang sudah diperbaiki di [FIX-3].
