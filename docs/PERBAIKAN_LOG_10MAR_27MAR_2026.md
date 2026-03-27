@@ -283,6 +283,7 @@ print(f"... HestonStrategy (${MARGIN_USD:.0f} margin × {LEVERAGE}x = ${MARGIN_U
 | 13 Mar | LONG | open → 08:37 | +$0.58 | Win |
 | 13 Mar | LONG | open → 14:23 (3 rows) | +$0.52 | Win |
 | 13 Mar | LONG | open → 16:18 | -$1.00 | Loss |
+| 15 Mar | MIXED | 05:25 → 07:06 (6 rows) | -$0.04 | Uji Coba Bot ⚠️ |
 | 16 Mar | LONG | 08:14 → 13:32 | +$0.96 | Win |
 | 16 Mar | LONG | 16:01 → 16:32 | +$0.69 | Win |
 | 17 Mar | LONG | 00:51 → 01:10 | +$0.99 | Win |
@@ -300,12 +301,13 @@ print(f"... HestonStrategy (${MARGIN_USD:.0f} margin × {LEVERAGE}x = ${MARGIN_U
 | 26 Mar | SHORT | 13:44 → 15:14 | +$0.52 | Win |
 | 27 Mar | SHORT | 04:00 → 05:33 | +$0.26 | Win |
 
-**Total trade:** 27
-**Win:** 19 | **Loss:** 8
-**Win Rate (excl. SL Bug):** ~73%
-**Total PnL (excl. SL Bug):** ~+$5.99
+**Total trade:** 28 (27 live + 1 uji coba)
+**Win:** 19 | **Loss:** 8 (excl. uji coba & SL Bug)
+**Win Rate (excl. SL Bug & uji coba):** ~73%
+**Total PnL (excl. SL Bug & uji coba):** ~+$5.99
 **Total PnL (incl. SL Bug):** ~-$0.31
 
+> ⚠️ Trade 15 Mar (-$0.04) adalah uji coba otomasi bot, bukan live trading normal — tidak dihitung dalam statistik performa.
 > ⚠️ Trade 18 Mar (-$6.30) adalah anomali akibat bug SL order auth yang sudah diperbaiki di [FIX-3].
 
 ---
