@@ -726,10 +726,16 @@ class LighterExecutionGateway(BaseExchangeExecutionGateway):
                 return None
 
             # Find most recent relevant closed order (SL, TP, or filled market order)
+            # Skip canceled orders — these are OCO companions that were auto-canceled when the other leg filled
             for last_order in closed_orders:
                 order_type = last_order.get("type", "")
                 status = last_order.get("status", "")
                 order_id = last_order.get("order_id", "unknown")
+
+                # Skip orders that were canceled (e.g. SL canceled when TP hit, or vice versa)
+                if "cancel" in status.lower():
+                    logger.debug(f"[LIGHTER] Skipping canceled order {order_id} ({order_type}/{status})")
+                    continue
 
                 # Try filled_quote_amount / filled_base_amount for actual fill price
                 filled_base = float(last_order.get("filled_base_amount", 0) or 0)
