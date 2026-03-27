@@ -17,8 +17,8 @@ logger = logging.getLogger(__name__)
 
 # Default ATR multiplier jika ATR tidak tersedia
 _DEFAULT_ATR_FALLBACK = 1500.0   # ~1500 USD — approximate ATR BTC 4H
-LEVERAGE   = 15
-MARGIN_USD = 5.0   # Conservative: $5 margin untuk testing HestonStrategy di live
+LEVERAGE   = 7
+MARGIN_USD = 20.0  # $20 margin × 7x = $140 notional
 
 
 class HestonStrategy(BaseTradePlanStrategy):
