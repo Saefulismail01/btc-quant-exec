@@ -291,8 +291,9 @@ print(f"... HestonStrategy (${MARGIN_USD:.0f} margin × {LEVERAGE}x = ${MARGIN_U
 | 13 Mar | LONG | open → 14:23 (3 rows) | +$0.52 | Win |
 | 13 Mar | LONG | open → 16:18 | -$1.00 | Loss |
 
-**Win (Manual):** 7 | **Loss:** 4 | **Win Rate:** 63.6%
-**Total PnL (Manual):** +$0.76
+**Win:** 7 | **Loss:** 4 | **Win Rate:** 63.6%
+**Total PnL:** +$0.66 | **Avg Win:** +$0.529 | **Avg Loss:** -$0.760
+**R:R:** 0.70 | **EV/trade:** +$0.060 | **Profit Factor:** 1.22
 
 ### Uji Coba Otomasi (15 Mar)
 
@@ -321,21 +322,25 @@ print(f"... HestonStrategy (${MARGIN_USD:.0f} margin × {LEVERAGE}x = ${MARGIN_U
 | 26 Mar | SHORT | 13:44 → 15:14 | +$0.52 | Win |
 | 27 Mar | SHORT | 04:00 → 05:33 | +$0.26 | Win |
 
-**Win (Otomatis, excl. SL Bug):** 12 | **Loss:** 3 | **Win Rate:** 80%
-**Total PnL (excl. SL Bug):** +$5.23
-**Total PnL (incl. SL Bug):** -$1.07
+**Win:** 12 | **Loss:** 3 | **Win Rate:** 80.0% *(excl. SL Bug)*
+**Total PnL (excl. SL Bug):** +$4.17 | **Avg Win:** +$0.485 | **Avg Loss:** -$0.550
+**R:R:** 0.88 | **EV/trade:** +$0.278 | **Profit Factor:** 3.53
+
+**Win:** 12 | **Loss:** 4 | **Win Rate:** 75.0% *(incl. SL Bug)*
+**Total PnL (incl. SL Bug):** -$2.13 | **R:R:** 0.24 | **EV/trade:** -$0.133 | **Profit Factor:** 0.73
 
 ---
 
 ### Ringkasan Keseluruhan
 
-| Fase | Trade | Win Rate | Total PnL |
-|------|-------|----------|-----------|
-| Manual (10–13 Mar) | 11 | 63.6% | +$0.76 |
-| Uji Coba (15 Mar) | 1 | — | -$0.04 |
-| Otomatis (16–27 Mar, excl. SL Bug) | 15 | 80.0% | +$5.23 |
-| **Total (excl. SL Bug & uji coba)** | **26** | **73.1%** | **+$5.99** |
-| **Total (incl. SL Bug, excl. uji coba)** | **27** | **70.4%** | **-$0.31** |
+| Fase | Trade | Win Rate | Total PnL | Avg Win | Avg Loss | R:R | EV/trade | Profit Factor |
+|------|-------|----------|-----------|---------|----------|-----|----------|---------------|
+| Manual (10–13 Mar) | 11 | 63.6% | +$0.66 | +$0.529 | -$0.760 | 0.70 | +$0.060 | 1.22 |
+| Uji Coba (15 Mar) | 1 | — | -$0.04 | — | — | — | — | — |
+| Otomatis excl. SL Bug (16–27 Mar) | 15 | 80.0% | +$4.17 | +$0.485 | -$0.550 | 0.88 | +$0.278 | 3.53 |
+| Otomatis incl. SL Bug (16–27 Mar) | 16 | 75.0% | -$2.13 | +$0.485 | -$1.988 | 0.24 | -$0.133 | 0.73 |
+| **Total excl. SL Bug & uji coba** | **26** | **73.1%** | **+$4.83** | **+$0.501** | **-$0.670** | **0.75** | **+$0.186** | **2.03** |
+| **Total incl. SL Bug, excl. uji coba** | **27** | **70.4%** | **-$1.47** | **+$0.501** | **-$1.374** | **0.36** | **-$0.054** | **0.87** |
 
 > ⚠️ Trade 15 Mar (-$0.04) adalah uji coba otomasi bot — tidak dihitung dalam statistik performa.
 > ⚠️ Trade 18 Mar (-$6.30) adalah anomali akibat bug SL order auth yang sudah diperbaiki di [FIX-3].
