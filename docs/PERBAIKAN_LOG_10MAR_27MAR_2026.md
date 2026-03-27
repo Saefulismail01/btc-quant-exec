@@ -270,6 +270,13 @@ print(f"... HestonStrategy (${MARGIN_USD:.0f} margin × {LEVERAGE}x = ${MARGIN_U
 
 ## Statistik Live Trading (10 Mar – 27 Mar 2026)
 
+> **Catatan Fase Eksekusi:**
+> - **10–13 Mar:** Eksekusi **manual** — sinyal dari bot dibaca, order dibuka/ditutup secara manual di dashboard Lighter. Intervensi manual (geser TP/SL) umum dilakukan di fase ini.
+> - **15 Mar:** Uji coba otomasi bot — tidak dihitung dalam statistik performa.
+> - **16 Mar – sekarang:** Eksekusi **otomatis** oleh bot. Intervensi manual masih sesekali dilakukan untuk menggeser target TP/SL.
+
+### Fase Manual (10–13 Mar)
+
 | Tanggal | Arah | Open → Close | PnL | Status |
 |---------|------|-------------|-----|--------|
 | 10 Mar | LONG | 16:05 → 18:14 | -$0.12 | Loss |
@@ -283,7 +290,20 @@ print(f"... HestonStrategy (${MARGIN_USD:.0f} margin × {LEVERAGE}x = ${MARGIN_U
 | 13 Mar | LONG | open → 08:37 | +$0.58 | Win |
 | 13 Mar | LONG | open → 14:23 (3 rows) | +$0.52 | Win |
 | 13 Mar | LONG | open → 16:18 | -$1.00 | Loss |
-| 15 Mar | MIXED | 05:25 → 07:06 (6 rows) | -$0.04 | Uji Coba Bot ⚠️ |
+
+**Win (Manual):** 7 | **Loss:** 4 | **Win Rate:** 63.6%
+**Total PnL (Manual):** +$0.76
+
+### Uji Coba Otomasi (15 Mar)
+
+| Tanggal | Arah | Open → Close | PnL | Status |
+|---------|------|-------------|-----|--------|
+| 15 Mar | MIXED | 05:25 → 07:06 (6 rows) | -$0.04 | Uji Coba ⚠️ |
+
+### Fase Otomatis (16–27 Mar)
+
+| Tanggal | Arah | Open → Close | PnL | Status |
+|---------|------|-------------|-----|--------|
 | 16 Mar | LONG | 08:14 → 13:32 | +$0.96 | Win |
 | 16 Mar | LONG | 16:01 → 16:32 | +$0.69 | Win |
 | 17 Mar | LONG | 00:51 → 01:10 | +$0.99 | Win |
@@ -301,13 +321,22 @@ print(f"... HestonStrategy (${MARGIN_USD:.0f} margin × {LEVERAGE}x = ${MARGIN_U
 | 26 Mar | SHORT | 13:44 → 15:14 | +$0.52 | Win |
 | 27 Mar | SHORT | 04:00 → 05:33 | +$0.26 | Win |
 
-**Total trade:** 28 (27 live + 1 uji coba)
-**Win:** 19 | **Loss:** 8 (excl. uji coba & SL Bug)
-**Win Rate (excl. SL Bug & uji coba):** ~73%
-**Total PnL (excl. SL Bug & uji coba):** ~+$5.99
-**Total PnL (incl. SL Bug):** ~-$0.31
+**Win (Otomatis, excl. SL Bug):** 12 | **Loss:** 3 | **Win Rate:** 80%
+**Total PnL (excl. SL Bug):** +$5.23
+**Total PnL (incl. SL Bug):** -$1.07
 
-> ⚠️ Trade 15 Mar (-$0.04) adalah uji coba otomasi bot, bukan live trading normal — tidak dihitung dalam statistik performa.
+---
+
+### Ringkasan Keseluruhan
+
+| Fase | Trade | Win Rate | Total PnL |
+|------|-------|----------|-----------|
+| Manual (10–13 Mar) | 11 | 63.6% | +$0.76 |
+| Uji Coba (15 Mar) | 1 | — | -$0.04 |
+| Otomatis (16–27 Mar, excl. SL Bug) | 15 | 80.0% | +$5.23 |
+| **Total (excl. SL Bug & uji coba)** | **26** | **73.1%** | **+$5.99** |
+
+> ⚠️ Trade 15 Mar (-$0.04) adalah uji coba otomasi bot — tidak dihitung dalam statistik performa.
 > ⚠️ Trade 18 Mar (-$6.30) adalah anomali akibat bug SL order auth yang sudah diperbaiki di [FIX-3].
 
 ---
