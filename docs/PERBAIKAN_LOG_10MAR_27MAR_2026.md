@@ -268,30 +268,43 @@ print(f"... HestonStrategy (${MARGIN_USD:.0f} margin × {LEVERAGE}x = ${MARGIN_U
 
 ---
 
-## Statistik Live Trading (15 Mar – 27 Mar 2026)
+## Statistik Live Trading (10 Mar – 27 Mar 2026)
 
-| Tanggal | Arah | Entry | Exit | PnL | Status |
-|---------|------|-------|------|-----|--------|
-| 16 Mar | LONG | 08:14 | 13:32 | +$0.96 | Win |
-| 16 Mar | LONG | 16:01 | 16:32 | +$0.69 | Win |
-| 17 Mar | LONG | 00:51 | 01:10 | +$0.99 | Win |
-| 17 Mar | LONG | 02:07 | 02:44 | +$0.12 | Win |
-| 17 Mar | LONG | 04:02 | 04:39 | -$1.01 | Loss |
-| 17 Mar | LONG | 07:21 | 07:39 | +$0.03 | Win |
-| 17 Mar | LONG | 08:00+12:00 | 14:40 | +$0.62 | Win |
-| 17 Mar | LONG | 14:15+14:16 | 14:44 | +$0.55 | Win |
-| 18 Mar | LONG | 08:00+04:09 | 15:00 | -$6.30 | SL Bug ⚠️ |
-| 22 Mar | SHORT | 00:00 | 00:02 | +$0.56 | Win |
-| 22 Mar | SHORT | 08:00 | 09:18 | +$0.26 | Win |
-| 22 Mar | SHORT | 12:00 | 14:19 | -$0.54 | Loss |
-| 23 Mar | SHORT | 00:00 | 07:01 | +$0.26 | Win |
-| 26 Mar | SHORT | 12:00 | 13:42 | -$0.10 | Loss |
-| 26 Mar | SHORT | 13:44 | 15:14 | +$0.52 | Win |
-| 27 Mar | SHORT | 04:00 | 05:33 | +$0.26 | Win |
+| Tanggal | Arah | Open → Close | PnL | Status |
+|---------|------|-------------|-----|--------|
+| 10 Mar | LONG | 16:05 → 18:14 | -$0.12 | Loss |
+| 11 Mar | LONG | 04:08 → 04:48 | +$0.52 | Win |
+| 11 Mar | LONG | 08:06 → 13:14 | +$0.34 | Win |
+| 11 Mar | LONG | 20:01 → 12 Mar 02:18 | -$0.89 | Loss |
+| 12 Mar | LONG | 08:05 → 09:45 | +$1.00 | Win |
+| 12 Mar | LONG | 12:15 → 13:46 (5 rows) | -$1.03 | Loss |
+| 12 Mar | LONG | 20:09 → 13 Mar 00:13 | +$0.57 | Win |
+| 13 Mar | LONG | open → 05:33 | +$0.17 | Win |
+| 13 Mar | LONG | open → 08:37 | +$0.58 | Win |
+| 13 Mar | LONG | open → 14:23 (3 rows) | +$0.52 | Win |
+| 13 Mar | LONG | open → 16:18 | -$1.00 | Loss |
+| 16 Mar | LONG | 08:14 → 13:32 | +$0.96 | Win |
+| 16 Mar | LONG | 16:01 → 16:32 | +$0.69 | Win |
+| 17 Mar | LONG | 00:51 → 01:10 | +$0.99 | Win |
+| 17 Mar | LONG | 02:07 → 02:44 | +$0.12 | Win |
+| 17 Mar | LONG | 04:02 → 04:39 | -$1.01 | Loss |
+| 17 Mar | LONG | 07:21 → 07:39 | +$0.03 | Win |
+| 17 Mar | LONG | 08:00+12:00 → 14:40 | +$0.62 | Win |
+| 17 Mar | LONG | 14:15+14:16 → 14:44 | +$0.55 | Win |
+| 18 Mar | LONG | 08:00+04:09 → 15:00 | -$6.30 | SL Bug ⚠️ |
+| 22 Mar | SHORT | 00:00 → 00:02 | +$0.56 | Win |
+| 22 Mar | SHORT | 08:00 → 09:18 | +$0.26 | Win |
+| 22 Mar | SHORT | 12:00 → 14:19 | -$0.54 | Loss |
+| 23 Mar | SHORT | 00:00 → 07:01 | +$0.26 | Win |
+| 26 Mar | SHORT | 12:00 → 13:42 | -$0.10 | Loss |
+| 26 Mar | SHORT | 13:44 → 15:14 | +$0.52 | Win |
+| 27 Mar | SHORT | 04:00 → 05:33 | +$0.26 | Win |
 
-**Win Rate (excl. SL Bug):** ~75%
-**Total PnL (excl. SL Bug):** ~+$3.78
-**Total PnL (incl. SL Bug):** ~-$2.52
+**Total trade:** 27
+**Win:** 19 | **Loss:** 8
+**Win Rate (excl. SL Bug):** ~73%
+**Total PnL (excl. SL Bug):** ~+$5.99
+**Total PnL (incl. SL Bug):** ~-$0.31
 
 > ⚠️ Trade 18 Mar (-$6.30) adalah anomali akibat bug SL order auth yang sudah diperbaiki di [FIX-3].
 
