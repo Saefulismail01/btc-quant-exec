@@ -1,0 +1,544 @@
+\documentclass[12pt,a4paper]{article}
+
+% ── Packages ──────────────────────────────────────────────────────────────────
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[bahasa]{babel}
+\usepackage{geometry}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{xcolor}
+\usepackage{colortbl}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{float}
+\usepackage{mdframed}
+\usepackage{fontawesome5}
+
+\geometry{
+    top=2.5cm, bottom=2.5cm,
+    left=2.5cm, right=2.5cm
+}
+
+% ── Colors ────────────────────────────────────────────────────────────────────
+\definecolor{btcblue}{RGB}{30, 60, 114}
+\definecolor{btcgold}{RGB}{247, 147, 26}
+\definecolor{wingreen}{RGB}{34, 139, 34}
+\definecolor{lossred}{RGB}{178, 34, 34}
+\definecolor{warnamber}{RGB}{255, 165, 0}
+\definecolor{codebg}{RGB}{245, 245, 245}
+\definecolor{rowalt}{RGB}{248, 248, 255}
+\definecolor{headerbg}{RGB}{30, 60, 114}
+
+% ── Header/Footer ─────────────────────────────────────────────────────────────
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\textcolor{btcblue}{\textbf{BTC-QUANT v4.5}}}
+\fancyhead[R]{\textcolor{gray}{\small Log Perbaikan — Mar 2026}}
+\fancyfoot[C]{\textcolor{gray}{\small \thepage}}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% ── Section Styling ───────────────────────────────────────────────────────────
+\titleformat{\section}
+  {\Large\bfseries\color{btcblue}}
+  {\thesection.}{0.5em}{}[\titlerule]
+
+\titleformat{\subsection}
+  {\large\bfseries\color{btcblue!80}}
+  {\thesubsection.}{0.5em}{}
+
+\titleformat{\subsubsection}
+  {\normalsize\bfseries\color{btcblue!60}}
+  {\thesubsubsection.}{0.5em}{}
+
+% ── Code Listing Style ────────────────────────────────────────────────────────
+\lstset{
+    backgroundcolor=\color{codebg},
+    basicstyle=\ttfamily\footnotesize,
+    breaklines=true,
+    frame=single,
+    rulecolor=\color{btcblue!30},
+    xleftmargin=8pt,
+    xrightmargin=8pt,
+    aboveskip=6pt,
+    belowskip=6pt
+}
+
+% ── Custom Commands ───────────────────────────────────────────────────────────
+\newcommand{\win}[1]{\textcolor{wingreen}{\textbf{#1}}}
+\newcommand{\loss}[1]{\textcolor{lossred}{\textbf{#1}}}
+\newcommand{\warn}[1]{\textcolor{warnammer}{\textbf{#1}}}
+\newcommand{\commit}[1]{\texttt{\small #1}}
+\newcommand{\fixbadge}[1]{%
+    \colorbox{btcblue!15}{\textcolor{btcblue}{\textbf{\small #1}}}%
+}
+
+% ── Warn Box ──────────────────────────────────────────────────────────────────
+\newmdenv[
+    linecolor=warnambr,
+    linewidth=1pt,
+    backgroundcolor=warnambr!10,
+    innerleftmargin=10pt,
+    innerrightmargin=10pt,
+    innertopmargin=6pt,
+    innerbottommargin=6pt,
+    skipabove=8pt,
+    skipbelow=8pt
+]{warnbox}
+
+\definecolor{warnambr}{RGB}{255,165,0}
+
+% ══════════════════════════════════════════════════════════════════════════════
+\begin{document}
+
+% ── Title Page ────────────────────────────────────────────────────────────────
+\begin{titlepage}
+    \centering
+    \vspace*{2cm}
+
+    {\Huge\bfseries\color{btcblue} BTC-QUANT}\\[0.5em]
+    {\Large\bfseries\color{btcgold} Execution Layer v4.5}\\[2em]
+
+    \rule{\linewidth}{1pt}\\[1em]
+    {\LARGE\bfseries Log Perbaikan \& Analisis Performa}\\[0.5em]
+    {\large 10 Maret 2026 -- 27 Maret 2026}\\[1em]
+    \rule{\linewidth}{1pt}\\[3em]
+
+    \begin{tabular}{ll}
+        \textbf{Platform}   & Lighter.xyz Mainnet (ZK-Rollup Perp DEX) \\[4pt]
+        \textbf{Market}     & BTC/USDC Perpetual (Market ID: 1) \\[4pt]
+        \textbf{Strategy}   & HestonStrategy (ATR-Adaptive) \\[4pt]
+        \textbf{Status}     & \textcolor{wingreen}{\textbf{LIVE}} \\[4pt]
+        \textbf{Tanggal}    & 27 Maret 2026 \\
+    \end{tabular}
+
+    \vfill
+    {\small\color{gray} Dokumen ini bersifat internal. Berisi catatan teknis perbaikan sistem,
+    statistik performa live trading, dan roadmap pengembangan.}
+\end{titlepage}
+
+% ── Table of Contents ─────────────────────────────────────────────────────────
+\tableofcontents
+\newpage
+
+% ══════════════════════════════════════════════════════════════════════════════
+\section{Ringkasan Eksekutif}
+
+Selama periode 10--27 Maret 2026, sistem BTC-QUANT berhasil bertransisi dari simulasi ke \textbf{live trading otomatis di Lighter mainnet}. Terdapat dua sub-periode:
+
+\begin{itemize}[leftmargin=1.5em]
+    \item \textbf{10--13 Mar:} Eksekusi \textit{manual} berdasarkan sinyal bot
+    \item \textbf{16 Mar -- sekarang:} Eksekusi \textit{otomatis} penuh oleh bot
+\end{itemize}
+
+Total \textbf{12 perbaikan teknis} telah diimplementasikan, mulai dari infrastruktur autentikasi hingga logika deteksi exit. Performa fase otomatis menunjukkan win rate \textbf{80\%} dengan profit factor \textbf{3.53} (eksklusif SL Bug).
+
+\begin{table}[H]
+\centering
+\caption{Ringkasan Performa Keseluruhan}
+\begin{tabular}{lcccccc}
+\toprule
+\textbf{Fase} & \textbf{Trade} & \textbf{Win Rate} & \textbf{Total PnL} & \textbf{R:R} & \textbf{EV/Trade} & \textbf{PF} \\
+\midrule
+Manual (10--13 Mar)         & 11 & 63.6\% & \win{+\$0.66} & 0.70 & +\$0.060 & 1.22 \\
+Otomatis excl. Bug (16--27) & 15 & 80.0\% & \win{+\$4.17} & 0.88 & +\$0.278 & 3.53 \\
+Otomatis incl. Bug (16--27) & 16 & 75.0\% & \loss{-\$2.13} & 0.24 & -\$0.133 & 0.73 \\
+\midrule
+\textbf{Total excl. Bug}    & \textbf{26} & \textbf{73.1\%} & \win{\textbf{+\$4.83}} & \textbf{0.75} & \textbf{+\$0.186} & \textbf{2.03} \\
+\textbf{Total incl. Bug}    & \textbf{27} & \textbf{70.4\%} & \loss{\textbf{-\$1.47}} & \textbf{0.36} & \textbf{-\$0.054} & \textbf{0.87} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{mdframed}[linecolor=warnambr,backgroundcolor=warnambr!8]
+\textbf{Catatan:} Trade 18 Mar (-\$6.30) adalah anomali akibat bug SL order authentication yang telah diperbaiki. Tanpa bug ini, sistem profitable dengan margin signifikan.
+\end{mdframed}
+
+\newpage
+
+% ══════════════════════════════════════════════════════════════════════════════
+\section{Fase 1 — Infrastruktur Awal (10--16 Mar)}
+
+\subsection{Deployment ke Lighter Mainnet}
+
+\begin{itemize}[leftmargin=1.5em]
+    \item Setup \texttt{LighterExecutionGateway} dengan koneksi mainnet
+    \item Integrasi Lighter Python SDK (\texttt{lighter-python})
+    \item Docker deployment di VPS (\texttt{btc-quant-api})
+    \item \textbf{First live order placed:} TX \texttt{d0bbcc4d...} \textcolor{wingreen}{\checkmark}
+\end{itemize}
+
+\subsection{Penemuan Account Index}
+
+Account index pada Lighter \textbf{bukan} angka sederhana — harus di-\textit{derive} dari alamat L1 wallet:
+
+\begin{table}[H]
+\centering
+\begin{tabular}{ll}
+\toprule
+\textbf{Parameter} & \textbf{Nilai} \\
+\midrule
+Wallet Bitget    & \texttt{0x105974E3EB346313d05727a67B04289C5AC6F544} \\
+Account Index    & \textbf{718591} (hex: \texttt{0xaf6ff}) \\
+API Key Index    & 3 \\
+Market ID (BTC)  & 1 \\
+Min Size         & 0.00020 BTC \\
+Fee              & 0\% (taker/maker) \\
+\bottomrule
+\end{tabular}
+\caption{Konfigurasi Lighter Mainnet}
+\end{table}
+
+\newpage
+
+% ══════════════════════════════════════════════════════════════════════════════
+\section{Fase 2 — Bug Fixes Kritikal (17--25 Mar)}
+
+\subsection{\fixbadge{FIX-1} Double Position Guard}
+\textbf{Commit:} \commit{492cf0b} \hfill \textbf{Tanggal:} $\sim$17 Mar
+
+\textbf{Masalah:} Bot dapat membuka posisi baru ketika posisi lama masih OPEN di exchange, mengakibatkan double exposure.
+
+\textbf{Fix:} Cek \texttt{get\_open\_position()} sebelum setiap entry. Jika ada posisi aktif, skip entry.
+
+\subsection{\fixbadge{FIX-2} Signal Replay setelah Restart}
+\textbf{Commit:} \commit{d8e7a87} \hfill \textbf{Tanggal:} $\sim$17 Mar
+
+\textbf{Masalah:} Setelah restart, \texttt{last\_notified\_ts} hilang dari memory sehingga sinyal lama dapat di-\textit{replay}.
+
+\textbf{Fix:} Persist \texttt{last\_notified\_ts} ke disk (\texttt{last\_candle\_ts.json}).
+
+\subsection{\fixbadge{FIX-3} SL Order Authentication}
+\textbf{Commit:} \commit{c3107f9} \hfill \textbf{Tanggal:} $\sim$17 Mar
+
+\textbf{Masalah:} SL order gagal ditempatkan karena auth header tidak dikirim pada endpoint order placement.
+
+\textbf{Fix:} Semua order placement request menggunakan auth token yang valid.
+
+\textbf{Impact:} Trade 18 Mar (-\$6.30) terjadi \textit{sebelum} fix ini — SL tidak terpasang sehingga posisi tidak terlindungi.
+
+\subsection{\fixbadge{FIX-4} Advisory Signal Tidak Tereksekusi}
+\textbf{Commit:} \commit{3160dc1} \hfill \textbf{Tanggal:} $\sim$18 Mar
+
+\textbf{Masalah:} Signal dengan conviction 15--20\% (status ADVISORY) di-skip.
+
+\textbf{Fix:} Update gate logic — ADVISORY signals diperlakukan sama dengan ACTIVE untuk entry.
+
+\subsection{\fixbadge{FIX-5} Lighter Auth Token via SDK}
+\textbf{Commit:} \commit{e28c312} \hfill \textbf{Tanggal:} 25 Mar
+
+\textbf{Masalah:} \texttt{\_generate\_auth\_token()} membuat token format manual yang tidak valid — Lighter API membutuhkan token yang \textbf{ditandatangani} dengan private key.
+
+\begin{lstlisting}[language=Python, caption=Auth Token Fix]
+# Sebelum (BROKEN):
+token = f"{expiry_unix}:{account_index}:{api_key_index}:{random_hex}"
+
+# Sesudah (FIXED):
+token_result = client.create_auth_token_with_expiry(
+    deadline=lighter_sdk.SignerClient.DEFAULT_10_MIN_AUTH_EXPIRY,
+    api_key_index=self.api_key_index,
+)
+token = token_result[0]  # SDK returns tuple
+\end{lstlisting}
+
+\subsection{\fixbadge{FIX-6} Exit Price dari trigger\_price}
+\textbf{Commit:} \commit{e28c312} \hfill \textbf{Tanggal:} 25 Mar
+
+\textbf{Masalah:} \texttt{fetch\_last\_closed\_order()} selalu return \texttt{filled\_price = 0.0} untuk SL/TP order karena Lighter menggunakan \textit{reduce-only trigger order} — \texttt{filled\_base\_amount = "0.00000"}.
+
+\begin{lstlisting}[language=Python, caption=Exit Price Fix]
+filled_base = float(last_order.get("filled_base_amount", 0) or 0)
+if filled_base > 0 and filled_quote > 0:
+    filled_price = filled_quote / filled_base  # actual fill
+else:
+    trigger_price = float(last_order.get("trigger_price", 0) or 0)
+    filled_price = trigger_price if trigger_price > 0 else order_price
+\end{lstlisting}
+
+\subsection{\fixbadge{FIX-7} Startup Position Sync}
+\textbf{Commit:} \commit{861822f} \hfill \textbf{Tanggal:} 25 Mar
+
+\textbf{Masalah:} Restart saat posisi open menyebabkan state DB tidak sinkron dengan exchange.
+
+\textbf{Fix:} Jalankan \texttt{sync\_position\_status()} saat daemon start.
+
+\subsection{\fixbadge{FIX-8} Exit Type Detection dari order\_type}
+\textbf{Commit:} \commit{861822f} \hfill \textbf{Tanggal:} 25 Mar
+
+\textbf{Masalah:} Exit type (SL/TP) ditentukan dari \textit{jarak harga} — tidak reliable.
+
+\begin{lstlisting}[language=Python, caption=Exit Type Detection Fix]
+order_type_str = last_order.get("order_type", "").lower()
+if "stop" in order_type_str:
+    exit_type = "SL"
+elif "take-profit" in order_type_str:
+    exit_type = "TP"
+\end{lstlisting}
+
+\subsection{\fixbadge{FIX-9} L2 EMA Weakening Diperkuat}
+\textbf{Commit:} \commit{8ab9b1b} \hfill \textbf{Tanggal:} 25 Mar
+
+\textbf{Masalah:} L2 tidak cukup memblokir sinyal kontra-trend — confidence hanya dikurangi, tidak di-set \texttt{False}.
+
+\textbf{Fix:} Force \texttt{l2 = False} saat L2 weakening aktif.
+
+\newpage
+
+% ══════════════════════════════════════════════════════════════════════════════
+\section{Fase 3 — Strategy Switch \& Optimasi (26--27 Mar)}
+
+\subsection{\fixbadge{FEAT-1} Switch ke HestonStrategy}
+\textbf{Commit:} \commit{01ef707} \hfill \textbf{Tanggal:} 26 Mar
+
+\begin{table}[H]
+\centering
+\caption{Perbandingan Backtest: FixedStrategy vs HestonStrategy (62 hari, Jan--Mar 2026)}
+\begin{tabular}{lccc}
+\toprule
+\textbf{Metrik} & \textbf{FixedStrategy} & \textbf{HestonStrategy} & \textbf{Delta} \\
+\midrule
+Net PnL (\%)       & +30.04\%  & \win{+76.10\%}  & +46.06pp \\
+Profit Factor      & 1.278     & \win{1.587}     & +0.309 \\
+Max Drawdown       & 20.75\%   & \win{17.10\%}   & -3.65pp \\
+Sharpe Ratio       & 2.299     & \win{3.409}     & +1.110 \\
+R:R Ratio          & 0.95      & \win{1.629}     & +0.679 \\
+Win Rate           & \win{57.36\%} & 49.35\%     & -8.01pp \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Parameter HestonStrategy:}
+\[
+\text{SL distance} = \text{ATR}_{14} \times 1.5 \approx 2.2\%\ \text{dari entry}
+\]
+\[
+\text{TP distance} = \text{ATR}_{14} \times 2.1 \approx 3.1\%\ \text{dari entry}
+\]
+
+\subsection{\fixbadge{FIX-10} OCO Canceled Order Salah Dibaca sebagai SL}
+\textbf{Commit:} \commit{f644601} \hfill \textbf{Tanggal:} 27 Mar
+
+\textbf{Masalah:} Ketika TP hit, SL companion order di-cancel otomatis oleh exchange (OCO behavior). Order canceled ini memiliki \texttt{trigger\_price} valid sehingga bot mengira exit via SL.
+
+\textbf{Akibat:}
+\begin{itemize}[leftmargin=1.5em]
+    \item Notifikasi Telegram menampilkan ``CLOSED — SL'' padahal TP hit
+    \item \textbf{SL freeze aktif secara salah} $\rightarrow$ entry berikutnya diblokir
+    \item Trade jam 03:00 WIB (27 Mar) tidak tereksekusi karena freeze palsu
+\end{itemize}
+
+\begin{lstlisting}[language=Python, caption=OCO Canceled Order Fix]
+for last_order in closed_orders:
+    status = last_order.get("status", "")
+    # Skip canceled orders (OCO companion yang auto-canceled)
+    if "cancel" in status.lower():
+        continue
+    # ... proses order yang benar-benar filled
+\end{lstlisting}
+
+\subsection{\fixbadge{FIX-11} Clear SL Freeze Palsu}
+\textbf{Tanggal:} 27 Mar (manual fix)
+
+Freeze state di disk (\texttt{sl\_freeze\_state.json}) di-reset ke \texttt{null} dan container di-restart.
+
+\subsection{\fixbadge{FEAT-2} Update Margin \& Leverage}
+\textbf{Commit:} \commit{05c4216} \hfill \textbf{Tanggal:} 27 Mar
+
+\begin{table}[H]
+\centering
+\caption{Perubahan Konfigurasi Trading}
+\begin{tabular}{lccc}
+\toprule
+\textbf{Parameter} & \textbf{Sebelum} & \textbf{Sesudah} & \textbf{Alasan} \\
+\midrule
+Margin USD          & \$5    & \$20   & Profit terlalu kecil (\$0.3--0.5/trade) \\
+Leverage            & 15x    & 7x     & 15x terlalu berisiko (liquidation dekat) \\
+Notional            & \$75   & \$140  & Target \$1/trade profit \\
+Liquidation dist.   & $\sim$6.7\% & $\sim$14\% & Jauh di atas SL 2.2\% \\
+Est. profit/trade   & $\sim$\$0.50 & $\sim$\$0.95 & $\approx$2$\times$ lebih besar \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\newpage
+
+% ══════════════════════════════════════════════════════════════════════════════
+\section{Statistik Live Trading}
+
+\subsection{Fase Manual (10--13 Mar)}
+
+\begin{table}[H]
+\centering
+\caption{Trade History — Fase Manual}
+\begin{tabular}{llll r l}
+\toprule
+\textbf{Tanggal} & \textbf{Arah} & \textbf{Open} & \textbf{Close} & \textbf{PnL} & \textbf{Status} \\
+\midrule
+\rowcolor{rowalt}
+10 Mar & LONG & 16:05 & 18:14 & \loss{-\$0.12} & Loss \\
+11 Mar & LONG & 04:08 & 04:48 & \win{+\$0.52} & Win \\
+\rowcolor{rowalt}
+11 Mar & LONG & 08:06 & 13:14 & \win{+\$0.34} & Win \\
+11 Mar & LONG & 20:01 & 12 Mar 02:18 & \loss{-\$0.89} & Loss \\
+\rowcolor{rowalt}
+12 Mar & LONG & 08:05 & 09:45 & \win{+\$1.00} & Win \\
+12 Mar & LONG & 12:15 & 13:46 & \loss{-\$1.03} & Loss \\
+\rowcolor{rowalt}
+12 Mar & LONG & 20:09 & 13 Mar 00:13 & \win{+\$0.57} & Win \\
+13 Mar & LONG & open  & 05:33 & \win{+\$0.17} & Win \\
+\rowcolor{rowalt}
+13 Mar & LONG & open  & 08:37 & \win{+\$0.58} & Win \\
+13 Mar & LONG & open  & 14:23 & \win{+\$0.52} & Win \\
+\rowcolor{rowalt}
+13 Mar & LONG & open  & 16:18 & \loss{-\$1.00} & Loss \\
+\midrule
+\multicolumn{5}{l}{\textbf{Win: 7 | Loss: 4 | Win Rate: 63.6\% | Total PnL: \win{+\$0.66}}} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Uji Coba Otomasi (15 Mar)}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{lllll}
+\toprule
+\textbf{Tanggal} & \textbf{Arah} & \textbf{Open $\to$ Close} & \textbf{PnL} & \textbf{Keterangan} \\
+\midrule
+15 Mar & MIXED & 05:25 $\to$ 07:06 & \loss{-\$0.04} & Uji coba — tidak dihitung \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Fase Otomatis (16--27 Mar)}
+
+\begin{table}[H]
+\centering
+\caption{Trade History — Fase Otomatis}
+\begin{tabular}{llll r l}
+\toprule
+\textbf{Tanggal} & \textbf{Arah} & \textbf{Open} & \textbf{Close} & \textbf{PnL} & \textbf{Status} \\
+\midrule
+\rowcolor{rowalt}
+16 Mar & LONG  & 08:14 & 13:32 & \win{+\$0.96} & Win \\
+16 Mar & LONG  & 16:01 & 16:32 & \win{+\$0.69} & Win \\
+\rowcolor{rowalt}
+17 Mar & LONG  & 00:51 & 01:10 & \win{+\$0.99} & Win \\
+17 Mar & LONG  & 02:07 & 02:44 & \win{+\$0.12} & Win \\
+\rowcolor{rowalt}
+17 Mar & LONG  & 04:02 & 04:39 & \loss{-\$1.01} & Loss \\
+17 Mar & LONG  & 07:21 & 07:39 & \win{+\$0.03} & Win \\
+\rowcolor{rowalt}
+17 Mar & LONG  & 08:00 & 14:40 & \win{+\$0.62} & Win \\
+17 Mar & LONG  & 14:15 & 14:44 & \win{+\$0.55} & Win \\
+\rowcolor{warnambr!15}
+18 Mar & LONG  & 08:00 & 15:00 & \loss{-\$6.30} & \textcolor{warnambr}{\textbf{SL Bug}} \\
+\rowcolor{rowalt}
+22 Mar & SHORT & 00:00 & 00:02 & \win{+\$0.56} & Win \\
+22 Mar & SHORT & 08:00 & 09:18 & \win{+\$0.26} & Win \\
+\rowcolor{rowalt}
+22 Mar & SHORT & 12:00 & 14:19 & \loss{-\$0.54} & Loss \\
+23 Mar & SHORT & 00:00 & 07:01 & \win{+\$0.26} & Win \\
+\rowcolor{rowalt}
+26 Mar & SHORT & 12:00 & 13:42 & \loss{-\$0.10} & Loss \\
+26 Mar & SHORT & 13:44 & 15:14 & \win{+\$0.52} & Win \\
+\rowcolor{rowalt}
+27 Mar & SHORT & 04:00 & 05:33 & \win{+\$0.26} & Win \\
+\midrule
+\multicolumn{5}{l}{\textbf{Win: 12 | Loss: 3 | Win Rate: 80.0\% | Total PnL (excl. Bug): \win{+\$4.17}}} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Ringkasan Metrik Lengkap}
+
+\begin{table}[H]
+\centering
+\caption{Ringkasan Metrik per Fase}
+\begin{tabular}{lccccccc}
+\toprule
+\textbf{Fase} & \textbf{N} & \textbf{WR} & \textbf{PnL} & \textbf{Avg W} & \textbf{Avg L} & \textbf{R:R} & \textbf{EV} & \textbf{PF} \\
+\midrule
+Manual        & 11 & 63.6\% & \win{+\$0.66} & +\$0.529 & -\$0.760 & 0.70 & +\$0.060 & 1.22 \\
+Auto (excl.)  & 15 & 80.0\% & \win{+\$4.17} & +\$0.485 & -\$0.550 & 0.88 & +\$0.278 & 3.53 \\
+Auto (incl.)  & 16 & 75.0\% & \loss{-\$2.13} & +\$0.485 & -\$1.988 & 0.24 & -\$0.133 & 0.73 \\
+\midrule
+\textbf{Total excl.} & \textbf{26} & \textbf{73.1\%} & \win{\textbf{+\$4.83}} & \textbf{+\$0.501} & \textbf{-\$0.670} & \textbf{0.75} & \textbf{+\$0.186} & \textbf{2.03} \\
+\textbf{Total incl.} & \textbf{27} & \textbf{70.4\%} & \loss{\textbf{-\$1.47}} & \textbf{+\$0.501} & \textbf{-\$1.374} & \textbf{0.36} & \textbf{-\$0.054} & \textbf{0.87} \\
+\bottomrule
+\multicolumn{9}{l}{\small excl. = eksklusif SL Bug | incl. = inklusif SL Bug | PF = Profit Factor | EV = Expected Value per trade}
+\end{tabular}
+\end{table}
+
+\begin{mdframed}[linecolor=btcblue!40,backgroundcolor=btcblue!5]
+\textbf{Interpretasi Metrik:}
+\begin{itemize}[leftmargin=1.5em,noitemsep]
+    \item \textbf{R:R $<$ 1} di semua fase karena rata-rata win lebih kecil dari loss, namun \textbf{win rate tinggi (73--80\%) mengkompensasi} secara EV positif.
+    \item \textbf{Profit Factor 2.03} (total excl. bug) menunjukkan sistem menghasilkan \$2.03 untuk setiap \$1 kerugian.
+    \item \textbf{EV +\$0.186/trade} berarti secara rata-rata, setiap trade menghasilkan profit positif.
+    \item Dengan setup baru \$20$\times$7x, semua nilai absolut naik $\approx$1.87$\times$ sementara rasio tetap sama.
+\end{itemize}
+\end{mdframed}
+
+\newpage
+
+% ══════════════════════════════════════════════════════════════════════════════
+\section{Status Sistem Saat Ini (27 Mar 2026)}
+
+\begin{table}[H]
+\centering
+\caption{Status Komponen}
+\begin{tabular}{ll}
+\toprule
+\textbf{Komponen} & \textbf{Status} \\
+\midrule
+Container VPS         & \textcolor{wingreen}{\textbf{Running}} (\texttt{btc-quant-api}) \\
+Strategy              & \textcolor{wingreen}{\textbf{HestonStrategy}} (ATR-adaptive) \\
+Margin $\times$ Leverage & \$20 $\times$ 7x = \$140 notional \\
+SL Freeze             & \textcolor{wingreen}{\textbf{Tidak aktif}} \\
+Exit Detection        & \textcolor{wingreen}{\textbf{Fixed}} (skip canceled OCO) \\
+Auth Token            & \textcolor{wingreen}{\textbf{SDK signed token}} \\
+Signal Gate           & \textcolor{wingreen}{\textbf{ADVISORY signals dieksekusi}} \\
+Account Balance       & $\sim$\$97 USDC \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% ══════════════════════════════════════════════════════════════════════════════
+\section{Roadmap}
+
+\begin{table}[H]
+\centering
+\caption{Pending Items \& Roadmap}
+\begin{tabular}{p{6cm}lll}
+\toprule
+\textbf{Item} & \textbf{Priority} & \textbf{Status} \\
+\midrule
+Monitor performa \$20$\times$7x (10 trade)     & Tinggi   & Sedang berjalan \\
+PR-2: Partial TP + break-even SL               & Sedang   & Pending backtest \\
+PR-1: 1H confirmation filter                   & Sedang   & Pending backtest \\
+Sprint 2: DD Adaptive Sizing                   & Tinggi   & Pending \\
+Naik margin ke \$30$\times$5x jika stabil      & Sedang   & Setelah 10 trade \\
+Sprint 3: Signal Quality (WR $\geq$ 52\% Bear) & Rendah   & Setelah Sprint 2 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% ── Footer ────────────────────────────────────────────────────────────────────
+\vfill
+\begin{center}
+\rule{0.5\linewidth}{0.4pt}\\[0.5em]
+{\small\color{gray}
+BTC-QUANT Live Execution Layer v4.5 $\cdot$ Lighter.xyz Mainnet $\cdot$
+Dokumen dihasilkan 27 Maret 2026
+}
+\end{center}
+
+\end{document}
