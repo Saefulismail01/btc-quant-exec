@@ -9,11 +9,11 @@ Tidak boleh diubah tanpa validasi backtest ulang.
 
 from .base_strategy import BaseTradePlanStrategy, TradeParams
 
-# Golden v4.4 Constants
+# Golden v4.4 Constants — margin/leverage updated to $20×7x
 SL_PCT      = 1.333   # %
 TP_PCT      = 0.71    # %
-LEVERAGE    = 15
-MARGIN_USD  = 10.0
+LEVERAGE    = 7
+MARGIN_USD  = 20.0
 
 
 class FixedStrategy(BaseTradePlanStrategy):
