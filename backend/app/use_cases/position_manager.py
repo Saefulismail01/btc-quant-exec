@@ -81,13 +81,14 @@ class PositionManager:
         Updates database and sends notifications if position closed.
 
         Returns:
-            True if position still open or no position, False if error
+            True if a position was JUST closed this cycle (caller should skip open).
+            False if no position closed (position still open, or no position at all, or error).
         """
         try:
             # Get open trade from DB
             db_trade = self.repo.get_open_trade()
             if not db_trade:
-                return True  # No position to sync
+                return False  # No position to sync
 
             logger.info(
                 f"[PositionManager] Syncing position status: {db_trade.side} "
@@ -234,7 +235,7 @@ class PositionManager:
                 )
             else:
                 logger.warning("[PositionManager] Position disappeared just before logging status")
-            return True
+            return False  # Position still open (or disappeared without close event) — allow normal flow
 
         except Exception as e:
             logger.error(f"[PositionManager] Error syncing position: {e}", exc_info=True)

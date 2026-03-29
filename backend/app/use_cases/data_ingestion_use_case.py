@@ -181,9 +181,12 @@ class DataIngestionUseCase:
         # 2) Live execution via PositionManager (Lighter)
         if self.position_manager:
             try:
-                await self.position_manager.sync_position_status()
-                await self.position_manager.process_signal(signal)
-                print("  [Execution] PositionManager signal processed.")
+                just_closed = await self.position_manager.sync_position_status()
+                if just_closed:
+                    print("  [Execution] Position just closed this cycle — skipping open to avoid immediate re-entry.")
+                else:
+                    await self.position_manager.process_signal(signal)
+                    print("  [Execution] PositionManager signal processed.")
             except Exception as e:
                 print(f"  [Execution] PositionManager failed: {str(e)}")
 
