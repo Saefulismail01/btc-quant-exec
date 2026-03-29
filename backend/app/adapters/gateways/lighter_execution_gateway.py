@@ -492,7 +492,11 @@ class LighterExecutionGateway(BaseExchangeExecutionGateway):
                 if err:
                     return OrderResult(success=False, error_message=str(err))
 
-                filled_price = unscale_price(price_scaled, self._price_decimals)
+                # Try to get actual fill price from response; fallback to submitted price
+                actual_fill_price = None
+                if resp and hasattr(resp, 'avg_execution_price') and resp.avg_execution_price:
+                    actual_fill_price = unscale_price(resp.avg_execution_price, self._price_decimals)
+                filled_price = actual_fill_price if actual_fill_price and actual_fill_price > 0 else unscale_price(price_scaled, self._price_decimals)
                 filled_qty = unscale_size(base_amount, self._size_decimals)
                 tx_hash = resp.tx_hash if resp else f"tx_{int(time.time() * 1000)}"
 
@@ -585,12 +589,22 @@ class LighterExecutionGateway(BaseExchangeExecutionGateway):
             size_scaled = scale_size(quantity, self._size_decimals)
             is_ask = (sl_side == "SELL")  # SELL to close LONG
 
+            # Limit price needs slippage buffer so order fills even if market gaps past trigger.
+            # SL for SHORT = BUY → limit price must be ABOVE trigger (accept worse price)
+            # SL for LONG  = SELL → limit price must be BELOW trigger (accept worse price)
+            SLIPPAGE_PCT = 0.005  # 0.5% buffer
+            if is_ask:  # SELL to close LONG
+                sl_limit_price = trigger_price * (1 - SLIPPAGE_PCT)
+            else:  # BUY to close SHORT
+                sl_limit_price = trigger_price * (1 + SLIPPAGE_PCT)
+            sl_limit_scaled = scale_price(sl_limit_price, self._price_decimals)
+
             tx, tx_hash, err = await client.create_sl_order(
                 market_index=self.MARKET_ID,
                 client_order_index=0,
                 base_amount=size_scaled,
                 trigger_price=price_scaled,
-                price=price_scaled,
+                price=sl_limit_scaled,
                 is_ask=is_ask,
                 reduce_only=True,
             )
@@ -646,12 +660,22 @@ class LighterExecutionGateway(BaseExchangeExecutionGateway):
             size_scaled = scale_size(quantity, self._size_decimals)
             is_ask = (tp_side == "SELL")  # SELL to close LONG
 
+            # Limit price needs slippage buffer so TP order fills even if market gaps past trigger.
+            # TP for LONG  = SELL → limit price must be BELOW trigger (accept slightly worse price)
+            # TP for SHORT = BUY  → limit price must be ABOVE trigger (accept slightly worse price)
+            SLIPPAGE_PCT = 0.003  # 0.3% buffer — tighter than SL since TP direction is favorable
+            if is_ask:  # SELL to close LONG
+                tp_limit_price = trigger_price * (1 - SLIPPAGE_PCT)
+            else:  # BUY to close SHORT
+                tp_limit_price = trigger_price * (1 + SLIPPAGE_PCT)
+            tp_limit_scaled = scale_price(tp_limit_price, self._price_decimals)
+
             tx, tx_hash, err = await client.create_tp_order(
                 market_index=self.MARKET_ID,
                 client_order_index=0,
                 base_amount=size_scaled,
                 trigger_price=price_scaled,
-                price=price_scaled,
+                price=tp_limit_scaled,
                 is_ask=is_ask,
                 reduce_only=True,
             )
