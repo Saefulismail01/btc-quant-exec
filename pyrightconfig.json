@@ -1,6 +1,6 @@
 {
-  "include": ["backend", "execution_layer"],
-  "extraPaths": ["backend"],
+  "include": ["backend", "execution_layer", "research"],
+  "extraPaths": ["backend", "research"],
   "pythonVersion": "3.11",
   "typeCheckingMode": "basic",
   "reportMissingModuleSource": "none",
