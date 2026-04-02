@@ -1,0 +1,7 @@
+#!/bin/bash
+# ArXiv CLI Alias
+# Usage: ./arxiv-cli search --query "bitcoin" --limit 10
+#        ./arxiv-cli export --query "trading" --format bibtex --output papers.bib
+
+cd "$(dirname "$0")/learn/arxiv-mcp-server"
+python arxiv_simple.py "$@"
