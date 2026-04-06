@@ -25,6 +25,7 @@ from app.use_cases.risk_manager import RiskManager
 from app.use_cases.execution_notifier_use_case import get_execution_notifier
 from app.use_cases.strategies.base_strategy import BaseTradePlanStrategy
 from app.use_cases.strategies.fixed_strategy import FixedStrategy
+from app.use_cases.shadow_trade_monitor import ShadowTradeMonitor
 
 logger = logging.getLogger(__name__)
 
@@ -68,6 +69,7 @@ class PositionManager:
         self.risk_manager = risk_manager or RiskManager()
         self.strategy = strategy or FixedStrategy()
         self.notifier = get_execution_notifier()
+        self.shadow_monitor = ShadowTradeMonitor(repo)
         self._sl_freeze_until: Optional[datetime] = self._load_freeze_state()
         logger.info(f"[PositionManager] Strategy: {self.strategy.__class__.__name__}")
         if self._sl_freeze_until:
@@ -226,6 +228,15 @@ class PositionManager:
                 except Exception as e:
                     logger.warning(f"[PositionManager] Failed to send trade closed notification: {e}")
 
+                # Start shadow monitoring for manual closes
+                if exit_type == "MANUAL":
+                    try:
+                        db_trade.exit_price = exit_price
+                        db_trade.pnl_usdt = pnl_usdt
+                        self.shadow_monitor.start_shadow(db_trade)
+                    except Exception as e:
+                        logger.warning(f"[PositionManager] Failed to start shadow trade: {e}")
+
                 return True
 
             if exchange_pos:
@@ -233,6 +244,28 @@ class PositionManager:
                     f"[PositionManager] ✅ Position still open at exchange | "
                     f"Entry: ${exchange_pos.entry_price:,.2f} | PnL: ${exchange_pos.unrealized_pnl:+.2f}"
                 )
+
+                # [NEW] SYNC SL/TP FROM EXCHANGE
+                try:
+                    active_orders = await self.gateway.get_active_sl_tp()
+                    synced = False
+                    new_sl = active_orders.get("sl_price")
+                    new_tp = active_orders.get("tp_price")
+
+                    if new_sl and abs(new_sl - db_trade.sl_price) > 0.01:
+                        logger.info(f"[PositionManager] 🔄 Syncing SL from exchange: ${db_trade.sl_price} -> ${new_sl}")
+                        db_trade.sl_price = new_sl
+                        synced = True
+                    if new_tp and abs(new_tp - db_trade.tp_price) > 0.01:
+                        logger.info(f"[PositionManager] 🔄 Syncing TP from exchange: ${db_trade.tp_price} -> ${new_tp}")
+                        db_trade.tp_price = new_tp
+                        synced = True
+                    
+                    if synced:
+                        self.repo.update_trade_params(db_trade.id, sl_price=db_trade.sl_price, tp_price=db_trade.tp_price)
+                        logger.info(f"[PositionManager] ✅ Database synced with actual exchange orders")
+                except Exception as e:
+                    logger.warning(f"[PositionManager] Failed to sync SL/TP from exchange: {e}")
             else:
                 logger.warning("[PositionManager] Position disappeared just before logging status")
             return False  # Position still open (or disappeared without close event) — allow normal flow

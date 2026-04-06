@@ -190,6 +190,21 @@ class DataIngestionUseCase:
             except Exception as e:
                 print(f"  [Execution] PositionManager failed: {str(e)}")
 
+            # Check shadow trades (counterfactual tracking)
+            try:
+                current_price = signal.latest_price if hasattr(signal, 'latest_price') else None
+                if current_price and self.position_manager.shadow_monitor:
+                    shadow_results = self.position_manager.shadow_monitor.check_shadows(current_price)
+                    for sr in shadow_results:
+                        emoji = "🟢" if sr.difference_usdt > 0 else "🔴"
+                        print(
+                            f"  [Shadow] {emoji} {sr.trade_id}: {sr.shadow_exit_type} | "
+                            f"Bot: ${sr.shadow_pnl_usdt:+.2f} vs You: ${sr.actual_pnl_usdt:+.2f} | "
+                            f"Diff: ${sr.difference_usdt:+.2f}"
+                        )
+            except Exception as e:
+                print(f"  [Shadow] Check failed: {str(e)}")
+
         # 4) Telegram signal alert from the same signal
         notifier = get_telegram_notifier()
         try:

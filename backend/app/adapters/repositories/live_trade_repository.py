@@ -216,6 +216,33 @@ class LiveTradeRepository:
             logging.error(f"[LiveTradeRepository] Failed to update trade {trade_id}: {e}")
             return False
 
+    def update_trade_params(
+        self,
+        trade_id: str,
+        sl_price: Optional[float] = None,
+        tp_price: Optional[float] = None,
+    ) -> bool:
+        """
+        Update SL/TP prices for an open trade.
+        Used for synchronizing with the exchange after manual adjustments.
+        """
+        def _write():
+            with duckdb.connect(self.db_path) as con:
+                if sl_price is not None and tp_price is not None:
+                    con.execute("UPDATE live_trades SET sl_price = ?, tp_price = ? WHERE id = ?", [sl_price, tp_price, trade_id])
+                elif sl_price is not None:
+                    con.execute("UPDATE live_trades SET sl_price = ? WHERE id = ?", [sl_price, trade_id])
+                elif tp_price is not None:
+                    con.execute("UPDATE live_trades SET tp_price = ? WHERE id = ?", [tp_price, trade_id])
+
+        try:
+            _retry_write(_write)
+            logging.info(f"[LiveTradeRepository] 🔄 Trade params updated for {trade_id} (SL: {sl_price}, TP: {tp_price})")
+            return True
+        except Exception as e:
+            logging.error(f"[LiveTradeRepository] Failed to update trade params {trade_id}: {e}")
+            return False
+
     def get_open_trade(self) -> Optional[LiveTradeRecord]:
         """
         Get the current open trade (OPEN status).

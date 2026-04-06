@@ -1,0 +1,108 @@
+---
+title: "Para Ilmuwan yang Direkrut Jim Simons untuk Membangun Renaissance Technologies"
+subtitle: "Analisis Strategi Rekrutmen dan Arsitektur Intelektual di Balik Medallion Fund"
+author: "Claude Research"
+date: "2026-04-02"
+format:
+  pdf:
+    documentclass: article
+    number-sections: true
+    geometry:
+      - top=25mm
+      - left=25mm
+      - right=25mm
+      - bottom=25mm
+    fontsize: 11pt
+  html:
+    toc: true
+    theme: cosmo
+---
+
+# Pendahuluan
+
+Renaissance Technologies menjelma menjadi hedge fund paling menguntungkan sepanjang sejarah — bukan dengan merekrut para trader Wall Street, melainkan dengan menghimpun sekelompok luar biasa **matematikawan, kriptografer, fisikawan, dan ahli linguistik komputasi** yang sama sekali tidak memiliki latar belakang keuangan. Jim Simons merekrut sekitar 150 ilmuwan bergelar doktor ke kampus perusahaannya di East Setauket, Long Island, yang bersumber dari tiga jalur perekrutan utama: *Institute for Defense Analyses* (tempat Simons sendiri pernah memecahkan sandi Soviet), laboratorium pengenalan wicara di IBM, serta mantan kolega akademisnya di Stony Brook University.
+
+Benang merah yang menyatukan seluruh rekrutan ini adalah keahlian dalam menggali sinyal-sinyal samar dari lautan data yang sangat besar dan penuh derau (*noisy datasets*) — entah itu memecahkan sandi militer, mentranskripsi ucapan manusia, atau memodelkan medan kuantum. Tabel berikut mencatat setiap rekrutan yang dapat diverifikasi secara publik beserta kredensial dan kontribusi utama mereka.
+
+\pagebreak
+
+# Daftar Lengkap Ilmuwan Utama Renaissance Technologies
+
+| Nama | Gelar & Bidang | Institusi | Peran Sebelumnya | Keahlian Utama yang Dibawa ke Renaissance |
+|---|---|---|---|---|
+| **Leonard Baum** (1931–2017) | BA Matematika (*summa cum laude*); PhD Matematika | Harvard University | Kriptanalis, Institute for Defense Analyses (IDA), Princeton | *Hidden Markov Models*, teori probabilitas, proses stokastik. Turut menemukan **algoritma Baum-Welch** (dikutip lebih dari 9.000 kali). Rekrutan pertama Simons (~1978). Merancang model perdagangan mata uang perdana di Monemetrics. |
+| **Greg Hullender** | Matematika (tidak tamat) | Caltech | Mahasiswa 19 tahun; kedapatan menjalankan operasi perdagangan saham dari kamar asramanya | Pemrograman dan sistem komputasi generasi awal. Salah satu karyawan paling pertama (~1978); digaji $9.000/tahun ditambah bagi hasil. Administrator sistem di Monemetrics. Kelak bergabung dengan Microsoft. |
+| **James Ax** (1937–2006) | PhD Matematika | UC Berkeley (pembimbing: Gerhard Hochschild) | Profesor penuh termuda dalam sejarah Cornell (usia 32); kemudian mengajar di Stony Brook | Aljabar, teori bilangan, logika matematika. Peraih **Cole Prize in Number Theory** (1967) atas teorema Ax–Kochen. Mengembangkan model mata uang Baum ke ranah komoditas berjangka (*futures*). Mendirikan Axcom, cikal bakal Medallion Fund. |
+| **Howard Morgan** | BS Fisika; PhD Riset Operasi | CCNY; Cornell University | Profesor Ilmu Keputusan & Ilmu Komputer, Wharton School, University of Pennsylvania | Riset operasi, basis data, jaringan komputer. Ikut mendirikan Renaissance bersama Simons pada 1982 sebagai presiden pertama, mengelola divisi modal ventura. Orang yang membawa ARPAnet ke Philadelphia. Kelak mendirikan First Round Capital. |
+| **Sandor Straus** | PhD Matematika | UC Berkeley | Staf pengajar Matematika & Ilmu Komputer, SUNY Stony Brook | Kurasi data historis dan infrastruktur komputasi. Dijuluki "**data guru**" Renaissance — membangun basis data kustom harga komoditas dari pita magnetik yang diverifikasi silang dengan buku tahunan bursa. Memiliki ~25% saham RenTech. Mengelola sistem Medallion setelah Berlekamp mundur, membukukan imbal hasil 39%, 34%, dan 39% berturut-turut (1991–93). |
+| **Mark Silber** | BA (Brooklyn College); MBA Keuangan; JD; LLM Hukum Pajak | NYU Stern; NYU School of Law | Akuntan Publik Bersertifikat, Seidman & Seidman | Hukum pajak, kepatuhan regulasi, dan administrasi dana. Bergabung sejak 1983 sebagai salah satu karyawan paling awal. Menjabat EVP, CFO, *Chief Legal Officer*, sekaligus *Chief Compliance Officer* — mengelola seluruh arsitektur keuangan dan hukum Renaissance selama empat dekade. |
+| **Elwyn Berlekamp** (1940–2019) | BS & MS Teknik Elektro; PhD Teknik Elektro | MIT (pembimbing termasuk **Claude Shannon**) | Profesor Matematika & EECS, UC Berkeley; presiden Cyclotomics Inc.; peneliti Bell Labs | Teori pengkodean, teori permainan kombinatorial, kode pengoreksi kesalahan. Penemu **algoritma Berlekamp**; turut menciptakan algoritma Berlekamp-Welch dan Berlekamp-Massey (dipakai pada wahana antariksa dari Voyager hingga Hubble). Anggota National Academy of Sciences dan National Academy of Engineering. Merombak total sistem Medallion pada 1989–90 dengan menerapkan penentuan ukuran posisi berbasis **Kelly criterion**, menghasilkan **imbal hasil bersih 55,9%** pada 1990. |
+| **Henry Laufer** (l. 1945) | BA (CCNY); MA Matematika; PhD Matematika | Princeton University (pembimbing: Robert Gunning) | Profesor Matematika, SUNY Stony Brook (1971–1992); penerima Sloan Fellowship | Variabel kompleks, geometri dan topologi aljabar. Menerbitkan lebih dari 25 artikel ilmiah, termasuk *Normal Two-Dimensional Singularities* (Princeton, 1971). Sebagai *Chief Scientist* & VP Riset (1992–2009), mengambil keputusan arsitektural yang boleh jadi paling menentukan dalam sejarah dana ini: Medallion akan menggunakan **satu model perdagangan terpadu** untuk seluruh kelas aset, alih-alih model terpisah-pisah. Ia juga merancang "algoritma taruhan" (*betting algorithm*) dan menemukan "efek 24 jam." |
+| **Robert Frey** (l. ~1954) | AAS Akuntansi; BS Matematika Terapan & Statistik; PhD Matematika Terapan (Riset Operasi) | Suffolk County CC; SUNY Stony Brook (PhD ditempuh paruh waktu selama 14 tahun) | Trader, Morgan Stanley Analytical Proprietary Group (*pairs trading*); pendiri Kepler Financial Management | Riset operasi, perdagangan kuantitatif, manajemen risiko. *Managing Director* (1992–2004); mendirikan dan memimpin grup riset pendapatan tetap (*fixed income*) Renaissance. Membangun dua dana ekuitas berbasis komputer yang kemudian diserap ke dalam Medallion. Kelak mendirikan Program Keuangan Kuantitatif di Stony Brook bersama Nassim Taleb. |
+| **Nick Patterson** (l. 1947) | BA Matematika; PhD Matematika (teori grup hingga) | Cambridge University (pembimbing: **John G. Thompson**, peraih Fields Medal) | Kriptografer, GCHQ Inggris (1972–80); kriptanalis, IDA Center for Communications Research (1980–93); penerima Meritorious Civilian Service Award dari NSA | Kriptanalisis, statistik Bayesian, *Hidden Markov Models*. Diakui sebagai salah satu dari **2–3 kriptografer terbaik** di seluruh komunitas intelijen Anglo-Amerika. Merekrut Peter Brown dan Robert Mercer dari IBM — yang boleh jadi merupakan keputusan perekrutan paling berpengaruh dalam sejarah Renaissance. Kelak bergabung dengan Broad Institute dan turut mengurutkan genom Neanderthal. |
+| **Peter Brown** (l. 1955) | BA Matematika; PhD Ilmu Komputer | Harvard University; Carnegie Mellon University (pembimbing: **Geoffrey Hinton**, "bapak *deep learning*" — Brown adalah mahasiswa doktoral pertamanya) | Staf peneliti, IBM T.J. Watson Research Center — grup pengenalan wicara & penerjemahan mesin (~1984–1993) | Linguistik komputasi, jaringan saraf tiruan, penerjemahan mesin statistik, rekayasa perangkat lunak berskala besar. Turut menulis **model penyelarasan IBM** (*IBM alignment models*) untuk penerjemahan mesin dan ikut mengembangkan *Brown clustering*. Disebut-sebut sebagai penggagas awal proyek Deep Blue IBM. Menjadi CEO tunggal Renaissance pada 2017. Istrinya, Margaret Hamburg, pernah menjabat sebagai Komisioner FDA. |
+| **Robert Mercer** (l. 1946) | BS Fisika & Matematika; PhD Ilmu Komputer | University of New Mexico; University of Illinois Urbana-Champaign | Staf peneliti & kepala linguistik komputasi, IBM T.J. Watson Research Center (~1972–1993); sebelumnya programmer di Laboratorium Senjata Angkatan Udara | Pengenalan pola statistik, pengenalan wicara, pembelajaran mesin, sistem data berskala besar. Turut mengembangkan model penyelarasan IBM dan *Brown clustering*. Penerima **ACL Lifetime Achievement Award** (2014). Co-CEO Renaissance (2010–17). Menerapkan teknik-teknik pengenalan wicara untuk mengekstraksi sinyal dari data keuangan. |
+| **David Magerman** (l. 1968) | BS Ilmu Komputer; PhD Ilmu Komputer | University of Pennsylvania; Stanford University (pembimbing: Vaughan Pratt; disertasi: *Natural Language Parsing as Statistical Pattern Recognition*) | Ilmuwan peneliti, IBM T.J. Watson Research Center; juga BBN dan SRI International | Pemrosesan bahasa alami, *parsing* statistik, rekayasa perangkat lunak. Menerbitkan makalah-makalah berpengaruh tentang model *parsing* berbasis pohon keputusan. Di Renaissance, menemukan dan **memperbaiki dua *bug* perangkat lunak kritis** dalam sistem perdagangan ekuitas yang terbukti esensial bagi kinerja Medallion. Naik hingga posisi *Head of Production* dan menjadi karyawan teknis dengan peringkat tertinggi. |
+| **Stephen Della Pietra** | AB Fisika; PhD Fisika Matematika (teori dawai/*string theory*) | Princeton University; Harvard University. Pascadoktoral: UT Austin; Institute for Advanced Study | Staf peneliti, IBM T.J. Watson Research Center (1989–1995) — pengenalan pola statistik dan NLP | Teori dawai, pemodelan entropi maksimum, penerjemahan mesin. Turut menulis "*A Maximum Entropy Approach to Natural Language Processing*" (1996) — salah satu makalah yang paling banyak dikutip dalam sejarah NLP. Kembaran identik Vincent; keduanya berbagi kantor bersebelahan di Renaissance dengan jendela penghubung internal. |
+| **Vincent Della Pietra** | AB Matematika; PhD Fisika Matematika (teori dawai) | Princeton University; Harvard University. Pascadoktoral: Institute for Advanced Study | Staf peneliti, IBM T.J. Watson Research Center (1988–1995) — pengenalan wicara dan NLP | Teori dawai, pemodelan statistik, penerjemahan mesin. Turut menulis makalah seminal tentang model *n-gram* berbasis kelas dan estimasi entropi untuk bahasa Inggris. Gaya kerja si kembar yang penuh adu argumen justru menghasilkan riset-riset terbaik mereka. |
+| **Lalit Bahl** (1943–2025) | BTech (President's Gold Medal); MS Teknik Elektro; PhD Teknik Elektro | IIT Kharagpur; University of Illinois Urbana-Champaign | Manajer Speech Algorithms Group, IBM T.J. Watson Research Center (1968–1998; 30 tahun). Memimpin pengembangan IBM ViaVoice. | *Hidden Markov Models* yang diterapkan pada pengenalan wicara, teori informasi, *turbo codes*. Metode yang ia rintis **diadopsi oleh hampir setiap tim pengenalan wicara di seluruh dunia**. IEEE Fellow; 37 paten AS; 80+ makalah; IBM Master Inventor. Bergabung dengan Renaissance pada 1998 sebagai Senior Research Scientist. |
+| **Mukund Padmanabhan** | BTech; MS Teknik Elektro; PhD Teknik Elektro (pemrosesan sinyal) | IIT Kharagpur; UCLA | Staf peneliti, IBM Research Division — algoritma pengenalan wicara | Pemrosesan sinyal digital, pengenalan wicara, pemodelan statistik. 80+ makalah teknis; 3.357+ kutipan. Saat ini menjabat sebagai Partner dan Peneliti di Renaissance. Penerima Distinguished Alumni Award dari IIT Kharagpur (2021). |
+| **Peter Weinberger** (l. 1942) | BA; PhD Matematika (teori bilangan) | Swarthmore College; UC Berkeley (pembimbing: Derrick Lehmer) | Kepala Riset Ilmu Komputer kemudian VP Riset Ilmu Informasi, AT&T Bell Labs; anggota grup penasihat pertahanan JASON; konsultan CCR | Perancangan bahasa pemrograman, perangkat lunak sistem, teori bilangan, komputasi berskala besar. Ia adalah huruf **"W" dalam AWK** — turut menulis *The AWK Programming Language* (1988). *Erdős number* 2. AAAS Fellow. Menjabat sebagai CTO Renaissance (~1996–2003). Kelak bergabung dengan Google. |
+| **Glen Whitney** | PhD Matematika | UCLA | *Intern* perangkat lunak lalu karyawan, IBM Research | Matematika dan pengembangan perangkat lunak. Setelah meninggalkan Renaissance, mendirikan **National Museum of Mathematics (MoMath)** di New York City (dibuka 2012). |
+| **Robert Lourie** | BS Fisika; PhD Fisika (fisika nuklir) | MIT (Hertz Foundation Fellow) | Profesor Fisika (berkedudukan tetap), University of Virginia; pascadoktoral di MIT dalam fisika nuklir | Fisika nuklir, analisis data, pemodelan keuangan. **Sepupu** Jim Simons. Awalnya bergabung untuk "cuti sabatikal enam bulan" yang berujung menjadi karier selama 21+ tahun. Naik hingga VP Riset dan Kepala Riset Berjangka (*Futures Research*). Juga menjabat sebagai *Trustee* Cold Spring Harbor Laboratory. |
+| **Andrew Mullhaupt** | PhD Matematika | NYU Courant Institute (1984; disertasi tentang persamaan delay Boolean) | Perancang sistem perdagangan kuantitatif, Morgan Stanley | PDE, aljabar linear, probabilitas terapan, pemrosesan sinyal. Setelah Renaissance, pindah ke SAC Capital sebagai Director of Research untuk Meridian Fund. Kini menjadi Profesor Riset di Stony Brook. |
+| **James Herrnstein** | BS; PhD Astronomi (astrofisika), peraih Bok Prize | Harvard University | Jansky Postdoctoral Fellow, National Radio Astronomy Observatory (NRAO) | Astrofisika, astronomi radio, analisis data dari kumpulan data berskala masif. Anggota tim yang menemukan **lubang hitam tersembunyi pertama di pusat sebuah galaksi** (NGC 4258, 1995). Memenangkan Miller Fellowship di Berkeley dan *fellowship* di Cambridge, namun memilih Renaissance (1999). |
+| **Alkes Price** | BS Matematika; PhD Matematika | University of Chicago; University of Pennsylvania | Peneliti akademis | Matematika dan metode statistik. Kini menjabat Profesor Genetika Statistik di Harvard dan anggota asosiasi Broad Institute. |
+| **Alexander Belopolsky** | PhD Fisika | MIT | Karier singkat di Wall Street setelah emigrasi dari Uni Soviet | Fisika matematika, pemodelan kuantitatif. Bergabung tahun 2001; keluar pada 2003 bersama Volfbeyn menuju Millennium Partners, memicu **gugatan rahasia dagang** besar. Penyelesaian: Millennium membayar ~$20 juta. |
+| **Pavel Volfbeyn** | PhD Fisika | MIT | Karier singkat di Wall Street setelah emigrasi dari Uni Soviet | Fisika, strategi perdagangan kuantitatif. Keluar bersama Belopolsky pada 2003. Menamai salah satu strateginya "Henry's signal" — yang secara mencurigakan mirip dengan strategi buatan Laufer di Renaissance. Menghasilkan ~$100 juta laba di Millennium sebelum diberhentikan. |
+| **Alexey Kononenko** | PhD Matematika | Penn State University (1997) | Karier singkat di Wall Street; kelahiran Rusia | Riset kuantitatif, perdagangan ekuitas. Berkembang pesat di grup ekuitas Renaissance hingga menjadi figur senior. |
+| **Alexander Astashkevich** (w. 2006) | Sarjana (Universitas Negeri Moskow); PhD Matematika | MIT (1995; disertasi tentang kuantisasi Fedosov pada orbit koadjoin semisederhana) | Asisten Profesor, UC Davis (3 tahun) | Aljabar Lie berdimensi tak-hingga, teori kuantisasi, topologi diferensial. Turut mengedit buku teks matematika selama di Renaissance. |
+| **Nat Simons** (l. 1966) | BA Ekonomi; MA Matematika | UC Berkeley | Putra Jim Simons | Analisis data, perdagangan berjangka. Bekerja di Renaissance 1994–97 sebagai analis data dan *trader futures*; kemudian menjadi Wakil Ketua (2006–2020). Mendirikan Meritage Group LP (mengelola $12 miliar+) dan Sea Change Foundation untuk filantropi iklim. |
+
+# Tiga Jalur Bakat yang Membangun Mesin Medallion {#sec-pipeline}
+
+Strategi perekrutan Renaissance tidak acak. Simons merekrut ilmuwan dari tiga institusi spesifik yang masing-masing memberikan keahlian berbeda. Ketiga jalur ini bekerja bersama dan menciptakan tim yang tidak tertandingi.
+
+## Jalur Pertama: Kriptografi IDA (1978–1993)
+
+Simons bekerja di *Institute for Defense Analyses* (IDA) dari 1964–1968 dan memecahkan sandi Soviet bersama Leonard Baum. Pekerjaan mereka melibatkan mencari pola tersembunyi dalam data yang penuh kebisingan — persis seperti mencari peluang perdagangan dalam data pasar.
+
+Teknik yang mereka gunakan — *Hidden Markov Models*, statistik Bayesian, dan deteksi pola — terbukti cocok untuk menganalisis harga saham. Baum menjadi rekrutan pertama Simons (1978). Dua dekade kemudian, pada 1993, Nick Patterson — seorang kriptografer top dari IDA yang diakui di tingkat internasional — bergabung dan membuka pintu ke jalur rekrutmen berikutnya.
+
+## Jalur Kedua: Pengenalan Wicara IBM (1993–1998)
+
+Patterson membaca artikel berita tentang pengurangan karyawan di IBM. Dia menyadari sesuatu: **tim pengenalan wicara di IBM T.J. Watson memiliki keahlian yang sama dengan keahlian yang dibutuhkan untuk memprediksi harga.**
+
+Keduanya menghadapi masalah yang sama: mengekstraksi sinyal yang bermakna dari data yang sangat besar dan berisik. Mengenali kata berikutnya dalam kalimat dari gelombang suara memerlukan teknik matematika yang sama dengan memprediksi pergerakan harga berikutnya.
+
+Patterson merekrut Peter Brown dan Robert Mercer dari IBM. Mereka membawa David Magerman, si kembar Della Pietra, Lalit Bahl, Mukund Padmanabhan, dan puluhan peneliti IBM lainnya. Hampir semua sistem perdagangan ekuitas Renaissance dibangun oleh **sekitar selusin ilmuwan dari IBM** ini.
+
+Seperti yang dikatakan Peter Brown kemudian: "Renaissance didirikan oleh beberapa matematikawan. Mereka tidak tahu cara menulis kode." Kelompok IBM membawa keahlian yang mereka tidak miliki — kemampuan membangun perangkat lunak besar di mana banyak peneliti bisa bekerja pada satu model secara bersamaan.
+
+## Jalur Ketiga: Akademik Stony Brook (1968–1980)
+
+Simons memimpin departemen matematika Stony Brook dari 1968–1978 dan merekrut profesor berbakat. Mereka kemudian mengikutinya ke Renaissance.
+
+**Henry Laufer** (ahli geometri aljabar) menjadi kepala riset dan membuat keputusan paling penting dalam sejarah dana: Medallion akan menggunakan **satu model perdagangan** untuk semua jenis aset (saham, obligasi, mata uang, dll) — bukan model terpisah untuk masing-masing. Keputusan ini memungkinkan sistem melihat hubungan antar pasar yang tidak terlihat oleh spesialis yang hanya fokus pada satu pasar.
+
+**Sandor Straus** membangun basis data harga historis dengan detail luar biasa, mengumpulkan data dari pita magnetik lama dan memverifikasinya dengan buku tahunan bursa. Data berkualitas tinggi ini menjadi fondasi semua model perdagangan.
+
+**Robert Frey** membawa pengalaman perdagangan kuantitatif dari Morgan Stanley dan membantu Renaissance memahami bagaimana benar-benar menjalankan operasi perdagangan di pasar riil.
+
+# Mengapa Wall Street Salah Memahami Bakat {#sec-wallstreet}
+
+Pola yang paling jelas dari daftar rekrutan di atas: **tidak ada seorang pun yang direkrut karena pengalaman di hedge fund atau perbankan investasi.**
+
+James Ax adalah matematikawan murni — aljabrawan. Si kembar Della Pietra belajar fisika teori. James Herrnstein adalah astronom yang meneliti lubang hitam. Lalit Bahl menghabiskan 30 tahun membuat komputer mengerti bahasa manusia. Peter Brown belajar di bawah Geoffrey Hinton, pemimpin revolusi *deep learning*. Elwyn Berlekamp mencipta kode yang membantu wahana Voyager dan Hubble mengirimkan gambar dari luar angkasa.
+
+Ini bukan kebetulan. Simons sengaja menolak orang-orang dari Wall Street. Dia percaya pengalaman Wall Street mengajarkan kebiasaan buruk: percaya pada intuisi, mengandalkan cerita yang menarik, dan menolak bukti statistik yang jelas. Iklan lowongan Renaissance mencari ilmuwan yang nyaman dengan data besar dan ketidakpastian, bukan lulusan MBA yang mahir menghitung nilai saham.
+
+Budaya kerja Renaissance mencerminkan nilai-nilai akademis ini. Sekitar **150 peneliti PhD** dari 275 karyawan total bekerja dalam suasana seperti universitas. Sebagaimana dikenang Peter Weinberger: "jika Anda perlu daya komputasi besar, keputusannya berdasarkan apakah Anda membutuhkannya — bukan anggaran." Pintu kantor Simons selalu terbuka untuk siapa saja, mulai dari sekretaris hingga peneliti senior.
+
+# Efek Akumulasi dari Pikiran-Pikiran Luar Biasa {#sec-compounding}
+
+Daftar di atas mencerminkan apa yang dapat diverifikasi secara publik, namun hampir pasti merupakan gambaran yang tidak utuh. Renaissance terkenal sangat tertutup — karyawannya menandatangani **perjanjian kerahasiaan yang sangat ketat**, dan banyak peneliti yang nyaris tidak meninggalkan jejak publik sama sekali. Sejumlah nama yang muncul secara sepintas dalam berbagai referensi — alumni IBM tambahan, fisikawan pasca-Soviet, astrofisikawan — tidak dapat dikonfirmasi dengan detail biografis yang memadai untuk dimasukkan.
+
+Yang dapat dikatakan dengan pasti ialah bahwa **densitas talenta kelas dunia per meter persegi** di kampus East Setauket tidak tertandingi dalam dunia keuangan. Perusahaan ini menghimpun para penerima Cole Prize, Veblen Prize, Shannon Award, Hamming Medal, ACL Lifetime Achievement Award, beserta sejumlah anggota National Academies — lalu mengarahkan seluruh daya tembak intelektual itu pada satu model perdagangan terpadu.
+
+Imbal hasil tahunan rata-rata Medallion Fund sebesar **66% sebelum biaya dari 1988 hingga 2018** — kurang lebih $100 miliar dalam laba perdagangan — merupakan produk langsung dari strategi perekrutan ini. Simons tidak memecahkan pasar sendirian. Ia memecahkan masalah yang lebih mendasar: bagaimana menghimpun orang-orang yang mampu memecahkannya secara bersama-sama.

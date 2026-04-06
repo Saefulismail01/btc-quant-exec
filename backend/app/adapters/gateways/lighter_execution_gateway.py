@@ -794,6 +794,56 @@ class LighterExecutionGateway(BaseExchangeExecutionGateway):
             logger.warning(f"[LIGHTER] Failed to fetch last closed order: {e}")
             return None
 
+    async def fetch_open_orders(self) -> list[dict[str, Any]]:
+        """
+        Fetch all open orders for the current account from Lighter.
+        Uses /accountOrders endpoint.
+
+        Returns:
+            List of order dictionaries.
+        """
+        try:
+            data = await self._make_request(
+                "GET", "/accountOrders",
+                params={"account_index": str(self.account_index), "market_id": str(self.MARKET_ID)}
+            )
+            orders = data.get("orders", [])
+            logger.info(f"[LIGHTER] Fetched {len(orders)} open orders from exchange.")
+            return orders
+        except Exception as e:
+            logger.error(f"[LIGHTER] Failed to fetch open orders: {e}")
+            return []
+
+    async def get_active_sl_tp(self) -> dict[str, Optional[float]]:
+        """
+        Analyze open orders to find active Stop-Loss and Take-Profit prices.
+
+        Returns:
+            Dict with 'sl_price' and 'tp_price' (None if not found).
+        """
+        open_orders = await self.fetch_open_orders()
+        sl_price: Optional[float] = None
+        tp_price: Optional[float] = None
+
+        for order in open_orders:
+            order_type = order.get("type", "").upper()
+            # Lighter SL/TP often identified by trigger_price > 0
+            trigger_px = float(order.get("trigger_price", 0) or 0)
+            order_px = float(order.get("price", 0) or 0)
+            status = order.get("status", "").upper()
+
+            if status != "OPEN":
+                continue
+
+            # Identify SL or TP based on type or price relationship
+            # Lighter orders can be STOP_LOSS_LIMIT or TAKE_PROFIT_LIMIT
+            if "STOP" in order_type:
+                sl_price = trigger_px if trigger_px > 0 else order_px
+            elif "PROFIT" in order_type:
+                tp_price = trigger_px if trigger_px > 0 else order_px
+
+        return {"sl_price": sl_price, "tp_price": tp_price}
+
     async def get_current_price(self) -> Optional[float]:
         """Fetch current BTC market price from Lighter orderbook."""
         try:
