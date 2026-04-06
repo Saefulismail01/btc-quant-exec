@@ -1,7 +1,7 @@
-# BTC-QUANT v4.4 — Project Ledger
+# BTC-QUANT v4.6 — Project Ledger
 
-> **Last Updated:** 2026-04-06 03:42 UTC
-> **Status:** Phase 3 Mainnet — Monitoring Only (No Live Execution)
+> **Last Updated:** 2026-04-06 04:50 UTC
+> **Status:** Phase 4 Mainnet — Live Execution Active
 > **BTC Price:** $69,055 | **FGI:** 13 (Extreme Fear)
 
 ---
@@ -10,7 +10,7 @@
 
 BTC-QUANT adalah bot scalping Bitcoin perpetuals di **Lighter mainnet** (L2 ZK orderbook DEX). Sistem menggunakan 5-layer signal pipeline berbasis riset Renaissance Technologies + econophysics untuk menghasilkan sinyal LONG/SHORT dengan conviction scoring.
 
-**Saat ini:** Data ingestion dan API server jalan di VPS. Lighter executor daemon **belum** terdeploy di container. Tidak ada posisi terbuka.
+**Saat ini:** Data ingestion, API server, dan PositionManager berjalan terintegrasi di Docker. Lighter execution aktif. Sinkronisasi SL/TP bursa riil aktif.
 
 ---
 
@@ -32,9 +32,9 @@ BTC-QUANT adalah bot scalping Bitcoin perpetuals di **Lighter mainnet** (L2 ZK o
 └─────────────────────────────────────────────────────────┘
          ↓
 ┌──────────────────────┐     ┌──────────────────────────┐
-│  FastAPI + Ingestion │     │  Lighter Executor Daemon  │
-│  (Docker container)  │     │  (NOT YET DEPLOYED)       │
-│  - Fetch OHLCV 60s   │     │  - PositionManager        │
+│  FastAPI + Ingestion │     │  PositionManager (Inside)│
+│  (Docker container)  │<───>│  (INTEGRATED & LIVE)      │
+│  - Fetch OHLCV 60s   │     │  - Sync Exchange Orders   │
 │  - Compute signal    │     │  - RiskManager            │
 │  - Cache signal      │     │  - LighterExecutionGateway│
 │  - Telegram bot      │     │  - Order placement        │
@@ -65,9 +65,9 @@ BTC-QUANT adalah bot scalping Bitcoin perpetuals di **Lighter mainnet** (L2 ZK o
 | **API Port** | 8000 | Exposed ke host |
 | **Data Ingestion** | Running | Cycle #6717+, setiap ~60 detik |
 | **Telegram Bot** | Running | Polling aktif |
-| **Lighter Executor** | **NOT RUNNING** | Daemon terpisah, belum di-container |
+| **Lighter Executor** | **RUNNING** | Terintegrasi di dalam API container |
 | **Gateway** | Lighter mainnet | `EXECUTION_GATEWAY=lighter` |
-| **Trading Flag** | `LIGHTER_TRADING_ENABLED=true` | ⚠️ Aktif di root .env |
+| **Trading Flag** | `LIGHTER_TRADING_ENABLED=true` | ✅ Aktif |
 
 ### Balance & Position
 | Item | Value |
@@ -78,17 +78,17 @@ BTC-QUANT adalah bot scalping Bitcoin perpetuals di **Lighter mainnet** (L2 ZK o
 
 ---
 
-## 4. Current Strategy: FixedStrategy (Golden v4.4)
+## 4. Current Strategy: HestonStrategy (v4.6 Adaptive)
 
 | Parameter | Value |
 |-----------|-------|
-| **SL** | 1.333% dari entry |
-| **TP** | 0.71% dari entry |
-| **Leverage** | 5x |
-| **Margin** | $99 per trade |
+| **SL** | ATR-Adaptive (Model Heston) |
+| **TP** | ATR-Adaptive (Model Heston) |
+| **Leverage** | 15x (Fixed for Live) |
+| **Margin** | $5 (Testing) per trade |
 | **Time Exit** | 6 candles = 24 jam |
-| **Risk per Trade** | 2% portfolio |
-| **Position Sizing** | `2% / SL%` → ~75% portfolio saat ini |
+| **Risk per Trade** | Dynamic (via RiskManager) |
+| **Position Sizing** | Real Balance Tracking |
 
 ### Heston SL/TP Preset (Modul A+B)
 Saat ini menggunakan **Scalper-Normal**:
@@ -164,17 +164,17 @@ Saat ini menggunakan **Scalper-Normal**:
 - [x] Telegram notifications
 - [x] Paper trading infrastructure
 - [x] 133 unit tests passing
-- [x] VPS deployment (Docker)
-- [x] First live order reference (Phase 3 mainnet)
+- [x] VPS deployment (Docker Compose)
+- [x] Exchange-to-DB Sync (v4.6)
+- [x] Integrated PositionManager
 
 ### 🔄 In Progress / Need Work
-- [ ] **Lighter executor daemon di container** — saat ini terpisah
-- [ ] **LLM integration** — Deepseek API key kosong di container, LLM unavailable
-- [ ] **Balance top-up** — $106.52 terlalu tipis untuk margin $99 + buffer
-- [ ] **Shadow trade monitor** — untuk manual close detection
+- [ ] **LLM integration** — Deepseek API key perlu divalidasi ke container
+- [ ] **Balance top-up** — Perlu tambahan untuk menaikkan margin
+- [x] **Shadow trade monitor** — ACTIVE (Logging enabled)
 
 ### 📋 Planned
-- [ ] HestonStrategy (dynamic SL/TP berdasarkan vol regime)
+- [x] HestonStrategy (dynamic SL/TP berbasis vol regime)
 - [ ] Multi-timeframe confirmation (15m entry trigger)
 - [ ] Portfolio rebalancing logic
 - [ ] Backtest walk-forward validation update
@@ -186,12 +186,9 @@ Saat ini menggunakan **Scalper-Normal**:
 
 | # | Issue | Severity | Status |
 |---|-------|----------|--------|
-| 1 | **Lighter executor tidak jalan di container** | High | Perlu deploy executor daemon |
-| 2 | **LLM unavailable** — Deepseek API key tidak ter-load di container | Medium | LLM fallback ke rule-based |
-| 3 | **Balance tipis** — $106.52, margin $99 hampir habis | High | Perlu top-up atau turunkan margin |
-| 4 | **MLP stuck NEUTRAL 50%** — model tidak bisa decide di market fear extreme | Medium | Butuh retrain atau data lebih |
-| 5 | **`LIGHTER_TRADING_ENABLED=true` di root .env** — berbahaya kalau executor nyala tanpa safety | High | Pertimbangkan set ke false |
-| 6 | **Log path lama** — `backend_run.log` masih reference ke `btc-scalping-quant` | Low | Cosmetic |
+| 1 | **Balance tipis** | High | $106.52, perlu top-up untuk naikkan risk |
+| 2 | **LLM unavailable** | Medium | Fallback ke rule-based masih berjalan |
+| 3 | **Label Inconsistency** | Low | Label "WAIT" di Telegram untuk sinyal ADVISORY |
 | 7 | **Telegram bot offset stuck** — `offset=552185895` tidak berubah, kemungkinan ada issue | Low | Monitoring |
 
 ---
