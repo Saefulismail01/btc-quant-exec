@@ -77,13 +77,26 @@ Dokumen ini berfungsi sebagai *single source of truth* untuk melacak progres, ke
 
 ### April 2026
 
-- **[2026-04-06]** Session: Fix "Inconsistency" & Real-time Exchange Sync.
+- **[2026-04-06]** Session: Fix "Inconsistency" & Real-time Exchange Sync (v4.6).
     - Implementasi `fetch_open_orders` dan `get_active_sl_tp` di `LighterExecutionGateway`.
     - Implementasi `update_trade_params` di `LiveTradeRepository` untuk sinkronisasi harga.
     - Sinkronisasi otomatis SL/TP di `PositionManager.sync_position_status()` agar bot tidak lagi "buta" terhadap perubahan manual di dashboard bursa.
     - Audit label notifikasi: Menemukan konflik di mana status `ADVISORY` (10-20% conviction) memberikan sinyal "WAIT" di Telegram namun tetap dilakukan "ENTRY" oleh bot.
 
+- **[2026-04-01]** Session: Execution Robustness Optimization.
+    - **Re-entry Prevention**: Menambahkan proteksi di `data_ingestion_use_case.py` agar bot tidak langsung masuk ke posisi baru (re-entry) di *candle* yang sama setelah sebuah posisi tertutup. Mengurangi risiko *churn* pada volatilitas tinggi.
+    - **Shadow Monitoring Integration**: Menambahkan modul `shadow_monitor.py` untuk melacak performa teoretis sinyal bot terhadap performa riil (manual) untuk audit reliabilitas.
+
 ### Maret 2026
+
+- **[2026-03-26]** Session: Strategy Heston Adaptive & Mainnet Optimization.
+    - **HestonStrategy Deployment**: Mengganti `FixedStrategy` dengan `HestonStrategy`. SL/TP kini bersifat dinamis berdasarkan ATR-Adaptive dan volatilitas stokastik model Heston.
+    - **Risk Manager Balance Sync**: `PositionManager` kini mengambil saldo riil dari bursa untuk menghitung *position sizing* yang lebih akurat, bukan lagi berdasarkan nilai margin statis.
+
+- **[2026-03-25]** Session: Critical Lighter Gateway Fixes.
+    - **Auth Token Fix**: Migrasi ke SDK native `create_auth_token_with_expiry()`. Menghilangkan error 401 Unauthorized secara permanen.
+    - **OCO Cancel Handling**: Perbaikan `fetch_last_closed_order` untuk otomatis mengabaikan (skip) order yang berstatus "Canceled" saat mendeteksi *exit price*. Menghindari kesalahan pencatatan harga keluar saat salah satu kaki OCO (SL atau TP) terpicu.
+    - **Startup Sync Robustness**: Perbaikan logika sinkronisasi saat bot baru menyala; bot sekarang memprioritaskan status bursa daripada status database yang mungkin *stale*.
 
 - **[2026-03-17]** Session: Mainnet live trading + bug fixes + PR-2 + diskusi PR-1 & exit strategy.
 
