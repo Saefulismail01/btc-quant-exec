@@ -4,10 +4,18 @@ Dokumen ini berfungsi sebagai *single source of truth* untuk melacak progres, ke
 
 ---
 
-## 🚀 Status Saat Ini: v4.5 + Lighter Mainnet Live + HestonStrategy
-**Update Terakhir:** 26 Maret 2026
+## 🚀 Status Saat Ini: v4.6 + Exchange-to-DB Sync + Lighter Live
+**Update Terakhir:** 06 April 2026
 **Status Eksekusi:** Live di Lighter Mainnet ✅
-**Strategy Aktif:** HestonStrategy ($5 margin, 15x leverage, ATR-adaptive SL/TP)
+**Strategy Aktif:** HestonStrategy ($5 margin, 15x leverage, Real-time Sync SL/TP)
+
+### 🔝 Key Updates (v4.6 — 06 April 2026)
+
+**Exchange Sync & Active Management:**
+1. **Real-time SL/TP Sync** — Bot kini melakukan *direct query* ke bursa Lighter (`/accountOrders`) setiap siklus 1 menit. SL/TP di database bot otomatis mengikuti perubahan manual yang dilakukan di dashboard bursa.
+2. **Order Reconciliation** — Menambahkan fungsi `get_active_sl_tp` di gateway untuk memastikan sinkronisasi harga SL/TP antara Exchange, Database, dan Telegram.
+3. **Signal Label Alignment Audit** — Mengidentifikasi inkonsistensi label di mana sinyal `ADVISORY` (Weak Buy) dianggap "WAIT" di Telegram tapi diizinkan "ENTRY" di PositionManager.
+4. **Shadow Logging Improvement** — Peningkatan detail log untuk monitoring *Shadow Trades* guna membandingkan performa bot vs intervensi manual.
 
 ### 🔝 Key Updates (v4.5 — 25-26 Maret 2026)
 
@@ -67,7 +75,15 @@ Dokumen ini berfungsi sebagai *single source of truth* untuk melacak progres, ke
 
 ## 🛠️ Riwayat Implementasi (Timeline)
 
-### Maret 2026 (Sekarang)
+### April 2026
+
+- **[2026-04-06]** Session: Fix "Inconsistency" & Real-time Exchange Sync.
+    - Implementasi `fetch_open_orders` dan `get_active_sl_tp` di `LighterExecutionGateway`.
+    - Implementasi `update_trade_params` di `LiveTradeRepository` untuk sinkronisasi harga.
+    - Sinkronisasi otomatis SL/TP di `PositionManager.sync_position_status()` agar bot tidak lagi "buta" terhadap perubahan manual di dashboard bursa.
+    - Audit label notifikasi: Menemukan konflik di mana status `ADVISORY` (10-20% conviction) memberikan sinyal "WAIT" di Telegram namun tetap dilakukan "ENTRY" oleh bot.
+
+### Maret 2026
 
 - **[2026-03-17]** Session: Mainnet live trading + bug fixes + PR-2 + diskusi PR-1 & exit strategy.
 
