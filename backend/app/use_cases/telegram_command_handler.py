@@ -19,6 +19,8 @@ from dotenv import load_dotenv
 
 from app.adapters.repositories.live_trade_repository import LiveTradeRepository
 from app.adapters.repositories.market_repository import MarketRepository
+from app.adapters.gateways.lighter_execution_gateway import LighterExecutionGateway
+from app.use_cases.signal_service import get_cached_signal
 
 logger = logging.getLogger(__name__)
 
@@ -47,6 +49,7 @@ class TelegramCommandHandler:
 
         self.live_repo = LiveTradeRepository()
         self.market_repo = MarketRepository(read_only=True)
+        self.gateway = LighterExecutionGateway()
 
         if not token:
             logger.warning("[TelegramCommandHandler] No token configured — commands disabled.")
@@ -121,6 +124,10 @@ class TelegramCommandHandler:
             await self._cmd_pnl(chat_id)
         elif text.startswith("/status"):
             await self._cmd_status(chat_id)
+        elif text.startswith("/signal"):
+            await self._cmd_signal(chat_id)
+        elif text.startswith("/balance"):
+            await self._cmd_balance(chat_id)
         elif text.startswith("/help"):
             await self._cmd_help(chat_id)
 
@@ -201,19 +208,71 @@ class TelegramCommandHandler:
             f"{pnl_emoji} Daily PnL  : <b>{daily_pnl_usdt:+.3f} USDT ({daily_pnl_pct:+.2f}%)</b>\n"
             f"━━━━━━━━━━━━━━━━━━\n"
             f"Ketik /pnl untuk detail posisi\n"
-            f"Ketik /help untuk semua command"
+            f"Ketik /signal untuk sinyal terbaru\n"
+            f"Ketik /balance untuk saldo exchange"
         )
         await self._send(chat_id, msg)
+
+    async def _cmd_signal(self, chat_id: int):
+        """Return the latest cached quantitative signal."""
+        signal = get_cached_signal()
+        if not signal:
+            await self._send(chat_id, "📭 <b>Belum ada sinyal yang terhitung.</b>\nHarap tunggu candle 4H berikutnya.")
+            return
+
+        c = signal.confluence
+        l = c.layers
+        
+        status_emoji = "🟢" if signal.trade_plan.status == "ACTIVE" else "🟡" if signal.trade_plan.status == "ADVISORY" else "⚪"
+        
+        msg = (
+            f"📡 <b>LATEST QUANT SIGNAL</b>\n"
+            f"━━━━━━━━━━━━━━━━━━\n"
+            f"🚦 Status    : {status_emoji} <b>{signal.trade_plan.status}</b>\n"
+            f"🎯 Action    : <b>{signal.trend.action}</b> ({signal.confluence.verdict})\n"
+            f"📊 Conviction: <b>{c.conviction_pct:.1f}%</b>\n"
+            f"━━━━━━━━━━━━━━━━━━\n"
+            f"<b>Layer Breakdown:</b>\n"
+            f"{'✅' if l.l1.aligned else '❌'} L1 BCD : {l.l1.label}\n"
+            f"{'✅' if l.l2.aligned else '❌'} L2 EMA : {l.l2.label}\n"
+            f"{'✅' if l.l3.aligned else '❌'} L3 MLP : {l.l3.label}\n"
+            f"{'✅' if l.l4.aligned else '❌'} L4 Vol : {signal.volatility.label}\n"
+            f"━━━━━━━━━━━━━━━━━━\n"
+            f"🛑 SL: ${signal.trade_plan.sl_price:,.2f}\n"
+            f"🎯 TP: ${signal.trade_plan.tp_price:,.2f}\n"
+            f"📏 Lev: {signal.trade_plan.leverage}x\n"
+            f"━━━━━━━━━━━━━━━━━━\n"
+            f"🕒 <i>{datetime.now().strftime('%H:%M:%S')} WIB</i>"
+        )
+        await self._send(chat_id, msg)
+
+    async def _cmd_balance(self, chat_id: int):
+        """Return account balance from exchange."""
+        try:
+            balance = await self.gateway.get_account_balance()
+            
+            msg = (
+                f"💰 <b>EXCHANGE BALANCE</b>\n"
+                f"━━━━━━━━━━━━━━━━━━\n"
+                f"🏦 Unified : <b>{balance:,.2f} USDC</b>\n"
+                f"━━━━━━━━━━━━━━━━━━\n"
+                f"🤖 Mode: {self.gateway.execution_mode.upper()}"
+            )
+            await self._send(chat_id, msg)
+        except Exception as e:
+            await self._send(chat_id, f"❌ Gagal ambil saldo: {str(e)}")
 
     async def _cmd_help(self, chat_id: int):
         msg = (
             f"🤖 <b>BTC-QUANT Commands</b>\n"
             f"━━━━━━━━━━━━━━━━━━\n"
-            f"/pnl    — Unrealized PnL posisi sekarang\n"
-            f"/status — Status bot & daily PnL\n"
-            f"/help   — Daftar command\n"
+            f"/pnl     — PnL posisi saat ini\n"
+            f"/status  — Status bot & daily PnL\n"
+            f"/signal  — Detail sinyal terbaru\n"
+            f"/balance — Saldo exchange rill\n"
+            f"/help    — Daftar command\n"
             f"━━━━━━━━━━━━━━━━━━\n"
-            f"🤖 BTC-QUANT LIVE v4.4"
+            f"🤖 BTC-QUANT LIVE v4.6"
         )
         await self._send(chat_id, msg)
 

@@ -455,10 +455,12 @@ class SignalService:
             )
 
             # Map layer outputs to continuous [-1, +1] votes for v2 Spectrum
-            def _to_vote(is_bull: bool, conf: float) -> float:
-                return float(conf if is_bull else -conf)
+            def _to_vote_three_state(tag: str, conf: float) -> float:
+                if tag == "bull": return float(conf)
+                if tag == "bear": return -float(conf)
+                return 0.0  # neutral
 
-            l1_vote = _to_vote(hmm_tag == "bull", hmm_post_conf)
+            l1_vote = _to_vote_three_state(hmm_tag, hmm_post_conf)
 
             # [FIX-SIGNAL #3] L2 vote dengan weakening modifier
             # Jika L2 weakened: force l2=False (bukan sekadar reduce confidence)
@@ -466,14 +468,14 @@ class SignalService:
             if _l2_weakened:
                 l2 = False  # Override l2 — disable alignment
             l2_base_conf = 1.0 if l2 else 0.0
-            l2_vote = _to_vote(trend_short == "BULL", l2_base_conf)
+            l2_vote = 1.0 * l2_base_conf if (l2 and trend_short == "BULL") else -1.0 * l2_base_conf if (l2 and trend_short == "BEAR") else 0.0
 
             # [FIX-SIGNAL #1] L3 vote dengan disagreement handling
             if _l3_disagrees:
                 # L3 NEUTRAL padahal di-feed BULL/BEAR = counter-signal magnitude 0.3
                 l3_vote = -0.3 if hmm_tag == "bull" else +0.3
             else:
-                l3_vote = _to_vote(ai_bias.upper() == "BULL", mlp_conf_norm)
+                l3_vote = _to_vote_three_state(ai_bias.lower(), mlp_conf_norm)
             l4_mult = _spectrum.compute_l4_multiplier(vol_ratio)
             
             spectrum = _spectrum.calculate(

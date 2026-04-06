@@ -7,15 +7,14 @@ Dokumen ini berfungsi sebagai *single source of truth* untuk melacak progres, ke
 ## 🚀 Status Saat Ini: v4.6 + Exchange-to-DB Sync + Lighter Live
 **Update Terakhir:** 06 April 2026
 **Status Eksekusi:** Live di Lighter Mainnet ✅
-**Strategy Aktif:** HestonStrategy ($5 margin, 15x leverage, Real-time Sync SL/TP)
+**Strategy Aktif:** FixedStrategy (Golden v4.4) — ($99 margin, 5x leverage, No LLM)
 
 ### 🔝 Key Updates (v4.6 — 06 April 2026)
 
-**Exchange Sync & Active Management:**
-1. **Real-time SL/TP Sync** — Bot kini melakukan *direct query* ke bursa Lighter (`/accountOrders`) setiap siklus 1 menit. SL/TP di database bot otomatis mengikuti perubahan manual yang dilakukan di dashboard bursa.
-2. **Order Reconciliation** — Menambahkan fungsi `get_active_sl_tp` di gateway untuk memastikan sinkronisasi harga SL/TP antara Exchange, Database, dan Telegram.
-3. **Signal Label Alignment Audit** — Mengidentifikasi inkonsistensi label di mana sinyal `ADVISORY` (Weak Buy) dianggap "WAIT" di Telegram tapi diizinkan "ENTRY" di PositionManager.
-4. **Shadow Logging Improvement** — Peningkatan detail log untuk monitoring *Shadow Trades* guna membandingkan performa bot vs intervensi manual.
+1. **Telegram Bot Enhancements** — Menambahkan command `/signal` (detail konfluensi) dan `/balance` (query saldo exchange rill).
+2. **Neutral Regime Guard Fix** — Perbaikan bug `l1_vote` di mana kondisi neutral terbaca sebagai bearish.
+3. **Architecture Cleanup** — Sinkronisasi penuh dokumen (LEDGER) dengan kode rill v4.6 (Tabel Arsitektur & Risk Rules).
+4. **Shadow Logging Improvement** — Peningkatan detail log untuk monitoring *Shadow Trades*.
 
 ### 🔝 Key Updates (v4.5 — 25-26 Maret 2026)
 
