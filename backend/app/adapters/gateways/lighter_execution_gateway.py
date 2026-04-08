@@ -782,6 +782,8 @@ class LighterExecutionGateway(BaseExchangeExecutionGateway):
                     return {
                         "order_id": order_id,
                         "filled_price": filled_price,
+                        "filled_quote": filled_quote,
+                        "filled_base": filled_base,
                         "order_type": order_type,
                         "status": status,
                         "timestamp": last_order.get("timestamp", 0)
@@ -793,6 +795,40 @@ class LighterExecutionGateway(BaseExchangeExecutionGateway):
         except Exception as e:
             logger.warning(f"[LIGHTER] Failed to fetch last closed order: {e}")
             return None
+
+    async def fetch_entry_fill_quote(self, order_id: str) -> Optional[float]:
+        """
+        Fetch filled_quote_amount dari entry market order yang baru saja dieksekusi.
+        Dipanggil segera setelah place_market_order berhasil.
+
+        Filter by order_id spesifik untuk menghindari salah capture ketika ada
+        overlap signal (2 market order entry di waktu berdekatan).
+
+        Returns:
+            filled_quote_amount (USDC) dari entry order, atau None jika tidak ditemukan.
+        """
+        try:
+            orders = await self._make_request(
+                "GET",
+                "/accountInactiveOrders",
+                params={"account_index": str(self.account_index), "market_id": str(self.MARKET_ID), "limit": "10"}
+            )
+            for order in orders.get("orders", []):
+                if str(order.get("order_id", "")) != str(order_id):
+                    continue
+                filled_quote = float(order.get("filled_quote_amount", 0) or 0)
+                filled_base = float(order.get("filled_base_amount", 0) or 0)
+                if filled_quote > 0 and filled_base > 0:
+                    logger.info(
+                        f"[LIGHTER] Entry fill captured: {filled_base:.5f} BTC "
+                        f"for ${filled_quote:.6f} USDC (order_id={order_id})"
+                    )
+                    return filled_quote
+                logger.warning(f"[LIGHTER] Order {order_id} found but fill amounts zero")
+                return None
+        except Exception as e:
+            logger.warning(f"[LIGHTER] Failed to fetch entry fill quote: {e}")
+        return None
 
     async def fetch_open_orders(self) -> list[dict[str, Any]]:
         """

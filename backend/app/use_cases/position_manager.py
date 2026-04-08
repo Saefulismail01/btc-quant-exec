@@ -181,8 +181,45 @@ class PositionManager:
                         exit_price = db_trade.entry_price
                         exit_type = "ERROR"
 
-                # Calculate PnL
-                pnl_usdt = self._calculate_pnl(db_trade, exit_price)
+                # Hitung PnL dari actual fill Lighter jika tersedia
+                exit_filled_quote = last_order.get("filled_quote", 0) if last_order else 0
+                entry_filled_quote = getattr(db_trade, "entry_filled_quote", None) or 0
+
+                if exit_filled_quote > 0 and entry_filled_quote > 0:
+                    # Branch 1: kedua fill amount tersedia (market order entry + market order exit)
+                    if db_trade.side == "LONG":
+                        pnl_usdt = exit_filled_quote - entry_filled_quote
+                    else:
+                        pnl_usdt = entry_filled_quote - exit_filled_quote
+                    logger.info(
+                        f"[PositionManager] PnL from Lighter fills: "
+                        f"entry_quote=${entry_filled_quote:.4f} exit_quote=${exit_filled_quote:.4f} "
+                        f"pnl=${pnl_usdt:+.4f}"
+                    )
+                elif entry_filled_quote > 0 and exit_price > 0 and db_trade.entry_price > 0:
+                    # Branch 2: SL/TP trigger order — filled_quote=0 tapi exit_price valid.
+                    # Hitung exit_filled_quote dari: entry_base × exit_price
+                    # di mana entry_base = entry_filled_quote / entry_price
+                    entry_base = entry_filled_quote / db_trade.entry_price
+                    exit_filled_quote_computed = entry_base * exit_price
+                    if db_trade.side == "LONG":
+                        pnl_usdt = exit_filled_quote_computed - entry_filled_quote
+                    else:
+                        pnl_usdt = entry_filled_quote - exit_filled_quote_computed
+                    logger.info(
+                        f"[PositionManager] PnL from entry fill + exit price: "
+                        f"entry_quote=${entry_filled_quote:.4f} entry_base={entry_base:.6f} "
+                        f"exit_price=${exit_price:.2f} exit_quote=${exit_filled_quote_computed:.4f} "
+                        f"pnl=${pnl_usdt:+.4f}"
+                    )
+                else:
+                    # Branch 3: fallback ke formula lokal jika tidak ada fill data sama sekali
+                    pnl_usdt = self._calculate_pnl(db_trade, exit_price)
+                    logger.warning(
+                        f"[PositionManager] PnL fallback to local formula "
+                        f"(entry_quote={entry_filled_quote}, exit_quote={exit_filled_quote})"
+                    )
+
                 pnl_pct = (pnl_usdt / db_trade.size_usdt * 100) if db_trade.size_usdt > 0 else 0
 
                 # Update DB
@@ -198,9 +235,10 @@ class PositionManager:
                 if self.risk_manager:
                     self.risk_manager.record_trade_result(pnl_pct)
 
-                # PR-2: SL hit → freeze new entries until 07:00 WIB next day
-                # TP hit → clear any existing freeze (allow next entry)
-                if exit_type == "SL":
+                # PR-2: SL hit dengan loss nyata → freeze entry sampai 07:00 WIB besok
+                # SL hit tapi breakeven/profit (misal SL dipindah manual) → tidak freeze
+                # TP hit → clear freeze yang ada
+                if exit_type == "SL" and pnl_usdt < 0:
                     self._set_sl_freeze()
                 elif exit_type == "TP":
                     self._clear_sl_freeze()
@@ -526,6 +564,17 @@ class PositionManager:
                 f"{side} {quantity:.8f} BTC @ ${entry_price:,.2f}"
             )
 
+            # Ambil filled_quote_amount dari Lighter untuk PnL yang akurat saat close
+            entry_filled_quote: Optional[float] = None
+            try:
+                entry_filled_quote = await self.gateway.fetch_entry_fill_quote(market_result.order_id)
+                if entry_filled_quote:
+                    logger.info(f"[PositionManager] Entry fill quote captured: ${entry_filled_quote:.4f}")
+                else:
+                    logger.warning("[PositionManager] Entry fill quote not found — PnL will use fallback formula")
+            except Exception as e:
+                logger.warning(f"[PositionManager] Failed to fetch entry fill quote: {e}")
+
             # Place SL order (CRITICAL)
             sl_result = await self.gateway.place_sl_order(
                 side=side,
@@ -620,7 +669,8 @@ class PositionManager:
                 tp_order_id=tp_result.order_id if tp_result.success else None,
                 signal_verdict=signal.confluence.verdict,
                 signal_conviction=signal.confluence.conviction_pct,
-                candle_open_ts=int(time.time() * 1000),  # Current timestamp
+                candle_open_ts=int(time.time() * 1000),
+                entry_filled_quote=entry_filled_quote,
             )
 
             logger.info(
