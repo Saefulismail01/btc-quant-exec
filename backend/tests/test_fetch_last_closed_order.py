@@ -15,6 +15,7 @@ def make_closed_order(
     exit_price: float = 72000.0,
     order_type: str = "take_profit",
     status: str = "filled",
+    timestamp: int = 1775822400000,
 ) -> dict:
     """
     Helper to create mock closed order.
@@ -32,7 +33,7 @@ def make_closed_order(
         "price": "0",
         "type": order_type,
         "status": status,
-        "timestamp": "1775822400000",
+        "timestamp": str(timestamp),
     }
 
 
@@ -179,6 +180,110 @@ class TestFetchLastClosedOrderFiltering:
             expected_tp_price=72598.92,
         )
 
+        assert result is None
+
+    @pytest.mark.asyncio
+    async def test_skips_old_orders_before_position_open(self, gateway):
+        """
+        Orders with timestamp before position_open_time should be skipped.
+        This prevents matching old orders from history.
+        """
+        position_open_time = 1775822400000  # Position opened at this time
+        old_order_time = position_open_time - 3600000  # 1 hour before
+        new_order_time = position_open_time + 1800000  # 30 min after
+
+        gateway._make_request.return_value = {
+            "orders": [
+                make_closed_order(
+                    order_id="old_order",
+                    exit_price=72261.9,
+                    timestamp=old_order_time,
+                ),
+                make_closed_order(
+                    order_id="new_order",
+                    exit_price=72261.9,
+                    timestamp=new_order_time,
+                ),
+            ]
+        }
+
+        result = await gateway.fetch_last_closed_order(
+            expected_sl_price=71126.18,
+            expected_tp_price=72598.92,
+            tolerance_pct=2.0,
+            position_open_time=position_open_time,
+        )
+
+        # Should skip old_order and return new_order
+        assert result is not None
+        assert result["order_id"] == "new_order"
+
+    @pytest.mark.asyncio
+    async def test_skips_orders_older_than_max_age(self, gateway, monkeypatch):
+        """
+        Orders older than max_order_age_seconds should be skipped.
+        """
+        import time
+        # Mock current time to be 2026-04-11 15:00 UTC
+        mock_current_time_ms = 1775822400000
+        monkeypatch.setattr(time, 'time', lambda: mock_current_time_ms / 1000)
+
+        old_order_time = mock_current_time_ms - 7200000  # 2 hours ago
+        new_order_time = mock_current_time_ms - 1800000  # 30 min ago
+
+        gateway._make_request.return_value = {
+            "orders": [
+                make_closed_order(
+                    order_id="very_old",
+                    exit_price=72261.9,
+                    timestamp=old_order_time,
+                ),
+                make_closed_order(
+                    order_id="recent",
+                    exit_price=72261.9,
+                    timestamp=new_order_time,
+                ),
+            ]
+        }
+
+        result = await gateway.fetch_last_closed_order(
+            expected_sl_price=71126.18,
+            expected_tp_price=72598.92,
+            tolerance_pct=2.0,
+            max_order_age_seconds=3600,  # 1 hour max
+        )
+
+        # Should skip very_old (2 hours > 1 hour max) and return recent
+        assert result is not None
+        assert result["order_id"] == "recent"
+
+    @pytest.mark.asyncio
+    async def test_all_orders_filtered_returns_none(self, gateway):
+        """
+        When all orders are too old, should return None.
+        """
+        position_open_time = 1775822400000
+        old_order_time = position_open_time - 3600000  # 1 hour before position
+
+        gateway._make_request.return_value = {
+            "orders": [
+                make_closed_order(
+                    order_id="old_order",
+                    exit_price=72261.9,
+                    timestamp=old_order_time,
+                ),
+            ]
+        }
+
+        result = await gateway.fetch_last_closed_order(
+            expected_sl_price=71126.18,
+            expected_tp_price=72598.92,
+            tolerance_pct=2.0,
+            position_open_time=position_open_time,
+            max_order_age_seconds=7200,
+        )
+
+        # All orders are too old, should return None
         assert result is None
 
 

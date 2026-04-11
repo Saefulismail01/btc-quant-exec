@@ -752,6 +752,8 @@ class LighterExecutionGateway(BaseExchangeExecutionGateway):
         expected_sl_price: Optional[float] = None,
         expected_tp_price: Optional[float] = None,
         tolerance_pct: float = 2.0,
+        position_open_time: Optional[int] = None,
+        max_order_age_seconds: int = 0,  # 0 = disabled (backward compatible)
     ) -> Optional[Dict[str, Any]]:
         """
         Fetch the last closed order for the BTC/USDC market.
@@ -766,6 +768,8 @@ class LighterExecutionGateway(BaseExchangeExecutionGateway):
             expected_sl_price: Expected SL price for filtering (optional)
             expected_tp_price: Expected TP price for filtering (optional)
             tolerance_pct: Max difference % from SL/TP to match (default 2%)
+            position_open_time: Position open timestamp in milliseconds (optional)
+            max_order_age_seconds: Max age of order to consider (default 1 hour)
 
         Returns:
             Dictionary with order details (filled_price, order_id, etc.) or None
@@ -792,6 +796,11 @@ class LighterExecutionGateway(BaseExchangeExecutionGateway):
                 order_type = last_order.get("type", "")
                 status = last_order.get("status", "")
                 order_id = last_order.get("order_id", "unknown")
+                # Convert timestamp to int (API returns string)
+                try:
+                    order_timestamp = int(last_order.get("timestamp", 0) or 0)
+                except (ValueError, TypeError):
+                    order_timestamp = 0
 
                 # Skip orders that were canceled (e.g. SL canceled when TP hit, or vice versa)
                 if "cancel" in status.lower():
@@ -799,6 +808,26 @@ class LighterExecutionGateway(BaseExchangeExecutionGateway):
                         f"[LIGHTER] Skipping canceled order {order_id} ({order_type}/{status})"
                     )
                     continue
+
+                # Skip orders that are too old (not related to current position)
+                if position_open_time and order_timestamp > 0:
+                    if order_timestamp < position_open_time:
+                        logger.debug(
+                            f"[LIGHTER] Skipping order {order_id}: timestamp {order_timestamp} "
+                            f"is before position open time {position_open_time}"
+                        )
+                        continue
+
+                # Skip orders older than max age
+                if max_order_age_seconds > 0 and order_timestamp > 0:
+                    current_time_ms = int(time.time() * 1000)
+                    age_seconds = (current_time_ms - order_timestamp) / 1000
+                    if age_seconds > max_order_age_seconds:
+                        logger.debug(
+                            f"[LIGHTER] Skipping order {order_id}: age {age_seconds:.0f}s "
+                            f"exceeds max {max_order_age_seconds}s"
+                        )
+                        continue
 
                 # Try filled_quote_amount / filled_base_amount for actual fill price
                 filled_base = float(last_order.get("filled_base_amount", 0) or 0)

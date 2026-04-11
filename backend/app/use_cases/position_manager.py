@@ -123,9 +123,12 @@ class PositionManager:
                 try:
                     # First, try to fetch actual filled order from exchange
                     # Filter by SL/TP prices to get the correct trade
+                    # Pass position open time to avoid matching old orders from history
                     last_order = await self.gateway.fetch_last_closed_order(
                         expected_sl_price=db_trade.sl_price,
                         expected_tp_price=db_trade.tp_price,
+                        position_open_time=db_trade.timestamp_open,
+                        max_order_age_seconds=7200,  # Max 2 hours old
                     )
                     if last_order:
                         exit_price = last_order.get(
@@ -258,6 +261,16 @@ class PositionManager:
                     else 0
                 )
 
+                # TRIPLE-CHECK: Final confirmation position is really closed on exchange
+                # before updating DB (prevents false closures)
+                final_check = await self.gateway.get_open_position()
+                if final_check is not None:
+                    logger.warning(
+                        f"[PositionManager] Triple-check FAILED: Position still open on exchange! "
+                        f"Aborting DB close. Position size: {final_check.size}"
+                    )
+                    return False
+
                 # Update DB
                 self.repo.update_trade_on_close(
                     db_trade.id,
@@ -331,6 +344,38 @@ class PositionManager:
                     f"[PositionManager] ✅ Position still open at exchange | "
                     f"Entry: ${exchange_pos.entry_price:,.2f} | PnL: ${exchange_pos.unrealized_pnl:+.2f}"
                 )
+
+                # [NEW] NOTIFY: Position still open from previous session
+                # Calculate current PnL and hold time
+                try:
+                    current_price = await self.gateway.get_current_price()
+                    if current_price is None:
+                        logger.warning("[PositionManager] Cannot get current price for position status")
+                        return False
+
+                    hold_time_hours = self._get_position_hold_time_hours(db_trade)
+
+                    # Calculate unrealized PnL
+                    if db_trade.side == "LONG":
+                        unrealized_pnl_usdt = (current_price - db_trade.entry_price) * db_trade.size_base
+                    else:
+                        unrealized_pnl_usdt = (db_trade.entry_price - current_price) * db_trade.size_base
+                    unrealized_pnl_pct = (unrealized_pnl_usdt / db_trade.size_usdt * 100) if db_trade.size_usdt > 0 else 0
+
+                    await self.notifier.notify_position_status(
+                        trade_id=db_trade.id,
+                        side=db_trade.side,
+                        entry_price=db_trade.entry_price,
+                        current_price=current_price,
+                        unrealized_pnl_usdt=unrealized_pnl_usdt,
+                        unrealized_pnl_pct=unrealized_pnl_pct,
+                        hold_time_hours=hold_time_hours,
+                        sl_price=db_trade.sl_price,
+                        tp_price=db_trade.tp_price,
+                    )
+                    logger.info(f"[PositionManager] Sent position status notification")
+                except Exception as e:
+                    logger.warning(f"[PositionManager] Failed to send position status: {e}")
 
                 # [NEW] SYNC SL/TP FROM EXCHANGE
                 try:

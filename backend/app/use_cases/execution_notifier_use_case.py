@@ -357,6 +357,77 @@ Resume via API.
             logger.error(f"[ExecutionNotifier] Error sending entry blocked notification: {e}", exc_info=True)
             return False
 
+    async def notify_position_status(
+        self,
+        trade_id: str,
+        side: str,
+        entry_price: float,
+        current_price: float,
+        unrealized_pnl_usdt: float,
+        unrealized_pnl_pct: float,
+        hold_time_hours: float,
+        sl_price: float,
+        tp_price: float,
+    ) -> bool:
+        """
+        Notify about existing open position status (from previous session).
+
+        Args:
+            trade_id: Trade ID
+            side: "LONG" or "SHORT"
+            entry_price: Entry price
+            current_price: Current market price
+            unrealized_pnl_usdt: Unrealized PnL in USDT
+            unrealized_pnl_pct: Unrealized PnL percentage
+            hold_time_hours: How long position has been held
+            sl_price: Stop-loss price
+            tp_price: Take-profit price
+
+        Returns:
+            True if sent successfully, False otherwise
+        """
+        if not self.gateway:
+            return False
+
+        try:
+            direction_emoji = "📈" if side == "LONG" else "📉"
+            pnl_emoji = "📈" if unrealized_pnl_usdt >= 0 else "📉"
+            status_emoji = "🟢" if unrealized_pnl_usdt >= 0 else "🔴"
+
+            # Distance to SL/TP
+            dist_to_sl = abs(current_price - sl_price)
+            dist_to_tp = abs(current_price - tp_price)
+            closer_to = "SL" if dist_to_sl < dist_to_tp else "TP"
+
+            message = f"""{status_emoji} POSITION STILL OPEN — From Previous Session
+━━━━━━━━━━━━━━━━━━
+{direction_emoji} BTC/USDT | {side}
+💰 Entry  : ${entry_price:,.2f}
+💰 Current: ${current_price:,.2f}
+{pnl_emoji} PnL    : {unrealized_pnl_usdt:+,.2f} USDT ({unrealized_pnl_pct:+.2f}%)
+⏱️  Hold   : {hold_time_hours:.1f} hours
+🎯 SL     : ${sl_price:,.2f} ({dist_to_sl:,.2f} away)
+🎯 TP     : ${tp_price:,.2f} ({dist_to_tp:,.2f} away)
+📊 Closer to: {closer_to}
+━━━━━━━━━━━━━━━━━━
+⚡ Signal will still be sent for next opportunity
+━━━━━━━━━━━━━━━━━━
+🤖 BTC-QUANT LIVE v4.4
+ID: {trade_id}"""
+
+            success = await self.gateway.send_message(message, parse_mode="HTML")
+
+            if success:
+                logger.info(f"[ExecutionNotifier] ✅ Position status notification sent: {trade_id}")
+            else:
+                logger.warning("[ExecutionNotifier] Failed to send position status notification")
+
+            return success
+
+        except Exception as e:
+            logger.error(f"[ExecutionNotifier] Error sending position status: {e}", exc_info=True)
+            return False
+
     # ─ Helper methods ─────────────────────────────────────────────────────────
 
     def _pct_diff(self, entry: float, target: float) -> float:
