@@ -15,10 +15,14 @@ RUN apt-get update && apt-get install -y \
 COPY backend/requirements.executor.txt ./requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy application code
+# Copy backend code - needed for imports
+COPY backend/ /app/
 COPY execution_layer/lighter/signal_executor.py /app/
 COPY execution_layer/lighter/lighter_executor.py /app/execution_layer/lighter/
 COPY .env /app/.env
+
+# Set PYTHONPATH to include /app for proper imports
+ENV PYTHONPATH=/app
 
 # Set working directory
 WORKDIR /app
