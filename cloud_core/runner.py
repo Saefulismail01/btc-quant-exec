@@ -1,6 +1,10 @@
 """
 Cloud Core Runner - Main entry point for testing
 """
+"""
+Cloud Core Research Runner
+CLI for experimenting with core signal generation engine
+"""
 import argparse
 import sys
 from pathlib import Path
@@ -10,13 +14,17 @@ from dotenv import load_dotenv
 load_dotenv()
 
 from signal_service import SignalService
-from execution.paper_executor import PaperExecutor
+from experiments import (
+    run_model_comparison,
+    analyze_features,
+    run_tuning,
+)
 
 
 def test_signal(ai_model: str = "mlp"):
     """Test signal generation."""
     print(f"\n{'='*60}")
-    print(f"TESTING SIGNAL GENERATION ({ai_model.upper()})")
+    print(f"SIGNAL GENERATION TEST ({ai_model.upper()})")
     print(f"{'='*60}\n")
     
     service = SignalService(ai_model=ai_model)
@@ -28,10 +36,10 @@ def test_signal(ai_model: str = "mlp"):
         print(f"  Price: ${signal.price:,.2f}")
         print(f"  Timestamp: {signal.timestamp}")
         print(f"\nLayer Votes:")
-        print(f"  L1 (BCD): {signal.l1_vote:+.3f}")
-        print(f"  L2 (EMA): {signal.l2_vote:+.3f}")
-        print(f"  L3 (AI):  {signal.l3_vote:+.3f}")
-        print(f"  L4 (Risk): {signal.l4_mult:.3f}")
+        print(f"  L1 (BCD): {signal.l1_vote:+.3f} [Weight: 30%]")
+        print(f"  L2 (EMA): {signal.l2_vote:+.3f} [Weight: 25%]")
+        print(f"  L3 (AI):  {signal.l3_vote:+.3f} [Weight: 45%] ← GATEKEEPER")
+        print(f"  L4 (Risk): {signal.l4_mult:.3f} [Multiplier]")
         print(f"\nSpectrum Output:")
         print(f"  Directional Bias: {signal.directional_bias:+.3f}")
         print(f"  Action: {signal.action}")
@@ -42,86 +50,41 @@ def test_signal(ai_model: str = "mlp"):
         print(f"  SL: {signal.sl_pct:.2f}%")
         print(f"  TP: {signal.tp_pct:.2f}%")
         print(f"  Leverage: {signal.leverage}x")
-        print(f"\nModel: {signal.model_used}")
+        print(f"\nModel Used: {signal.model_used}")
+        
+        if signal.trade_gate == "ACTIVE":
+            print(f"\n✅ SIGNAL IS ACTIVE - Can Enter Trade")
+        elif signal.trade_gate == "ADVISORY":
+            print(f"\n⚠️  ADVISORY - Reduce Size, Wait for Confirmation")
+        else:
+            print(f"\n❌ SUSPENDED - Do Not Trade")
     else:
-        print("Failed to generate signal")
+        print("❌ Failed to generate signal")
     
     return signal
-
-
-def test_paper_trade():
-    """Test paper trading."""
-    print(f"\n{'='*60}")
-    print("TESTING PAPER TRADING")
-    print(f"{'='*60}\n")
-    
-    # Create executor
-    executor = PaperExecutor(
-        initial_balance=10000.0,
-        save_path="./data/paper_state.json"
-    )
-    
-    # Print initial stats
-    executor.print_summary()
-    
-    # Generate signal
-    service = SignalService(ai_model="mlp")
-    signal = service.generate_signal()
-    
-    if signal and signal.trade_gate == "ACTIVE":
-        print(f"\nSignal is ACTIVE - executing paper trade...")
-        
-        # Calculate SL/TP prices
-        if signal.action == "LONG":
-            sl_price = signal.price * (1 - signal.sl_pct / 100)
-            tp_price = signal.price * (1 + signal.tp_pct / 100)
-        else:
-            sl_price = signal.price * (1 + signal.sl_pct / 100)
-            tp_price = signal.price * (1 - signal.tp_pct / 100)
-        
-        # Open position
-        position = executor.open_position(
-            symbol=signal.symbol,
-            side=signal.action,
-            price=signal.price,
-            size_usdt=100.0,  # Small size for test
-            leverage=signal.leverage,
-            sl_price=sl_price,
-            tp_price=tp_price,
-        )
-        
-        if position:
-            print(f"\nPosition opened: {position.id}")
-    else:
-        print(f"\nSignal gate: {signal.trade_gate if signal else 'N/A'} - no trade")
-    
-    # Print final stats
-    executor.print_summary()
 
 
 def run_backtest(ai_model: str = "mlp"):
     """Run walk-forward backtest."""
     print(f"\n{'='*60}")
-    print(f"RUNNING BACKTEST ({ai_model.upper()})")
+    print(f"WALK-FORWARD BACKTEST ({ai_model.upper()})")
     print(f"{'='*60}\n")
     
-    # Fetch data
     from data.fetcher import DataFetcher
     
     fetcher = DataFetcher()
     df = fetcher.fetch_ohlcv(symbol="BTC/USDT", timeframe="4h", limit=1000)
     
     if df is None:
-        print("Failed to fetch data")
+        print("❌ Failed to fetch data")
         return
     
-    # Run backtest
     service = SignalService(ai_model=ai_model)
     results = service.run_backtest(df, verbose=True)
     
     # Analyze results
     print(f"\n{'='*60}")
-    print("BACKTEST RESULTS")
+    print("BACKTEST ANALYSIS")
     print(f"{'='*60}\n")
     
     total_signals = len(results)
@@ -129,89 +92,103 @@ def run_backtest(ai_model: str = "mlp"):
     advisory_signals = len(results[results["gate"] == "ADVISORY"])
     suspended_signals = len(results[results["gate"] == "SUSPENDED"])
     
-    print(f"Total Signals: {total_signals}")
-    print(f"  ACTIVE: {active_signals} ({active_signals/total_signals*100:.1f}%)")
-    print(f"  ADVISORY: {advisory_signals} ({advisory_signals/total_signals*100:.1f}%)")
-    print(f"  SUSPENDED: {suspended_signals} ({suspended_signals/total_signals*100:.1f}%)")
+    long_signals = len(results[results["action"] == "LONG"])
+    short_signals = len(results[results["action"] == "SHORT"])
     
-    print(f"\nBias Statistics:")
-    print(f"  Mean Bias: {results['bias'].mean():+.4f}")
-    print(f"  Std Bias: {results['bias'].std():.4f}")
-    print(f"  Max Bullish: {results['bias'].max():+.4f}")
-    print(f"  Max Bearish: {results['bias'].min():+.4f}")
+    print(f"Total Signals Generated: {total_signals}")
+    print(f"\nGate Distribution:")
+    print(f"  🟢 ACTIVE:    {active_signals:3d} ({active_signals/total_signals*100:5.1f}%) - Can trade")
+    print(f"  🟡 ADVISORY:  {advisory_signals:3d} ({advisory_signals/total_signals*100:5.1f}%) - Caution")
+    print(f"  🔴 SUSPENDED: {suspended_signals:3d} ({suspended_signals/total_signals*100:5.1f}%) - No trade")
+    print(f"\nDirection Distribution:")
+    print(f"  📈 LONG:  {long_signals:3d} ({long_signals/total_signals*100:5.1f}%)")
+    print(f"  📉 SHORT: {short_signals:3d} ({short_signals/total_signals*100:5.1f}%)")
     
-    print(f"\nConviction Statistics:")
+    print(f"\nSignal Quality Metrics:")
+    print(f"  Mean Bias:     {results['bias'].mean():+.4f}")
+    print(f"  Bias StdDev:   {results['bias'].std():.4f}")
+    print(f"  Max Bullish:   {results['bias'].max():+.4f}")
+    print(f"  Max Bearish:   {results['bias'].min():+.4f}")
     print(f"  Mean Conviction: {results['conviction'].mean():.2f}%")
-    print(f"  Max Conviction: {results['conviction'].max():.2f}%")
+    print(f"  Max Conviction:  {results['conviction'].max():.2f}%")
 
 
 def compare_models():
-    """Compare MLP vs XGBoost."""
+    """Run comprehensive model comparison."""
     print(f"\n{'='*60}")
-    print("COMPARING MLP vs XGBOOST")
+    print("MODEL COMPARISON: MLP vs XGBoost")
     print(f"{'='*60}\n")
     
-    # Fetch data
-    from data.fetcher import DataFetcher
+    print("This will compare both models on same dataset.")
+    print("Metrics: Directional accuracy, bias magnitude, signal distribution\n")
     
-    fetcher = DataFetcher()
-    df = fetcher.fetch_ohlcv(symbol="BTC/USDT", timeframe="4h", limit=500)
-    
-    if df is None:
-        print("Failed to fetch data")
-        return
-    
-    # Test MLP
-    print("Testing MLP...")
-    service_mlp = SignalService(ai_model="mlp")
-    results_mlp = service_mlp.run_backtest(df.copy())
-    
-    # Test XGBoost
-    print("\nTesting XGBoost...")
-    service_xgb = SignalService(ai_model="xgboost")
-    results_xgb = service_xgb.run_backtest(df.copy())
-    
-    # Compare
+    run_model_comparison()
+
+
+def analyze_feature_importance():
+    """Analyze feature importance for L3 models."""
     print(f"\n{'='*60}")
-    print("COMPARISON RESULTS")
+    print("FEATURE IMPORTANCE ANALYSIS")
     print(f"{'='*60}\n")
     
-    print(f"MLP:")
-    print(f"  Mean Bias: {results_mlp['bias'].mean():+.4f}")
-    print(f"  Mean Conviction: {results_mlp['conviction'].mean():.2f}%")
-    print(f"  ACTIVE signals: {len(results_mlp[results_mlp['gate'] == 'ACTIVE'])}")
+    print("Analyzing which features correlate most with future returns...\n")
     
-    print(f"\nXGBoost:")
-    print(f"  Mean Bias: {results_xgb['bias'].mean():+.4f}")
-    print(f"  Mean Conviction: {results_xgb['conviction'].mean():.2f}%")
-    print(f"  ACTIVE signals: {len(results_xgb[results_xgb['gate'] == 'ACTIVE'])}")
+    analyze_features()
+
+
+def tune_hyperparameters():
+    """Run hyperparameter tuning."""
+    print(f"\n{'='*60}")
+    print("HYPERPARAMETER TUNING")
+    print(f"{'='*60}\n")
+    
+    print("Finding optimal hyperparameters for L3 models...\n")
+    
+    run_tuning()
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Cloud Core Runner")
+    parser = argparse.ArgumentParser(
+        description="Cloud Core Research Runner - Experiment with signal generation",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""
+Examples:
+  python runner.py signal --model mlp        Generate signal with MLP
+  python runner.py backtest --model xgboost  Run backtest with XGBoost
+  python runner.py compare                    Compare MLP vs XGBoost
+  python runner.py features                 Analyze feature importance
+  python runner.py tune                       Tune hyperparameters
+        """
+    )
+    
     parser.add_argument(
         "command",
-        choices=["signal", "paper", "backtest", "compare"],
+        choices=["signal", "backtest", "compare", "features", "tune"],
         help="Command to run"
     )
     parser.add_argument(
         "--model",
         choices=["mlp", "xgboost"],
         default="mlp",
-        help="AI model to use (default: mlp)"
+        help="AI model for L3 (default: mlp)"
     )
     
     args = parser.parse_args()
     
     if args.command == "signal":
         test_signal(ai_model=args.model)
-    elif args.command == "paper":
-        test_paper_trade()
     elif args.command == "backtest":
         run_backtest(ai_model=args.model)
     elif args.command == "compare":
         compare_models()
+    elif args.command == "features":
+        analyze_feature_importance()
+    elif args.command == "tune":
+        tune_hyperparameters()
 
 
 if __name__ == "__main__":
     main()
+    print("\n" + "="*60)
+    print("Research complete. Check generated reports for details.")
+    print("="*60)
