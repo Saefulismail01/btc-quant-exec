@@ -13,7 +13,11 @@ RUN apt-get update && apt-get install -y \
 
 # Copy requirements and install
 COPY backend/requirements.txt ./requirements.txt
-RUN pip install --no-cache-dir -r requirements.txt lighter
+
+# Fix dependency conflict: install numpy<2 first (required by lighter), then rest
+RUN pip install --no-cache-dir 'numpy<2.0.0' && \
+    pip install --no-cache-dir -r requirements.txt && \
+    pip install --no-cache-dir lighter
 
 # Copy application code
 COPY execution_layer/lighter/signal_executor.py /app/

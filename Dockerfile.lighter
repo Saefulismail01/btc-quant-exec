@@ -13,7 +13,10 @@ RUN apt-get update && apt-get install -y \
 
 # Copy requirements and install
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+
+# Fix dependency conflict: install numpy<2 first (required by lighter), then rest
+RUN pip install --no-cache-dir 'numpy<2.0.0' && \
+    pip install --no-cache-dir -r requirements.txt
 
 # Copy backend code (needed for imports)
 COPY backend/ /app/backend/
