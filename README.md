@@ -2,22 +2,52 @@
 
 Live trading bot execution layer for Bitcoin on Lighter mainnet with Renaissance Technologies research framework.
 
-**Status**: ✅ Phase 3 Mainnet - First live order placed
+**Status**: ✅ Phase 3 Mainnet - Production Running
 
 ---
 
-## 📚 Quick Start
+## � Directory Structure (Cleaned)
 
-**New to this project?** → Start here:
-1. Read [`docs/START_HERE.md`](docs/START_HERE.md) (5 min)
-2. Read [`docs/README.md`](docs/README.md) (10 min)
-3. Choose your path below
-
-**Returning user?** → Direct access:
-- Trading: [`docs/guides/TRADING_GUIDE.md`](docs/guides/TRADING_GUIDE.md)
-- Research: [`docs/research/CRYPTO_RELEVANCE_ANALYSIS_2026.md`](docs/research/CRYPTO_RELEVANCE_ANALYSIS_2026.md)
-- Paper Search: [`docs/guides/PAPER_SEARCH_GUIDE.md`](docs/guides/PAPER_SEARCH_GUIDE.md)
-- AI Integration: [`docs/integration/MCP_WITH_OTHER_AI.md`](docs/integration/MCP_WITH_OTHER_AI.md)
+```
+btc-scalping-execution_layer/
+│
+├── 🔴 backend/              (115 items)  ← PRODUCTION - Do Not Modify
+│   ├── app/
+│   │   ├── core/engines/
+│   │   │   └── layer3_ai.py           # 🏆 MLP Model (Running Live)
+│   │   ├── use_cases/                 # Signal, Position, Risk
+│   │   └── adapters/gateways/         # Execution gateways
+│   └── scripts/                       # Auto scalp, HFT bot
+│
+├── 🔬 cloud_core/           (34 items)   ← RESEARCH - Safe to Modify
+│   ├── engines/
+│   │   ├── layer3_logistic.py         # 53.8% accuracy
+│   │   ├── layer3_lightgbm.py         # 53.3% accuracy
+│   │   ├── layer3_xgboost.py          # 52.8% accuracy
+│   │   └── layer3_lstm.py             # Experimental
+│   ├── model_evaluator.py             # Model comparison
+│   └── colab_core.ipynb               # Jupyter research
+│
+├── 📚 docs/                (103 items)   ← DOCUMENTATION
+│   ├── START_HERE.md
+│   ├── analysis/                      # Structure analysis files
+│   └── setup/                         # Setup guides
+│
+├── 🗄️ archive/             (499 items)  ← ARCHIVED
+│   ├── old_stuff/                     # rtk/, learn/, research/
+│   ├── scripts/                       # Cleanup scripts
+│   └── paper/                         # Academic paper
+│
+├── 🔌 execution_layer/     (18 items)   ← EXECUTION
+├── 🎨 frontend/            (22 items)   ← WEB UI
+├── 📊 backtest/            (176 items)  ← BACKTEST DATA
+│
+└── ⚙️ [config & database]
+    ├── .env
+    ├── docker-compose.yml
+    ├── btc-quant.db                     # Production DB
+    └── README.md                        # This file
+```
 
 ---
 
@@ -25,31 +55,9 @@ Live trading bot execution layer for Bitcoin on Lighter mainnet with Renaissance
 
 BTC-QUANT is a **live trading bot** that executes orders on Lighter mainnet for Bitcoin perpetuals, powered by:
 - ✅ Renaissance Technologies algorithmic methods
-- ✅ Econophysics research framework
-- ✅ Academic paper search (ArXiv integration)
-- ✅ Multi-AI integration (Claude, ChatGPT, Gemini)
-
----
-
-## 📂 Documentation Structure
-
-All documentation is organized in `docs/` folder:
-
-```
-docs/
-├── START_HERE.md ← Entry point
-├── README.md ← Navigation hub
-├── setup/ ← Installation & setup guides
-├── integration/ ← AI platform setup
-├── research/ ← Key findings & papers
-├── guides/ ← How-to guides
-├── reference/ ← Quick lookup
-└── architecture/ ← System design
-```
-
-**Find what you need**: [`docs/reference/INDEX.md`](docs/reference/INDEX.md)
-
-**Quick commands**: [`docs/reference/QUICK_REFERENCE.md`](docs/reference/QUICK_REFERENCE.md)
+- ✅ 4-Layer Ensemble Architecture (Layer 1-4)
+- ✅ MLP Neural Network for signal generation
+- ✅ Telegram notifications & monitoring
 
 ---
 
@@ -58,81 +66,92 @@ docs/
 | Feature | Status | Details |
 |---------|--------|---------|
 | **Live Trading** | ✅ | Mainnet execution on Lighter |
-| **Strategy** | ✅ | FixedStrategy ($99 margin, 5x leverage) |
-| **Research** | ✅ | 45+ pages Renaissance analysis |
-| **Paper Search** | ✅ | ArXiv + Multi-source tools |
-| **AI Integration** | ✅ | Claude, ChatGPT, Gemini ready |
-| **Tests** | ✅ | 133 passing tests |
+| **ML Model** | ✅ | MLP (layer3_ai.py) running production |
+| **Risk Management** | ✅ | Position sizing, SL/TP |
+| **Notifications** | ✅ | Telegram alerts |
+| **Research** | ✅ | Model evaluation framework |
 
 ---
 
-## 📖 Documentation by Goal
+## 📖 Quick Access
 
-### I want to trade
-→ [`docs/guides/TRADING_GUIDE.md`](docs/guides/TRADING_GUIDE.md)
+### I want to trade (Production)
+→ `backend/` - Production system
+→ `backend/app/core/engines/layer3_ai.py` - MLP Model (Sacred)
+→ `backend/scripts/auto_scalp.py` - Auto trading
 
-### I want to research papers
-→ [`docs/guides/PAPER_SEARCH_GUIDE.md`](docs/guides/PAPER_SEARCH_GUIDE.md)
+### I want to research (New Models)
+→ `cloud_core/` - Research arena
+→ `cloud_core/engines/layer3_logistic.py` - Best research model (53.8%)
+→ `cloud_core/model_evaluator.py` - Compare models
+→ `cloud_core/colab_core.ipynb` - Jupyter experiments
 
-### I want to understand the strategy
-→ [`docs/research/CRYPTO_RELEVANCE_ANALYSIS_2026.md`](docs/research/CRYPTO_RELEVANCE_ANALYSIS_2026.md)
+### I need documentation
+→ `docs/` - All documentation
+→ `docs/START_HERE.md` - Entry point
 
-### I want to use with ChatGPT/Gemini
-→ [`docs/integration/MCP_WITH_OTHER_AI.md`](docs/integration/MCP_WITH_OTHER_AI.md)
-
-### I want to understand everything
-→ Read [`docs/START_HERE.md`](docs/START_HERE.md) → Follow suggested path
+### I want archived/old stuff
+→ `archive/` - Old folders & files
+→ `archive/old_stuff/` - rtk/, learn/, research/
 
 ---
 
 ## 🛠️ Quick Setup
 
-### Test Trading Connection
+### Test Production Connection
 ```bash
 python backend/scripts/test_lighter_connection.py
 ```
 
-### Run Tests
+### Run Production
 ```bash
-pytest backend/tests/ -v
+cd backend
+python live_executor.py
 ```
 
-### Search Papers (CLI)
+### Run Model Evaluation (Research)
 ```bash
-cd learn/arxiv-mcp-server
-python arxiv_simple.py search --query "bitcoin"
+cd cloud_core
+python model_evaluator.py
 ```
 
-### Search Papers (HTTP API)
+### Run Quick Test (Research)
 ```bash
-cd learn/paper-search-mcp
-python mcp_http_server.py --port 8000
-# In another terminal:
-curl "http://127.0.0.1:8000/search?query=econophysics"
+cd cloud_core
+python quick_evaluator.py
 ```
 
 ---
 
 ## 📊 Project Statistics
 
-- 📖 **Documentation**: 100+ pages
-- 🧪 **Tests**: 133 passing
-- 💻 **Code**: 3000+ lines (backend)
-- 📚 **Research**: 45+ pages analysis
-- 📄 **Papers**: 5 econophysics papers found
-- 🛠️ **Tools**: 2 MCP servers + HTTP API
+- � **Production**: 115 files (backend/)
+- � **Research**: 34 files (cloud_core/)
+- �️ **Archived**: 499 files (archive/)
+- � **Documentation**: 103 files (docs/)
+- � **Database**: btc-quant.db (production)
 
 ---
 
-## 🔧 Core Components
+## ⚠️ Important Rules
 
-- **`backend/`** – Execution layer (Lighter mainnet integration)
-- **`learn/`** – Research tools and paper search
-  - `arxiv-mcp-server/` – Direct ArXiv API access
-  - `paper-search-mcp/` – Multi-source paper search
-  - `riset_renaisance/` – Renaissance research files
-- **`tests/`** – Test suite (133 tests)
-- **`docs/`** – Complete documentation
+### 🔴 Production (`backend/`) - DO NOT MODIFY
+- `backend/app/core/engines/layer3_ai.py` - MLP Model running live
+- `backend/app/use_cases/` - Signal, Position, Risk managers
+- `backend/app/adapters/gateways/` - Execution gateways
+- `backend/scripts/` - Production scripts
+
+### 🔬 Research (`cloud_core/`) - Safe to Modify
+- All `layer3_*.py` models for experimentation
+- `model_evaluator.py` - Test and compare models
+- `colab_core.ipynb` - Jupyter notebook
+
+### 🏆 Path to Production
+1. Experiment in `cloud_core/engines/`
+2. Backtest > 60% accuracy
+3. Paper trading 1 month (profit)
+4. Integration test
+5. Replace MLP in `backend/`
 
 ---
 
@@ -144,20 +163,12 @@ Required: `.env` file (template: `.env.template`)
 ```
 LIGHTER_MAINNET_API_KEY=...
 LIGHTER_MAINNET_API_SECRET=...
-LIGHTER_ACCOUNT_INDEX=718591
+LIGHTER_ACCOUNT_INDEX=...
 LIGHTER_TRADING_ENABLED=false  # false by default (safe)
+TELEGRAM_BOT_TOKEN=...
 ```
 
 ---
 
-## 📞 Need Help?
-
-- **Getting started?** → [`docs/START_HERE.md`](docs/START_HERE.md)
-- **Finding a file?** → [`docs/reference/INDEX.md`](docs/reference/INDEX.md)
-- **Need quick command?** → [`docs/reference/QUICK_REFERENCE.md`](docs/reference/QUICK_REFERENCE.md)
-- **Confused about structure?** → [`docs/reference/FOLDER_STRUCTURE.md`](docs/reference/FOLDER_STRUCTURE.md)
-
----
-
-**Status**: ✅ Production Ready — Phase 3 Mainnet  
-**Last Updated**: April 2, 2026
+**Status**: ✅ Production Running — MLP Active  
+**Last Updated**: April 11, 2026

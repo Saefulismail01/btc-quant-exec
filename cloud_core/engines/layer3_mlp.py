@@ -163,14 +163,17 @@ class MLPSignalModel:
             # Scale features
             X_scaled = self.scaler.fit_transform(X)
             
-            # Train MLP
+            # Train MLP dengan parameter yang lebih stabil
             self.model = MLPClassifier(
-                hidden_layer_sizes=self.HIDDEN_LAYERS,
-                activation="relu",
+                hidden_layer_sizes=(32, 16),  # Simpler architecture
+                activation="tanh",  # More stable than relu
                 solver="adam",
-                max_iter=self.MAX_ITER,
+                max_iter=500,  # More iterations
                 early_stopping=True,
-                validation_fraction=0.15,
+                validation_fraction=0.2,
+                n_iter_no_change=20,  # Patience for early stopping
+                learning_rate_init=0.001,  # Lower learning rate
+                alpha=0.01,  # L2 regularization
                 random_state=self.RANDOM_STATE,
                 verbose=False,
             )
