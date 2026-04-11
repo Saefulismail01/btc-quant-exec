@@ -4,10 +4,37 @@ Dokumen ini berfungsi sebagai *single source of truth* untuk melacak progres, ke
 
 ---
 
-## 🚀 Status Saat Ini: v4.6 + Exchange-to-DB Sync + Lighter Live
-**Update Terakhir:** 06 April 2026
+## 🚀 Status Saat Ini: v4.7 + Lighter Fill-Based PnL
+**Update Terakhir:** 08 April 2026
 **Status Eksekusi:** Live di Lighter Mainnet ✅
 **Strategy Aktif:** FixedStrategy (Golden v4.4) — ($99 margin, 5x leverage, No LLM)
+
+### 🔝 Key Updates (v4.7 — 08 April 2026)
+
+**Root Cause:** Tanggal 7 April 2026 jam 03:00 WIB, bot tidak entry padahal ada signal BUY. Investigasi docker logs menemukan dua bug:
+
+**Bug 1: SL Freeze salah trigger saat SL = breakeven**
+- SL dipindah manual ke breakeven setelah trade >8 jam
+- SL hit di $68,870 (di atas entry $68,570) → PnL sebenarnya hampir 0
+- Bot tetap trigger SL freeze sampai 07:00 WIB berikutnya → signal jam 03:00 WIB di-block
+- **Fix:** SL freeze sekarang hanya aktif kalau `pnl_usdt < 0`. SL breakeven/profit tidak freeze.
+
+**Bug 2: PnL calculation salah (formula lokal vs data Lighter)**
+- `_calculate_pnl` pakai `TAKER_FEE_RATE = 0.0002` (0.02%) tapi Lighter charge jauh lebih tinggi
+- Hasil: bot lapor +$1.84 padahal Lighter show -$0.12 (selisih ~$2)
+- **Fix:** PnL sekarang diambil langsung dari fill amount Lighter (`exit_filled_quote - entry_filled_quote`). Formula lokal hanya sebagai fallback jika data fill tidak tersedia.
+
+**Perubahan file:**
+1. `lighter_execution_gateway.py`
+   - `fetch_last_closed_order` sekarang return `filled_quote` dan `filled_base`
+   - Tambah method `fetch_entry_fill_quote()` — dipanggil setelah `place_market_order`
+2. `live_trade_repository.py`
+   - Tambah field `entry_filled_quote` (USDC yang dibayar saat entry)
+   - Migration aman: `ALTER TABLE` yang silent-fail untuk DB existing
+3. `position_manager.py`
+   - Setelah market order fill → `fetch_entry_fill_quote()` dan simpan ke DB
+   - Saat close → `pnl = exit_filled_quote - entry_filled_quote` (Lighter fills)
+   - SL freeze: `if exit_type == "SL" and pnl_usdt < 0` (bukan any SL)
 
 ### 🔝 Key Updates (v4.6 — 06 April 2026)
 

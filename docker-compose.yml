@@ -30,6 +30,49 @@ services:
     networks:
       - btc-quant-network
 
+  # Signal Executor - 4H signal-based execution daemon
+  signal-executor:
+    build:
+      context: .
+      dockerfile: Dockerfile.signal
+    container_name: btc-quant-signal-executor
+    env_file:
+      - .env
+    environment:
+      - LIGHTER_EXECUTION_MODE=${LIGHTER_EXECUTION_MODE:-testnet}
+      - LIGHTER_TRADING_ENABLED=${LIGHTER_TRADING_ENABLED:-false}
+      - BACKEND_API_URL=http://btc-quant-api:8000/api/signal
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+    volumes:
+      - ./execution_layer/lighter:/app/execution_layer/lighter
+      - ./logs:/app/logs
+    depends_on:
+      - btc-quant-api
+    restart: unless-stopped
+    networks:
+      - btc-quant-network
+
+  # Lighter Executor - Main execution daemon
+  lighter-executor:
+    build:
+      context: .
+      dockerfile: Dockerfile.lighter
+    container_name: btc-quant-lighter-executor
+    env_file:
+      - .env
+    environment:
+      - LIGHTER_EXECUTION_MODE=${LIGHTER_EXECUTION_MODE:-testnet}
+      - LIGHTER_TRADING_ENABLED=${LIGHTER_TRADING_ENABLED:-false}
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+    volumes:
+      - ./backend/app/infrastructure:/app/backend/app/infrastructure
+      - ./logs:/app/logs
+    depends_on:
+      - btc-quant-api
+    restart: unless-stopped
+    networks:
+      - btc-quant-network
+
 networks:
   btc-quant-network:
     driver: bridge

@@ -1,0 +1,27 @@
+# Dockerfile for Signal Executor (4H signal-based execution daemon)
+FROM python:3.12-slim
+
+WORKDIR /app
+
+# Install dependencies
+RUN apt-get update && apt-get install -y \
+    git \
+    gcc \
+    g++ \
+    make \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy requirements and install
+COPY backend/requirements.txt ./requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt lighter
+
+# Copy application code
+COPY execution_layer/lighter/signal_executor.py /app/
+COPY execution_layer/lighter/lighter_executor.py /app/execution_layer/lighter/
+COPY .env /app/.env
+
+# Set working directory
+WORKDIR /app
+
+# Run signal executor
+CMD ["python", "signal_executor.py"]

@@ -55,6 +55,7 @@ class LiveTradeRecord:
     signal_verdict: Optional[str]
     signal_conviction: Optional[float]
     candle_open_ts: int
+    entry_filled_quote: Optional[float] = None  # USDC yang dibayar saat entry (dari Lighter)
 
 
 class LiveTradeRepository:
@@ -93,9 +94,15 @@ class LiveTradeRepository:
                         pnl_pct             DOUBLE,
                         signal_verdict      VARCHAR,
                         signal_conviction   DOUBLE,
-                        candle_open_ts      BIGINT NOT NULL
+                        candle_open_ts      BIGINT NOT NULL,
+                        entry_filled_quote  DOUBLE
                     )
                 """)
+                # Migration: tambah kolom untuk DB yang sudah ada
+                try:
+                    con.execute("ALTER TABLE live_trades ADD COLUMN entry_filled_quote DOUBLE")
+                except Exception:
+                    pass  # Kolom sudah ada
             logging.info("[LiveTradeRepository] Tables initialized")
         except (duckdb.IOException, duckdb.InternalException) as e:
             logging.warning(f"[LiveTradeRepository] Skipping _init_tables (DB locked): {e}")
@@ -111,11 +118,12 @@ class LiveTradeRepository:
         leverage: int,
         sl_price: float,
         tp_price: float,
-        sl_order_id: Optional[str],
-        tp_order_id: Optional[str],
-        signal_verdict: Optional[str],
-        signal_conviction: Optional[float],
-        candle_open_ts: int,
+        sl_order_id: Optional[str] = None,
+        tp_order_id: Optional[str] = None,
+        signal_verdict: Optional[str] = None,
+        signal_conviction: Optional[float] = None,
+        candle_open_ts: int = 0,
+        entry_filled_quote: Optional[float] = None,
     ) -> bool:
         """
         Insert a new live trade record.
@@ -148,15 +156,15 @@ class LiveTradeRepository:
                         sl_price, tp_price, sl_order_id, tp_order_id,
                         exit_type, status, pnl_usdt, pnl_pct,
                         signal_verdict, signal_conviction, candle_open_ts,
-                        timestamp_close
-                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                        timestamp_close, entry_filled_quote
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """, [
                     trade_id, int(time.time() * 1000), symbol, side,
                     entry_price, None, size_usdt, size_base, leverage,
                     sl_price, tp_price, sl_order_id, tp_order_id,
                     None, "OPEN", None, None,
                     signal_verdict, signal_conviction, candle_open_ts,
-                    None
+                    None, entry_filled_quote
                 ])
 
         try:
@@ -258,7 +266,8 @@ class LiveTradeRepository:
                         entry_price, exit_price, size_usdt, size_base, leverage,
                         sl_price, tp_price, sl_order_id, tp_order_id,
                         exit_type, status, pnl_usdt, pnl_pct,
-                        signal_verdict, signal_conviction, candle_open_ts
+                        signal_verdict, signal_conviction, candle_open_ts,
+                        entry_filled_quote
                     FROM live_trades
                     WHERE status = 'OPEN'
                     ORDER BY timestamp_open DESC
@@ -291,6 +300,7 @@ class LiveTradeRepository:
                     signal_verdict=row[18],
                     signal_conviction=row[19],
                     candle_open_ts=row[20],
+                    entry_filled_quote=row[21] if len(row) > 21 else None,
                 )
 
         except Exception as e:
@@ -315,7 +325,8 @@ class LiveTradeRepository:
                         entry_price, exit_price, size_usdt, size_base, leverage,
                         sl_price, tp_price, sl_order_id, tp_order_id,
                         exit_type, status, pnl_usdt, pnl_pct,
-                        signal_verdict, signal_conviction, candle_open_ts
+                        signal_verdict, signal_conviction, candle_open_ts,
+                        entry_filled_quote
                     FROM live_trades
                     WHERE status = 'CLOSED'
                     ORDER BY timestamp_close DESC
@@ -346,6 +357,7 @@ class LiveTradeRepository:
                         signal_verdict=row[18],
                         signal_conviction=row[19],
                         candle_open_ts=row[20],
+                        entry_filled_quote=row[21] if len(row) > 21 else None,
                     ))
 
                 return trades

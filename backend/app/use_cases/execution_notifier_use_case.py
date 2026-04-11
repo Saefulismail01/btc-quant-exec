@@ -287,6 +287,76 @@ Resume via API.
             logger.error(f"[ExecutionNotifier] Error sending notification: {e}", exc_info=True)
             return False
 
+    async def notify_entry_blocked(
+        self,
+        block_reason: str,
+        signal_verdict: str,
+        signal_status: str,
+        conviction_pct: float,
+        details: Optional[str] = None,
+    ) -> bool:
+        """
+        Notify when entry is blocked (SL freeze, position exists, invalid signal, etc.)
+
+        Args:
+            block_reason: Reason for blocking (e.g., "SL Freeze", "Position Exists", "Signal Suspended")
+            signal_verdict: Signal verdict (e.g., "STRONG BUY", "WEAK BUY")
+            signal_status: Signal status (e.g., "ACTIVE", "ADVISORY", "SUSPENDED")
+            conviction_pct: Signal conviction percentage
+            details: Additional details (optional)
+
+        Returns:
+            True if sent successfully, False otherwise
+        """
+        if not self.gateway:
+            return False
+
+        try:
+            # Emoji based on block reason
+            if "SL Freeze" in block_reason:
+                status_emoji = "🧊"
+                block_emoji = "⛔"
+            elif "Position" in block_reason:
+                status_emoji = "📍"
+                block_emoji = "🚫"
+            elif "Risk" in block_reason:
+                status_emoji = "⚠️"
+                block_emoji = "🛡️"
+            elif "Suspended" in block_reason or "status" in block_reason.lower():
+                status_emoji = "⏸️"
+                block_emoji = "🚫"
+            else:
+                status_emoji = "⚡"
+                block_emoji = "🚫"
+
+            # Direction emoji
+            direction_emoji = "📈" if "BUY" in signal_verdict else "📉" if "SELL" in signal_verdict else "➖"
+
+            details_text = f"\n📝 Details: {details}" if details else ""
+
+            message = f"""{status_emoji} ENTRY BLOCKED — {block_reason}
+━━━━━━━━━━━━━━━━━━
+{direction_emoji} Signal: {signal_verdict}
+📊 Status: {signal_status}
+🔥 Conviction: {conviction_pct:.1f}%{details_text}
+
+{block_emoji} Entry prevented. Waiting for next signal.
+━━━━━━━━━━━━━━━━━━
+🤖 BTC-QUANT LIVE v4.4"""
+
+            success = await self.gateway.send_message(message, parse_mode="HTML")
+
+            if success:
+                logger.info(f"[ExecutionNotifier] ✅ Entry blocked notification sent: {block_reason}")
+            else:
+                logger.warning("[ExecutionNotifier] Failed to send entry blocked notification")
+
+            return success
+
+        except Exception as e:
+            logger.error(f"[ExecutionNotifier] Error sending entry blocked notification: {e}", exc_info=True)
+            return False
+
     # ─ Helper methods ─────────────────────────────────────────────────────────
 
     def _pct_diff(self, entry: float, target: float) -> float:

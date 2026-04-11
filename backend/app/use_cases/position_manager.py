@@ -73,7 +73,9 @@ class PositionManager:
         self._sl_freeze_until: Optional[datetime] = self._load_freeze_state()
         logger.info(f"[PositionManager] Strategy: {self.strategy.__class__.__name__}")
         if self._sl_freeze_until:
-            logger.info(f"[PositionManager] SL freeze active until {self._sl_freeze_until.isoformat()}")
+            logger.info(
+                f"[PositionManager] SL freeze active until {self._sl_freeze_until.isoformat()}"
+            )
 
     async def sync_position_status(self) -> bool:
         """
@@ -101,7 +103,10 @@ class PositionManager:
             exchange_pos = await self.gateway.get_open_position()
             if exchange_pos is None:
                 import asyncio as _asyncio
-                logger.warning("[PositionManager] get_open_position() returned None — retrying in 3s...")
+
+                logger.warning(
+                    "[PositionManager] get_open_position() returned None — retrying in 3s..."
+                )
                 await _asyncio.sleep(3)
                 exchange_pos = await self.gateway.get_open_position()
 
@@ -117,18 +122,29 @@ class PositionManager:
                 exit_type = "UNKNOWN"
                 try:
                     # First, try to fetch actual filled order from exchange
-                    last_order = await self.gateway.fetch_last_closed_order()
+                    # Filter by SL/TP prices to get the correct trade
+                    last_order = await self.gateway.fetch_last_closed_order(
+                        expected_sl_price=db_trade.sl_price,
+                        expected_tp_price=db_trade.tp_price,
+                    )
                     if last_order:
-                        exit_price = last_order.get("filled_price", db_trade.entry_price)
+                        exit_price = last_order.get(
+                            "filled_price", db_trade.entry_price
+                        )
                         # Determine exit type from order_type field (reliable)
                         order_type_str = last_order.get("order_type", "").lower()
                         if "stop" in order_type_str:
                             exit_type = "SL"
-                        elif "take-profit" in order_type_str or "take_profit" in order_type_str:
+                        elif (
+                            "take-profit" in order_type_str
+                            or "take_profit" in order_type_str
+                        ):
                             exit_type = "TP"
                         else:
                             # Fallback: distance comparison
-                            if abs(exit_price - db_trade.sl_price) < abs(exit_price - db_trade.tp_price):
+                            if abs(exit_price - db_trade.sl_price) < abs(
+                                exit_price - db_trade.tp_price
+                            ):
                                 exit_type = "SL"
                             else:
                                 exit_type = "TP"
@@ -149,13 +165,17 @@ class PositionManager:
                             if current_price and current_price > 0:
                                 sl_dist = abs(current_price - db_trade.sl_price)
                                 tp_dist = abs(current_price - db_trade.tp_price)
-                                logger.info(f"[PositionManager] Heuristic using current price ${current_price:,.2f} | SL dist: {sl_dist:.2f} | TP dist: {tp_dist:.2f}")
+                                logger.info(
+                                    f"[PositionManager] Heuristic using current price ${current_price:,.2f} | SL dist: {sl_dist:.2f} | TP dist: {tp_dist:.2f}"
+                                )
                             else:
                                 # Last resort: check if entry price moved toward SL or TP
                                 # Use SL as default (safer — avoids false TP detection)
                                 sl_dist = 1
                                 tp_dist = 2
-                                logger.warning("[PositionManager] Cannot get current price — defaulting to SL heuristic (safe)")
+                                logger.warning(
+                                    "[PositionManager] Cannot get current price — defaulting to SL heuristic (safe)"
+                                )
 
                             if sl_dist < tp_dist:
                                 exit_price = db_trade.sl_price
@@ -168,21 +188,29 @@ class PositionManager:
                         else:
                             exit_price = db_trade.entry_price
                             exit_type = "MANUAL"
-                            logger.warning("[PositionManager] Using entry price as fallback")
+                            logger.warning(
+                                "[PositionManager] Using entry price as fallback"
+                            )
                 except Exception as e:
                     logger.error(f"[PositionManager] Error determining exit: {e}")
                     # Fallback to heuristic on error
                     if db_trade.entry_price > 0:
                         sl_dist = abs(db_trade.entry_price - db_trade.sl_price)
                         tp_dist = abs(db_trade.entry_price - db_trade.tp_price)
-                        exit_price = db_trade.sl_price if sl_dist < tp_dist else db_trade.tp_price
+                        exit_price = (
+                            db_trade.sl_price
+                            if sl_dist < tp_dist
+                            else db_trade.tp_price
+                        )
                         exit_type = "SL" if sl_dist < tp_dist else "TP"
                     else:
                         exit_price = db_trade.entry_price
                         exit_type = "ERROR"
 
                 # Hitung PnL dari actual fill Lighter jika tersedia
-                exit_filled_quote = last_order.get("filled_quote", 0) if last_order else 0
+                exit_filled_quote = (
+                    last_order.get("filled_quote", 0) if last_order else 0
+                )
                 entry_filled_quote = getattr(db_trade, "entry_filled_quote", None) or 0
 
                 if exit_filled_quote > 0 and entry_filled_quote > 0:
@@ -196,7 +224,11 @@ class PositionManager:
                         f"entry_quote=${entry_filled_quote:.4f} exit_quote=${exit_filled_quote:.4f} "
                         f"pnl=${pnl_usdt:+.4f}"
                     )
-                elif entry_filled_quote > 0 and exit_price > 0 and db_trade.entry_price > 0:
+                elif (
+                    entry_filled_quote > 0
+                    and exit_price > 0
+                    and db_trade.entry_price > 0
+                ):
                     # Branch 2: SL/TP trigger order — filled_quote=0 tapi exit_price valid.
                     # Hitung exit_filled_quote dari: entry_base × exit_price
                     # di mana entry_base = entry_filled_quote / entry_price
@@ -220,7 +252,11 @@ class PositionManager:
                         f"(entry_quote={entry_filled_quote}, exit_quote={exit_filled_quote})"
                     )
 
-                pnl_pct = (pnl_usdt / db_trade.size_usdt * 100) if db_trade.size_usdt > 0 else 0
+                pnl_pct = (
+                    (pnl_usdt / db_trade.size_usdt * 100)
+                    if db_trade.size_usdt > 0
+                    else 0
+                )
 
                 # Update DB
                 self.repo.update_trade_on_close(
@@ -238,8 +274,17 @@ class PositionManager:
                 # PR-2: SL hit dengan loss nyata → freeze entry sampai 07:00 WIB besok
                 # SL hit tapi breakeven/profit (misal SL dipindah manual) → tidak freeze
                 # TP hit → clear freeze yang ada
-                if exit_type == "SL" and pnl_usdt < 0:
-                    self._set_sl_freeze()
+                # EDGE CASE: "SL" dengan profit = trailing SL yang tereksekusi, treat as positive exit
+                if exit_type == "SL":
+                    if pnl_usdt < 0:
+                        # Real SL hit with loss → freeze
+                        self._set_sl_freeze()
+                        logger.info(f"[PositionManager] SL freeze activated (PnL: ${pnl_usdt:+.2f})")
+                    else:
+                        # SL hit tapi profit/breakeven = manual trailing SL
+                        # Clear freeze dan treat sebagai positive exit
+                        self._clear_sl_freeze()
+                        logger.info(f"[PositionManager] SL hit with profit (PnL: ${pnl_usdt:+.2f}) - no freeze, trailing SL executed")
                 elif exit_type == "TP":
                     self._clear_sl_freeze()
 
@@ -264,7 +309,9 @@ class PositionManager:
                         leverage=db_trade.leverage,
                     )
                 except Exception as e:
-                    logger.warning(f"[PositionManager] Failed to send trade closed notification: {e}")
+                    logger.warning(
+                        f"[PositionManager] Failed to send trade closed notification: {e}"
+                    )
 
                 # Start shadow monitoring for manual closes
                 if exit_type == "MANUAL":
@@ -273,7 +320,9 @@ class PositionManager:
                         db_trade.pnl_usdt = pnl_usdt
                         self.shadow_monitor.start_shadow(db_trade)
                     except Exception as e:
-                        logger.warning(f"[PositionManager] Failed to start shadow trade: {e}")
+                        logger.warning(
+                            f"[PositionManager] Failed to start shadow trade: {e}"
+                        )
 
                 return True
 
@@ -291,30 +340,50 @@ class PositionManager:
                     new_tp = active_orders.get("tp_price")
 
                     if new_sl and abs(new_sl - db_trade.sl_price) > 0.01:
-                        logger.info(f"[PositionManager] 🔄 Syncing SL from exchange: ${db_trade.sl_price} -> ${new_sl}")
+                        logger.info(
+                            f"[PositionManager] 🔄 Syncing SL from exchange: ${db_trade.sl_price} -> ${new_sl}"
+                        )
                         db_trade.sl_price = new_sl
                         synced = True
                     if new_tp and abs(new_tp - db_trade.tp_price) > 0.01:
-                        logger.info(f"[PositionManager] 🔄 Syncing TP from exchange: ${db_trade.tp_price} -> ${new_tp}")
+                        logger.info(
+                            f"[PositionManager] 🔄 Syncing TP from exchange: ${db_trade.tp_price} -> ${new_tp}"
+                        )
                         db_trade.tp_price = new_tp
                         synced = True
-                    
+
                     if synced:
-                        self.repo.update_trade_params(db_trade.id, sl_price=db_trade.sl_price, tp_price=db_trade.tp_price)
-                        logger.info(f"[PositionManager] ✅ Database synced with actual exchange orders")
+                        self.repo.update_trade_params(
+                            db_trade.id,
+                            sl_price=db_trade.sl_price,
+                            tp_price=db_trade.tp_price,
+                        )
+                        logger.info(
+                            f"[PositionManager] ✅ Database synced with actual exchange orders"
+                        )
                 except Exception as e:
-                    logger.warning(f"[PositionManager] Failed to sync SL/TP from exchange: {e}")
+                    logger.warning(
+                        f"[PositionManager] Failed to sync SL/TP from exchange: {e}"
+                    )
             else:
-                logger.warning("[PositionManager] Position disappeared just before logging status")
+                logger.warning(
+                    "[PositionManager] Position disappeared just before logging status"
+                )
             return False  # Position still open (or disappeared without close event) — allow normal flow
 
         except Exception as e:
-            logger.error(f"[PositionManager] Error syncing position: {e}", exc_info=True)
+            logger.error(
+                f"[PositionManager] Error syncing position: {e}", exc_info=True
+            )
             return False
 
     async def process_signal(self, signal: SignalResponse) -> bool:
         """
         Process incoming signal and execute trading logic.
+
+        EXCHANGE-FIRST APPROACH:
+        Always check exchange state first, DB is secondary (logging only).
+        This prevents data inconsistency issues where DB shows wrong state.
 
         Args:
             signal: SignalResponse from signal pipeline
@@ -323,7 +392,9 @@ class PositionManager:
             True if processed successfully, False otherwise
         """
         try:
-            logger.info(f"[PositionManager] Processing signal | Verdict: {signal.confluence.verdict}")
+            logger.info(
+                f"[PositionManager] Processing signal | Verdict: {signal.confluence.verdict}"
+            )
 
             # Check trading enabled flag
             if not self._is_trading_enabled():
@@ -347,21 +418,67 @@ class PositionManager:
                     )
                 return True
 
-            # Get or manage existing position
-            db_trade = self.repo.get_open_trade()
+            # EXCHANGE-FIRST: Check position directly from exchange
+            exchange_pos = await self.gateway.get_open_position()
 
+            if exchange_pos:
+                # Position exists at exchange - manage it
+                logger.info(
+                    f"[PositionManager] Position detected at exchange | "
+                    f"{exchange_pos.side} @ ${exchange_pos.entry_price:,.2f} | "
+                    f"PnL: ${exchange_pos.unrealized_pnl:+.2f}"
+                )
+
+                # Get DB record for additional data (SL/TP, order IDs)
+                db_trade = self.repo.get_open_trade()
+
+                if db_trade:
+                    # Both exchange and DB have position - normal manage
+                    return await self._manage_existing_position(signal, db_trade, exchange_pos)
+                else:
+                    # Exchange has position but DB empty - possible sync issue
+                    # Mark as cannot open new until resolved
+                    logger.warning(
+                        "[PositionManager] Exchange has position but DB empty - "
+                        "cannot manage without SL/TP data. Skipping signal."
+                    )
+                    # Notify Telegram about blocked entry
+                    try:
+                        await self.notifier.notify_entry_blocked(
+                            block_reason="Position Exists (DB Sync Issue)",
+                            signal_verdict=signal.confluence.verdict,
+                            signal_status=signal.trade_plan.status,
+                            conviction_pct=signal.confluence.conviction_pct,
+                            details=f"Exchange has {exchange_pos.side} position @ ${exchange_pos.entry_price:,.2f} but DB empty. Cannot manage without SL/TP data.",
+                        )
+                    except Exception as e:
+                        logger.warning(f"[PositionManager] Failed to send blocked entry notification: {e}")
+                    return True
+
+            # No position at exchange - check if we should open
+            logger.info("[PositionManager] No position at exchange")
+
+            # Check if DB incorrectly shows open position (sync issue)
+            db_trade = self.repo.get_open_trade()
             if db_trade:
-                logger.info(f"[PositionManager] Open position exists | Managing...")
-                return await self._manage_existing_position(signal, db_trade)
-            else:
-                logger.info("[PositionManager] No open position | Trying to open new...")
-                return await self._try_open_position(signal)
+                logger.warning(
+                    f"[PositionManager] DB shows open trade but exchange empty - "
+                    f"position likely closed. Marking DB trade as orphaned."
+                )
+                # Could optionally mark DB trade as closed here
+
+            # Try to open new position
+            return await self._try_open_position(signal)
 
         except Exception as e:
-            logger.error(f"[PositionManager] Error processing signal: {e}", exc_info=True)
+            logger.error(
+                f"[PositionManager] Error processing signal: {e}", exc_info=True
+            )
             return False
 
-    async def _manage_existing_position(self, signal: SignalResponse, db_trade) -> bool:
+    async def _manage_existing_position(
+        self, signal: SignalResponse, db_trade, exchange_pos=None
+    ) -> bool:
         """
         Manage an existing open position.
 
@@ -372,15 +489,20 @@ class PositionManager:
         Args:
             signal: Current signal
             db_trade: Database trade record
+            exchange_pos: Optional PositionInfo from exchange (avoid redundant API call)
 
         Returns:
             True if processed, False on error
         """
         try:
-            # Verify position still exists
-            exchange_pos = await self.gateway.get_open_position()
+            # Verify position still exists (use provided exchange_pos if available)
+            if exchange_pos is None:
+                exchange_pos = await self.gateway.get_open_position()
+
             if not exchange_pos:
-                logger.warning("[PositionManager] Position no longer exists at exchange")
+                logger.warning(
+                    "[PositionManager] Position no longer exists at exchange"
+                )
                 # Already handled by sync_position_status, don't double-update
                 return True
 
@@ -408,7 +530,11 @@ class PositionManager:
                 # Update DB
                 exit_price = close_result.filled_price
                 pnl_usdt = self._calculate_pnl(db_trade, exit_price)
-                pnl_pct = (pnl_usdt / db_trade.size_usdt * 100) if db_trade.size_usdt > 0 else 0
+                pnl_pct = (
+                    (pnl_usdt / db_trade.size_usdt * 100)
+                    if db_trade.size_usdt > 0
+                    else 0
+                )
 
                 self.repo.update_trade_on_close(
                     db_trade.id,
@@ -442,7 +568,9 @@ class PositionManager:
                         leverage=db_trade.leverage,
                     )
                 except Exception as e:
-                    logger.warning(f"[PositionManager] Failed to send trade closed notification: {e}")
+                    logger.warning(
+                        f"[PositionManager] Failed to send trade closed notification: {e}"
+                    )
 
                 return True
 
@@ -454,7 +582,9 @@ class PositionManager:
             return True
 
         except Exception as e:
-            logger.error(f"[PositionManager] Error managing position: {e}", exc_info=True)
+            logger.error(
+                f"[PositionManager] Error managing position: {e}", exc_info=True
+            )
             return False
 
     async def _try_open_position(self, signal: SignalResponse) -> bool:
@@ -475,23 +605,46 @@ class PositionManager:
             True if processed (success or declined), False on error
         """
         try:
-            # SAFETY GUARD: Double-check exchange directly — never rely solely on DB
-            # This prevents opening a second position if DB was incorrectly marked closed
+            # REDUNDANT SAFETY GUARD: process_signal already checked exchange-first,
+            # but we double-check here to prevent any race conditions
             live_pos = await self.gateway.get_open_position()
             if live_pos is not None:
                 logger.warning(
                     f"[PositionManager] ⛔ Entry blocked — position still OPEN at exchange "
-                    f"(DB may be out of sync). Entry: ${live_pos.entry_price:,.2f}"
+                    f"(race condition detected). Entry: ${live_pos.entry_price:,.2f}"
                 )
+                # Notify Telegram about race condition block
+                try:
+                    await self.notifier.notify_entry_blocked(
+                        block_reason="Position Exists (Race Condition)",
+                        signal_verdict=signal.confluence.verdict,
+                        signal_status=signal.trade_plan.status,
+                        conviction_pct=signal.confluence.conviction_pct,
+                        details=f"Position already open @ ${live_pos.entry_price:,.2f}. Cannot open another.",
+                    )
+                except Exception as e:
+                    logger.warning(f"[PositionManager] Failed to send race condition notification: {e}")
                 return True
 
             # PR-2: Block entry if SL freeze is active
             if self._is_sl_frozen():
                 freeze_until: Optional[datetime] = self._sl_freeze_until
+                freeze_str = freeze_until.strftime('%H:%M') if freeze_until else 'unknown'
                 logger.info(
                     f"[PositionManager] ⛔ Entry blocked — SL freeze until "
                     f"{freeze_until.isoformat() if freeze_until else '?'} WIB"
                 )
+                # Notify Telegram about SL freeze
+                try:
+                    await self.notifier.notify_entry_blocked(
+                        block_reason="SL Freeze Active",
+                        signal_verdict=signal.confluence.verdict,
+                        signal_status=signal.trade_plan.status,
+                        conviction_pct=signal.confluence.conviction_pct,
+                        details=f"SL freeze active until {freeze_str} WIB. Entry blocked until next trading window.",
+                    )
+                except Exception as e:
+                    logger.warning(f"[PositionManager] Failed to send SL freeze notification: {e}")
                 return True
 
             # Check signal status
@@ -500,6 +653,17 @@ class PositionManager:
                     f"[PositionManager] Signal not ACTIVE/ADVISORY (status={signal.trade_plan.status}). "
                     f"Skipping open."
                 )
+                # Notify Telegram about signal status block
+                try:
+                    await self.notifier.notify_entry_blocked(
+                        block_reason=f"Signal {signal.trade_plan.status}",
+                        signal_verdict=signal.confluence.verdict,
+                        signal_status=signal.trade_plan.status,
+                        conviction_pct=signal.confluence.conviction_pct,
+                        details=f"Signal status is {signal.trade_plan.status}, not ACTIVE/ADVISORY. No entry allowed.",
+                    )
+                except Exception as e:
+                    logger.warning(f"[PositionManager] Failed to send signal status notification: {e}")
                 return True
 
             # Check RiskManager (with actual account balance for proper position sizing)
@@ -509,7 +673,10 @@ class PositionManager:
                     risk_result = self.risk_manager.evaluate(
                         portfolio_value=account_balance,
                         atr=signal.price.atr14,
-                        sl_multiplier=1.333 / 100 * signal.price.now / max(signal.price.atr14, 1),
+                        sl_multiplier=1.333
+                        / 100
+                        * signal.price.now
+                        / max(signal.price.atr14, 1),
                         requested_leverage=15,
                         current_price=signal.price.now,
                     )
@@ -518,6 +685,17 @@ class PositionManager:
                             f"[PositionManager] RiskManager blocked: {risk_result.rejection_reason} "
                             f"(balance: ${account_balance:,.2f})"
                         )
+                        # Notify Telegram about risk manager block
+                        try:
+                            await self.notifier.notify_entry_blocked(
+                                block_reason="Risk Manager Block",
+                                signal_verdict=signal.confluence.verdict,
+                                signal_status=signal.trade_plan.status,
+                                conviction_pct=signal.confluence.conviction_pct,
+                                details=f"Risk Manager: {risk_result.rejection_reason}. Balance: ${account_balance:,.2f}",
+                            )
+                        except Exception as e:
+                            logger.warning(f"[PositionManager] Failed to send risk block notification: {e}")
                         return True
                 except Exception as e:
                     logger.error(f"[PositionManager] Failed to check risk: {e}")
@@ -533,10 +711,10 @@ class PositionManager:
                 action=side,
                 signal_data=signal.dict(),
             )
-            sl_price   = params.sl_price
-            tp_price   = params.tp_price
+            sl_price = params.sl_price
+            tp_price = params.tp_price
             margin_usd = params.margin_usd
-            leverage   = params.leverage
+            leverage = params.leverage
 
             logger.info(
                 f"[PositionManager] 🔓 Opening {side} | "
@@ -553,7 +731,9 @@ class PositionManager:
             )
 
             if not market_result.success:
-                logger.error(f"[PositionManager] Market order failed: {market_result.error_message}")
+                logger.error(
+                    f"[PositionManager] Market order failed: {market_result.error_message}"
+                )
                 return True  # Don't retry, wait for next signal
 
             entry_price = market_result.filled_price
@@ -567,13 +747,21 @@ class PositionManager:
             # Ambil filled_quote_amount dari Lighter untuk PnL yang akurat saat close
             entry_filled_quote: Optional[float] = None
             try:
-                entry_filled_quote = await self.gateway.fetch_entry_fill_quote(market_result.order_id)
+                entry_filled_quote = await self.gateway.fetch_entry_fill_quote(
+                    market_result.order_id
+                )
                 if entry_filled_quote:
-                    logger.info(f"[PositionManager] Entry fill quote captured: ${entry_filled_quote:.4f}")
+                    logger.info(
+                        f"[PositionManager] Entry fill quote captured: ${entry_filled_quote:.4f}"
+                    )
                 else:
-                    logger.warning("[PositionManager] Entry fill quote not found — PnL will use fallback formula")
+                    logger.warning(
+                        "[PositionManager] Entry fill quote not found — PnL will use fallback formula"
+                    )
             except Exception as e:
-                logger.warning(f"[PositionManager] Failed to fetch entry fill quote: {e}")
+                logger.warning(
+                    f"[PositionManager] Failed to fetch entry fill quote: {e}"
+                )
 
             # Place SL order (CRITICAL)
             sl_result = await self.gateway.place_sl_order(
@@ -599,10 +787,12 @@ class PositionManager:
                         side=side,
                         entry_price=entry_price,
                         size_usdt=margin_usd,
-                        leverage=leverage
+                        leverage=leverage,
                     )
-                    pnl_usdt = self._calculate_pnl(trade_mock, close_result.filled_price)
-                    pnl_pct = (pnl_usdt / margin_usd * 100)
+                    pnl_usdt = self._calculate_pnl(
+                        trade_mock, close_result.filled_price
+                    )
+                    pnl_pct = pnl_usdt / margin_usd * 100
                     self.repo.insert_trade(
                         trade_id=market_result.order_id,
                         symbol="BTC/USDT",
@@ -628,15 +818,21 @@ class PositionManager:
                             exit=close_result.filled_price,
                             pnl_usdt=pnl_usdt,
                             pnl_pct=pnl_pct,
-                            exit_type="EMERGENCY_SL_FAIL"
+                            exit_type="EMERGENCY_SL_FAIL",
                         )
                     except Exception as e:
-                        logger.warning(f"Failed to send emergency close notification: {e}")
+                        logger.warning(
+                            f"Failed to send emergency close notification: {e}"
+                        )
                 else:
-                    logger.error(f"Emergency position close FAILED: {close_result.error_message}")
+                    logger.error(
+                        f"Emergency position close FAILED: {close_result.error_message}"
+                    )
                 return False
 
-            logger.info(f"[PositionManager] ✅ SL order placed | ID: {sl_result.order_id}")
+            logger.info(
+                f"[PositionManager] ✅ SL order placed | ID: {sl_result.order_id}"
+            )
 
             # Place TP order (non-critical)
             tp_result = await self.gateway.place_tp_order(
@@ -651,7 +847,9 @@ class PositionManager:
                     f"{tp_result.error_message}"
                 )
             else:
-                logger.info(f"[PositionManager] ✅ TP order placed | ID: {tp_result.order_id}")
+                logger.info(
+                    f"[PositionManager] ✅ TP order placed | ID: {tp_result.order_id}"
+                )
 
             # Record to DB
             trade_id = market_result.order_id
@@ -692,12 +890,16 @@ class PositionManager:
                     signal_verdict=signal.confluence.verdict,
                 )
             except Exception as e:
-                logger.warning(f"[PositionManager] Failed to send trade opened notification: {e}")
+                logger.warning(
+                    f"[PositionManager] Failed to send trade opened notification: {e}"
+                )
 
             return True
 
         except Exception as e:
-            logger.error(f"[PositionManager] Error opening position: {e}", exc_info=True)
+            logger.error(
+                f"[PositionManager] Error opening position: {e}", exc_info=True
+            )
             return False
 
     # ─ SL freeze state helpers ────────────────────────────────────────────────
