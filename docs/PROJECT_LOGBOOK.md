@@ -4,10 +4,86 @@ Dokumen ini berfungsi sebagai *single source of truth* untuk melacak progres, ke
 
 ---
 
-## 🚀 Status Saat Ini: v4.7 + Lighter Fill-Based PnL
-**Update Terakhir:** 08 April 2026
+## 🚀 Status Saat Ini: v4.8 + Trailing SL & Order ID Tracking
+**Update Terakhir:** 12 April 2026
 **Status Eksekusi:** Live di Lighter Mainnet ✅
-**Strategy Aktif:** FixedStrategy (Golden v4.4) — ($99 margin, 5x leverage, No LLM)
+**Strategy Aktif:** Signal Executor + Intraday Monitor (Trailing SL 15m)
+**Execution Mode:** Signal Executor (API hanya generate signal)
+
+### 🔝 Key Updates (v4.8 — 12 April 2026)
+
+**Root Cause:** Bot masih kena SL 2x dalam satu hari karena SL freeze tidak bekerja di signal executor. SL freeze logic ada di API (PositionManager) tapi signal executor eksekusi langsung ke Lighter tanpa cek freeze state.
+
+**Implementasi Order ID Tracking & Trailing SL:**
+
+1. **Order ID Tracking** (`signal_executor.py`)
+   - Tambah `ORDER_IDS_FILE` path: `execution_layer/lighter/order_ids.json`
+   - Implement `load_order_ids()`, `save_order_ids()`, `clear_order_ids()`
+   - Simpan order IDs (entry, SL, TP) setelah eksekusi trade
+   - Clear order IDs ketika posisi close atau tidak ada posisi
+
+2. **SL Order Update Logic** (`trailing_sl.py`)
+   - Implement `cancel_order(order_id, nonce)` untuk cancel SL order by transaction hash
+   - Implement `update_sl_order(position, new_sl_price)` dengan pattern cancel + create:
+     - Load SL order ID dari file
+     - Cancel existing SL order
+     - Create new SL order dengan harga trailing
+     - Update order IDs di file
+   - Implement trailing SL logic: trail jika profit > 1%, lock minimal 0.5% profit
+
+3. **Intraday Monitor Integration** (`intraday_monitor.py`)
+   - Add order ID clearing ketika posisi close
+   - Add `clear_order_ids()` function
+   - Clear order IDs di monitoring cycle ketika tidak ada posisi
+   - Clear order IDs setelah manual close position
+
+4. **Unit Tests** (`tests/test_order_id_tracking.py`)
+   - 8 unit tests untuk order ID tracking logic
+   - Test save/load/clear dan error handling
+   - Semua tests pass (95/95 total tests including trailing SL & SL freeze tests)
+
+5. **SL Freeze di Signal Executor** (`signal_executor.py`)
+   - Implement SL freeze check di `run_cycle()` sebelum entry
+   - Load freeze state dari `sl_freeze_state.json` (shared dengan API)
+   - Block entry jika freeze aktif sampai 07:00 WIB besok
+
+**Deployment & Architecture Change:**
+
+6. **Disable PositionManager Execution**
+   - Set `LIGHTER_TRADING_ENABLED=false` di `.env` VPS
+   - API (PositionManager) hanya generate signal, tidak eksekusi trade
+   - Mencegah double entry antara API dan signal executor
+
+7. **Enable Signal Executor + Intraday Monitor**
+   - Enable `signal-executor` service di docker-compose.yml
+   - Enable `intraday-monitor` service di docker-compose.yml
+   - Set `LIGHTER_TRADING_ENABLED=true` untuk signal executor (override .env)
+   - Deploy ke VPS dengan LIVE TRADING mode
+
+8. **Bug Fix: Intraday Monitor Minute Overflow**
+   - Fix error `ValueError: minute must be in 0..59` di perhitungan next check time
+   - Handle overflow ketika next_quarter >= 60 (tambah 1 jam dan reset minute ke 0)
+
+**Perubahan file:**
+1. `execution_layer/lighter/signal_executor.py` - Order ID tracking + SL freeze check
+2. `execution_layer/lighter/trailing_sl.py` - SL order update (cancel + create) + trailing logic
+3. `execution_layer/lighter/intraday_monitor.py` - Order ID clearing + minute overflow fix
+4. `execution_layer/lighter/tests/test_order_id_tracking.py` - Unit tests baru
+5. `docker-compose.yml` - Enable signal-executor & intraday-monitor services
+6. `.env` (VPS) - Set `LIGHTER_TRADING_ENABLED=false` untuk API
+
+**Setup Baru:**
+- API (btc-quant-api) = Generate signal only (PositionManager execution disabled)
+- Signal Executor = Eksekusi trade ke Lighter + SL freeze check + Order ID tracking
+- Intraday Monitor = Trailing SL 15m cycle + Early exit detection
+- SL Freeze State = Shared file `sl_freeze_state.json` antara API dan signal executor
+- Order ID State = File `order_ids.json` untuk tracking SL/TP orders
+
+**Commits:**
+- `f4bcf62` - Disable signal-executor, intraday-monitor, lighter-executor
+- `6880c6a` - Enable intraday-monitor for trailing SL
+- `79e2066` - Update TRAILING_SL_README.md with deployment status
+- `9264d02` - Enable signal executor with LIVE TRADING mode + fix intraday monitor bug
 
 ### 🔝 Key Updates (v4.7 — 08 April 2026)
 
@@ -102,6 +178,41 @@ Dokumen ini berfungsi sebagai *single source of truth* untuk melacak progres, ke
 ## 🛠️ Riwayat Implementasi (Timeline)
 
 ### April 2026
+
+- **[2026-04-12]** Session: Order ID Tracking & Trailing SL Implementation (v4.8).
+    - **Root Cause:** Bot kena SL 2x dalam satu hari karena SL freeze tidak bekerja di signal executor. SL freeze logic ada di API tapi signal executor eksekusi langsung tanpa cek freeze state.
+    - **Implementasi Order ID Tracking:** Tambah `load_order_ids()`, `save_order_ids()`, `clear_order_ids()` di `signal_executor.py` untuk tracking SL/TP order IDs ke file `order_ids.json`.
+    - **SL Order Update Logic:** Implement `cancel_order()` dan `update_sl_order()` di `trailing_sl.py` dengan pattern cancel + create untuk update SL order secara dinamis.
+    - **Trailing SL Logic:** Trail SL jika profit > 1%, lock minimal 0.5% profit. Step size 0.25% per trailing update.
+    - **Intraday Monitor Integration:** Add order ID clearing di `intraday_monitor.py` untuk clear order IDs ketika posisi close.
+    - **SL Freeze di Signal Executor:** Implement SL freeze check di signal executor untuk block entry setelah SL hit sampai 07:00 WIB besok.
+    - **Unit Tests:** 8 unit tests untuk order ID tracking, total 95/95 tests pass (termasuk trailing SL & SL freeze tests).
+    - **Architecture Change:** Disable PositionManager execution (`LIGHTER_TRADING_ENABLED=false`), enable signal executor untuk eksekusi trade + SL freeze + order ID tracking.
+    - **Deployment:** Deploy signal executor + intraday monitor ke VPS dengan LIVE TRADING mode. Fix intraday monitor minute overflow bug.
+    - **Commits:** `f4bcf62`, `6880c6a`, `79e2066`, `9264d02`.
+
+- **[2026-04-11]** Session: Exchange-First Architecture Fix & Cloud Core Research Engine.
+    - **Exchange-First Architecture:** Implementasi architecture baru di mana Lighter exchange adalah source of truth untuk position status (bukan database). Triple-check sebelum close position di DB.
+    - **False Position Closure Bug Fix:** Tambah timestamp validation di `fetch_last_closed_order` untuk mengabaikan order lama. Tambah `position_open_time` parameter untuk mencegah matching pre-position orders.
+    - **Position Status Notification:** Implement `notify_position_status` untuk notifikasi status posisi yang sudah terbuka.
+    - **SL Freeze Trailing SL Fix:** Perbaikan SL freeze logic untuk trailing SL di backend.
+    - **Telegram Blocked Entry Notifications:** Implement notifikasi Telegram ketika entry diblok (SL freeze, dll).
+    - **Cloud Core Research Engine:** Implementasi `cloud_core/` sebagai mini core engine untuk research (L1-L4 only, tanpa executor).
+        - Layer 1: BCD (Bayesian Changepoint Detection)
+        - Layer 2: EMA (Exponential Moving Average)
+        - Layer 3: MLP/XGBoost/RandomForest/LightGBM/LSTM/Logistic/Advanced/Rules (alternatives)
+        - Layer 4: Risk Management
+        - Spectrum Engine: Ensemble voting
+        - Live/Paper Executor untuk testing
+    - **Self-Contained Testing System:** Cloud core bisa berjalan independent di cloud VMs tanpa dependency ke backend.
+    - **Colab Core Notebook:** Implementasi `colab_core.ipynb` untuk research di Google Colab.
+    - **Directory Cleanup:** Reorganisasi directory structure - pindahkan old stuff ke `archive/`, docs ke `docs/`, scripts ke `archive/scripts/`.
+    - **Docker Fixes:**
+        - Fix Docker numpy<2 dependency conflict untuk lighter-sdk
+        - Fix executor-specific requirements tanpa pandas-ta untuk lighter-sdk compatibility
+        - Fix Python path untuk executor containers - copy backend ke /app dan set PYTHONPATH
+    - **Backtest Research Scripts:** Multiple scripts untuk evaluasi BCD confidence, precision filter, layer accuracy, meta classifier.
+    - **Commits:** `cb88781`, `dfad4e5`, `64ffb55`, `e424772`, `9259f8d`, `0f4dd35`, `ed09709`, `59e3617`, `56c0b9b`.
 
 - **[2026-04-06]** Session: Fix "Inconsistency" & Real-time Exchange Sync (v4.6).
     - Implementasi `fetch_open_orders` dan `get_active_sl_tp` di `LighterExecutionGateway`.
@@ -236,7 +347,7 @@ Dokumen ini berfungsi sebagai *single source of truth* untuk melacak progres, ke
 
 ---
 
-## 🎯 Fokus Saat Ini: Stabilisasi Live + Sprint 2-4
+## 🎯 Fokus Saat Ini: Monitoring Trailing SL & Order ID Tracking (v4.8)
 
 ### Status Lighter Execution
 | Task | Status | Note |
@@ -247,20 +358,29 @@ Dokumen ini berfungsi sebagai *single source of truth* untuk melacak progres, ke
 | Exit Price Fix | ✅ DONE | 25 Mar — trigger_price fallback |
 | Startup Sync | ✅ DONE | 25 Mar |
 | HestonStrategy Live | ✅ DONE | 26 Mar — $5 margin, ATR-adaptive |
-
-### Roadmap Sprint (dari DOD v4)
-| Sprint | Target | Status | Blocking? |
-|--------|--------|--------|-----------|
-| Sprint 1: Exit Management | R:R ≥ 1.8, DD ≤ 15% | ✅ DONE (backtest) | — |
-| Sprint 2: DD Adaptive Sizing | DD ≤ 20%, Sharpe ≥ 1.8 | ⏳ PENDING | Butuh equity tracking live |
-| Sprint 3: Signal Quality | WR ≥ 52%, Bear WR ≥ 52% | ⏳ PENDING | Setelah Sprint 2 |
-| Sprint 4: Frequency | ≥ 1 trade/hari | ⏳ PENDING | Setelah Sprint 3 |
+| Exchange-First Architecture | ✅ DONE | 11 Apr — Exchange sebagai source of truth, triple-check |
+| False Position Closure Fix | ✅ DONE | 11 Apr — Timestamp validation, position_open_time |
+| Position Status Notification | ✅ DONE | 11 Apr — Notify status posisi terbuka |
+| SL Freeze Trailing SL Fix | ✅ DONE | 11 Apr — Perbaikan SL freeze untuk trailing SL |
+| Telegram Blocked Entry Notifications | ✅ DONE | 11 Apr — Notifikasi ketika entry diblok |
+| Cloud Core Research Engine | ✅ DONE | 11 Apr — Mini core engine untuk research (L1-L4) |
+| Colab Core Notebook | ✅ DONE | 11 Apr — Single-file notebook untuk Google Colab |
+| Directory Cleanup | ✅ DONE | 11 Apr — Reorganisasi struktur direktori |
+| Docker Fixes (numpy, pandas-ta, PYTHONPATH) | ✅ DONE | 11 Apr — Perbaikan dependency dan path |
+| Backtest Research Scripts | ✅ DONE | 11 Apr — Evaluasi BCD, layer accuracy, meta classifier |
+| Order ID Tracking | ✅ DONE | 12 Apr — Track SL/TP order IDs untuk trailing SL |
+| SL Order Update (Cancel+Create) | ✅ DONE | 12 Apr — Update SL order secara dinamis |
+| Trailing SL Logic | ✅ DONE | 12 Apr — Trail jika profit > 1%, lock 0.5% |
+| Intraday Monitor | ✅ DONE | 12 Apr — 15m monitoring cycle untuk trailing SL |
+| SL Freeze di Signal Executor | ✅ DONE | 12 Apr — Block entry setelah SL hit |
+| Architecture Change (Signal Executor) | ✅ DONE | 12 Apr — Signal executor eksekusi, API hanya generate signal |
 
 ### Next Action (Priority)
-1. **Monitor HestonStrategy** — validasi 5-10 trade live ($5 margin)
-2. **Naikkan margin** ke $10-20 kalau 5 trade pertama profitable
-3. **Implement Sprint 2** — DD adaptive sizing (graduated risk reduction)
-4. **Leverage 3-5x** — setelah Sprint 2 deployed dan DD terkontrol
+1. **Monitor Trailing SL** — validasi trailing SL bekerja dengan baik pada live trading
+2. **Monitor SL Freeze** — pastikan SL freeze bekerja di signal executor (block entry setelah SL hit)
+3. **Validasi Order ID Tracking** — pastikan order IDs tersimpan dengan benar dan SL update berhasil
+4. **Monitor Intraday Monitor** — pastikan 15m cycle berjalan smooth tanpa error
+5. **Analisis Performa Trailing SL** — bandingkan performa dengan vs tanpa trailing SL setelah 10-20 trades
 
 ---
 
@@ -268,13 +388,9 @@ Dokumen ini berfungsi sebagai *single source of truth* untuk melacak progres, ke
 - **Bear Market WR**: Win Rate di bear market (47.1%) perlu ditingkatkan agar lebih stabil.
 - **Data Leakage Check**: Memastikan tidak ada lookahead bias pada model MLP v4.4.
 - **Lighter Nonce Sensitivity**: Sistem nonce Lighter sangat ketat, butuh manajemen state yang presisi.
-
----
-
-## 📅 Rencana Langkah Berikutnya (Action Items)
-1.  **Phase 1 Lighter**: Setup `LighterExecutionGateway` yang mendukung Testnet.
-2.  **MLP Deep-dive**: Analisis *feature importance* untuk memahami mengapa Bear Market WR rendah.
-3.  **Cross-Validation**: Implementasi Walk-Forward kembali untuk memvalidasi bobot 0.3/0.25/0.45 di data 2022.
+- **Trailing SL Gap Risk**: Cancel + create SL order ada jeda tanpa proteksi (meskipun singkat, ~3 detik).
+- **Order ID State Consistency**: Pastikan order IDs selalu sinkron antara signal executor dan intraday monitor.
+- **SL Freeze Sync**: Freeze state shared antara API dan signal executor perlu dipastikan konsisten.
 
 ---
 *Log ini diperbarui setiap kali ada perubahan signifikan pada arsitektur atau status proyek.*

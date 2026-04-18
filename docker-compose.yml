@@ -30,7 +30,7 @@ services:
     networks:
       - btc-quant-network
 
-  # Signal Executor - 4H signal-based execution daemon
+  # Signal Executor - 4H signal-based execution daemon with SL freeze & trailing SL
   signal-executor:
     build:
       context: .
@@ -40,31 +40,11 @@ services:
       - .env
     environment:
       - LIGHTER_EXECUTION_MODE=${LIGHTER_EXECUTION_MODE:-testnet}
-      - LIGHTER_TRADING_ENABLED=${LIGHTER_TRADING_ENABLED:-false}
+      - LIGHTER_TRADING_ENABLED=true  # Override .env for signal executor
       - BACKEND_API_URL=http://btc-quant-api:8000/api/signal
       - LOG_LEVEL=${LOG_LEVEL:-INFO}
     volumes:
       - ./execution_layer/lighter:/app/execution_layer/lighter
-      - ./logs:/app/logs
-    depends_on:
-      - btc-quant-api
-    restart: unless-stopped
-    networks:
-      - btc-quant-network
-
-  # Lighter Executor - Main execution daemon
-  lighter-executor:
-    build:
-      context: .
-      dockerfile: Dockerfile.lighter
-    container_name: btc-quant-lighter-executor
-    env_file:
-      - .env
-    environment:
-      - LIGHTER_EXECUTION_MODE=${LIGHTER_EXECUTION_MODE:-testnet}
-      - LIGHTER_TRADING_ENABLED=${LIGHTER_TRADING_ENABLED:-false}
-      - LOG_LEVEL=${LOG_LEVEL:-INFO}
-    volumes:
       - ./backend/app/infrastructure:/app/backend/app/infrastructure
       - ./logs:/app/logs
     depends_on:
@@ -72,6 +52,52 @@ services:
     restart: unless-stopped
     networks:
       - btc-quant-network
+    command: python execution_layer/lighter/signal_executor.py
+
+  # Intraday Monitor - 15m position monitoring for trailing SL & early exit
+  intraday-monitor:
+    build:
+      context: .
+      dockerfile: Dockerfile.signal
+    container_name: btc-quant-intraday-monitor
+    env_file:
+      - .env
+    environment:
+      - LIGHTER_EXECUTION_MODE=${LIGHTER_EXECUTION_MODE:-testnet}
+      - LIGHTER_TRADING_ENABLED=${LIGHTER_TRADING_ENABLED:-false}
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+    volumes:
+      - ./execution_layer/lighter:/app/execution_layer/lighter
+      - ./backend/app/infrastructure:/app/backend/app/infrastructure
+      - ./logs:/app/logs
+    depends_on:
+      - btc-quant-api
+    restart: unless-stopped
+    networks:
+      - btc-quant-network
+    command: python execution_layer/lighter/intraday_monitor.py
+
+  # Lighter Executor - Main execution daemon
+  # DISABLED: Using API-only execution
+  # lighter-executor:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile.lighter
+  #   container_name: btc-quant-lighter-executor
+  #   env_file:
+  #     - .env
+  #   environment:
+  #     - LIGHTER_EXECUTION_MODE=${LIGHTER_EXECUTION_MODE:-testnet}
+  #     - LIGHTER_TRADING_ENABLED=${LIGHTER_TRADING_ENABLED:-false}
+  #     - LOG_LEVEL=${LOG_LEVEL:-INFO}
+  #   volumes:
+  #     - ./backend/app/infrastructure:/app/backend/app/infrastructure
+  #     - ./logs:/app/logs
+  #   depends_on:
+  #     - btc-quant-api
+  #   restart: unless-stopped
+  #   networks:
+  #     - btc-quant-network
 
 networks:
   btc-quant-network:

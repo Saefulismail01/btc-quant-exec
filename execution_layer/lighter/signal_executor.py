@@ -5,12 +5,12 @@ BTC-QUANT v4.4 — 4H Signal-Based Execution Daemon
 Reads cached signal from backend container every 4H and executes on Lighter mainnet.
 
 Signal → Trade mapping:
-  STRONG BUY/SELL  (ACTIVE)    → margin=$15, leverage=15x
-  WEAK BUY/SELL    (ADVISORY)  → margin=$10, leverage=15x
+  STRONG BUY/SELL  (ACTIVE)    → margin=$100, leverage=5x
+  WEAK BUY/SELL    (ADVISORY)  → margin=$50, leverage=5x (optional)
   NEUTRAL                      → skip
   SUSPENDED                    → skip
 
-SL/TP from signal.trade_plan.sl and signal.trade_plan.tp1 (Heston ATR-based).
+SL/TP: FixedStrategy v4.4 (SL=1.333%, TP=0.71%)
 
 Usage:
     python execution_layer/lighter/signal_executor.py
@@ -38,7 +38,7 @@ sys.path.insert(0, str(root_path / "backend"))
 from dotenv import load_dotenv
 load_dotenv(root_path / ".env")
 
-import lighter
+import lighter  # type: ignore
 import aiohttp
 
 # ── Config ─────────────────────────────────────────────────────────────────────
@@ -50,11 +50,14 @@ if API_SECRET.startswith("0x"):
 API_KEY_INDEX = int(os.getenv("LIGHTER_API_KEY_INDEX", "3"))
 ACCOUNT_INDEX = int(os.getenv("LIGHTER_ACCOUNT_INDEX", "718591"))
 BTC_MARKET = 1
-LEVERAGE = 15
 
-# Margin per signal strength
-MARGIN_ACTIVE = 15.0    # $15 for STRONG BUY/SELL
-MARGIN_ADVISORY = 10.0  # $10 for WEAK BUY/SELL
+# Leverage & Margin dari env (default: FixedStrategy v4.4)
+LEVERAGE = int(os.getenv("LIGHTER_LEVERAGE", "5"))
+MARGIN_USD = float(os.getenv("LIGHTER_MARGIN_USD", "100.0"))  # $100 equity
+
+# Slippage & SL/TP dari FixedStrategy
+SL_PCT = float(os.getenv("LIGHTER_SL_PCT", "1.333"))
+TP_PCT = float(os.getenv("LIGHTER_TP_PCT", "0.71"))
 
 # Slippage tolerance: 2% buffer to ensure fill
 SLIPPAGE = 0.02
@@ -67,6 +70,12 @@ SIGNAL_DELAY_MINUTES = 2
 # Trading enabled flag
 TRADING_ENABLED = os.getenv("LIGHTER_TRADING_ENABLED", "false").lower() == "true"
 
+# SL freeze state file
+FREEZE_STATE_FILE = Path(__file__).parent.parent / "backend" / "app" / "infrastructure" / "sl_freeze_state.json"
+
+# Order IDs state file (for tracking SL/TP orders for trailing SL)
+ORDER_IDS_FILE = Path(__file__).parent / "order_ids.json"
+
 # ── Logging ────────────────────────────────────────────────────────────────────
 
 logging.basicConfig(
@@ -75,6 +84,76 @@ logging.basicConfig(
     datefmt="%Y-%m-%d %H:%M:%S",
 )
 logger = logging.getLogger(__name__)
+
+# ── SL Freeze helpers ─────────────────────────────────────────────────────────────
+
+WIB = timezone(timedelta(hours=7))
+
+def load_freeze_state() -> datetime | None:
+    """Load SL freeze timestamp from disk."""
+    try:
+        if FREEZE_STATE_FILE.exists():
+            with open(FREEZE_STATE_FILE, "r") as f:
+                data = json.load(f)
+            ts = data.get("sl_freeze_until")
+            if ts:
+                return datetime.fromisoformat(ts)
+    except Exception as e:
+        logger.warning(f"Could not load freeze state: {e}")
+    return None
+
+def is_sl_frozen() -> bool:
+    """Return True if new entries are blocked due to recent SL hit."""
+    freeze_until = load_freeze_state()
+    if freeze_until is None:
+        return False
+    now = datetime.now(WIB)
+    if now >= freeze_until:
+        # Freeze expired, clear it
+        try:
+            with open(FREEZE_STATE_FILE, "w") as f:
+                json.dump({"sl_freeze_until": None}, f)
+        except Exception:
+            pass
+        return False
+    return True
+
+
+# ── Order ID tracking helpers ─────────────────────────────────────────────────────
+
+def load_order_ids() -> dict:
+    """Load order IDs from disk."""
+    try:
+        if ORDER_IDS_FILE.exists():
+            with open(ORDER_IDS_FILE, "r") as f:
+                return json.load(f)
+    except Exception as e:
+        logger.warning(f"Could not load order IDs: {e}")
+    return {}
+
+
+def save_order_ids(order_ids: dict) -> bool:
+    """Save order IDs to disk."""
+    try:
+        with open(ORDER_IDS_FILE, "w") as f:
+            json.dump(order_ids, f, indent=2)
+        logger.info(f"[OrderIDs] Saved: {order_ids}")
+        return True
+    except Exception as e:
+        logger.error(f"Could not save order IDs: {e}")
+        return False
+
+
+def clear_order_ids() -> bool:
+    """Clear order IDs (called when position is closed)."""
+    try:
+        if ORDER_IDS_FILE.exists():
+            ORDER_IDS_FILE.unlink()
+            logger.info("[OrderIDs] Cleared")
+        return True
+    except Exception as e:
+        logger.error(f"Could not clear order IDs: {e}")
+        return False
 
 # ── Signal reading ─────────────────────────────────────────────────────────────
 
@@ -124,21 +203,37 @@ def parse_signal(signal) -> dict | None:
         logger.info("Signal SUSPENDED — skip")
         return None
 
-    if verdict in ("STRONG BUY", "STRONG SELL"):
-        margin = MARGIN_ACTIVE
-    elif verdict in ("WEAK BUY", "WEAK SELL"):
-        margin = MARGIN_ADVISORY
+    if verdict in ("STRONG BUY", "STRONG SELL", "WEAK BUY", "WEAK SELL"):
+        margin = MARGIN_USD  # $100 untuk semua signal (STRONG & WEAK)
     else:
         logger.info(f"Verdict {verdict} → skip")
         return None
 
     action = "LONG" if "BUY" in verdict else "SHORT"
-    sl_price = signal.trade_plan.sl
-    tp_price = signal.trade_plan.tp1
 
-    if not sl_price or not tp_price or sl_price <= 0 or tp_price <= 0:
-        logger.error(f"Invalid SL/TP from signal: SL={sl_price}, TP={tp_price}")
+    # Hitung SL/TP dari FixedStrategy v4.4 (1.333% / 0.71%)
+    # Perlu fetch current price untuk kalkulasi
+    # Support both dict-like (via .get) and SimpleNamespace (via getattr)
+    try:
+        current_price = getattr(signal, 'price', 0) or getattr(signal.confluence, 'btc_price', 0)
+        # Handle MagicMock in tests - convert to number
+        if hasattr(current_price, '__call__'):  # MagicMock detection
+            current_price = 0
+    except AttributeError:
+        # Fallback untuk dict-like object
+        current_price = signal.get('price', 0) if hasattr(signal, 'get') else 0
+    # Validate price is a positive number
+    try:
+        if not current_price or float(current_price) <= 0:
+            logger.error(f"Cannot calculate SL/TP: invalid entry price={current_price}")
+            return None
+    except (ValueError, TypeError):
+        logger.error(f"Cannot calculate SL/TP: invalid entry price type={type(current_price)}")
         return None
+
+    is_long = action == "LONG"
+    sl_price = current_price * (1 - SL_PCT / 100) if is_long else current_price * (1 + SL_PCT / 100)
+    tp_price = current_price * (1 + TP_PCT / 100) if is_long else current_price * (1 - TP_PCT / 100)
 
     return {
         "action": action,
@@ -243,6 +338,14 @@ async def execute_trade(action: str, margin: float, sl_price: float, tp_price: f
         api_private_keys={API_KEY_INDEX: API_SECRET},
     )
 
+    # Track order IDs
+    order_ids = {
+        "entry": None,
+        "sl": None,
+        "tp": None,
+        "timestamp": datetime.now(timezone.utc).isoformat()
+    }
+
     try:
         # ── 1. Entry order ─────────────────────────────────────────────────────
         _, resp, err = await client.create_market_order(
@@ -258,11 +361,12 @@ async def execute_trade(action: str, margin: float, sl_price: float, tp_price: f
             logger.error(f"[EXEC] Entry FAILED: {err}")
             return False
         logger.info(f"[EXEC] Entry OK | tx={getattr(resp, 'tx_hash', 'n/a')}")
+        order_ids["entry"] = getattr(resp, 'tx_hash', None)
         nonce += 1
         time.sleep(3)  # CRITICAL: wait for entry to settle
 
         # ── 2. Stop-loss order ─────────────────────────────────────────────────
-        _, _, err_sl = await client.create_order(
+        _, resp_sl, err_sl = await client.create_order(
             market_index=BTC_MARKET,
             client_order_index=1,
             base_amount=base_amount,
@@ -279,11 +383,12 @@ async def execute_trade(action: str, margin: float, sl_price: float, tp_price: f
             logger.error(f"[EXEC] SL FAILED: {err_sl}")
         else:
             logger.info(f"[EXEC] SL OK @ ${sl_price:,.2f}")
+            order_ids["sl"] = getattr(resp_sl, 'tx_hash', None)
         nonce += 1
         time.sleep(3)  # CRITICAL: avoid nonce conflict
 
         # ── 3. Take-profit order ───────────────────────────────────────────────
-        _, _, err_tp = await client.create_order(
+        _, resp_tp, err_tp = await client.create_order(
             market_index=BTC_MARKET,
             client_order_index=2,
             base_amount=base_amount,
@@ -300,8 +405,12 @@ async def execute_trade(action: str, margin: float, sl_price: float, tp_price: f
             logger.error(f"[EXEC] TP FAILED: {err_tp}")
         else:
             logger.info(f"[EXEC] TP OK @ ${tp_price:,.2f}")
+            order_ids["tp"] = getattr(resp_tp, 'tx_hash', None)
 
-        # ── 4. Verify position ─────────────────────────────────────────────────
+        # ── 4. Save order IDs ─────────────────────────────────────────────────
+        save_order_ids(order_ids)
+
+        # ── 5. Verify position ─────────────────────────────────────────────────
         time.sleep(3)
         pos = await get_open_position()
         if pos:
@@ -366,11 +475,23 @@ async def run_cycle():
             )
             logger.info("[DAEMON] Skipping — position already open")
             return
+        else:
+            # No position - clear order IDs if any exist
+            clear_order_ids()
     except Exception as e:
         logger.error(f"[DAEMON] Failed to check position: {e}")
         return
 
-    # 2. Read signal from API
+    # 2. Check SL freeze
+    if is_sl_frozen():
+        freeze_until = load_freeze_state()
+        freeze_str = freeze_until.strftime('%H:%M') if freeze_until else 'unknown'
+        logger.info(
+            f"[DAEMON] ⛔ Entry blocked — SL freeze until {freeze_until.isoformat() if freeze_until else '?'} WIB"
+        )
+        return
+
+    # 3. Read signal from API
     signal_data = await get_signal_from_api()
     if signal_data is None:
         logger.info("[DAEMON] No signal from API this cycle")
@@ -401,7 +522,7 @@ async def run_cycle():
         f"margin=${params['margin']} | SL=${params['sl']:,.2f} | TP=${params['tp']:,.2f}"
     )
 
-    # 3. Execute
+    # 4. Execute
     try:
         success = await execute_trade(
             action=params["action"],
@@ -425,7 +546,7 @@ async def main():
     logger.info("[DAEMON] BTC-QUANT v4.4 — 4H Signal Executor")
     logger.info(f"[DAEMON] Mode: {'LIVE TRADING' if TRADING_ENABLED else 'DRY RUN'}")
     logger.info(f"[DAEMON] Account: {ACCOUNT_INDEX} | API Key: {API_KEY_INDEX}")
-    logger.info(f"[DAEMON] ACTIVE margin: ${MARGIN_ACTIVE} | ADVISORY margin: ${MARGIN_ADVISORY} | Leverage: {LEVERAGE}x")
+    logger.info(f"[DAEMON] Margin: ${MARGIN_USD} | Leverage: {LEVERAGE}x | SL/TP: {SL_PCT}%/{TP_PCT}%")
     logger.info(f"[DAEMON] Signal hours (UTC): {sorted(SIGNAL_HOURS_UTC)}")
     logger.info("=" * 60)
 

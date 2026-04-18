@@ -58,15 +58,26 @@ run_cycle = executor_mod.run_cycle
 
 # ─── Helpers ──────────────────────────────────────────────────────────────────
 
-def make_signal(verdict: str, status: str = "ACTIVE", sl: float = 80000.0, tp: float = 90000.0):
-    """Build a mock signal object matching the shape signal_service returns."""
+def make_signal(verdict: str, status: str = "ACTIVE", price: float = 70000.0, sl: float = None, tp: float = None):
+    """Build a mock signal object matching the shape signal_service returns.
+    
+    For new FixedStrategy-based SL/TP calculation, provide 'price' as entry price.
+    Legacy 'sl' and 'tp' parameters are kept for backward compatibility in some tests.
+    """
     signal = MagicMock()
     signal.is_fallback = False
     signal.confluence.verdict = verdict
     signal.confluence.conviction_pct = 75.0
+    # Handle price=None for negative tests
+    if price is not None:
+        signal.confluence.btc_price = price
+        signal.price = price
+    else:
+        # For missing price test, don't set btc_price attribute
+        del signal.confluence.btc_price
     signal.trade_plan.status = status
-    signal.trade_plan.sl = sl
-    signal.trade_plan.tp1 = tp
+    signal.trade_plan.sl = sl or 0
+    signal.trade_plan.tp1 = tp or 0
     return signal
 
 
@@ -90,60 +101,90 @@ class TestParseSignal:
         s = make_signal("NEUTRAL")
         assert parse_signal(s) is None
 
-    def test_strong_buy_maps_to_long_active(self):
-        s = make_signal("STRONG BUY")
+    def test_strong_buy_maps_to_long_with_100_margin(self):
+        s = make_signal("STRONG BUY", price=70000.0)
         result = parse_signal(s)
         assert result is not None
         assert result["action"] == "LONG"
-        assert result["margin"] == executor_mod.MARGIN_ACTIVE
+        assert result["margin"] == 100.0  # $100 for all signals
 
-    def test_strong_sell_maps_to_short_active(self):
-        s = make_signal("STRONG SELL")
+    def test_strong_sell_maps_to_short_with_100_margin(self):
+        s = make_signal("STRONG SELL", price=70000.0)
         result = parse_signal(s)
         assert result is not None
         assert result["action"] == "SHORT"
-        assert result["margin"] == executor_mod.MARGIN_ACTIVE
+        assert result["margin"] == 100.0  # $100 for all signals
 
-    def test_weak_buy_maps_to_long_advisory(self):
-        s = make_signal("WEAK BUY")
+    def test_weak_buy_maps_to_long_with_100_margin(self):
+        """WEAK signals also use $100 margin (simplified config)"""
+        s = make_signal("WEAK BUY", price=70000.0)
         result = parse_signal(s)
         assert result is not None
         assert result["action"] == "LONG"
-        assert result["margin"] == executor_mod.MARGIN_ADVISORY
+        assert result["margin"] == 100.0  # Same as STRONG
 
-    def test_weak_sell_maps_to_short_advisory(self):
-        s = make_signal("WEAK SELL")
+    def test_weak_sell_maps_to_short_with_100_margin(self):
+        """WEAK signals also use $100 margin (simplified config)"""
+        s = make_signal("WEAK SELL", price=70000.0)
         result = parse_signal(s)
         assert result is not None
         assert result["action"] == "SHORT"
-        assert result["margin"] == executor_mod.MARGIN_ADVISORY
+        assert result["margin"] == 100.0  # Same as STRONG
 
-    def test_sl_and_tp_passed_through(self):
-        s = make_signal("STRONG BUY", sl=78500.0, tp=92000.0)
+    def test_sl_tp_calculated_from_fixed_strategy_pct(self):
+        """SL/TP calculated from entry price using FixedStrategy v4.4 percentages"""
+        entry_price = 70000.0
+        s = make_signal("STRONG BUY", price=entry_price)
         result = parse_signal(s)
-        assert result["sl"] == 78500.0
-        assert result["tp"] == 92000.0
+        assert result is not None
+        # LONG: SL = price * (1 - 1.333%), TP = price * (1 + 0.71%)
+        expected_sl = entry_price * (1 - 1.333 / 100)
+        expected_tp = entry_price * (1 + 0.71 / 100)
+        assert abs(result["sl"] - expected_sl) < 0.01
+        assert abs(result["tp"] - expected_tp) < 0.01
 
-    def test_invalid_sl_returns_none(self):
-        s = make_signal("STRONG BUY", sl=0.0, tp=90000.0)
+    def test_sl_tp_calculated_correctly_for_short(self):
+        """SHORT: SL above entry, TP below entry"""
+        entry_price = 70000.0
+        s = make_signal("STRONG SELL", price=entry_price)
+        result = parse_signal(s)
+        assert result is not None
+        # SHORT: SL = price * (1 + 1.333%), TP = price * (1 - 0.71%)
+        expected_sl = entry_price * (1 + 1.333 / 100)
+        expected_tp = entry_price * (1 - 0.71 / 100)
+        assert abs(result["sl"] - expected_sl) < 0.01
+        assert abs(result["tp"] - expected_tp) < 0.01
+
+    def test_invalid_price_returns_none(self):
+        """Invalid price (0 or negative) should return None"""
+        s = make_signal("STRONG BUY", price=0.0)
         assert parse_signal(s) is None
 
-    def test_invalid_tp_returns_none(self):
-        s = make_signal("STRONG BUY", sl=80000.0, tp=0.0)
+    def test_negative_price_returns_none(self):
+        """Negative price should return None"""
+        s = make_signal("STRONG BUY", price=-100.0)
         assert parse_signal(s) is None
 
-    def test_negative_sl_returns_none(self):
-        s = make_signal("STRONG BUY", sl=-100.0, tp=90000.0)
+    def test_missing_price_returns_none(self):
+        """Missing price should return None"""
+        s = make_signal("STRONG BUY", price=None)
         assert parse_signal(s) is None
 
-    def test_margin_active_is_15(self):
-        assert executor_mod.MARGIN_ACTIVE == 15.0
+    def test_margin_usd_is_100(self):
+        """All signals use $100 margin (FixedStrategy v4.4)"""
+        assert executor_mod.MARGIN_USD == 100.0
 
-    def test_margin_advisory_is_10(self):
-        assert executor_mod.MARGIN_ADVISORY == 10.0
+    def test_leverage_is_5(self):
+        """Leverage is 5x (FixedStrategy v4.4)"""
+        assert executor_mod.LEVERAGE == 5
 
-    def test_leverage_is_15(self):
-        assert executor_mod.LEVERAGE == 15
+    def test_sl_pct_is_1_333(self):
+        """SL is 1.333% (FixedStrategy v4.4)"""
+        assert executor_mod.SL_PCT == 1.333
+
+    def test_tp_pct_is_0_71(self):
+        """TP is 0.71% (FixedStrategy v4.4)"""
+        assert executor_mod.TP_PCT == 0.71
 
 
 # ─── execute_trade tests ──────────────────────────────────────────────────────
@@ -272,8 +313,8 @@ class TestExecuteTrade:
                 p.stop()
 
     @pytest.mark.asyncio
-    async def test_base_amount_calculation_active(self):
-        """ACTIVE: $15 margin × 15x / $84000 × 1e5 = 267 base_amount."""
+    async def test_base_amount_calculation_100_margin_5x_leverage(self):
+        """$100 margin × 5x leverage / $84000 × 1e5 = 595 base_amount."""
         mock_client = self._make_signer_client()
         patches = self._patch_dependencies(price=84000.0, mock_client=mock_client)
         executor_mod.TRADING_ENABLED = True
@@ -282,31 +323,11 @@ class TestExecuteTrade:
             for p in patches:
                 p.start()
 
-            await execute_trade("LONG", 15.0, 80000.0, 90000.0)
+            await execute_trade("LONG", 100.0, 80000.0, 90000.0)
 
             call_kwargs = mock_client.create_market_order.call_args.kwargs
-            expected = int(15.0 * 15 / 84000.0 * 1e5)
-            assert call_kwargs["base_amount"] == expected
-        finally:
-            executor_mod.TRADING_ENABLED = False
-            for p in patches:
-                p.stop()
-
-    @pytest.mark.asyncio
-    async def test_base_amount_calculation_advisory(self):
-        """ADVISORY: $10 margin × 15x / $84000 × 1e5."""
-        mock_client = self._make_signer_client()
-        patches = self._patch_dependencies(price=84000.0, mock_client=mock_client)
-        executor_mod.TRADING_ENABLED = True
-
-        try:
-            for p in patches:
-                p.start()
-
-            await execute_trade("LONG", 10.0, 80000.0, 90000.0)
-
-            call_kwargs = mock_client.create_market_order.call_args.kwargs
-            expected = int(10.0 * 15 / 84000.0 * 1e5)
+            # $100 * 5x = $500 notional / $84000 = 0.00595 BTC * 1e5 = 595
+            expected = int(100.0 * 5 / 84000.0 * 1e5)
             assert call_kwargs["base_amount"] == expected
         finally:
             executor_mod.TRADING_ENABLED = False
@@ -560,13 +581,19 @@ class TestRunCycle:
     def _make_signal(self, verdict="STRONG BUY"):
         return make_signal(verdict)
 
-    def _signal_dict(self, verdict="STRONG BUY", sl=80000.0, tp=90000.0):
-        """Build dict response from API."""
-        return {
-            "is_fallback": False,
-            "confluence": {"verdict": verdict, "conviction_pct": 75.0},
-            "trade_plan": {"status": "ACTIVE", "sl": sl, "tp1": tp}
-        }
+    def _signal_dict(self, verdict="STRONG BUY", price=70000.0):
+        """Build SimpleNamespace response from API (matching actual signal shape)."""
+        from types import SimpleNamespace
+        return SimpleNamespace(
+            is_fallback=False,
+            confluence=SimpleNamespace(
+                verdict=verdict,
+                conviction_pct=75.0,
+                btc_price=price  # For SL/TP calculation
+            ),
+            trade_plan=SimpleNamespace(status="ACTIVE"),
+            price=price
+        )
 
     @pytest.mark.asyncio
     async def test_skips_when_position_already_open(self):
@@ -600,7 +627,26 @@ class TestRunCycle:
             mock_exec.assert_not_called()
 
     @pytest.mark.asyncio
-    async def test_executes_on_strong_buy_signal(self):
+    async def test_sl_tp_calculated_from_fixed_strategy_in_run_cycle(self):
+        """SL/TP dihitung otomatis dari FixedStrategy v4.4 percentages"""
+        mock_execute = AsyncMock(return_value=True)
+        entry_price = 70000.0
+        with patch.object(executor_mod, "get_open_position", new=AsyncMock(return_value=None)), \
+             patch.object(executor_mod, "get_signal_from_api", new=AsyncMock(return_value=self._signal_dict("STRONG BUY", price=entry_price))), \
+             patch.object(executor_mod, "execute_trade", new=mock_execute), \
+             patch.object(executor_mod, "get_balance", new=AsyncMock(return_value=100.0)):
+
+            await run_cycle()
+
+            mock_execute.assert_called_once()
+            call_kwargs = mock_execute.call_args.kwargs
+            # LONG: SL should be below entry, TP above entry
+            assert call_kwargs["sl_price"] < entry_price  # SL = entry * (1 - 1.333%)
+            assert call_kwargs["tp_price"] > entry_price  # TP = entry * (1 + 0.71%)
+
+    @pytest.mark.asyncio
+    async def test_executes_on_strong_buy_with_100_margin(self):
+        """STRONG BUY uses $100 margin with 5x leverage"""
         mock_execute = AsyncMock(return_value=True)
         with patch.object(executor_mod, "get_open_position", new=AsyncMock(return_value=None)), \
              patch.object(executor_mod, "get_signal_from_api", new=AsyncMock(return_value=self._signal_dict("STRONG BUY"))), \
@@ -612,10 +658,11 @@ class TestRunCycle:
             mock_execute.assert_called_once()
             call_kwargs = mock_execute.call_args.kwargs
             assert call_kwargs["action"] == "LONG"
-            assert call_kwargs["margin"] == executor_mod.MARGIN_ACTIVE
+            assert call_kwargs["margin"] == 100.0  # $100 for all signals
 
     @pytest.mark.asyncio
-    async def test_executes_on_strong_sell_signal(self):
+    async def test_executes_on_strong_sell_with_100_margin(self):
+        """STRONG SELL uses $100 margin with 5x leverage"""
         mock_execute = AsyncMock(return_value=True)
         with patch.object(executor_mod, "get_open_position", new=AsyncMock(return_value=None)), \
              patch.object(executor_mod, "get_signal_from_api", new=AsyncMock(return_value=self._signal_dict("STRONG SELL"))), \
@@ -627,10 +674,11 @@ class TestRunCycle:
             mock_execute.assert_called_once()
             call_kwargs = mock_execute.call_args.kwargs
             assert call_kwargs["action"] == "SHORT"
-            assert call_kwargs["margin"] == executor_mod.MARGIN_ACTIVE
+            assert call_kwargs["margin"] == 100.0  # $100 for all signals
 
     @pytest.mark.asyncio
-    async def test_executes_on_weak_buy_with_advisory_margin(self):
+    async def test_executes_on_weak_buy_with_100_margin(self):
+        """WEAK BUY also uses $100 margin (simplified config)"""
         mock_execute = AsyncMock(return_value=True)
         with patch.object(executor_mod, "get_open_position", new=AsyncMock(return_value=None)), \
              patch.object(executor_mod, "get_signal_from_api", new=AsyncMock(return_value=self._signal_dict("WEAK BUY"))), \
@@ -641,7 +689,7 @@ class TestRunCycle:
 
             mock_execute.assert_called_once()
             call_kwargs = mock_execute.call_args.kwargs
-            assert call_kwargs["margin"] == executor_mod.MARGIN_ADVISORY
+            assert call_kwargs["margin"] == 100.0  # Same as STRONG
 
     @pytest.mark.asyncio
     async def test_sl_tp_passed_from_signal_trade_plan(self):

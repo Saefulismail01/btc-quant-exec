@@ -1,0 +1,720 @@
+% Options for packages loaded elsewhere
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\PassOptionsToPackage{dvipsnames,svgnames,x11names}{xcolor}
+%
+\documentclass[
+  11pt,
+  a4paper,
+]{article}
+\usepackage{xcolor}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{amsmath,amssymb}
+\setcounter{secnumdepth}{5}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+% Make \paragraph and \subparagraph free-standing
+\makeatletter
+\ifx\paragraph\undefined\else
+  \let\oldparagraph\paragraph
+  \renewcommand{\paragraph}{
+    \@ifstar
+      \xxxParagraphStar
+      \xxxParagraphNoStar
+  }
+  \newcommand{\xxxParagraphStar}[1]{\oldparagraph*{#1}\mbox{}}
+  \newcommand{\xxxParagraphNoStar}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+  \let\oldsubparagraph\subparagraph
+  \renewcommand{\subparagraph}{
+    \@ifstar
+      \xxxSubParagraphStar
+      \xxxSubParagraphNoStar
+  }
+  \newcommand{\xxxSubParagraphStar}[1]{\oldsubparagraph*{#1}\mbox{}}
+  \newcommand{\xxxSubParagraphNoStar}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+\makeatother
+
+
+\usepackage{longtable,booktabs,array}
+\newcounter{none} % for unnumbered tables
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx}
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
+% Set default figure placement to htbp
+\def\fps@figure{htbp}
+\makeatother
+
+
+
+
+
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+
+
+ 
+
+
+\usepackage{booktabs}
+\usepackage{float}
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+\usepackage{fancyhdr}
+\usepackage{xcolor}
+\pagestyle{fancy}
+\fancyhead[L]{\small BTC-QUANT v4.4-v4.5}
+\fancyhead[R]{\small Performance Logbook}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\definecolor{win}{RGB}{34, 139, 34}
+\definecolor{loss}{RGB}{220, 20, 60}
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\AtBeginDocument{%
+\ifdefined\contentsname
+  \renewcommand*\contentsname{Table of contents}
+\else
+  \newcommand\contentsname{Table of contents}
+\fi
+\ifdefined\listfigurename
+  \renewcommand*\listfigurename{List of Figures}
+\else
+  \newcommand\listfigurename{List of Figures}
+\fi
+\ifdefined\listtablename
+  \renewcommand*\listtablename{List of Tables}
+\else
+  \newcommand\listtablename{List of Tables}
+\fi
+\ifdefined\figurename
+  \renewcommand*\figurename{Figure}
+\else
+  \newcommand\figurename{Figure}
+\fi
+\ifdefined\tablename
+  \renewcommand*\tablename{Table}
+\else
+  \newcommand\tablename{Table}
+\fi
+}
+\@ifpackageloaded{float}{}{\usepackage{float}}
+\floatstyle{ruled}
+\@ifundefined{c@chapter}{\newfloat{codelisting}{h}{lop}}{\newfloat{codelisting}{h}{lop}[chapter]}
+\floatname{codelisting}{Listing}
+\newcommand*\listoflistings{\listof{codelisting}{List of Listings}}
+\makeatother
+\makeatletter
+\makeatother
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
+\makeatother
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={BTC-QUANT Performance Logbook},
+  pdfauthor={BTC-QUANT Execution Layer},
+  pdfkeywords={BTC-QUANT, live trading, HestonStrategy, performance
+analysis, trading bot},
+  colorlinks=true,
+  linkcolor={blue},
+  filecolor={Maroon},
+  citecolor={Blue},
+  urlcolor={Blue},
+  pdfcreator={LaTeX via pandoc}}
+
+
+\title{BTC-QUANT Performance Logbook}
+\usepackage{etoolbox}
+\makeatletter
+\providecommand{\subtitle}[1]{% add subtitle to \maketitle
+  \apptocmd{\@title}{\par {\large #1 \par}}{}{}
+}
+\makeatother
+\subtitle{Live Trading Analysis: March - April 2026}
+\author{BTC-QUANT Execution Layer}
+\date{2026-04-17}
+\begin{document}
+\maketitle
+\begin{abstract}
+Laporan ini mendokumentasikan performa live trading BTC-QUANT dari 10
+Maret hingga 14 April 2026 menggunakan strategi HestonStrategy dengan
+parameter margin \$20 dan leverage 7x. Analisis mencakup 54 posisi
+dengan win rate 75.9\% dan total PnL \$20.37 (adjusted). Laporan ini
+secara khusus menonjolkan lesson learned dari intervensi manual yang
+merugikan, dengan kesimpulan utama: percaya pada edge sistem dan hindari
+intervensi manual.
+\end{abstract}
+
+\renewcommand*\contentsname{Table of contents}
+{
+\setcounter{tocdepth}{2}
+\tableofcontents
+}
+
+\section{Glosarium \& Konsep Utama}\label{glosarium-konsep-utama}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.4286}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.5714}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Istilah
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Keterangan
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{PnL (Profit \& Loss)} & Keuntungan atau kerugian bersih dari
+posisi yang ditutup. \\
+\textbf{Win Rate (WR)} & Persentase posisi profitable dari total
+posisi. \\
+\textbf{Intervensi Manual} & Tindakan trader menggeser SL/TP atau
+menutup posisi secara manual, mengesampingkan sistem otomatis. \\
+\textbf{Signal Delay} & Kondisi di mana posisi terbuka tapi tidak
+tereksekusi TP/SL dalam waktu yang diharapkan. \\
+\textbf{Time-based Exit} & Mekanisme auto-close posisi setelah durasi
+tertentu tanpa trigger TP/SL. \\
+\textbf{HestonStrategy} & Strategi dengan SL/TP adaptif berbasis ATR
+dari model volatilitas Heston. \\
+\textbf{Edge} & Keunggulan statistik sistem trading yang teruji secara
+backtest. \\
+\end{longtable}
+}
+
+\section{Ringkasan Eksekutif (per Dashboard
+Lighter)}\label{ringkasan-eksekutif-per-dashboard-lighter}
+
+\begin{longtable}[]{@{}ll@{}}
+\caption{Ringkasan metrik performa dari dashboard
+Lighter.}\label{tbl-executive}\tabularnewline
+\toprule\noalign{}
+Metrik & Nilai \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+Metrik & Nilai \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{PnL} & \textbf{\$14.11} \\
+\textbf{Volume} & \$25,972.88 \\
+\textbf{Return Percentage} & 14.19\% \\
+\textbf{Average Daily PnL} & \$0.35 \\
+\textbf{PnL Volatility} & \$2.15 \\
+\textbf{Sharpe Ratio} & 3.13 \\
+\textbf{Maximum Drawdown} & \$6.53 \\
+\textbf{Estimated Fees Saved} & \$12.98 \\
+\end{longtable}
+
+\textbf{Note:} Dashboard menunjukkan PnL \$14.11. Setelah adjustment
+untuk bug 18 Mar (loss -\$6.30 diabaikan) dan filter 15 Mar (uji coba),
+\textbf{PnL aktual adalah \$20.37} dengan \textbf{54 posisi} dan
+\textbf{win rate 75.9\%}.
+
+\textbf{Expected Value (Potensi):} \textasciitilde\$35 (tanpa intervensi
+manual dan sizing error)
+
+\newpage
+
+\section{Adjustments \& Data Filter}\label{adjustments-data-filter}
+
+\subsection{Data yang Diabaikan}\label{data-yang-diabaikan}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.3000}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2667}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.1667}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2667}}@{}}
+\caption{Data yang diexclude dari perhitungan
+final.}\label{tbl-excluded}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Tanggal
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Posisi
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+PnL
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Alasan
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Tanggal
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Posisi
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+PnL
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Alasan
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{15 Mar 2026} & 5 & -\$0.04 & Uji coba otomasi bot, tidak
+mencerminkan strategi actual. \\
+\textbf{18 Mar 2026} & 1 & -\$6.30 & Bug autentikasi SL order, dihitung
+sebagai loss tapi PnL = 0. \\
+\end{longtable}
+
+\textbf{Rationale:} 15 Mar merupakan testing phase dengan intervensi
+manual intensif. 18 Mar adalah loss akibat bug autentikasi SL pada
+Lighter gateway (sudah diperbaiki di commit \texttt{c3107f9}), bukan
+kesalahan strategi.
+
+\section{Analisis Per Periode}\label{analisis-per-periode}
+
+\subsection{Maret 2026: Fase Setup \&
+Debugging}\label{maret-2026-fase-setup-debugging}
+
+\begin{longtable}[]{@{}lllll@{}}
+\caption{Detail performa harian Maret
+2026.}\label{tbl-march}\tabularnewline
+\toprule\noalign{}
+Tanggal & Posisi & PnL & Status & Catatan \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+Tanggal & Posisi & PnL & Status & Catatan \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+10 Mar & 1 & -\$0.12 & ✅ & Fase manual awal \\
+11 Mar & 2 & +\$0.86 & ✅ & -- \\
+12 Mar & 3 & -\$0.91 & ✅ & -- \\
+13 Mar & 5 & +\$0.83 & ✅ & -- \\
+16 Mar & 2 & +\$1.65 & ✅ & Start fase otomatis \\
+17 Mar & 7 & +\$1.30 & ✅ & -- \\
+22 Mar & 3 & +\$0.28 & ✅ & -- \\
+23 Mar & 1 & +\$0.26 & ✅ & -- \\
+26 Mar & 2 & +\$0.42 & ✅ & -- \\
+27 Mar & 1 & +\$0.26 & ✅ & -- \\
+28 Mar & 1 & +\$0.11 & ✅ & -- \\
+29 Mar & 4 & \textbf{+\$3.14} & ✅ & Strong short \\
+31 Mar & 1 & -\$1.91 & ✅ & -- \\
+\end{longtable}
+
+\textbf{Total Maret:} +\$6.17 (33 posisi, adjusted)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{April 2026: Fase
+Operasional}\label{april-2026-fase-operasional}
+
+\begin{longtable}[]{@{}lllll@{}}
+\caption{Detail performa harian April
+2026.}\label{tbl-april}\tabularnewline
+\toprule\noalign{}
+Tanggal & Posisi & PnL & Status & Catatan \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+Tanggal & Posisi & PnL & Status & Catatan \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+2 Apr & 1 & +\$3.54 & ✅ & -- \\
+\textbf{3 Apr} & 2 & +\$6.35 & ⚠️ & Interupsi manual, profit \textless{}
+target \\
+\textbf{4 Apr} & 2 & +\$0.18 & ❌ & \textbf{Interupsi manual → profit
+minim} \\
+5 Apr & 1 & -\$2.99 & ✅ & Loss normal \\
+6 Apr & 2 & -\$3.52 & ✅ & -- \\
+\textbf{7 Apr} & 1 & +\$0.12 & ⚠️ & Interupsi manual, profit minim \\
+8 Apr & 1 & +\$3.36 & ✅ & -- \\
+9 Apr & 2 & +\$3.81 & ✅ & -- \\
+\textbf{10 Apr} & 2 & +\$4.00 & ⚠️ & Interupsi manual, profit
+\textless{} target \\
+11 Apr & 2 & -\$2.93 & ✅ & -- \\
+\textbf{12 Apr} & 1 & -\$2.52 & ⚠️ & SL manual adjustment, sizing
+kecil \\
+13 Apr & 2 & +\$3.31 & ✅ & Sizing kecil \\
+14 Apr & 1 & +\$1.50 & ✅ & Sizing kecil \\
+\end{longtable}
+
+\textbf{Total April:} +\$14.21 (20 posisi)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Analisis Intervensi Manual}\label{analisis-intervensi-manual}
+
+\subsection{Konteks Intervensi}\label{konteks-intervensi}
+
+\textbf{Rationale Intervensi:} \textgreater{} Ketika signal sudah lebih
+dari 8 jam tapi belum close posisi (TP/SL), maka SL digeser lebih
+sedikit untuk mengurangi loss karena signal dinilai tidak lagi relevan
+di timeframe tersebut.
+
+\subsection{Impact Interupsi Signal
+Delay}\label{impact-interupsi-signal-delay}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1525}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2034}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2203}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.3051}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1186}}@{}}
+\caption{Impact financial dari intervensi
+manual.}\label{tbl-intervention}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Tanggal
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+PnL Aktual
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Estimasi TP
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Opportunity Cost
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Hasil
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Tanggal
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+PnL Aktual
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Estimasi TP
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Opportunity Cost
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Hasil
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+3 Apr & +\$6.35 & \textasciitilde\$8.68 & -\$2.33 & Profit, tapi
+\textless{} target \\
+\textbf{4 Apr} & \textbf{+\$0.18} & \textasciitilde\$8.68 &
+\textbf{-\$8.50} & ❌ \textbf{Harusnya 2 TP, malah profit minim} \\
+7 Apr & +\$0.12 & \textasciitilde\$4.34 & -\$4.22 & Profit minim \\
+10 Apr & +\$4.00 & \textasciitilde\$8.68 & -\$4.68 & Profit, tapi
+\textless{} target \\
+\end{longtable}
+
+\textbf{Total Opportunity Cost:} - Aktual: +\$10.65 - Potensi:
+\textasciitilde\$25.38 - \textbf{Profit yang hilang:
+\textasciitilde\$15}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\newpage
+
+\subsection{Sizing Error (12-14 April)}\label{sizing-error-12-14-april}
+
+\begin{longtable}[]{@{}lllll@{}}
+\caption{Impact sizing error pada
+performa.}\label{tbl-sizing}\tabularnewline
+\toprule\noalign{}
+Tanggal & PnL & Size Aktual & Size Target & Impact \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+Tanggal & PnL & Size Aktual & Size Target & Impact \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+12 Apr & -\$2.52 & \$147 & \$500 & Loss lebih kecil karena sizing \\
+13 Apr & +\$3.31 & \$151 & \$500 & Profit 30\% dari potensi \\
+14 Apr & +\$1.50 & \$151 & \$500 & Profit 30\% dari potensi \\
+\end{longtable}
+
+\textbf{Note:} 12 Apr SL manual adjustment berhasil menyelamatkan dari
+loss lebih besar saat harga anjlok. Namun, sizing kecil mengurangkan
+profit potential.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Performa by Side (Long vs
+Short)}\label{performa-by-side-long-vs-short}
+
+\begin{longtable}[]{@{}llll@{}}
+\caption{Perbandingan performa Long vs
+Short.}\label{tbl-byside}\tabularnewline
+\toprule\noalign{}
+Arah & Win/Loss & Win Rate & PnL \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+Arah & Win/Loss & Win Rate & PnL \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{Long} & 27W / 9L & 75.0\% & +\$7.82 \\
+\textbf{Short} & 14W / 3L & \textbf{82.4\%} & \textbf{+\$12.55} \\
+\end{longtable}
+
+\textbf{Insight:} Short strategy jauh lebih superior dengan win rate
+82.4\% dan PnL \$12.55 vs \$7.82. Ini menunjukkan edge yang lebih kuat
+pada kondisi bearish/trend down.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Lessons Learned}\label{lessons-learned}
+
+\subsection{Pelajaran \#1: Percaya pada
+Edge}\label{pelajaran-1-percaya-pada-edge}
+
+\begin{quote}
+\textbf{``Percaya pada edge dan jangan lakukan intervensi manual''}
+\end{quote}
+
+\textbf{Evidence:} - \textbf{4 Apr:} Intervensi → Profit +\$0.18
+(harusnya 2 TP \textasciitilde\$8.68) - \textbf{3, 7, 10 Apr:}
+Intervensi → Profit \textless{} target - \textbf{Cost of intervention:
+\textasciitilde\$15}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Pelajaran \#2: Consistent
+Sizing}\label{pelajaran-2-consistent-sizing}
+
+\textbf{Issue:} 12-14 Apr sizing hanya \textasciitilde30\% dari target
+(\$150 vs \$500 notional)
+
+\textbf{Impact:} - Profit dikurangi \textasciitilde70\% - Loss juga
+dikurangi \textasciitilde70\% (12 Apr SL manual)
+
+\textbf{Action:} Fix position sizing logic di bot configuration.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Pelajaran \#3: SL
+Management}\label{pelajaran-3-sl-management}
+
+\textbf{Positif:} 12 Apr SL manual adjustment berhasil menyelamatkan
+dari loss lebih besar.
+
+\textbf{Negatif:} Intervensi manual justru merusak edge pada 4 Apr.
+
+\textbf{Rule:} - Jika signal valid dan SL belum hit → biarkan - Jika
+signal expired (\textgreater8 jam) → gunakan \textbf{time-exit}, bukan
+SL adjustment
+
+\section{Riwayat Perbaikan (Setelah 27
+Maret)}\label{riwayat-perbaikan-setelah-27-maret}
+
+\subsection{29 Maret 2026 --- Critical
+Fixes}\label{maret-2026-critical-fixes}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}llll@{}}
+\toprule\noalign{}
+ID & Deskripsi & Severity & Commit \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{FIX-13} & Re-entry Guard & \textbf{CRITICAL} &
+\texttt{ddc6309} \\
+\textbf{FIX-14} & Koreksi Database dari CSV & MEDIUM & --- \\
+\textbf{FIX-15} & Switch ke FixedStrategy & MEDIUM & \texttt{663ba55} \\
+\textbf{FIX-16} & SL/TP Limit Price Slippage Buffer & HIGH &
+\texttt{7330b4c} \\
+\textbf{FIX-17} & filled\_price dari SDK Response & MEDIUM &
+\texttt{7330b4c} \\
+\end{longtable}
+}
+
+\subsubsection{FIX-13: Re-entry Guard
+(Critical)}\label{fix-13-re-entry-guard-critical}
+
+\textbf{Masalah:} Saat posisi baru saja ditutup,
+\texttt{sync\_position\_status()} langsung diikuti
+\texttt{process\_signal()} di cycle yang sama, menyebabkan bot langsung
+membuka posisi baru (double/triple entry).
+
+\textbf{Solusi:} - Return \texttt{True} hanya jika posisi baru saja
+ditutup di cycle ini - Caller skip \texttt{process\_signal()} jika
+return \texttt{True}
+
+\textbf{Impact:} Menghilangkan bug double/triple entry.
+
+\subsubsection{FIX-14: Koreksi Database dari
+CSV}\label{fix-14-koreksi-database-dari-csv}
+
+\textbf{Masalah:} Data DuckDB tidak akurat --- berisi 10 record campuran
+dari bug double entry dan data tidak lengkap.
+
+\textbf{Solusi:} Rekonstruksi database dari CSV export Lighter (ground
+truth): - Hapus 10 record lama - Insert ulang 9 trade valid berdasarkan
+CSV
+
+\textbf{Result:} Total PnL direkonstruksi: \textbf{+\$2.18 USDT}
+
+\subsubsection{FIX-15: Switch ke
+FixedStrategy}\label{fix-15-switch-ke-fixedstrategy}
+
+\textbf{Masalah:} HestonStrategy menghasilkan TP terlalu jauh (ATR × 2.1
+≈ 3.1\%), posisi tidak hit TP dan harus ditutup manual.
+
+\textbf{Solusi:} Switch ke FixedStrategy (Golden v4.4) dengan parameter:
+- SL\_PCT: 1.333\% - TP\_PCT: 0.71\% - LEVERAGE: 7x - MARGIN\_USD: \$20
+
+\subsubsection{FIX-16: SL/TP Limit Price Slippage
+Buffer}\label{fix-16-sltp-limit-price-slippage-buffer}
+
+\textbf{Masalah:} Limit price SL/TP di-set sama dengan trigger price,
+order tidak fill saat market gap/slippage.
+
+\textbf{Solusi:} Tambah slippage buffer: - SL order: buffer 0.5\% - TP
+order: buffer 0.3\%
+
+\subsubsection{FIX-17: filled\_price dari SDK
+Response}\label{fix-17-filled_price-dari-sdk-response}
+
+\textbf{Masalah:} \texttt{filled\_price} di-set dari intended price,
+bukan actual fill price dari SDK.
+
+\textbf{Solusi:} Baca \texttt{avg\_execution\_price} dari SDK response
+object.
+
+\section{Rekomendasi Improvement}\label{rekomendasi-improvement}
+
+\subsection{Immediate (High Priority)}\label{immediate-high-priority}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{Time-based Exit:} Auto-close posisi setelah 8-12 jam tanpa
+  TP/SL
+\item
+  \textbf{Fix Sizing:} Pastikan margin \& leverage sesuai config
+  (\$20×7x atau \$100×5x)
+\item
+  \textbf{Remove Manual Override:} Disable ability untuk manual close
+  dari dashboard
+\end{enumerate}
+
+\subsection{Medium Term}\label{medium-term}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{Signal Decay:} Reduce conviction score setiap candle tanpa
+  trigger
+\item
+  \textbf{Trailing SL:} Implement break-even SL setelah 50\% TP tercapai
+\item
+  \textbf{Market Regime Detection:} Reduce size atau pause trading saat
+  choppy/volatile
+\end{enumerate}
+
+\subsection{Long Term}\label{long-term}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{Walk-forward Validation:} Retest strategi dengan intervensi
+  manual di-backtest
+\item
+  \textbf{Feature Analysis:} Apa yang membuat short lebih profitable?
+\item
+  \textbf{Correlation Analysis:} L1-L3 alignment untuk improve entry
+  quality
+\end{enumerate}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Kesimpulan}\label{kesimpulan}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{Trust the System:} Intervensi manual merugikan dengan
+  opportunity cost \textasciitilde\$15.
+\item
+  \textbf{Short Superiority:} Win rate 82.4\% vs 75\% pada short
+  menunjukkan edge lebih kuat.
+\item
+  \textbf{Sizing Matters:} Inconsistent sizing mengurangi profit
+  potential signifikan.
+\item
+  \textbf{Time-Exit \textgreater{} SL Adjustment:} Mekanisme auto-close
+  berdasarkan waktu lebih baik daripada manual SL adjustment.
+\end{enumerate}
+
+\textbf{Final PnL Potential:} \$20.37 (aktual) + \$15 (opportunity) =
+\textbf{\textasciitilde\$35}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\emph{Dokumen ini dibuat untuk mendokumentasikan lesson learned dan
+mencegah repeat of mistakes. Terakhir diupdate: 17 April 2026.}
+
+
+
+
+\end{document}
