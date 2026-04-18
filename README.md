@@ -1,63 +1,61 @@
-﻿# BTC-QUANT Execution Layer
+# BTC-QUANT Execution Layer
 
 Live trading bot execution layer for Bitcoin on Lighter mainnet with Renaissance Technologies research framework.
 
-**Status**: ✅ Phase 3 Mainnet - Production Running
+**Status**: ✅ Phase 4 Production - [v4.8] Live (Trailing SL Active)
 
 ---
 
-## � Directory Structure (Cleaned)
+## 📂 Directory Structure (Optimized)
 
 ```
 btc-scalping-execution_layer/
 │
-├── 🔴 backend/              (115 items)  ← PRODUCTION - Do Not Modify
-│   ├── app/
-│   │   ├── core/engines/
-│   │   │   └── layer3_ai.py           # 🏆 MLP Model (Running Live)
-│   │   ├── use_cases/                 # Signal, Position, Risk
-│   │   └── adapters/gateways/         # Execution gateways
-│   └── scripts/                       # Auto scalp, HFT bot
+├── 🔴 backend/              # PRODUCTION - Core API & Services
+│   ├── app/                 # Logic: Signal, Position, Risk Management
+│   └── scripts/             # Production tools (auto scalp, HFT)
 │
-├── 🔬 cloud_core/           (34 items)   ← RESEARCH - Safe to Modify
-│   ├── engines/
-│   │   ├── layer3_logistic.py         # 53.8% accuracy
-│   │   ├── layer3_lightgbm.py         # 53.3% accuracy
-│   │   ├── layer3_xgboost.py          # 52.8% accuracy
-│   │   └── layer3_lstm.py             # Experimental
-│   ├── model_evaluator.py             # Model comparison
-│   └── colab_core.ipynb               # Jupyter research
+├── 🔌 execution_layer/      # EXECUTION GATEWAY (Lighter Mainnet)
+│   └── lighter/             # Signal Executor & Intraday Monitor (v4.8)
 │
-├── 📚 docs/                (103 items)   ← DOCUMENTATION
-│   ├── START_HERE.md
-│   ├── analysis/                      # Structure analysis files
-│   └── setup/                         # Setup guides
+├── 🔬 cloud_core/           # RESEARCH ENGINE (Safe to Modify)
+│   ├── engines/             # Alternative Models (LightGBM, XGBoost, LSTM)
+│   └── colab_core.ipynb     # Research playground for Google Colab
 │
-├── 🗄️ archive/             (499 items)  ← ARCHIVED
-│   ├── old_stuff/                     # rtk/, learn/, research/
-│   ├── scripts/                       # Cleanup scripts
-│   └── paper/                         # Academic paper
+├── 🎨 frontend/             # MONITORING DASHBOARD (Vite + React)
 │
-├── 🔌 execution_layer/     (18 items)   ← EXECUTION
-├── 🎨 frontend/            (22 items)   ← WEB UI
-├── 📊 backtest/            (176 items)  ← BACKTEST DATA
+├── 📚 docs/                 # DOCUMENTATION & Reports
+│   ├── reports/             # Live trading logbooks & performance
+│   └── PROJECT_LOGBOOK.md   # [Root Source of Truth] Evolution & History
 │
-└── ⚙️ [config & database]
-    ├── .env
-    ├── docker-compose.yml
-    ├── btc-quant.db                     # Production DB
-    └── README.md                        # This file
+└── 🗄️ archive/              # ARCHIVED STUFF (Legacy codes & experiments)
 ```
 
 ---
 
-## 🎯 What Is This?
+## 🎯 System Overview (v4.8 Updates)
 
-BTC-QUANT is a **live trading bot** that executes orders on Lighter mainnet for Bitcoin perpetuals, powered by:
-- ✅ Renaissance Technologies algorithmic methods
-- ✅ 4-Layer Ensemble Architecture (Layer 1-4)
-- ✅ MLP Neural Network for signal generation
-- ✅ Telegram notifications & monitoring
+BTC-QUANT is a **High-Frequency Scalping Bot** executing on Lighter mainnet, now featuring **Exchange-First Architecture**:
+- **Signal Executor (v4.8)**: Acts as the primary execution engine. It handles trade execution, verifies **SL Freeze state**, and manages **Order ID Tracking**.
+- **Intraday Monitor**: Runs a **15-minute cycle** to monitor open positions and execute **Trailing SL** (trails when profit > 1%, locking min 0.5% profit).
+- **Ensemble Intelligence**: Combines Bayesian Changepoint Detection (BCD), EMA Momentum, and MLP Neural Networks for >55% accuracy.
+- **Risk Shield**: Hard-coded SL Freeze mechanism that stops all entries until 07:00 WIB the next day if a Stop Loss is hit.
+
+---
+
+## ⚡ Recent Updates (April 2026)
+
+- **[2026-04-18] Repository Optimization**:
+  - Removed `node_modules` and heavy binaries from Git tracking.
+  - History squashed for lightweight cloning and performance.
+  - Updated `.gitignore` for better development hygiene.
+- **[2026-04-12] v4.8 Deployment**:
+  - Implemented **Order ID Tracking** via `order_ids.json`.
+  - Added **Dynamic Trailing SL** (Cancel + Create pattern).
+  - Fixed **Minute Overflow** bug in Intraday monitoring.
+- **[2026-04-11] Cloud Core & Exchange-First**:
+  - Exchange is now the **Source of Truth** for positions (Triple-checked).
+  - Launched `cloud_core/` as a standalone research engine for rapid model testing.
 
 ---
 
@@ -65,110 +63,43 @@ BTC-QUANT is a **live trading bot** that executes orders on Lighter mainnet for 
 
 | Feature | Status | Details |
 |---------|--------|---------|
-| **Live Trading** | ✅ | Mainnet execution on Lighter |
-| **ML Model** | ✅ | MLP (layer3_ai.py) running production |
-| **Risk Management** | ✅ | Position sizing, SL/TP |
-| **Notifications** | ✅ | Telegram alerts |
-| **Research** | ✅ | Model evaluation framework |
+| **Live Trading** | ✅ | Lighter Mainnet (BTC/USDC) |
+| **Trailing SL** | ✅ | ATR-Adaptive + 1.0% Profit Lock |
+| **SL Freeze** | ✅ | Cross-service safety (API & Executor) |
+| **Research Arena** | ✅ | Standalone `cloud_core` with 5+ model types |
+| **Notifications** | ✅ | Telegram: /signal, /balance, /status |
 
 ---
 
-## 📖 Quick Access
+## 🛠️ Quick Start
 
-### I want to trade (Production)
-→ `backend/` - Production system
-→ `backend/app/core/engines/layer3_ai.py` - MLP Model (Sacred)
-→ `backend/scripts/auto_scalp.py` - Auto trading
-
-### I want to research (New Models)
-→ `cloud_core/` - Research arena
-→ `cloud_core/engines/layer3_logistic.py` - Best research model (53.8%)
-→ `cloud_core/model_evaluator.py` - Compare models
-→ `cloud_core/colab_core.ipynb` - Jupyter experiments
-
-### I need documentation
-→ `docs/` - All documentation
-→ `docs/START_HERE.md` - Entry point
-
-### I want archived/old stuff
-→ `archive/` - Old folders & files
-→ `archive/old_stuff/` - rtk/, learn/, research/
-
----
-
-## 🛠️ Quick Setup
-
-### Test Production Connection
+### Check System Status
 ```bash
-python backend/scripts/test_lighter_connection.py
+rtk git status # Verification: Repo should be clean and ahead/synced
 ```
 
-### Run Production
+### Run Production Executor
 ```bash
-cd backend
-python live_executor.py
+# Recommended: Use Docker for production
+docker-compose up -d signal-executor intraday-monitor
 ```
 
-### Run Model Evaluation (Research)
+### Research Mode (Safe Experimentation)
 ```bash
 cd cloud_core
 python model_evaluator.py
 ```
 
-### Run Quick Test (Research)
-```bash
-cd cloud_core
-python quick_evaluator.py
-```
+---
+
+## 🏗️ Path to Production (Safety First)
+1. Develop & Backtest in `cloud_core/`.
+2. Win Rate must be > 60% (or PF > 1.3).
+3. 2 Weeks Paper Trading in `cloud_core/`.
+4. Replace MLP engine in `backend/app/core/engines/layer3_ai.py`.
 
 ---
 
-## 📊 Project Statistics
-
-- � **Production**: 115 files (backend/)
-- � **Research**: 34 files (cloud_core/)
-- �️ **Archived**: 499 files (archive/)
-- � **Documentation**: 103 files (docs/)
-- � **Database**: btc-quant.db (production)
-
----
-
-## ⚠️ Important Rules
-
-### 🔴 Production (`backend/`) - DO NOT MODIFY
-- `backend/app/core/engines/layer3_ai.py` - MLP Model running live
-- `backend/app/use_cases/` - Signal, Position, Risk managers
-- `backend/app/adapters/gateways/` - Execution gateways
-- `backend/scripts/` - Production scripts
-
-### 🔬 Research (`cloud_core/`) - Safe to Modify
-- All `layer3_*.py` models for experimentation
-- `model_evaluator.py` - Test and compare models
-- `colab_core.ipynb` - Jupyter notebook
-
-### 🏆 Path to Production
-1. Experiment in `cloud_core/engines/`
-2. Backtest > 60% accuracy
-3. Paper trading 1 month (profit)
-4. Integration test
-5. Replace MLP in `backend/`
-
----
-
-## ⚙️ Configuration
-
-Required: `.env` file (template: `.env.template`)
-
-**Key variables**:
-```
-LIGHTER_MAINNET_API_KEY=...
-LIGHTER_MAINNET_API_SECRET=...
-LIGHTER_ACCOUNT_INDEX=...
-LIGHTER_TRADING_ENABLED=false  # false by default (safe)
-TELEGRAM_BOT_TOKEN=...
-```
-
----
-
-**Status**: ✅ Production Running — MLP Active  
-**Last Updated**: April 11, 2026
+**Status**: ✅ Production Running — v4.8 Active  
+**Last Updated**: April 18, 2026
+**Maintainer**: Mail (dev@instagram-dashboard.com)
