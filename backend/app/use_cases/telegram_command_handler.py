@@ -134,67 +134,87 @@ class TelegramCommandHandler:
     # ─ Commands ───────────────────────────────────────────────────────────────
 
     async def _cmd_pnl(self, chat_id: int):
-        """Return current open position PnL."""
-        trade = self.live_repo.get_open_trade()
+        """Return current open position PnL (Real-time sync from Lighter)."""
+        # [FIX] Get position directly from exchange API instead of local DB
+        position = await self.gateway.get_open_position()
+        local_trade = self.live_repo.get_open_trade()
 
-        if not trade:
-            await self._send(chat_id, "📭 <b>Tidak ada posisi terbuka.</b>")
+        # 1. Sync Case: Exchange has no position but local DB thinks it's open
+        if not position:
+            if local_trade:
+                logger.info(f"[TelegramCommandHandler] Syncing: Closing local orphaned trade {local_trade.id}")
+                # Try to get exit info to close it properly in DB
+                last_order = await self.gateway.fetch_last_closed_order(
+                    position_open_time=local_trade.timestamp_open
+                )
+                exit_price = last_order.get("filled_price") if last_order else None
+                self.live_repo.close_trade(local_trade.id, exit_price or 0.0)
+                await self._send(chat_id, "✅ <b>Posisi tersinkronisasi.</b>\nBursa melapor tidak ada posisi terbuka. Catatan lokal telah dirapikan.")
+            else:
+                await self._send(chat_id, "📭 <b>Tidak ada posisi terbuka di bursa.</b>")
             return
 
-        current_price = self._get_latest_price()
+        # 2. Get real-time price for the "Now" display
+        current_price = await self.gateway.get_current_price()
+        
+        # Fallback to local DB price only if API fails
         if current_price is None:
-            await self._send(chat_id, "⚠️ Gagal ambil harga terbaru dari DB.")
-            return
+            current_price = self._get_latest_price()
 
-        # Hitung unrealized PnL
-        if trade.side == "LONG":
-            price_diff_pct = (current_price - trade.entry_price) / trade.entry_price
+        entry_price = position.entry_price
+        side = position.side
+        leverage = position.leverage
+        
+        # Use exchange-calculated PnL if available (unscaled by gateway)
+        unrealized_pnl_usdt = position.unrealized_pnl
+        
+        # Calculate PnL % based on current price for accuracy
+        if side == "LONG":
+            price_diff_pct = (current_price - entry_price) / entry_price
         else:
-            price_diff_pct = (trade.entry_price - current_price) / trade.entry_price
+            price_diff_pct = (entry_price - current_price) / entry_price
+        
+        unrealized_pnl_pct = price_diff_pct * leverage * 100
 
-        unrealized_pnl_usdt = price_diff_pct * trade.size_usdt * trade.leverage
-        unrealized_pnl_pct = price_diff_pct * trade.leverage * 100
-
-        # Status vs SL/TP
-        if trade.side == "LONG":
-            distance_to_sl_pct = (current_price - trade.sl_price) / trade.entry_price * 100
-            distance_to_tp_pct = (trade.tp_price - current_price) / trade.entry_price * 100
-        else:
-            distance_to_sl_pct = (trade.sl_price - current_price) / trade.entry_price * 100
-            distance_to_tp_pct = (current_price - trade.tp_price) / trade.entry_price * 100
+        # SL/TP info (from local trade if available, otherwise from bursa)
+        sl_price = local_trade.sl_price if local_trade else 0.0
+        tp_price = local_trade.tp_price if local_trade else 0.0
+        size_usdt = local_trade.size_usdt if local_trade else (position.quantity * entry_price / leverage)
 
         pnl_emoji = "📈" if unrealized_pnl_usdt >= 0 else "📉"
-        direction_emoji = "📈" if trade.side == "LONG" else "📉"
-
-        hold_hours = (time.time() * 1000 - trade.timestamp_open) / 3600000
-
+        direction_emoji = "📈" if side == "LONG" else "📉"
+        
         msg = (
-            f"📊 <b>OPEN POSITION — Live PnL</b>\n"
+            f"📊 <b>OPEN POSITION — REAL-TIME</b>\n"
             f"━━━━━━━━━━━━━━━━━━\n"
-            f"{direction_emoji} <b>{trade.side}</b> BTC/USDT\n"
-            f"💰 Entry     : <b>${trade.entry_price:,.2f}</b>\n"
+            f"{direction_emoji} <b>{side}</b> BTC/USDT\n"
+            f"💰 Entry     : <b>${entry_price:,.2f}</b>\n"
             f"📡 Now       : <b>${current_price:,.2f}</b>\n"
             f"{pnl_emoji} Unreal PnL : <b>{unrealized_pnl_usdt:+.3f} USDT ({unrealized_pnl_pct:+.2f}%)</b>\n"
             f"━━━━━━━━━━━━━━━━━━\n"
-            f"🛑 SL        : ${trade.sl_price:,.2f}  (jarak {distance_to_sl_pct:+.3f}%)\n"
-            f"🎯 TP        : ${trade.tp_price:,.2f}  (jarak {distance_to_tp_pct:+.3f}%)\n"
-            f"📏 Margin    : ${trade.size_usdt:,.0f} × {trade.leverage}x\n"
-            f"⏱️  Hold      : {hold_hours:.1f} jam\n"
-            f"━━━━━━━━━━━━━━━━━━\n"
-            f"🤖 BTC-QUANT LIVE v4.4"
+            f"🛑 SL        : ${sl_price:,.2f}\n"
+            f"🎯 TP        : ${tp_price:,.2f}\n"
+            f"📏 Leverage  : {leverage}x\n"
+            f"🤖 Status   : 🟢 synchronized with Lighter"
         )
         await self._send(chat_id, msg)
 
     async def _cmd_status(self, chat_id: int):
-        """Return bot status and daily PnL."""
+        """Return bot status and daily PnL (synchronized)."""
         trading_enabled = os.getenv("LIGHTER_TRADING_ENABLED", "false").lower() == "true"
         mode = os.getenv("LIGHTER_EXECUTION_MODE", "unknown").upper()
+        
+        # Get daily PnL from DB (historical stats)
         daily_pnl_usdt, daily_pnl_pct = self.live_repo.get_daily_pnl()
-        trade = self.live_repo.get_open_trade()
-        current_price = self._get_latest_price()
+        
+        # [FIX] Get live position and price for accurate status
+        position = await self.gateway.get_open_position()
+        current_price = await self.gateway.get_current_price()
+        if current_price is None:
+            current_price = self._get_latest_price()
 
         trading_status = "🟢 ENABLED" if trading_enabled else "🔴 DISABLED"
-        position_text = f"Ada posisi {trade.side} @ ${trade.entry_price:,.2f}" if trade else "Tidak ada posisi"
+        position_text = f"Ada posisi {position.side} @ ${position.entry_price:,.2f}" if position else "Tidak ada posisi"
         price_text = f"${current_price:,.2f}" if current_price else "N/A"
         pnl_emoji = "📈" if daily_pnl_usdt >= 0 else "📉"
 
