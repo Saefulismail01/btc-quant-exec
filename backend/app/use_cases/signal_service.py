@@ -583,6 +583,11 @@ class SignalService:
                 gate=spectrum.trade_gate, conviction=spectrum.conviction_pct, score=score
             )
 
+            # [FIX] Harmonize verdict and status. If verdict is NEUTRAL, status MUST be SUSPENDED.
+            if verdict == "NEUTRAL":
+                tp_status = "SUSPENDED"
+                tp_reason = f"Neutral verdict (score {score}) overrides spectrum gate. Wait for next candle."
+
             conclusion = (
                 f"High Conviction ({spectrum.conviction_pct:.1f}%) — "
                 "execute when price enters entry zone."

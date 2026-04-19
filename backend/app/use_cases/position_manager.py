@@ -437,6 +437,11 @@ class PositionManager:
             True if processed successfully, False otherwise
         """
         try:
+            # [FIX] Fallback protection — skip all actions if signal is a fallback (data error)
+            if signal.is_fallback:
+                logger.warning("[PositionManager] ⚠️ Signal is FALLBACK (data error). Skipping all actions.")
+                return True
+
             logger.info(
                 f"[PositionManager] Processing signal | Verdict: {signal.confluence.verdict}"
             )
@@ -693,22 +698,24 @@ class PositionManager:
                 return True
 
             # Check signal status
-            if signal.trade_plan.status not in ("ACTIVE", "ADVISORY"):
+            # MUST be ACTIVE/ADVISORY and NOT NEUTRAL to enter.
+            if signal.trade_plan.status not in ("ACTIVE", "ADVISORY") or signal.confluence.verdict == "NEUTRAL":
+                block_reason = f"Signal {signal.trade_plan.status}" if signal.confluence.verdict != "NEUTRAL" else "Neutral Verdict"
                 logger.info(
-                    f"[PositionManager] Signal not ACTIVE/ADVISORY (status={signal.trade_plan.status}). "
+                    f"[PositionManager] {block_reason} (status={signal.trade_plan.status}, verdict={signal.confluence.verdict}). "
                     f"Skipping open."
                 )
-                # Notify Telegram about signal status block
+                # Notify Telegram about entry block
                 try:
                     await self.notifier.notify_entry_blocked(
-                        block_reason=f"Signal {signal.trade_plan.status}",
+                        block_reason=block_reason,
                         signal_verdict=signal.confluence.verdict,
                         signal_status=signal.trade_plan.status,
                         conviction_pct=signal.confluence.conviction_pct,
-                        details=f"Signal status is {signal.trade_plan.status}, not ACTIVE/ADVISORY. No entry allowed.",
+                        details=f"Entry blocked because verdict is {signal.confluence.verdict} and status is {signal.trade_plan.status}. We only enter on ACTIVE/ADVISORY signals with non-neutral verdicts.",
                     )
                 except Exception as e:
-                    logger.warning(f"[PositionManager] Failed to send signal status notification: {e}")
+                    logger.warning(f"[PositionManager] Failed to send entry block notification: {e}")
                 return True
 
             # Check RiskManager (with actual account balance for proper position sizing)
