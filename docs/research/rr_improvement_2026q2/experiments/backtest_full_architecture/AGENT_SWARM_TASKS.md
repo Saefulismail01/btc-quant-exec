@@ -4,6 +4,50 @@
 **Lead Agent:** Cascade (current)  
 **Branch:** `feature/backtest-full-architecture`
 
+## Context & Background
+
+### Why This Backtest?
+
+**Problem:** Production bot has high win rate (~75%) but low R:R (0.53), resulting in thin EV (+0.22% per trade).
+
+**Research Findings (from `RESEARCH_FINDINGS.md`):**
+- **Horizon mismatch confirmed:** MLP trained on 4H forward return labels, but execution happens in minutes-hours
+- **Execution-aligned labels are 1.56x more predictable:** F1 0.51 vs 0.31 (baseline)
+- **Recommendation:** Retrain MLP with execution-aligned labels for 64%+ improvement
+
+**What We're Testing:**
+This backtest validates whether the proposed improvements actually work in a full architecture simulation:
+1. **MLP variants:** Baseline (4H) vs Execution-aligned vs 1H forward return
+2. **Exit strategies:** Fixed TP/SL vs Partial TP vs Pure trailing
+3. **Exhaustion layer:** Veto/reduce size at exhaustion conditions
+
+### What Has Been Done So Far?
+
+1. **Research phase (completed):**
+   - Walk-forward validation on 180 days Binance 1m data
+   - Proved execution-aligned labels are more predictable
+   - Documented in `RESEARCH_FINDINGS.md`
+
+2. **Tier 0 implementation (completed in `refactor/reconciliation-pipeline`):**
+   - Reconciliation pipeline (Lighter → DuckDB)
+   - Signal snapshot store
+   - Ready for production deployment
+
+3. **Current phase:**
+   - Building backtest to validate strategy improvements before production deployment
+   - Using existing L1/L2/L4 components (no need to reimplement)
+   - Focus on MLP variants + exit strategies + exhaustion
+
+### Success Criteria
+
+**Primary:**
+- Config A (execution-aligned MLP) shows EV improvement ≥ 50% vs baseline
+- Config B (partial TP) shows avg winner improvement ≥ 50% vs baseline
+- Config C (partial TP + exhaustion veto) shows best Sharpe ratio
+
+**If successful:** Promote to production deployment
+**If unsuccessful:** Re-evaluate approach or adjust parameters
+
 ## Overview
 
 This document defines task breakdown for parallel agent swarm implementation of backtest with full Tier 0-4 architecture.
@@ -16,28 +60,38 @@ This document defines task breakdown for parallel agent swarm implementation of 
 - **Deliverables:** Integrated backtest engine, final results report
 
 ### Agent A - Data Engineer
-- **Responsibility:** Data loading, preprocessing, indicator computation
+- **Responsibility:** Data loading, preprocessing, feature extraction
+- **Context:** You're preparing the foundation data that all other agents will use. The backtest needs both 1m data (for accurate TP/SL simulation) and 4H data (for signal generation). You'll also extract the 8 technical features that MLP needs.
 - **Tasks:** Phase 1 (Data Preparation)
 - **Deliverables:** Preprocessed datasets, indicator features
 
 ### Agent B - MLP Engineer
 - **Responsibility:** MLP training (3 variants)
+- **Context:** You're training the core prediction models. Research showed execution-aligned labels are 1.56x more predictable. You'll train 3 variants: baseline (current), execution-aligned (research recommendation), and 1H forward return (alternative). This is the most critical component for improving EV.
 - **Tasks:** Phase 2 (MLP Training)
 - **Deliverables:** 3 trained MLP models
 
 ### Agent C - Execution Engineer
 - **Responsibility:** Execution simulation (TP/SL, partial, trailing)
+- **Context:** You're implementing how trades exit. Current fixed TP/SL limits winner magnitude. You'll implement partial TP (close 60% @ 0.4%, trail 40%) and pure trailing to capture trend continuation. This is key for improving R:R.
 - **Tasks:** Phase 3 (Execution Simulation)
 - **Deliverables:** Execution simulation modules
 
 ### Agent D - Backtest Engineer
 - **Responsibility:** Backtest engine, metrics calculation
+- **Context:** You're building the simulation engine that ties everything together. You'll integrate with existing L1/L2/L4 code, run all 6 configurations, and calculate metrics. This determines which combination performs best.
 - **Tasks:** Phase 4 (Backtest Engine)
 - **Deliverables:** Backtest engine, metrics module
 
 ## Task Breakdown
 
 ### Phase 1: Data Preparation (Agent A)
+
+**Context:** This is the foundation. Without clean, aligned data, nothing else works. You need to:
+- Load 1m data (for accurate TP/SL simulation — critical because TP/SL happens in minutes)
+- Load 4H data (for signal generation — MLP operates on 4H timeframe)
+- Extract 8 features that MLP uses (same as production)
+- Call existing L1/L2/L4 code to get regime/volatility context
 
 **Tasks:**
 1. Load 1m cached data from `.cache/btc_1m_*.parquet`
@@ -62,6 +116,13 @@ This document defines task breakdown for parallel agent swarm implementation of 
 ---
 
 ### Phase 2: MLP Training (Agent B)
+
+**Context:** This is the most critical phase. Research proved execution-aligned labels are 1.56x more predictable (F1 0.51 vs 0.31). You're training 3 models to compare:
+- **Baseline:** Current production model (4H forward return) — this is the control
+- **Variant A:** Execution-aligned (TP before SL) — this is the research recommendation
+- **Variant B:** 1H forward return — alternative hypothesis
+
+If Variant A performs best, it validates the research and justifies production retraining.
 
 **Tasks:**
 1. Train Baseline MLP (4H forward return label)
@@ -88,6 +149,13 @@ This document defines task breakdown for parallel agent swarm implementation of 
 ---
 
 ### Phase 3: Execution Simulation (Agent C)
+
+**Context:** Current bot has low R:R (0.53) because fixed TP 0.71% cuts winners short. You're implementing exit strategies to capture trend continuation:
+- **Fixed TP/SL:** Baseline (current production)
+- **Partial TP:** Close 60% @ 0.4%, trail 40% — balances banking profit vs trend capture
+- **Pure trailing:** No fixed TP, trail with ATR — maximum trend capture but higher risk
+
+You're also implementing exhaustion layer to avoid "buying at the top" by vetoing entries when market is overextended.
 
 **Tasks:**
 1. Implement fixed TP/SL execution
@@ -117,6 +185,14 @@ This document defines task breakdown for parallel agent swarm implementation of 
 
 ### Phase 4: Backtest Engine (Agent D)
 
+**Context:** You're building the simulation that determines which combination works best. You'll:
+- Integrate with existing L1/L2/L4 code (no need to reimplement)
+- Run 6 configurations (MLP variants × exit strategies × exhaustion)
+- Calculate metrics (WR, R:R, EV, Sharpe, etc.)
+- Generate comparison report
+
+This is the decision engine — it will tell us whether the research recommendations actually improve performance.
+
 **Tasks:**
 1. Implement time-series walk-forward logic
    - Train/test split by time
@@ -145,6 +221,14 @@ This document defines task breakdown for parallel agent swarm implementation of 
 ---
 
 ### Phase 5: Integration & Analysis (Lead Agent)
+
+**Context:** You're the orchestrator. After all agents complete their tasks, you'll:
+- Integrate all components into a working backtest
+- Run the full simulation with all 6 configurations
+- Analyze results to determine which combination performs best
+- Generate recommendations for production deployment
+
+This is the final decision point — based on your analysis, we'll decide whether to promote the research recommendations to production.
 
 **Tasks:**
 1. Review all agent outputs
