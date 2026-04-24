@@ -10,30 +10,25 @@ Backtest ini akan mensimulasikan complete trading pipeline dengan semua tier unt
 
 ## 2. Architecture Components in Backtest
 
-### Tier 0 - Foundation (Simulation)
-- **Signal snapshot:** Capture L1-L4 state at signal generation
-- **Trade ledger:** Simulate trade execution with TP/SL tracking
-- **Reconciliation:** Not needed in backtest (data is perfect)
+### Reuse Existing Components (No Code Needed)
+- **L1 (BOCPD Regime):** Use existing production code
+- **L2 (EMA Voting):** Use existing production code
+- **L4 (Volatility):** Use existing production code
+- **Data pipeline:** Use existing 4H data with microstructure
 
-### Tier 1 - Data Sync
-- **OHLCV 4H:** Use local CSV data (2020-2026)
-- **OHLCV 1m:** Use cached Binance data (180 days)
-- **Market metrics:** CVD, funding, OI (from 4H data with real orderflow)
-
-### Tier 2 - MLP Models
-- **Baseline:** Current MLP (4H forward return label)
-- **Variant A:** MLP with execution-aligned label (TP before SL)
-- **Variant B:** MLP with 1H forward return label (alternative)
-
-### Tier 3 - Asymmetric Exit
-- **Baseline:** Fixed TP 0.71% / SL 1.33%
-- **Variant A:** Partial TP (60% @ 0.4%, trail 40%)
-- **Variant B:** Pure trailing (no fixed TP)
-
-### Tier 4 - Exhaustion Layer
-- **Baseline:** No exhaustion check
-- **Variant A:** Veto entry when exhaustion_score > 0.7
-- **Variant B:** Reduce size 50% when 0.5 < exhaustion_score ≤ 0.7
+### Components to Implement (New Code)
+- **Tier 2 - MLP Models:**
+  - Baseline: Current MLP (4H forward return label)
+  - Variant A: MLP with execution-aligned label (TP before SL)
+  - Variant B: MLP with 1H forward return label (alternative)
+- **Tier 3 - Asymmetric Exit:**
+  - Baseline: Fixed TP 0.71% / SL 1.33%
+  - Variant A: Partial TP (60% @ 0.4%, trail 40%)
+  - Variant B: Pure trailing (no fixed TP)
+- **Tier 4 - Exhaustion Layer:**
+  - Baseline: No exhaustion check
+  - Variant A: Veto entry when exhaustion_score > 0.7
+  - Variant B: Reduce size 50% when 0.5 < exhaustion_score ≤ 0.7
 
 ## 3. Backtest Configuration
 
@@ -97,15 +92,14 @@ Backtest ini akan mensimulasikan complete trading pipeline dengan semua tier unt
 ### Phase 1: Data Preparation
 1. Load 1m cached data (180 days)
 2. Load 4H data with microstructure
-3. Resample 1m to 4H for signal generation
-4. Precompute indicators (RSI, MACD, EMA, ATR, etc.)
+3. Call existing production code to get L1/L2/L4 outputs
+4. Extract 8 technical features for MLP
 
-### Phase 2: Signal Generation
-1. Implement L1 regime detection (BOCPD)
-2. Implement L2 EMA voting
-3. Implement L3 MLP prediction (baseline + variants)
-4. Implement L4 volatility regime
-5. Generate signals with filters
+### Phase 2: MLP Training (3 Variants)
+1. Train Baseline MLP (4H forward return label)
+2. Train Variant A MLP (execution-aligned label)
+3. Train Variant B MLP (1H forward return label)
+4. Save all 3 models
 
 ### Phase 3: Execution Simulation
 1. Implement fixed TP/SL execution
@@ -115,7 +109,7 @@ Backtest ini akan mensimulasikan complete trading pipeline dengan semua tier unt
 5. Track MFE/MAE per trade
 
 ### Phase 4: Backtest Engine
-1. Implement time-series walk-forward
+1. Integrate with existing signal generation (L1/L2/L4)
 2. Run all 6 configurations
 3. Collect metrics per configuration
 4. Generate comparison report
@@ -132,12 +126,12 @@ Backtest ini akan mensimulasikan complete trading pipeline dengan semua tier unt
 backtest_full_architecture/
 ├── data/
 │   ├── load_data.py           # Load 1m + 4H data
-│   └── preprocess.py          # Compute indicators
-├── signals/
-│   ├── l1_regime.py           # BOCPD regime detection
-│   ├── l2_ema.py              # EMA voting logic
-│   ├── l3_mlp.py              # MLP prediction (variants)
-│   └── l4_volatility.py       # Volatility regime
+│   └── extract_features.py    # Extract 8 features (reuse existing)
+├── mlp/
+│   ├── train_baseline.py      # Train 4H forward return MLP
+│   ├── train_exec_aligned.py # Train execution-aligned MLP
+│   ├── train_1h.py            # Train 1H forward return MLP
+│   └── models/               # Saved models
 ├── execution/
 │   ├── fixed_tp_sl.py         # Fixed TP/SL simulation
 │   ├── partial_tp.py          # Partial TP + trailing
@@ -146,7 +140,7 @@ backtest_full_architecture/
 │   ├── exhaustion_score.py    # Compute exhaustion score
 │   └── veto_logic.py          # Veto/reduce size logic
 ├── backtest/
-│   ├── engine.py              # Main backtest engine
+│   ├── engine.py              # Main backtest engine (integrate with existing)
 │   ├── config.py              # Configuration matrix
 │   └── metrics.py             # Metrics calculation
 ├── results/

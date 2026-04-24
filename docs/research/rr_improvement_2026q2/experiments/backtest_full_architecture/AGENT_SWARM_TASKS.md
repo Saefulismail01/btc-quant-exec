@@ -20,10 +20,10 @@ This document defines task breakdown for parallel agent swarm implementation of 
 - **Tasks:** Phase 1 (Data Preparation)
 - **Deliverables:** Preprocessed datasets, indicator features
 
-### Agent B - Signal Engineer
-- **Responsibility:** Signal generation (L1-L4 layers)
-- **Tasks:** Phase 2 (Signal Generation)
-- **Deliverables:** Signal generation module, L1-L4 implementations
+### Agent B - MLP Engineer
+- **Responsibility:** MLP training (3 variants)
+- **Tasks:** Phase 2 (MLP Training)
+- **Deliverables:** 3 trained MLP models
 
 ### Agent C - Execution Engineer
 - **Responsibility:** Execution simulation (TP/SL, partial, trailing)
@@ -42,52 +42,46 @@ This document defines task breakdown for parallel agent swarm implementation of 
 **Tasks:**
 1. Load 1m cached data from `.cache/btc_1m_*.parquet`
 2. Load 4H data from `backtest/data/BTC_USDT_4h_2020_2026_with_real_orderflow.csv`
-3. Resample 1m to 4H for signal generation alignment
-4. Precompute technical indicators:
+3. Call existing production code to get L1/L2/L4 outputs
+4. Extract 8 technical features for MLP:
    - RSI 14
    - MACD histogram
-   - EMA 20, 50
-   - ATR 14
-   - Log returns
-5. Precompute microstructure features:
-   - CVD (from real orderflow data)
+   - EMA distance
+   - Log return
+   - Normalized ATR
+   - Normalized CVD
    - Funding rate
    - OI change
-6. Save preprocessed data to `backtest_full_architecture/data/processed/`
+5. Save preprocessed data to `backtest_full_architecture/data/processed/`
 
 **Dependencies:** None
-**Output:** `data/preprocessed_4h.parquet`, `data/preprocessed_1m.parquet`
+**Output:** `data/preprocessed_4h.parquet`, `data/preprocessed_1m.parquet`, `data/features.parquet`
 
 **Estimated Time:** 0.5 day
 
 ---
 
-### Phase 2: Signal Generation (Agent B)
+### Phase 2: MLP Training (Agent B)
 
 **Tasks:**
-1. Implement L1 regime detection (BOCPD algorithm)
-   - Input: 4H OHLCV
-   - Output: Regime labels (trending/choppy)
-2. Implement L2 EMA voting logic
-   - Input: EMA 20, 50
-   - Output: EMA vote score, alignment flag
-3. Implement L3 MLP prediction variants
-   - Baseline: 4H forward return label
-   - Variant A: Execution-aligned label (TP before SL)
-   - Variant B: 1H forward return label
-   - Input: 8 technical features
-   - Output: Class probabilities
-4. Implement L4 volatility regime
-   - Input: ATR, rolling vol
-   - Output: Vol regime labels (low/medium/high)
-5. Implement signal generation with filters
-   - Combine L1-L4 outputs
-   - Apply conviction threshold
-   - Generate signals at 4H candle close
-6. Save signal data to `backtest_full_architecture/signals/`
+1. Train Baseline MLP (4H forward return label)
+   - Use existing label generation code
+   - Train on 180 days data
+   - Save model to `mlp/models/baseline.joblib`
+2. Train Variant A MLP (execution-aligned label)
+   - Use label from execution-aligned study (TP before SL)
+   - Train on 180 days data
+   - Save model to `mlp/models/variant_a.joblib`
+3. Train Variant B MLP (1H forward return label)
+   - Generate 1H forward return labels
+   - Train on 180 days data
+   - Save model to `mlp/models/variant_b.joblib`
+4. Validate all 3 models with walk-forward
+   - Report F1, accuracy per model
+   - Save validation results
 
 **Dependencies:** Phase 1 (Agent A)
-**Output:** `signals/signals_baseline.parquet`, `signals/signals_variant_a.parquet`, `signals/signals_variant_b.parquet`
+**Output:** `mlp/models/baseline.joblib`, `mlp/models/variant_a.joblib`, `mlp/models/variant_b.joblib`, `mlp/validation_results.csv`
 
 **Estimated Time:** 1 day
 
@@ -135,9 +129,10 @@ This document defines task breakdown for parallel agent swarm implementation of 
    - Secondary: Profit factor, avg winner/loser
    - Conditional: WR by regime/vol/exhaustion
 4. Implement backtest loop
+   - Integrate with existing L1/L2/L4 (call production code)
    - For each config:
-     - Generate signals
-     - Simulate execution
+     - Use appropriate MLP variant
+     - Simulate execution strategy
      - Track trades
      - Calculate metrics
 5. Save results to `backtest_full_architecture/results/`
@@ -236,19 +231,20 @@ This document defines task breakdown for parallel agent swarm implementation of 
 backtest_full_architecture/
 ├── data/
 │   ├── load_data.py           # Agent A
-│   ├── preprocess.py          # Agent A
+│   ├── extract_features.py    # Agent A
 │   └── processed/
 │       ├── preprocessed_4h.parquet
-│       └── preprocessed_1m.parquet
-├── signals/
-│   ├── l1_regime.py           # Agent B
-│   ├── l2_ema.py              # Agent B
-│   ├── l3_mlp.py              # Agent B
-│   ├── l4_volatility.py       # Agent B
-│   └── signals/
-│       ├── signals_baseline.parquet
-│       ├── signals_variant_a.parquet
-│       └── signals_variant_b.parquet
+│       ├── preprocessed_1m.parquet
+│       └── features.parquet
+├── mlp/
+│   ├── train_baseline.py      # Agent B
+│   ├── train_exec_aligned.py # Agent B
+│   ├── train_1h.py            # Agent B
+│   ├── models/
+│   │   ├── baseline.joblib
+│   │   ├── variant_a.joblib
+│   │   └── variant_b.joblib
+│   └── validation_results.csv
 ├── execution/
 │   ├── fixed_tp_sl.py         # Agent C
 │   ├── partial_tp.py          # Agent C
@@ -277,11 +273,11 @@ backtest_full_architecture/
 - ✅ All indicators computed correctly
 - ✅ Data aligned between 1m and 4H
 
-### Agent B (Signal Engineer)
-- ✅ L1-L4 implementations working
-- ✅ 3 MLP variants implemented
-- ✅ Signal generation with filters working
-- ✅ Signal files saved correctly
+### Agent B (MLP Engineer)
+- ✅ 3 MLP models trained successfully
+- ✅ All models validated with walk-forward
+- ✅ Models saved to correct locations
+- ✅ Validation results documented
 
 ### Agent C (Execution Engineer)
 - ✅ All execution strategies implemented
