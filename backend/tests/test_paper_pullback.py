@@ -16,9 +16,7 @@ from unittest.mock import patch, MagicMock
 BACKEND_DIR = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(BACKEND_DIR))
 
-# Patch signal_service sebelum import agar tidak butuh DuckDB
-with patch("app.use_cases.signal_service.get_signal_service", return_value=MagicMock()):
-    import paper_executor_pullback as pb
+import paper_executor_pullback as pb
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -38,8 +36,7 @@ def _make_executor(tmp_path: Path) -> pb.PullbackPaperExecutor:
     with patch.object(pb, "OUTPUT_DIR", tmp_path), \
          patch.object(pb, "TRADES_CSV", tmp_path / "trades.csv"), \
          patch.object(pb, "STATE_FILE", tmp_path / "state.json"), \
-         patch.object(pb, "LOG_FILE",   tmp_path / "pb.log"), \
-         patch("app.use_cases.signal_service.get_signal_service", return_value=MagicMock()):
+         patch.object(pb, "LOG_FILE",   tmp_path / "pb.log"):
         executor = pb.PullbackPaperExecutor()
     return executor
 
@@ -168,8 +165,7 @@ def test_is_frozen_none():
 def test_freeze_reset_on_new_day(tmp_path):
     state_file = tmp_path / "state.json"
     with patch.object(pb, "STATE_FILE", state_file), \
-         patch.object(pb, "TRADES_CSV", tmp_path / "t.csv"), \
-         patch("app.use_cases.signal_service.get_signal_service", return_value=MagicMock()):
+         patch.object(pb, "TRADES_CSV", tmp_path / "t.csv"):
         ex = pb.PullbackPaperExecutor()
         ex.state.freeze_date = "2026-04-27"
         now = _ts("2026-04-28", hour=2)   # 02:00 UTC = 09:00 WIB 28 Apr
@@ -180,8 +176,7 @@ def test_freeze_reset_on_new_day(tmp_path):
 def test_freeze_not_reset_same_day(tmp_path):
     state_file = tmp_path / "state.json"
     with patch.object(pb, "STATE_FILE", state_file), \
-         patch.object(pb, "TRADES_CSV", tmp_path / "t.csv"), \
-         patch("app.use_cases.signal_service.get_signal_service", return_value=MagicMock()):
+         patch.object(pb, "TRADES_CSV", tmp_path / "t.csv"):
         ex = pb.PullbackPaperExecutor()
         ex.state.freeze_date = "2026-04-28"
         now = _ts("2026-04-28", hour=10)  # masih hari yang sama WIB
@@ -198,13 +193,11 @@ def test_long_fill_when_price_below_limit(tmp_path):
     trades_csv = tmp_path / "trades.csv"
     now = time.time()
     with patch.object(pb, "STATE_FILE", state_file), \
-         patch.object(pb, "TRADES_CSV", trades_csv), \
-         patch("app.use_cases.signal_service.get_signal_service", return_value=MagicMock()):
+         patch.object(pb, "TRADES_CSV", trades_csv):
         ex = pb.PullbackPaperExecutor()
         ex.state.pending_order = pb.PendingOrder(
             "LONG", 100_000, 99_700, 98_667, 100_710, now, "ts"
         )
-        # Harga turun ke 99,500 — di bawah limit 99,700 → harus fill
         ex._check_pending_fill(99_500, now + 60)
         assert ex.state.pending_order is None
         assert ex.state.open_position is not None
@@ -216,13 +209,11 @@ def test_long_no_fill_when_price_above_limit(tmp_path):
     trades_csv = tmp_path / "trades.csv"
     now = time.time()
     with patch.object(pb, "STATE_FILE", state_file), \
-         patch.object(pb, "TRADES_CSV", trades_csv), \
-         patch("app.use_cases.signal_service.get_signal_service", return_value=MagicMock()):
+         patch.object(pb, "TRADES_CSV", trades_csv):
         ex = pb.PullbackPaperExecutor()
         ex.state.pending_order = pb.PendingOrder(
             "LONG", 100_000, 99_700, 98_667, 100_710, now, "ts"
         )
-        # Harga masih 100,500 — di atas limit → belum fill
         ex._check_pending_fill(100_500, now + 60)
         assert ex.state.pending_order is not None
         assert ex.state.open_position is None
@@ -233,13 +224,11 @@ def test_short_fill_when_price_above_limit(tmp_path):
     trades_csv = tmp_path / "trades.csv"
     now = time.time()
     with patch.object(pb, "STATE_FILE", state_file), \
-         patch.object(pb, "TRADES_CSV", trades_csv), \
-         patch("app.use_cases.signal_service.get_signal_service", return_value=MagicMock()):
+         patch.object(pb, "TRADES_CSV", trades_csv):
         ex = pb.PullbackPaperExecutor()
         ex.state.pending_order = pb.PendingOrder(
             "SHORT", 100_000, 100_300, 101_333, 99_290, now, "ts"
         )
-        # Harga naik ke 100,500 — di atas limit 100,300 → fill
         ex._check_pending_fill(100_500, now + 60)
         assert ex.state.pending_order is None
         assert ex.state.open_position is not None
@@ -250,13 +239,11 @@ def test_order_expired_written_to_csv(tmp_path):
     trades_csv = tmp_path / "trades.csv"
     now = time.time()
     with patch.object(pb, "STATE_FILE", state_file), \
-         patch.object(pb, "TRADES_CSV", trades_csv), \
-         patch("app.use_cases.signal_service.get_signal_service", return_value=MagicMock()):
+         patch.object(pb, "TRADES_CSV", trades_csv):
         ex = pb.PullbackPaperExecutor()
         ex.state.pending_order = pb.PendingOrder(
             "LONG", 100_000, 99_700, 98_667, 100_710, now, "ts"
         )
-        # Waktu sudah melewati expiry
         expired_ts = now + pb.MAX_WAIT_CANDLES * pb.CANDLE_SECONDS + 100
         ex._check_pending_fill(100_500, expired_ts)
         assert ex.state.pending_order is None
@@ -279,19 +266,17 @@ def test_long_sl_hit(tmp_path):
     state_file = tmp_path / "state.json"
     trades_csv = tmp_path / "trades.csv"
     with patch.object(pb, "STATE_FILE", state_file), \
-         patch.object(pb, "TRADES_CSV", trades_csv), \
-         patch("app.use_cases.signal_service.get_signal_service", return_value=MagicMock()):
+         patch.object(pb, "TRADES_CSV", trades_csv):
         ex = pb.PullbackPaperExecutor()
         entry = 100_000.0
         ex.state.open_position = _open_pos("LONG", entry)
-        sl_price = entry * (1 - pb.SL_PCT) - 10   # di bawah SL
+        sl_price = entry * (1 - pb.SL_PCT) - 10
         now = time.time()
         ex._check_open_exit(sl_price, now)
         assert ex.state.open_position is None
         assert ex.state.n_trades == 1
         assert ex.state.n_sl     == 1
         assert ex.state.total_pnl < 0
-        # Freeze harus aktif
         assert ex.state.freeze_date == pb._wib_date(now)
         content = trades_csv.read_text()
         assert "SL" in content
@@ -301,18 +286,17 @@ def test_long_tp_hit(tmp_path):
     state_file = tmp_path / "state.json"
     trades_csv = tmp_path / "trades.csv"
     with patch.object(pb, "STATE_FILE", state_file), \
-         patch.object(pb, "TRADES_CSV", trades_csv), \
-         patch("app.use_cases.signal_service.get_signal_service", return_value=MagicMock()):
+         patch.object(pb, "TRADES_CSV", trades_csv):
         ex = pb.PullbackPaperExecutor()
         entry = 100_000.0
         ex.state.open_position = _open_pos("LONG", entry)
-        tp_price = entry * (1 + pb.TP_PCT) + 10   # di atas TP
+        tp_price = entry * (1 + pb.TP_PCT) + 10
         ex._check_open_exit(tp_price, time.time())
         assert ex.state.open_position is None
         assert ex.state.n_trades == 1
         assert ex.state.n_wins   == 1
         assert ex.state.total_pnl > 0
-        assert ex.state.freeze_date is None   # TP tidak trigger freeze
+        assert ex.state.freeze_date is None
         content = trades_csv.read_text()
         assert "TRAIL_TP" in content
 
@@ -321,12 +305,11 @@ def test_short_sl_hit(tmp_path):
     state_file = tmp_path / "state.json"
     trades_csv = tmp_path / "trades.csv"
     with patch.object(pb, "STATE_FILE", state_file), \
-         patch.object(pb, "TRADES_CSV", trades_csv), \
-         patch("app.use_cases.signal_service.get_signal_service", return_value=MagicMock()):
+         patch.object(pb, "TRADES_CSV", trades_csv):
         ex = pb.PullbackPaperExecutor()
         entry = 100_000.0
         ex.state.open_position = _open_pos("SHORT", entry)
-        sl_price = entry * (1 + pb.SL_PCT) + 10   # di atas SL untuk SHORT
+        sl_price = entry * (1 + pb.SL_PCT) + 10
         ex._check_open_exit(sl_price, time.time())
         assert ex.state.n_sl == 1
         assert ex.state.total_pnl < 0
@@ -338,18 +321,15 @@ def test_sl_cancels_pending_order(tmp_path):
     trades_csv = tmp_path / "trades.csv"
     now = time.time()
     with patch.object(pb, "STATE_FILE", state_file), \
-         patch.object(pb, "TRADES_CSV", trades_csv), \
-         patch("app.use_cases.signal_service.get_signal_service", return_value=MagicMock()):
+         patch.object(pb, "TRADES_CSV", trades_csv):
         ex = pb.PullbackPaperExecutor()
         entry = 100_000.0
         ex.state.open_position  = _open_pos("LONG", entry)
-        # Ada pending order SHORT yang terpisah
         ex.state.pending_order  = pb.PendingOrder(
             "SHORT", 98_000, 98_294, 99_307, 97_303, now, "ts2"
         )
         sl_price = entry * (1 - pb.SL_PCT) - 10
         ex._check_open_exit(sl_price, now)
-        # Pending order harus ikut dicancel
         assert ex.state.pending_order is None
         assert ex.state.n_miss == 1
         content = trades_csv.read_text()
@@ -375,8 +355,7 @@ def test_new_signal_creates_pending_order(tmp_path):
     trades_csv = tmp_path / "trades.csv"
     now = time.time()
     with patch.object(pb, "STATE_FILE", state_file), \
-         patch.object(pb, "TRADES_CSV", trades_csv), \
-         patch("app.use_cases.signal_service.get_signal_service", return_value=MagicMock()):
+         patch.object(pb, "TRADES_CSV", trades_csv):
         ex = pb.PullbackPaperExecutor()
         ex._process_new_signal(_make_signal("LONG", "ACTIVE", 100_000), now)
         assert ex.state.pending_order is not None
@@ -390,12 +369,11 @@ def test_new_signal_skipped_when_frozen(tmp_path):
     trades_csv = tmp_path / "trades.csv"
     now = _ts("2026-04-28", hour=10)
     with patch.object(pb, "STATE_FILE", state_file), \
-         patch.object(pb, "TRADES_CSV", trades_csv), \
-         patch("app.use_cases.signal_service.get_signal_service", return_value=MagicMock()):
+         patch.object(pb, "TRADES_CSV", trades_csv):
         ex = pb.PullbackPaperExecutor()
-        ex.state.freeze_date = "2026-04-28"   # freeze hari ini
+        ex.state.freeze_date = "2026-04-28"
         ex._process_new_signal(_make_signal("LONG", "ACTIVE", 100_000), now)
-        assert ex.state.pending_order is None   # tidak boleh buka order baru
+        assert ex.state.pending_order is None
 
 
 def test_new_signal_skipped_when_suspended(tmp_path):
@@ -403,8 +381,7 @@ def test_new_signal_skipped_when_suspended(tmp_path):
     trades_csv = tmp_path / "trades.csv"
     now = time.time()
     with patch.object(pb, "STATE_FILE", state_file), \
-         patch.object(pb, "TRADES_CSV", trades_csv), \
-         patch("app.use_cases.signal_service.get_signal_service", return_value=MagicMock()):
+         patch.object(pb, "TRADES_CSV", trades_csv):
         ex = pb.PullbackPaperExecutor()
         ex._process_new_signal(_make_signal("LONG", "SUSPENDED", 100_000), now)
         assert ex.state.pending_order is None
@@ -415,12 +392,10 @@ def test_new_signal_skipped_when_position_open(tmp_path):
     trades_csv = tmp_path / "trades.csv"
     now = time.time()
     with patch.object(pb, "STATE_FILE", state_file), \
-         patch.object(pb, "TRADES_CSV", trades_csv), \
-         patch("app.use_cases.signal_service.get_signal_service", return_value=MagicMock()):
+         patch.object(pb, "TRADES_CSV", trades_csv):
         ex = pb.PullbackPaperExecutor()
         ex.state.open_position = _open_pos("LONG", 100_000)
         ex._process_new_signal(_make_signal("SHORT", "ACTIVE", 99_000), now)
-        # Tidak boleh ada pending order baru selagi posisi masih open
         assert ex.state.pending_order is None
 
 
@@ -430,8 +405,7 @@ def test_short_limit_above_signal_price(tmp_path):
     trades_csv = tmp_path / "trades.csv"
     now = time.time()
     with patch.object(pb, "STATE_FILE", state_file), \
-         patch.object(pb, "TRADES_CSV", trades_csv), \
-         patch("app.use_cases.signal_service.get_signal_service", return_value=MagicMock()):
+         patch.object(pb, "TRADES_CSV", trades_csv):
         ex = pb.PullbackPaperExecutor()
         ex._process_new_signal(_make_signal("SHORT", "ACTIVE", 100_000), now)
         assert ex.state.pending_order is not None

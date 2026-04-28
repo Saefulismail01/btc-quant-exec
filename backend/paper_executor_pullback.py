@@ -43,14 +43,13 @@ from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from typing import Optional
 
+import aiohttp
+
 # ── Path setup ────────────────────────────────────────────────────────────────
 BACKEND_DIR = Path(__file__).resolve().parent
-if str(BACKEND_DIR) not in sys.path:
-    sys.path.insert(0, str(BACKEND_DIR))
-
-from app.use_cases.signal_service import get_signal_service
 
 # ── Config ────────────────────────────────────────────────────────────────────
+BACKEND_API_URL  = os.getenv("BACKEND_API_URL", "http://btc-quant-api:8000/api/signal")
 PULLBACK_PCT     = float(os.getenv("PB_PCT",      "0.003"))   # 0.30%
 MAX_WAIT_CANDLES = int(os.getenv("PB_WAIT",       "2"))        # 2 candle 4H = 8 jam
 CANDLE_SECONDS   = 4 * 3600                                    # 4H dalam detik
@@ -295,11 +294,10 @@ def _now_str() -> str:
 class PullbackPaperExecutor:
 
     def __init__(self):
-        self.signal_svc = get_signal_service()
-        self.state      = ExecutorState()
+        self.state   = ExecutorState()
         self.state.load()
-        self.running    = True
-        self.cycle      = 0
+        self.running = True
+        self.cycle   = 0
 
     # ── 1. Reset freeze ───────────────────────────────────────────────────────
     def _check_freeze_reset(self, now_ts: float):
@@ -508,6 +506,46 @@ class PullbackPaperExecutor:
             f"SL={sl:.2f} TP={tp:.2f} | status={status} | expires {exp_str}"
         )
 
+    # ── Fetch signal via HTTP ──────────────────────────────────────────────────
+    async def _fetch_signal(self):
+        """Call backend API and return a simple namespace with .price.now, .trade_plan.*, .is_fallback."""
+        try:
+            async with aiohttp.ClientSession() as session:
+                async with session.get(
+                    BACKEND_API_URL,
+                    timeout=aiohttp.ClientTimeout(total=SIGNAL_TIMEOUT),
+                ) as resp:
+                    if resp.status != 200:
+                        log.warning(f"API returned {resp.status}")
+                        return None
+                    data = await resp.json()
+        except asyncio.TimeoutError:
+            log.warning(f"Signal API timeout (>{SIGNAL_TIMEOUT}s)")
+            return None
+        except Exception as e:
+            log.warning(f"Signal API error: {e}")
+            return None
+
+        # Parse JSON → simple namespace
+        try:
+            tp = data.get("trade_plan", {})
+            price_now = data.get("price", {}).get("now", 0.0)
+            signal = type("Signal", (), {
+                "is_fallback": data.get("is_fallback", True),
+                "timestamp"  : data.get("timestamp", ""),
+                "price"      : type("Price", (), {"now": float(price_now)})(),
+                "trade_plan" : type("TP", (), {
+                    "action" : tp.get("action", "LONG"),
+                    "status" : tp.get("status", "SUSPENDED"),
+                    "sl"     : float(tp.get("sl", 0)),
+                    "tp"     : float(tp.get("tp", 0)),
+                })(),
+            })()
+            return signal
+        except Exception as e:
+            log.warning(f"Signal parse error: {e}")
+            return None
+
     # ── Main loop ─────────────────────────────────────────────────────────────
     async def run(self):
         log.info("=" * 70)
@@ -535,15 +573,8 @@ class PullbackPaperExecutor:
             try:
                 self._check_freeze_reset(now_ts)
 
-                try:
-                    signal = await asyncio.wait_for(
-                        asyncio.to_thread(self.signal_svc.get_signal),
-                        timeout=SIGNAL_TIMEOUT,
-                    )
-                except asyncio.TimeoutError:
-                    log.warning(
-                        f"[CYCLE {self.cycle}] Signal timeout (>{SIGNAL_TIMEOUT}s)"
-                    )
+                signal = await self._fetch_signal()
+                if signal is None:
                     await asyncio.sleep(CYCLE_INTERVAL)
                     continue
 
