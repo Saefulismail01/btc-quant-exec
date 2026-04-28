@@ -89,7 +89,7 @@ services:
       - PB_PCT=${PB_PCT:-0.003}
       - PB_WAIT=${PB_WAIT:-2}
       - PB_CYCLE=${PB_CYCLE:-60}
-      - PB_NOTIONAL=${PB_NOTIONAL:-15000}
+      - PB_NOTIONAL=${PB_NOTIONAL:-495}
       - BACKEND_API_URL=http://btc-quant-api:8000/api/signal
       - LOG_LEVEL=${LOG_LEVEL:-INFO}
     volumes:

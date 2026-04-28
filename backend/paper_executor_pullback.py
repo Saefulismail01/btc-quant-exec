@@ -55,8 +55,8 @@ MAX_WAIT_CANDLES = int(os.getenv("PB_WAIT",       "2"))        # 2 candle 4H = 8
 CANDLE_SECONDS   = 4 * 3600                                    # 4H dalam detik
 CYCLE_INTERVAL   = int(os.getenv("PB_CYCLE",      "60"))       # polling (detik)
 SIGNAL_TIMEOUT   = 30.0                                        # detik
-NOTIONAL         = float(os.getenv("PB_NOTIONAL", "15000"))   # $15,000 notional
-FEE_USD          = NOTIONAL * 0.0004 * 2                      # $12 round-trip
+NOTIONAL         = float(os.getenv("PB_NOTIONAL", "495"))    # $99 equity x 5x leverage
+FEE_USD          = NOTIONAL * 0.0004 * 2                      # ~$0.40 round-trip
 SL_PCT           = 0.01333                                     # 1.333% SL
 TP_PCT           = 0.0071                                      # 0.71% TP
 
