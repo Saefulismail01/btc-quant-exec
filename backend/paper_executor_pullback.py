@@ -56,7 +56,7 @@ CANDLE_SECONDS   = 4 * 3600                                    # 4H dalam detik
 CYCLE_INTERVAL   = int(os.getenv("PB_CYCLE",      "60"))       # polling (detik)
 SIGNAL_TIMEOUT   = 30.0                                        # detik
 NOTIONAL         = float(os.getenv("PB_NOTIONAL", "495"))    # $99 equity x 5x leverage
-FEE_USD          = NOTIONAL * 0.0004 * 2                      # ~$0.40 round-trip
+FEE_USD          = 0.0                                         # Lighter DEX: zero fee
 SL_PCT           = 0.01333                                     # 1.333% SL
 TP_PCT           = 0.0071                                      # 0.71% TP
 
