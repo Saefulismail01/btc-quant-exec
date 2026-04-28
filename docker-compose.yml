@@ -90,17 +90,17 @@ services:
       - PB_WAIT=${PB_WAIT:-2}
       - PB_CYCLE=${PB_CYCLE:-60}
       - PB_NOTIONAL=${PB_NOTIONAL:-15000}
+      - BACKEND_API_URL=http://btc-quant-api:8000/api/signal
       - LOG_LEVEL=${LOG_LEVEL:-INFO}
     volumes:
       - ./backend/app/infrastructure:/app/backend/app/infrastructure
       - ./logs:/app/logs
       # Persist trades CSV dan state JSON di luar container
       - ./data/paper_pullback:/app/data/paper_pullback
-    depends_on:
-      - btc-quant-api
     restart: unless-stopped
     networks:
       - btc-quant-network
+      - live-network
     command: python paper_executor_pullback.py
 
   # Lighter Executor - Main execution daemon
@@ -128,6 +128,10 @@ services:
 networks:
   btc-quant-network:
     driver: bridge
+  # External network where btc-quant-api lives (deployed from separate compose project)
+  live-network:
+    external: true
+    name: btc_scalping_btc-quant-network
 
 volumes:
   database:
