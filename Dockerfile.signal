@@ -19,6 +19,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY backend/ /app/
 COPY execution_layer/lighter/signal_executor.py /app/
 COPY execution_layer/lighter/lighter_executor.py /app/execution_layer/lighter/
+COPY backend/paper_executor_pullback.py /app/paper_executor_pullback.py
 COPY .env /app/.env
 
 # Set PYTHONPATH to include /app for proper imports

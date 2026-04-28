@@ -77,6 +77,32 @@ services:
       - btc-quant-network
     command: python execution_layer/lighter/intraday_monitor.py
 
+  # Paper Pullback Executor - Forward test pullback 0.30% + freeze rule (virtual money)
+  paper-pullback:
+    build:
+      context: .
+      dockerfile: Dockerfile.signal
+    container_name: btc-quant-paper-pullback
+    env_file:
+      - .env
+    environment:
+      - PB_PCT=${PB_PCT:-0.003}
+      - PB_WAIT=${PB_WAIT:-2}
+      - PB_CYCLE=${PB_CYCLE:-60}
+      - PB_NOTIONAL=${PB_NOTIONAL:-15000}
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+    volumes:
+      - ./backend/app/infrastructure:/app/backend/app/infrastructure
+      - ./logs:/app/logs
+      # Persist trades CSV dan state JSON di luar container
+      - ./data/paper_pullback:/app/data/paper_pullback
+    depends_on:
+      - btc-quant-api
+    restart: unless-stopped
+    networks:
+      - btc-quant-network
+    command: python paper_executor_pullback.py
+
   # Lighter Executor - Main execution daemon
   # DISABLED: Using API-only execution
   # lighter-executor:

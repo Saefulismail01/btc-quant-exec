@@ -303,6 +303,94 @@ docker-compose down -v
 
 ---
 
+## Deploying Paper Pullback Executor (Forward Test)
+
+Service ini menjalankan simulasi pullback entry 0.30% + daily freeze rule secara paralel dengan sistem live — menggunakan uang virtual. Tidak menyentuh apapun di production.
+
+### Step 1: Pull kode terbaru
+
+```bash
+cd btc-quant
+git pull origin main
+```
+
+### Step 2: Buat folder output di host VPS
+
+```bash
+mkdir -p data/paper_pullback
+mkdir -p logs
+```
+
+### Step 3: Build image (hanya paper-pullback)
+
+```bash
+docker-compose build paper-pullback
+```
+
+### Step 4: Jalankan service (tanpa restart yang lain)
+
+```bash
+docker-compose up -d paper-pullback
+```
+
+### Step 5: Verifikasi berjalan
+
+```bash
+# Cek status container
+docker-compose ps paper-pullback
+
+# Lihat log real-time
+docker-compose logs -f btc-quant-paper-pullback
+
+# Output yang diharapkan di log:
+# ====================================================================
+#   PULLBACK PAPER EXECUTOR — v1.0
+#   Pullback : 0.30%  |  Max wait: 2x4H = 8h
+#   Notional : $15,000  |  Fee: $12.00  |  SL: 1.333%  |  TP: 0.710%
+# ====================================================================
+```
+
+### Step 6: Monitor hasil trades
+
+```bash
+# Lihat semua trade
+cat data/paper_pullback/paper_pullback_trades.csv
+
+# Lihat state terkini (PnL, WR, freeze status)
+cat data/paper_pullback/paper_pullback_state.json
+
+# Lihat log hari ini
+tail -100 data/paper_pullback/paper_pullback.log
+```
+
+### Config opsional via `.env`
+
+Tambahkan baris berikut ke `.env` jika ingin override default:
+
+```env
+PB_PCT=0.003        # pullback 0.30% (default)
+PB_WAIT=2           # max wait 2 candle 4H (default)
+PB_CYCLE=60         # polling setiap 60 detik (default)
+PB_NOTIONAL=15000   # notional $15,000 (default)
+```
+
+### Stop service
+
+```bash
+docker-compose stop paper-pullback
+# atau permanen:
+docker-compose rm -sf paper-pullback
+```
+
+### Catatan penting
+
+- Output tersimpan di `./data/paper_pullback/` di host VPS — **persistent** meski container di-restart
+- State JSON otomatis di-resume saat container restart (tidak kehilangan progress)
+- Service ini **tidak** mempengaruhi live trading, paper_executor baseline, maupun DuckDB production
+- Jalankan minimum **30 hari** untuk hasil yang valid secara statistik
+
+---
+
 ## Next Steps
 
 1. ✅ Setup Docker on VPS
@@ -311,6 +399,7 @@ docker-compose down -v
 4. ✅ Verify trades are executing correctly
 5. ✅ Run 48 hours total before switching to mainnet
 6. ✅ Deploy mainnet with `LIGHTER_TRADING_ENABLED=true`
+7. ⏳ Deploy `paper-pullback` service untuk forward test Proposal D (30 hari)
 
 ---
 
