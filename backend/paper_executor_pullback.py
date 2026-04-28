@@ -509,12 +509,11 @@ class PullbackPaperExecutor:
     # ── Fetch signal via HTTP ──────────────────────────────────────────────────
     async def _fetch_signal(self):
         """Call backend API and return a simple namespace with .price.now, .trade_plan.*, .is_fallback."""
+        log.debug(f"Fetching signal from {BACKEND_API_URL}")
         try:
-            async with aiohttp.ClientSession() as session:
-                async with session.get(
-                    BACKEND_API_URL,
-                    timeout=aiohttp.ClientTimeout(total=SIGNAL_TIMEOUT),
-                ) as resp:
+            timeout = aiohttp.ClientTimeout(total=SIGNAL_TIMEOUT, connect=10)
+            async with aiohttp.ClientSession(timeout=timeout) as session:
+                async with session.get(BACKEND_API_URL) as resp:
                     if resp.status != 200:
                         log.warning(f"API returned {resp.status}")
                         return None
@@ -571,6 +570,7 @@ class PullbackPaperExecutor:
             now_ts = time.time()
 
             try:
+                log.info(f"[CYCLE {self.cycle}] start")
                 self._check_freeze_reset(now_ts)
 
                 signal = await self._fetch_signal()
