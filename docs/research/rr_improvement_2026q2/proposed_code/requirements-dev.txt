@@ -1,0 +1,10 @@
+# Dev dependencies for Tier 0b/0c proposal code
+# Install: pip install -r docs/research/rr_improvement_2026q2/proposed_code/requirements-dev.txt
+#
+# Note: `lighter` SDK is intentionally NOT included.
+# All Lighter interactions are mocked via Protocol / AsyncMock (constraint C2).
+# Windows compatible — no libc / C extension required beyond duckdb wheel.
+
+duckdb>=0.10.0
+pytest>=8.0.0
+pytest-asyncio>=0.23.0
