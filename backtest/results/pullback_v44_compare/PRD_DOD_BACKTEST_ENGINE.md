@@ -8,13 +8,13 @@ Backtest engine saat ini (`pullback_v44_same_engine.py`) adalah **single-layer 4
 
 | Komponen | Status | File:Baris |
 |---|---|---|
-| Signal generation (v4.4 layer 1-4) | **Berfungsi** — panggil BCD, AI, EMA, Spectrum service | `:140-227` |
-| Market entry simulation | **Berfungsi** — entry di close price sinyal | `:264-299` |
-| Pullback limit entry | **Berfungsi** — cari candle berikutnya yang touch limit price | `:302-374` |
-| Exit logic (SL/TP/TIME_EXIT) | **Berfungsi** — hold max 6 candle, SL/TP cek per candle | `:230-261` |
-| Metrics (Sharpe, DD, Win Rate) | **Berfungsi** — dihitung otomatis per konfigurasi | `:400-562` |
-| File output (CSV/JSON) | **Berfungsi** — trades, equity curve, daily, summary | `:565-573` |
-| Comparison summary | **Berfungsi** — semua konfigurasi dibandingkan | `:633-675` |
+| Signal generation (v4.4 layer 1-4) | **Berfungsi** — panggil BCD, AI, EMA, Spectrum service | `backtest/scripts/experiments/pullback_v44_same_engine.py:140-227` |
+| Market entry simulation | **Berfungsi** — entry di close price sinyal | `backtest/scripts/experiments/pullback_v44_same_engine.py:264-299` |
+| Pullback limit entry | **Berfungsi** — cari candle berikutnya yang touch limit price | `backtest/scripts/experiments/pullback_v44_same_engine.py:302-374` |
+| Exit logic (SL/TP/TIME_EXIT) | **Berfungsi** — hold max 6 candle, SL/TP cek per candle | `backtest/scripts/experiments/pullback_v44_same_engine.py:230-261` |
+| Metrics (Sharpe, DD, Win Rate) | **Berfungsi** — dihitung otomatis per konfigurasi | `backtest/scripts/experiments/pullback_v44_same_engine.py:400-562` |
+| File output (CSV/JSON) | **Berfungsi** — trades, equity curve, daily, summary | `backtest/scripts/experiments/pullback_v44_same_engine.py:565-573` |
+| Comparison summary | **Berfungsi** — semua konfigurasi dibandingkan | `backtest/scripts/experiments/pullback_v44_same_engine.py:633-675` |
 
 **Data source:** DuckDB `btc_ohlcv_4h` + `market_metrics` (2022-11-18 → 2026-03-04, ~14,400 candles)
 
@@ -24,13 +24,13 @@ Setelah investigasi kode, ditemukan **7 bias** yang membuat hasil backtest tidak
 
 | # | Masalah | Bias | Dampak | Kode |
 |---|---|---|---|---|
-| 1 | **OHLC 4H approximation** — `Low ≤ limit_px` dianggap FILLED, padahal harga cuma sentuh tipis | Positif | ↑ Fill rate, ↑ Profit | `:321-326` |
-| 2 | **Tidak cek candle T** — loop mulai dari `i+1`, candle sinyal itu sendiri tidak dicek | Negatif | ↓ Fill rate | `:319` |
-| 3 | **SL priority over TP** — dalam satu candle, SL dicek duluan | Negatif | ↓ Profit, ↓ Win Rate | `:85-96` |
-| 4 | **Sharpe dari hari dengan trade saja** — hari tanpa trade tidak dimasukkan | Positif | ↑ Sharpe 20-40% | `:495-498` |
-| 5 | **Drawdown tanpa MTM** — equity curve hanya dicatat saat exit | Positif | ↓ Max DD 20-50% | `:484-487` |
-| 6 | **Skip_until konservatif** — posisi aktif skip sinyal baru | Negatif | ↓ Jumlah trade | `:306-312`, `:372` |
-| 7 | **TRAIL_TP terminologi** — exit di close saat TP attain, bukan trailing stop | Minimal | Terminologi | `:89-90`, `:94-95` |
+| 1 | **OHLC 4H approximation** — `Low ≤ limit_px` dianggap FILLED, padahal harga cuma sentuh tipis | Positif | ↑ Fill rate, ↑ Profit | `backtest/scripts/experiments/pullback_v44_same_engine.py:321-326` |
+| 2 | **Tidak cek candle T** — loop mulai dari `i+1`, candle sinyal itu sendiri tidak dicek | Negatif | ↓ Fill rate | `backtest/scripts/experiments/pullback_v44_same_engine.py:319` |
+| 3 | **SL priority over TP** — dalam satu candle, SL dicek duluan | Negatif | ↓ Profit, ↓ Win Rate | `backtest/scripts/experiments/pullback_v44_same_engine.py:85-96` |
+| 4 | **Sharpe dari hari dengan trade saja** — hari tanpa trade tidak dimasukkan | Positif | ↑ Sharpe 20-40% | `backtest/scripts/experiments/pullback_v44_same_engine.py:495-498` |
+| 5 | **Drawdown tanpa MTM** — equity curve hanya dicatat saat exit | Positif | ↓ Max DD 20-50% | `backtest/scripts/experiments/pullback_v44_same_engine.py:484-487` |
+| 6 | **Skip_until konservatif** — posisi aktif skip sinyal baru | Negatif | ↓ Jumlah trade | `backtest/scripts/experiments/pullback_v44_same_engine.py:306-312`, `backtest/scripts/experiments/pullback_v44_same_engine.py:372` |
+| 7 | **TRAIL_TP terminologi** — exit di close saat TP attain, bukan trailing stop | Minimal | Terminologi | `backtest/scripts/experiments/pullback_v44_same_engine.py:89-90`, `backtest/scripts/experiments/pullback_v44_same_engine.py:94-95` |
 
 ### Keterbatasan Data
 
@@ -49,26 +49,26 @@ Setelah investigasi kode, ditemukan **7 bias** yang membuat hasil backtest tidak
 
 Backtest engine saat ini menggunakan **4H OHLC approximation** untuk simulasi limit order entry dan exit. Ini menghasilkan bias positif signifikan karena asumsi "harga touch = order filled" tidak akurat untuk strategi pullback. Risk metrics (Sharpe, DD) juga overestimated karena metodologi perhitungan yang tidak memasukkan hari tanpa trade dan mark-to-market.
 
-**Tujuan:** Bangun dual-layer backtest engine yang memisahkan signal layer (4H) dan execution layer (15s/tick) untuk menghasilkan hasil yang valid, akurat, dan bebas bias struktural.
+**Tujuan:** Bangun dual-layer backtest engine yang memisahkan signal layer (4H) dan execution layer (15s bars, atau tick jika tersedia) untuk menghasilkan hasil yang lebih valid, lebih akurat, dan mengurangi bias struktural utama.
 
 ### 2. Functional Requirements
 
 #### FR-1: Dual-Layer Architecture
 
 - **Signal Layer** (4H): Generate sinyal menggunakan engine v4.4 yang sudah ada (BCD + AI + EMA + Spectrum). Identik dengan yang sekarang.
-- **Execution Layer** (15s/tick): Simulasi limit order placement, fill validation, dan exit (SL/TP/TIME_EXIT) dengan resolusi 15 detik.
+- **Execution Layer** (15s bars, atau tick jika tersedia): Simulasi limit order placement, fill validation, dan exit (SL/TP/TIME_EXIT) dengan resolusi lebih granular daripada 4H.
 - Kedua layer harus dari **data source terpisah** — tidak boleh satu DataFrame.
 
-#### FR-2: Tick-by-Tick Execution
+#### FR-2: Granular Execution
 
-- Limit order dipasang di setiap bar 15s setelah sinyal
-- Fill terjadi **hanya jika harga benar-benar attain limit price** pada bar 15s tertentu
-- No more "sentuh = filled" assumption
-- Dukungan partial fill (opsional, fase 2)
+- Limit order dipasang dan dievaluasi di setiap bar 15s setelah sinyal
+- Fill terjadi hanya jika bar 15s menunjukkan harga attain limit price
+- No more 4H "sentuh = filled" assumption
+- Partial fill membutuhkan tick/orderbook data; untuk 15s bars cukup dicatat sebagai future enhancement
 
 #### FR-3: Correct SL/TP Priority
 
-- Dalam 15s execution, urutan SL/TP diketahui persis — tidak ada lagi "SL selalu menang"
+- Dalam 15s execution, urutan SL/TP jauh lebih presisi daripada 4H — tidak ada lagi "SL selalu menang" pada candle 4H
 - Setiap bar 15s dicek: entry dulu → setelah entry, cek exit
 - Exit cek: manapun yang attain duluan (SL atau TP), itu yang dieksekusi
 
@@ -136,7 +136,7 @@ Empat tes yang harus lulus sebelum digunakan untuk pengambilan keputusan:
 - [ ] Kedua layer bisa berjalan independen
 - [ ] Output sinyal dari signal_layer bisa langsung dimasukkan ke execution_layer
 
-### DoD-2: Tick-by-Tick Execution (15s)
+### DoD-2: Granular Execution (15s)
 
 - [ ] Limit order simulation: pasang limit price, cek setiap bar 15s
 - [ ] Fill validation: `LONG: price ≤ limit_px` pada bar tertentu → FILLED di bar itu
@@ -144,11 +144,12 @@ Empat tes yang harus lulus sebelum digunakan untuk pengambilan keputusan:
 - [ ] TIME_EXIT: jika melebihi max_wait (dalam satuan waktu, bukan candle), exit di close price
 - [ ] MISS: jika limit tidak attain dalam max_wait
 - [ ] Output: entry_price, exit_price, exit_type, hold_time, pnl
+- [ ] Dokumentasikan bahwa 15s bar execution belum memodelkan antrean order dan partial fill realistis
 
 ### DoD-3: SL/TP Priority Correct
 
-- [ ] Tidak ada prioritas buatan — SL dan TP dicek pada bar yang sama secara sekuensial
-- [ ] Yang attain duluan dalam timeline 15s yang dieksekusi
+- [ ] Tidak ada prioritas buatan pada candle 4H — SL dan TP dicek mengikuti sequence bar 15s
+- [ ] Yang attain lebih dulu dalam timeline 15s yang dieksekusi
 - [ ] Verifikasi: bandingkan dengan tick data (6 jam) untuk sample
 
 ### DoD-4: Opportunity Cost Recording
@@ -204,7 +205,7 @@ Empat tes yang harus lulus sebelum digunakan untuk pengambilan keputusan:
 | **Signal Layer** | 4H, inlined di script utama | 4H, module terpisah `signal_layer.py` |
 | **Execution Layer** | 4H, same DataFrame | 15s, data terpisah, module terpisah |
 | **Fill Validation** | `Low ≤ limit_px` = filled | Bar-by-bar 15s: price attain limit |
-| **SL/TP Priority** | SL always wins | Actual sequence in 15s timeline |
+| **SL/TP Priority** | SL always wins inside a 4H candle | Sequence mengikuti timeline 15s |
 | **Hold Time** | Skip_until = i + hold | Catat sinyal BLOCKED |
 | **Equity Curve** | Exit points only | Daily MTM |
 | **Sharpe Ratio** | Hanya hari dengan trade | Semua hari (return 0 untuk non-trade day) |
@@ -220,7 +221,7 @@ Empat tes yang harus lulus sebelum digunakan untuk pengambilan keputusan:
 | Fase | Apa | Data | Durasi | DoD Check |
 |---|---|---|---|---|
 | **Fase 1** | Pisahkan signal & execution layer | 4H + 15s | 1-2 hari | DoD-1 |
-| **Fase 2** | Tick-by-tick execution engine | 15s | 2-3 hari | DoD-2, DoD-3, DoD-4 |
+| **Fase 2** | Granular execution engine | 15s | 2-3 hari | DoD-2, DoD-3, DoD-4 |
 | **Fase 3** | MTM harian + risk metrics | 1H | 0.5 hari | DoD-5, DoD-6 |
 | **Fase 4** | Walk-forward framework | 4H + 15s | 1 hari | DoD-7 |
 | **Fase 5** | Verification + reporting | - | 0.5 hari | DoD-8, DoD-9 |

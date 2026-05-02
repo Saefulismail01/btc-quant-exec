@@ -262,7 +262,7 @@ Jika bias dikoreksi, perkiraan hasil real-time untuk **PB 0.5% wait=2c**:
 
 ## 11. Arsitektur Backtest Ideal
 
-Berikut desain backtest engine yang **valid, akurat, dan bebas bias struktural** untuk strategi pullback entry.
+Berikut desain backtest engine yang **lebih valid, lebih akurat, dan mengurangi bias struktural utama** untuk strategi pullback entry.
 
 ### Arsitektur
 
@@ -274,7 +274,7 @@ flowchart LR
         A --> B
     end
 
-    subgraph EXECUTION["EXECUTION LAYER (15s / tick)"]
+    subgraph EXECUTION["EXECUTION LAYER (15s bars / tick jika tersedia)"]
         direction TB
         C["For each bar in T+1 .. T+N:"]
         C --> D{"LONG: price ≤ limit?<br/>SHORT: price ≥ limit?"}
@@ -311,15 +311,15 @@ execution_bars = execution_df.loc[signal_time:signal_time+max_wait]
 
 **Pemisahan ini mencegah look-ahead bias** karena data sinyal dan eksekusi berasal dari source berbeda dengan granularitas berbeda.
 
-#### 2. Tick-by-Tick Execution — Bukan OHLC
+#### 2. Granular Execution — Bukan 4H OHLC
 
 ```python
-def simulate_execution(signal, tick_data, pullback_pct):
+def simulate_execution(signal, execution_bars, pullback_pct):
     """
-    Simulasi limit order + exit dengan tick-level accuracy.
-    - Entry: limit order di pasang, tick dicek satu per satu
-    - Exit: TP/SL di monitor setiap tick
-    - Partial fill: support partial untuk realistis
+    Simulasi limit order + exit dengan data granular.
+    - Entry: limit order dipasang, bar 15s dicek berurutan
+    - Exit: TP/SL dimonitor di setiap bar 15s
+    - Tick data bisa dipakai jika tersedia untuk validasi lebih presisi
     """
     side = signal['side']
     limit_px = signal['price'] * (1 - pullback_pct) if side == 'LONG' else signal['price'] * (1 + pullback_pct)
@@ -330,15 +330,15 @@ def simulate_execution(signal, tick_data, pullback_pct):
     entry_px = None
     position = 0.0      # Berapa banyak terisi (0.0 - 1.0)
     
-    for tick in tick_data:
-        price = tick['price']
+    for bar in execution_bars:
+        price = bar['price']  # 15s close/mid/representative price; tick price jika tick data tersedia
         
         # Cek entry (limit order)
         if not filled:
             if (side == 'LONG' and price <= limit_px) or (side == 'SHORT' and price >= limit_px):
                 filled = True
                 entry_px = limit_px
-                continue          # Entry di tick ini, lanjut monitor exit
+                continue          # Entry di bar ini, lanjut monitor exit
         
         # Cek exit (setelah entry)
         if filled:
@@ -353,9 +353,9 @@ def simulate_execution(signal, tick_data, pullback_pct):
 ```
 
 **Keuntungan:**
-- Urutan SL/TP diketahui persis (no more bias priority)
-- Limit order fill cuma terjadi saat harga benar-benar attain (no more OHLC assumption)
-- Partial fill bisa di-support
+- Urutan SL/TP jauh lebih presisi daripada 4H OHLC karena memakai sequence 15s
+- Limit order fill divalidasi dengan bar granular, bukan hanya high/low 4H
+- Tick data tetap diperlukan jika ingin memodelkan antrean order dan partial fill secara realistis
 
 #### 3. Batasi Hold Time — Bukan Skip Sinyal
 
@@ -483,7 +483,7 @@ metrics = {
 | Fase | Apa yang Dibangun | Data | Durasi |
 |---|---|---|---|
 | **Fase 1** | Pisahkan signal & execution layer | 4H + 15s | 1-2 hari |
-| **Fase 2** | Tick-by-tick execution engine | 15s | 2-3 hari |
+| **Fase 2** | Granular execution engine | 15s | 2-3 hari |
 | **Fase 3** | MTM harian + equity curve | 1H (DuckDB) | 0.5 hari |
 | **Fase 4** | Walk-forward framework | 4H | 1 hari |
 | **Fase 5** | Metrics suite lengkap + reporting | - | 0.5 hari |
