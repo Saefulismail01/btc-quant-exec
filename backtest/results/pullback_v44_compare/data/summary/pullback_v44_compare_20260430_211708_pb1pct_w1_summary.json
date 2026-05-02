@@ -1,0 +1,71 @@
+{
+  "label": "PULLBACK pb=0.10% wait=1c",
+  "run_timestamp": "20260430_211708",
+  "engine": "pullback_v44_same_engine",
+  "window_start": "2022-11-18",
+  "window_end": "2026-03-04",
+  "initial_capital": 10000.0,
+  "final_equity": 34465.32,
+  "net_pnl_usd": 24465.32,
+  "net_pnl_pct": 244.6532,
+  "daily_return_pct": 0.2035,
+  "n_days": 1202,
+  "n_trades": 1097,
+  "n_wins": 670,
+  "n_losses": 427,
+  "win_rate_pct": 61.08,
+  "avg_winner_usd": 156.99,
+  "avg_loser_usd": 189.03,
+  "rr_ratio": 0.83,
+  "profit_factor": 1.303,
+  "max_drawdown_pct": 13.32,
+  "sharpe_ratio": 2.416,
+  "exit_distribution": {
+    "SL": 361,
+    "TP": 329,
+    "TRAIL_TP": 321,
+    "TIME_EXIT": 86
+  },
+  "n_sl": 361,
+  "n_tp": 329,
+  "n_trail_tp": 321,
+  "n_time_exits": 86,
+  "n_breakeven_sl": 0,
+  "avg_hold_candles": 2.25,
+  "max_hold_candles": 6,
+  "regime_summary": {
+    "bear": {
+      "trades": 257,
+      "win_rate": 58.4,
+      "total_pnl": 5158.07
+    },
+    "bull": {
+      "trades": 550,
+      "win_rate": 60.5,
+      "total_pnl": 12722.24
+    },
+    "neutral": {
+      "trades": 290,
+      "win_rate": 64.5,
+      "total_pnl": 6585.01
+    }
+  },
+  "position_usd": 1000.0,
+  "leverage": 15.0,
+  "notional_usd": 15000.0,
+  "sl_pct": 0.01333,
+  "tp_min_pct": 0.0071,
+  "fee_usd_per_trade": 12.0,
+  "max_hold_candles_cfg": 6,
+  "n_signals": 4342,
+  "n_missed": 168,
+  "fill_rate": 86.7,
+  "entry_mode": "pullback",
+  "pullback_pct": 0.001,
+  "max_wait_candles": 1,
+  "execution_resolution": "4H_OHLC_APPROX",
+  "execution_resolution_note": "Pullback fills are inferred from 4H OHLC and not validated intrabar.",
+  "n_skipped": 3077,
+  "n_errors": 0,
+  "elapsed_seconds": 11279.4
+}
